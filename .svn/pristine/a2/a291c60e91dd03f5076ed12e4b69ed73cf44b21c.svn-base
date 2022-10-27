@@ -1,0 +1,152 @@
+import { Component, Emit, Vue } from "vue-property-decorator";
+import { IArticleData } from "@/api/types";
+import Pagination from "@/components/Pagination/index.vue";
+import MainSubLayout from "@/components/CollpaseFlex/index.vue";
+import ProTable from "@/components/Table/index.vue";
+import EquipmentClassTree from "./equipmentClassTree.vue";
+const calendarTypeOptions = [
+  { key: "CN", displayName: "China" },
+  { key: "US", displayName: "USA" },
+  { key: "JP", displayName: "Japan" },
+  { key: "EU", displayName: "Eurozone" }
+];
+
+// arr to obj, such as { CN : "China", US : "USA" }
+const calendarTypeKeyValue = calendarTypeOptions.reduce(
+  (
+    acc: {
+      [key: string]: string;
+    },
+    cur
+  ) => {
+    acc[cur.key] = cur.displayName;
+    return acc;
+  },
+  {}
+) as {
+  [key: string]: string;
+};
+
+@Component({
+  name: "ComplexTable",
+  components: {
+    Pagination,
+    MainSubLayout,
+    ProTable,
+    EquipmentClassTree
+  },
+  filters: {
+    typeFilter: (type: string) => {
+      return calendarTypeKeyValue[type];
+    }
+  }
+})
+export default class extends Vue {
+  public columns = [
+    {
+      width: 120,
+      dataIndex: "timestamp",
+      title: "产品批号"
+    },
+    {
+      width: 120,
+      dataIndex: "timestamp",
+      title: "设备名称"
+    },
+    {
+      width: 120,
+      dataIndex: "author",
+      title: "科室"
+    },
+    {
+      width: 120,
+      dataIndex: "reviewer",
+      title: "设备型号"
+    },
+    {
+      width: 120,
+      dataIndex: "reviewer",
+      title: "品牌"
+    },
+    {
+      width: 120,
+      dataIndex: "reviewer",
+      title: "产地"
+    },
+    {
+      width: 120,
+      dataIndex: "author",
+      title: "设备类别"
+    },
+    {
+      width: 120,
+      dataIndex: "author",
+      title: "状态"
+    },
+    {
+      width: 120,
+      dataIndex: "author",
+      title: "设备价格"
+    },
+    {
+      width: 120,
+      dataIndex: "author",
+      title: "启用时间"
+    },
+    {
+      width: 120,
+      dataIndex: "author",
+      title: "生产日期"
+    },
+    {
+      width: 120,
+      dataIndex: "author",
+      title: "保质期(年)"
+    },
+    {
+      width: 120,
+      dataIndex: "author",
+      title: "添加时间"
+    },
+    {
+      width: 200,
+      dataIndex: "type",
+      title: "操作"
+    }
+  ]; //表格列设置
+  public formList = [
+    {
+      label: "产品批号",
+      value: "user"
+    },
+    {
+      label: "设备名称",
+      value: "region"
+    },
+    {
+      label: "科室",
+      value: "user"
+    },
+    {
+      label: "状态",
+      value: "user"
+    },
+    {
+      label: "设备型号",
+      value: "user"
+    },
+    {
+      label: "设备类别",
+      value: "user"
+    }
+  ]; //表格表单查询项
+
+  // 新增设备类别
+  public addNewEquipmentClass = () => {}
+
+  @Emit()
+  emitHandleCreate(data:string){
+    console.log("🚀 ~ data", data)
+  }
+
+}

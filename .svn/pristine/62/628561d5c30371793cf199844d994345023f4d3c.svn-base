@@ -1,0 +1,55 @@
+<template>
+  <diction-select
+    itemtype="501"
+    v-model="sv"
+    :disabled="disabled"
+    :readonly="readonly"
+    clearable
+    placeholder="请选择性别"
+    @change="selectchange"
+  >
+  </diction-select>
+</template>
+
+<script>
+import DictionSelect from '@/components/Form/DictionSelect.vue'
+
+export default {
+  data() {
+    return {
+      sv: null,
+    }
+  },
+  name: 'SexSelect',
+  props: {
+    value: {
+      default: null,
+    },
+    readonly: {
+      default: false,
+    },
+    disabled: {
+      default: false,
+    },
+  },
+  methods: {
+    selectchange: function (v, o) {
+      this.$emit('input', v)
+      this.$emit('change', v)
+    },
+    onfocuse: function (v) {
+      this.sv = this.value
+    },
+  },
+  components: {
+    'diction-select': DictionSelect,
+  },
+  watch: {
+    value: function (v, o) {
+      this.sv = v
+    },
+  },
+}
+</script>
+
+<style scoped></style>

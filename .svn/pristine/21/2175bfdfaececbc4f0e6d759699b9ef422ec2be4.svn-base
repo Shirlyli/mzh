@@ -1,0 +1,101 @@
+<template>
+  <el-form-item
+    :label="labeltitle"
+    :prop="propcode"
+    v-if="dialogStatus != 'view'"
+  >
+    <el-col :span="span1">
+      <el-input
+        type="textarea"
+        v-model="vModel"
+        readonly
+        :autosize="{ minRows: minRowsHeight, maxRows: maxRowsHeight }"
+        :placeholder="placeholdertxt"
+      >
+      </el-input>
+    </el-col>
+    <el-col :span="span2">
+      <el-button
+        round
+        type="info"
+        :icon="ElIconSearch"
+        size="small"
+        @click="handleTextareaSelection()"
+        v-bind="{ style: { 'margin-top': marginTop } }"
+      ></el-button>
+    </el-col>
+  </el-form-item>
+  <el-form-item :label="labeltitle" :prop="propcode" v-else>
+    <el-col>
+      <el-input
+        type="textarea"
+        v-model="vModel"
+        disabled
+        readonly
+        :autosize="{ minRows: minRowsHeight, maxRows: maxRowsHeight }"
+      >
+      </el-input>
+    </el-col>
+  </el-form-item>
+</template>
+
+<script>
+import { Search as ElIconSearch } from '@element-plus/icons'
+
+export default {
+  data() {
+    return {
+      ElIconSearch,
+    }
+  },
+  name: 'textarea-select',
+  props: {
+    labeltitle: {
+      type: String,
+      default: '',
+    },
+    propcode: {
+      type: String,
+      default: '',
+    },
+    dialogStatus: {
+      type: String,
+      default: '',
+    },
+    span1: {
+      type: Number,
+      default: 22,
+    },
+    span2: {
+      type: Number,
+      default: 2,
+    },
+    vModel: {
+      type: String,
+      default: null,
+    },
+    minRowsHeight: {
+      type: Number,
+      default: 4,
+    },
+    maxRowsHeight: {
+      type: Number,
+      default: 10,
+    },
+    placeholdertxt: {
+      type: String,
+      default: '',
+    },
+    marginTop: {
+      default: '70px',
+    },
+  },
+  methods: {
+    handleTextareaSelection: function () {
+      this.$emit('handleTextareaSelection', this.propcode)
+    },
+  },
+}
+</script>
+
+<style scoped></style>

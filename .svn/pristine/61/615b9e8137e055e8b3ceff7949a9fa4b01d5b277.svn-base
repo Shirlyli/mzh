@@ -1,0 +1,246 @@
+<template>
+  <el-select
+    style="width: 90%"
+    filterable
+    :multiple="multiple"
+    v-model="sv"
+    :disabled="disabled"
+    :readonly="readonly"
+    clearable
+    placeholder="请选择"
+    @change="selectchange"
+    @focus="onfocuse"
+  >
+    <el-option
+      v-for="item in dictionSelectOptions"
+      :key="item.itemcode"
+      :label="item.itemname"
+      :value="item.itemcode"
+    ></el-option>
+  </el-select>
+</template>
+
+<script>
+import request from '@/utils/request'
+import { mapGetters } from 'vuex'
+
+export default {
+  data() {
+    return {
+      dictionSelectOptions: [],
+      sv: null,
+    }
+  },
+  name: 'DictionSelect',
+  props: {
+    itemtype: String, // 字典代码
+    pItemtype: String, // 父字典代码
+    multiple: {
+      type: Boolean,
+      defalut: false
+    },
+    modelValue: String,
+    readonly: {
+      type: Boolean,
+      defalut: false
+    },
+    disabled: {
+      type: Boolean,
+      defalut: false
+    }
+  },
+  methods: {
+    loaddicdata: function () {
+      if (!this.itemtype) {
+        this.dictionSelectOptions = []
+        return
+      }
+      let key = (this.pItemtype ? this.pItemtype : '') + '_' + this.itemtype
+      if (this.dics[key]) {
+        this.dictionSelectOptions = this.dics[key]
+      } else {
+        let url =
+          'basedata/tbdictionary/dicitems?itemtype=' +
+          (this.itemtype ? this.itemtype : '') +
+          '&pItemcode=' +
+          (this.pItemtype ? this.pItemtype : '')
+        request
+          .post(url, {})
+          .then((response) => {
+            if (response.data && response.data.result) {
+              if (response.data.data) {
+                this.dictionSelectOptions = response.data.data
+                this.$store.dispatch('adddic', {
+                  key: key,
+                  list: response.data.data,
+                })
+              } else {
+                this.dictionSelectOptions = []
+              }
+            } else {
+              this.dictionSelectOptions = []
+            }
+          })
+          .catch(() => {
+            this.dictionSelectOptions = []
+          })
+      }
+    },
+    selectchange: function (v, o) {
+      let vl
+      let cuv
+      if (this.multiple) {
+        cuv = []
+        if (v) {
+          vl = v
+          for (let it of v) {
+            for (let item of this.dictionSelectOptions) {
+              if (it === item.itemcode) {
+                cuv.push({
+                  id: item.itemcode,
+                  text: item.itemname,
+                })
+              }
+            }
+          }
+        } else {
+          vl = []
+        }
+      } else {
+        if (
+          v &&
+          this.dictionSelectOptions &&
+          this.dictionSelectOptions.length > 0
+        ) {
+          for (let item of this.dictionSelectOptions) {
+            if (v === item.itemcode) {
+              vl = v
+              cuv = {
+                id: item.itemcode,
+                text: item.itemname,
+              }
+              break
+            }
+          }
+        } else {
+          vl = null
+          cuv = null
+        }
+      }
+      if (this.multiple) {
+        this.$emit('update:modelValue', vl.join(','))
+      } else {
+        this.$emit('update:modelValue', vl)
+      }
+      // this.$emit('change', cuv)
+    },
+    onfocuse: function (v) {
+      if (this.multiple) {
+        if (this.modelValue) {
+          this.sv = this.modelValue.split(',')
+        } else {
+          this.sv = []
+        }
+      } else {
+        this.sv = this.modelValue
+      }
+    },
+  },
+  computed: {
+    ...mapGetters(['dics']),
+    value: {
+      get() {
+        if (this.multiple) {
+          if (this.modelValue) {
+            return this.modelValue.split(',')
+          } else {
+            return []
+          }
+        } else {
+          return this.modelValue
+        }
+      },
+      set(v) {
+        let vl
+        let cuv
+        if (this.multiple) {
+          cuv = []
+          if (v) {
+            vl = v
+            for (let it of v) {
+              for (let item of this.dictionSelectOptions) {
+                if (it === item.itemcode) {
+                  cuv.push({
+                    id: item.itemcode,
+                    text: item.itemname,
+                  })
+                }
+              }
+            }
+          } else {
+            vl = []
+          }
+        } else {
+          if (
+                  v &&
+                  this.dictionSelectOptions &&
+                  this.dictionSelectOptions.length > 0
+          ) {
+            for (let item of this.dictionSelectOptions) {
+              if (v === item.itemcode) {
+                vl = v
+                cuv = {
+                  id: item.itemcode,
+                  text: item.itemname,
+                }
+                break
+              }
+            }
+          } else {
+            vl = null
+            cuv = null
+          }
+        }
+        if (this.multiple) {
+          this.$emit('update:modelValue', vl.join(','))
+        } else {
+          this.$emit('update:modelValue', vl)
+        }
+      }
+    }
+  },
+  created() {
+    this.loaddicdata()
+    if (this.multiple) {
+      if (this.modelValue) {
+        this.sv = this.modelValue.split(',')
+      } else {
+        this.sv = []
+      }
+    } else {
+      this.sv = this.modelValue
+    }
+  },
+  watch: {
+    modelValue: function (v, o) {
+      if (this.multiple) {
+        if (v) {
+          this.sv = v.split(',')
+        } else {
+          this.sv = []
+        }
+      } else {
+        this.sv = v
+      }
+    },
+    itemtype: function (v, o) {
+      this.loaddicdata()
+    },
+    pItemtype: function (v, o) {
+      this.loaddicdata()
+    },
+  },
+}
+</script>
+
+<style scoped></style>
