@@ -5,13 +5,13 @@
         <el-card>
           <div slot="header"
                class="clearfix">
-            <span>字典管理</span>
+            <span>科室分类</span>
           </div>
           <Tree />
         </el-card>
       </template>
       <template #right>
-        <RightContent />
+        <RightContent :title="'科室查询'"/>
         <!-- <el-tabs v-model="activeName"
                  style="margin-top:15px"
                  type="border-card">

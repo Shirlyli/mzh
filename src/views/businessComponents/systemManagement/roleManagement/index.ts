@@ -21,6 +21,33 @@ export default class extends Vue {
   private activeName = 'CN'
   private createdTimes = 0
   private tableData = []
+  private formConfig = {
+    data: {
+      name: '',
+      time: ''
+    },
+    items: [
+      { field: 'name', title: '角色名称', slots: { default: 'name_item' } },
+      { field: 'time', title: '创建时间', slots: { default: 'create_time' } },
+      { slots: { default: 'operate_item' } }
+    ] // 表单项
+  }
+
+  private columns = [
+    { type: 'seq', width: 60 },
+    { field: 'name', title: '授权角色' },
+    { field: 'name', title: '角色名称' },
+    { field: 'nickname', title: '角色类型' },
+    { field: 'age', title: '角色描述' },
+    { field: 'age', title: '创建时间' },
+    {
+      width: 250,
+      title: '操作',
+      slots: { default: 'operate' },
+      showOverflow: true
+    }
+  ]
+
   @Watch('activeName')
   private onActiveNameChange(value: string) {
     this.$router.push(`${this.$route.path}?tab=${value}`).catch((err) => {

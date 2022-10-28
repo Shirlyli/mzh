@@ -483,8 +483,8 @@ export const asyncRoutes = [
   ...purchaseManagementRouter,
   ...fileManagementRouter,
   ...systemManagementRouter,
-  ...equipmentArchivesRouter,
-  ...beforeAsyncRoutes
+  ...equipmentArchivesRouter
+  // ...beforeAsyncRoutes
 ]
 
 console.log('🚀 ~ asyncRoutes', asyncRoutes)

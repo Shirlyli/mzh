@@ -18,6 +18,41 @@ export default class extends Vue {
     { label: '折旧信息', key: 'EU' }
   ]
 
+  private formConfig = {
+    data: {
+      name: '',
+      sex: '',
+      time: ''
+    },
+    items: [
+      { field: 'name', title: '名称', slots: { default: 'name_item' } },
+      {
+        field: 'sex',
+        title: '菜单路由',
+        slots: { default: 'sex_item' }
+      },
+      { field: 'time', title: '权限标识', slots: { default: 'create_time' } },
+      { field: 'time', title: '创建时间', slots: { default: 'create_time' } },
+      { slots: { default: 'operate_item' } }
+    ] // 表单项
+  }
+
+  private columns = [
+    { type: 'seq', width: 60 },
+    { field: 'name', title: '名称' },
+    { field: 'name', title: '菜单路由' },
+    { field: 'nickname', title: '权限标识' },
+    { field: 'age', title: '启用' },
+    { field: 'age', title: '备注' },
+    { field: 'age', title: '创建时间' },
+    {
+      width: 250,
+      title: '操作',
+      slots: { default: 'operate' },
+      showOverflow: true
+    }
+  ]
+
   private activeName = 'CN'
   private createdTimes = 0
   private tableData = []

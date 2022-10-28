@@ -11,7 +11,13 @@
         </el-card>
       </template>
       <template #right>
-        <VexTable />
+        <el-card>
+          <div slot="header"
+               class="clearfix">
+            <span>字典</span>
+          </div>
+          <VexTable :columns="columns"/>
+        </el-card>
       </template>
     </main-sub-layout>
   </div>

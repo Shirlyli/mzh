@@ -2,14 +2,20 @@
   <div>
     <!-- @form-submit="findList" -->
 
-    <vxe-grid v-bind="gridOptions"
+    <vxe-grid ref="xGrid"
+              v-bind="gridOptions"
               :toolbar-config="tableToolbar">
+
+      <!-- 自定义工具栏 -->
       <template #toolbar_buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
-        <vxe-button @click="saveEvent" status="warning">批量删除</vxe-button>
+        <vxe-button @click="saveEvent"
+                    status="warning">批量删除</vxe-button>
+        <vxe-button @click="$refs.xGrid.exportData()">导入</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()">导出</vxe-button>
       </template>
 
+      <!-- 表单查询项 -->
       <template #name_item="{data}">
         <vxe-input v-model="data.name"
                    type="text"
@@ -24,6 +30,14 @@
                       :label="item.label"></vxe-option>
         </vxe-select>
       </template>
+      <template #create_time="{data}">
+        <el-date-picker v-model="data.time"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+        </el-date-picker>
+      </template>
       <template #operate_item>
         <vxe-button type="submit"
                     status="success"
@@ -31,206 +45,90 @@
         <vxe-button type="reset"
                     content="重置"></vxe-button>
       </template>
+
+      <!-- 表格操作 -->
+      <template #operate="{row}">
+        <vxe-button content="查看"></vxe-button>
+        <template v-if="$refs.xGrid.isActiveByRow(row)">
+          <vxe-button status="primary"
+                      content="保存"
+                      @click="saveRowEvent(row)"></vxe-button>
+        </template>
+        <template v-else>
+          <vxe-button content="编辑"
+                      @click="editRowEvent(row)"></vxe-button>
+        </template>
+        <vxe-button content="删除"
+                    status='warning'
+                    @click="removeRowEvent(row)"></vxe-button>
+      </template>
+
     </vxe-grid>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
+import VXETable from 'vxe-table'
+
 @Component({
   name: 'VexTable',
   components: {}
 })
 export default class extends Vue {
+  @Prop({
+    default: {
+      data: {
+        name: '',
+        sex: '',
+        time: ''
+      },
+      items: [
+        { field: 'name', title: '名称', slots: { default: 'name_item' } },
+        {
+          field: 'sex',
+          title: '菜单路由',
+          slots: { default: 'sex_item' }
+        },
+        { field: 'time', title: '权限标识', slots: { default: 'create_time' } },
+        { field: 'time', title: '创建时间', slots: { default: 'create_time' } },
+        { slots: { default: 'operate_item' } }
+      ] // 表单项
+    }
+  })
+  formConfig!: any
+
+  @Prop({ default: [] }) columns!: []
   private gridOptions: any = {
     resizable: true,
     border: true,
     showOverflow: true,
     loading: false,
-    height: 680,
+    height: 'auto',
     exportConfig: {},
-    pagerConfig: {
-      // 默认每页大小
-      pageSize: 10
-    },
     checkboxConfig: {
       // 设置复选框支持分页勾选，需要设置 rowId 行数据主键
       reserve: true
     },
-    formConfig: {
-      data: {
-        name: '',
-        sex: ''
-      },
-      items: [
-        { field: 'name', title: 'Name', slots: { default: 'name_item' } },
-        {
-          field: 'sex',
-          title: '性别',
-          titlePrefix: {
-            message: '帮助信息！！！',
-            icon: 'vxe-icon-question-circle-fill'
-          },
-          slots: { default: 'sex_item' }
-        },
-        { slots: { default: 'operate_item' } }
-      ] // 表单项
+    pagerConfig: {
+      total: 0,
+      currentPage: 1,
+      pageSize: 10,
+      pageSizes: [10, 20, 50, 100, 200, 500]
     },
-    columns: [
-      { type: 'seq', width: 60 },
-      { type: 'checkbox', width: 60 },
-      { field: 'name', title: '字典值' },
-      { field: 'name', title: '字典排序' },
-      { field: 'nickname', title: '字典备注' },
-      { field: 'age', title: '状态' },
-      { field: 'sex', title: '操作' }
-    ], // 列表项数据
-    // data: [],
-    proxyConfig: {
-      seq: true, // 启用动态序号代理（分页之后索引自动计算为当前页的起始序号）
-      props: {
-        // 自定义响应结果读取的字段，例如返回结果为：{result: [], page: {total: 10}}
-        result: 'result',
-        total: 'page.total'
-      },
-      ajax: {
-        // 接收 Promise
-        query: ({ page }) => {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              const list = [
-                {
-                  id: 10001,
-                  name: 'Test1',
-                  nickname: 'T1',
-                  role: 'Develop',
-                  sex: 'Man',
-                  age: 28,
-                  address: 'Shenzhen'
-                },
-                {
-                  id: 10002,
-                  name: 'Test2',
-                  nickname: 'T2',
-                  role: 'Test',
-                  sex: 'Women',
-                  age: 22,
-                  address: 'Guangzhou'
-                },
-                {
-                  id: 10003,
-                  name: 'Test3',
-                  nickname: 'T3',
-                  role: 'PM',
-                  sex: 'Man',
-                  age: 32,
-                  address: 'Shanghai'
-                },
-                {
-                  id: 10004,
-                  name: 'Test4',
-                  nickname: 'T4',
-                  role: 'Designer',
-                  sex: 'Women',
-                  age: 23,
-                  address: 'Shenzhen'
-                },
-                {
-                  id: 10005,
-                  name: 'Test5',
-                  nickname: 'T5',
-                  role: 'Develop',
-                  sex: 'Women',
-                  age: 30,
-                  address: 'Shanghai'
-                },
-                {
-                  id: 10006,
-                  name: 'Test6',
-                  nickname: 'T6',
-                  role: 'Designer',
-                  sex: 'Women',
-                  age: 21,
-                  address: 'Shenzhen'
-                },
-                {
-                  id: 10007,
-                  name: 'Test7',
-                  nickname: 'T7',
-                  role: 'Test',
-                  sex: 'Man',
-                  age: 29,
-                  address: 'test abc'
-                },
-                {
-                  id: 10008,
-                  name: 'Test8',
-                  nickname: 'T8',
-                  role: 'Develop',
-                  sex: 'Man',
-                  age: 35,
-                  address: 'Shenzhen'
-                },
-                {
-                  id: 10009,
-                  name: 'Test9',
-                  nickname: 'T9',
-                  role: 'Develop',
-                  sex: 'Man',
-                  age: 35,
-                  address: 'Shenzhen'
-                },
-                {
-                  id: 100010,
-                  name: 'Test10',
-                  nickname: 'T10',
-                  role: 'Develop',
-                  sex: 'Man',
-                  age: 35,
-                  address: 'Guangzhou'
-                },
-                {
-                  id: 100011,
-                  name: 'Test11',
-                  nickname: 'T11',
-                  role: 'Test',
-                  sex: 'Women',
-                  age: 26,
-                  address: 'test abc'
-                },
-                {
-                  id: 100012,
-                  name: 'Test12',
-                  nickname: 'T12',
-                  role: 'Develop',
-                  sex: 'Man',
-                  age: 34,
-                  address: 'Guangzhou'
-                },
-                {
-                  id: 100013,
-                  name: 'Test13',
-                  nickname: 'T13',
-                  role: 'Test',
-                  sex: 'Women',
-                  age: 22,
-                  address: 'Shenzhen'
-                }
-              ]
-              resolve({
-                page: {
-                  total: list.length
-                },
-                result: list.slice(
-                  (page.currentPage - 1) * page.pageSize,
-                  page.currentPage * page.pageSize
-                )
-              })
-            }, 100)
-          })
-        }
-      }
-    }
+    editConfig: {
+      // 设置触发编辑为手动模式
+      trigger: 'manual',
+      // 设置为整行编辑模式
+      mode: 'row',
+      // 显示修改状态和新增状态
+      showStatus: true,
+      // 自定义可编辑列头的图标
+      icon: 'vxe-icon-question-circle-fill'
+    },
+    formConfig: this.formConfig,
+    columns: this.columns, // 列表项数据
+    data: []
   }
 
   // 自定义工具栏
@@ -308,6 +206,33 @@ export default class extends Vue {
       ]
       gridOptions.loading = false
     }, 500)
+  }
+
+  // 编辑
+  private editRowEvent = (row) => {
+    const $grid: any = (this.$refs as any).xGrid
+    ;($grid as any).setActiveRow(row)
+  }
+
+  // 保存
+  private saveRowEvent = () => {
+    const $grid: any = (this.$refs as any).xGrid
+    ;($grid as any).clearActived().then(() => {
+      this.gridOptions.loading = true
+      setTimeout(() => {
+        this.gridOptions.loading = false
+        VXETable.modal.message({ content: '保存成功！', status: 'success' })
+      }, 300)
+    })
+  }
+
+  // 删除
+  private removeRowEvent = async(row) => {
+    const type = await VXETable.modal.confirm('您确定要删除该数据?')
+    const $grid: any = (this.$refs as any).xGrid
+    if (type === 'confirm') {
+      ($grid as any).remove(row)
+    }
   }
 }
 </script>

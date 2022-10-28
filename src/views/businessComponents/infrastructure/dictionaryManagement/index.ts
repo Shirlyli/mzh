@@ -18,6 +18,21 @@ export default class extends Vue {
     { label: '折旧信息', key: 'EU' }
   ]
 
+  private columns =[
+    { type: 'seq', width: 60 },
+    { type: 'checkbox', width: 60 },
+    { field: 'name', title: '字典值' },
+    { field: 'name', title: '字典排序' },
+    { field: 'nickname', title: '字典备注' },
+    { field: 'age', title: '状态' },
+    {
+      width: 250,
+      title: '操作',
+      slots: { default: 'operate' },
+      showOverflow: true
+    }
+  ]
+
   private activeName = 'CN'
   private createdTimes = 0
   private tableData = []

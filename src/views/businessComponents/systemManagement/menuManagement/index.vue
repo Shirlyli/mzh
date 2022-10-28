@@ -1,19 +1,8 @@
 <template>
-  <div>
-    <main-sub-layout class="main-wrapper rule-config-page">
-      <template #left>
-        <el-card>
-          <div slot="header"
-               class="clearfix">
-            <span>字典管理</span>
-          </div>
-          <Tree />
-        </el-card>
-      </template>
-      <template #right>
-        <VexTable />
-      </template>
-    </main-sub-layout>
+  <div class="p-md">
+    <el-card>
+      <VexTable :formConfig="formConfig" :columns="columns"/>
+    </el-card>
   </div>
 </template>
 

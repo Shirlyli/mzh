@@ -3,6 +3,10 @@
     margin-top: 12px;
 }
 
+.p-md {
+    padding: 16px;
+}
+
 // 表格全屏样式
 .wrapper-right .vxe-grid.is--maximize {
     left: 210px;
@@ -13,9 +17,11 @@
     text-align: right;
 }
 
-.el-card__body {
-    height: 100%;
-    overflow-y: scroll;
+.personalCard {
+    .el-card__body {
+        height: 100%;
+        overflow-y: scroll;
+    }
 }
 
 .el-row {
@@ -31,6 +37,10 @@
     .filter-item {
         width: 100% !important;
     }
+}
+
+.vxe-table--main-wrapper {
+    height: calc(100vh - 290px);
 }
 
 .el-card {
