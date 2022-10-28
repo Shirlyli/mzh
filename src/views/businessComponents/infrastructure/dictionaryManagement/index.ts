@@ -1,11 +1,13 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
+import VexTable from '@/components/VexTable/index.vue'
 @Component({
   name: 'Tab',
   components: {
     MainSubLayout,
-    Tree
+    Tree,
+    VexTable
   }
 })
 export default class extends Vue {
@@ -18,7 +20,7 @@ export default class extends Vue {
 
   private activeName = 'CN'
   private createdTimes = 0
-
+  private tableData = []
   @Watch('activeName')
   private onActiveNameChange(value: string) {
     this.$router.push(`${this.$route.path}?tab=${value}`).catch((err) => {

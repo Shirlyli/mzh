@@ -42,3 +42,16 @@ export interface IUserData {
   introduction: string
   roles: string[]
 }
+
+// 新增设备-设备信息
+export interface EquipmentInfoData {
+  id: number
+  username: string
+  password: string
+  name: string
+  email: string
+  phone: string
+  avatar: string
+  introduction: string
+  roles: string[]
+}

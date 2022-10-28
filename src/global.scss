@@ -1,14 +1,25 @@
-.submenu-title-noDropdown {
-    // background-color: #42b983 !important;
-    // color: #fff;
-}
-
+// 向上margin
 .mt-md {
     margin-top: 12px;
 }
 
+// 表格全屏样式
+.wrapper-right .vxe-grid.is--maximize {
+    left: 210px;
+    width: 90%;
+}
+
 .common-el-offset {
     text-align: right;
+}
+
+.el-card__body {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.el-row {
+    padding: 0 20px;
 }
 
 .el-form--inline .el-form-item {

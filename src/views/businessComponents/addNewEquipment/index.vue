@@ -11,7 +11,8 @@
         </el-card>
       </template>
       <template #right>
-        <el-tabs v-model="activeName"
+        <RightContent />
+        <!-- <el-tabs v-model="activeName"
                  style="margin-top:15px"
                  type="border-card">
           <el-tab-pane v-for="item in tabMapOptions"
@@ -24,13 +25,13 @@
                         @create="showCreatedTimes" />
             </keep-alive>
           </el-tab-pane>
-        </el-tabs>
+        </el-tabs> -->
       </template>
     </main-sub-layout>
   </div>
 </template>
 
-<script lang="ts" src="./index.ts""">
+<script lang="ts" src="./index.ts">
 </script>
 
 <style lang="scss" scoped>

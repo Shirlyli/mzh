@@ -1,100 +1,44 @@
 <template>
-  <el-table
-    :data="list"
-    border
-    fit
-    highlight-current-row
-    style="width: 100%"
-  >
-    <el-table-column
-      v-loading="loading"
-      align="center"
-      label="ID"
-      width="65"
-      element-loading-text="请给我点时间！"
-    >
-      <template slot-scope="{row}">
-        <span>{{ row.id }}</span>
-      </template>
-    </el-table-column>
-
-    <el-table-column
-      width="180px"
-      align="center"
-      label="Date"
-    >
-      <template slot-scope="{row}">
-        <span>{{ row.timestamp | parseTime }}</span>
-      </template>
-    </el-table-column>
-
-    <el-table-column
-      min-width="240px"
-      label="Title"
-    >
-      <template slot-scope="{row}">
-        <span>{{ row.title }}</span>
-        <el-tag>{{ row.type }}</el-tag>
-      </template>
-    </el-table-column>
-
-    <el-table-column
-      width="180px"
-      align="center"
-      label="Author"
-    >
-      <template slot-scope="{row}">
-        <span>{{ row.author }}</span>
-      </template>
-    </el-table-column>
-
-    <el-table-column
-      width="120px"
-      label="Importance"
-    >
-      <template slot-scope="{row}">
-        <svg-icon
-          v-for="n in +row.importance"
-          :key="n"
-          name="star"
-        />
-      </template>
-    </el-table-column>
-
-    <el-table-column
-      align="center"
-      label="Readings"
-      width="95"
-    >
-      <template slot-scope="{row}">
-        <span>{{ row.pageviews }}</span>
-      </template>
-    </el-table-column>
-
-    <el-table-column
-      class-name="status-col"
-      label="Status"
-      width="110"
-    >
-      <template slot-scope="{row}">
-        <el-tag :type="row.status | articleStatusFilter">
-          {{ row.status }}
-        </el-tag>
-      </template>
-    </el-table-column>
-  </el-table>
+  <el-form ref="dataForm"
+           :rules="rules"
+           :model="defaultEquipmentInfoData"
+           label-position="left"
+           label-width="100px">
+    <div v-for="(item,index) in formList"
+         :key="index">
+      <p style="font-size: 18px;">{{Object.keys(item)[0]}}</p>
+      <el-row :gutter="20">
+        <el-col :span="8"
+                v-for="(formitems,i) in Object.values(item)[0]"
+                :key="i">
+          <el-form-item :label="formitems.label"
+                        prop="type">
+            <el-input v-model="defaultEquipmentInfoData[formitems.key]" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </div>
+  </el-form>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { getArticles } from '@/api/articles'
-
+import { equipmentInfoData } from '@/api/equipment'
+import {
+  equipmentBasicInfo,
+  equipmentProperty,
+  capitalStructure,
+  purchaseInfo,
+  biddingInfo,
+  contractInfo,
+  acceptanceInfo
+} from '@/store/formlist/index'
 @Component({
   name: 'TabPane'
 })
 export default class extends Vue {
-  @Prop({ default: 'CN' }) private type!: string
-
+  @Prop({ default: 'equipmentInfo' }) private type!: string
   private list = null
   private listQuery = {
     page: 1,
@@ -103,10 +47,79 @@ export default class extends Vue {
     sort: 'id'
   }
 
+  private defaultEquipmentInfoData = equipmentInfoData // 默认新增模态框数据
   private loading = false
-
+  private formList: any = []
+  // 表单映射数组
   created() {
+    console.log('🚀 ~ this.type', this.type)
+
+    switch (this.type) {
+      case 'equipmentInfo':
+        this.formList = [
+          {
+            基本信息: equipmentBasicInfo
+          },
+          {
+            设备属性: equipmentProperty
+          },
+          {
+            资金结构: capitalStructure
+          }
+        ]
+        break
+      case 'equipmentData':
+        this.formList = [
+          {
+            申购信息: purchaseInfo
+          },
+          {
+            招标信息: biddingInfo
+          },
+          {
+            合同信息: contractInfo
+          },
+          {
+            验收信息: acceptanceInfo
+          }
+        ]
+        break
+      case 'purchaseInfo':
+        this.formList = [
+          {
+            基本信息: equipmentBasicInfo
+          },
+          {
+            设备属性: equipmentProperty
+          },
+          {
+            资金结构: capitalStructure
+          }
+        ]
+        break
+      case 'depreciateInfo':
+        this.formList = [
+          {
+            基本信息: equipmentBasicInfo
+          },
+          {
+            设备属性: equipmentProperty
+          },
+          {
+            资金结构: capitalStructure
+          }
+        ]
+        break
+      default:
+        console.log('error')
+    }
     this.getList()
+  }
+
+  // 监听type值变化
+  @Watch('type')
+  private onTypeChange() {
+    console.log('🚀 ~ type', this.type)
   }
 
   private async getList() {

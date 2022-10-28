@@ -42,7 +42,7 @@ export default {
     checkingSet: '巡检设置',
     meteringTestingSetup: '计量检测设置',
     inventorySettings: '盘点设置',
-    infrastructure: '基础设置', //= ====1
+    infrastructure: '基础数据', //= ====1
     personalData: '个人资料',
     APPMenu: 'APP菜单',
     userManagement: '用户管理',
@@ -60,6 +60,9 @@ export default {
     versionManagement: '版本管理', //= ====1
     systemManagement: '系统管理',
     dictionaryManagement: '字典管理',
+    menuManagement: '菜单管理',
+    roleManagement: '角色管理',
+    personManagement: '用户管理',
     App: 'App',
 
     dashboard: '首页',
