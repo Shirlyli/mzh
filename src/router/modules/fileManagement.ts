@@ -6,7 +6,7 @@ const fileManagementRouter: RouteConfig[] = [
   {
     path: '/fileManagement',
     component: Layout,
-    redirect: '/fileManagement/addNewEquipment',
+    redirect: '/fileManagement/equipmentClass',
     meta: {
       title: 'fileManagement',
       icon: 'lock',

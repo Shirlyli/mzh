@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <main-sub-layout class="main-wrapper rule-config-page">
       <template #left>
         <el-card>

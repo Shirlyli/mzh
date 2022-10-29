@@ -12135,10 +12135,10 @@ vuex@^3.6.2:
   resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.6.2.tgz#236bc086a870c3ae79946f107f16de59d5895e71"
   integrity sha512-ETW44IqCgBpVomy520DT5jf8n0zoCac+sxWnn+hMe/CzaSejb/eVw2YToiXYX+Ex/AuHHia28vWTq4goAexFbw==
 
-vxe-table@3.2.6:
-  version "3.2.6"
-  resolved "https://registry.npmmirror.com/vxe-table/-/vxe-table-3.2.6.tgz#b60d776ab61ae765e2a3cdedd72121a799c07d3e"
-  integrity sha512-jqq1huIV+yN6iGHG5KPl67f04mpTy2CBSp1cD3GwbWc6tT5pVCHi2Jh/MfudZBZcWCYT8HM/h/0d5ttdynqCbg==
+vxe-table@3.6.6:
+  version "3.6.6"
+  resolved "https://registry.npmmirror.com/vxe-table/-/vxe-table-3.6.6.tgz#a97792fbcb0088e1db182d965c2e8e3ca56e6df6"
+  integrity sha512-DKifb0ekFYCu0UkTE0r1BmkRhabnCnS1+ilnTwciuTyC/DzGfwi8s+8LjX7YMV+Jp+hr4CJubIzHPcP41M+JTg==
 
 w3c-hr-time@^1.0.1:
   version "1.0.2"

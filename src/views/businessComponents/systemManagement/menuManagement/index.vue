@@ -1,7 +1,9 @@
 <template>
   <div class="p-md">
     <el-card>
-      <VexTable :formConfig="formConfig" :columns="columns"/>
+      <VexTable :formConfig="formConfig"
+                :columns="columns"
+                :tableData="tableData" />
     </el-card>
   </div>
 </template>

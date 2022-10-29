@@ -1,7 +1,6 @@
 <template>
   <div>
     <!-- @form-submit="findList" -->
-
     <vxe-grid ref="xGrid"
               v-bind="gridOptions"
               :toolbar-config="tableToolbar">
@@ -77,28 +76,13 @@ import VXETable from 'vxe-table'
 })
 export default class extends Vue {
   @Prop({
-    default: {
-      data: {
-        name: '',
-        sex: '',
-        time: ''
-      },
-      items: [
-        { field: 'name', title: '名称', slots: { default: 'name_item' } },
-        {
-          field: 'sex',
-          title: '菜单路由',
-          slots: { default: 'sex_item' }
-        },
-        { field: 'time', title: '权限标识', slots: { default: 'create_time' } },
-        { field: 'time', title: '创建时间', slots: { default: 'create_time' } },
-        { slots: { default: 'operate_item' } }
-      ] // 表单项
-    }
+    default: {}
   })
   formConfig!: any
 
   @Prop({ default: [] }) columns!: []
+
+  @Prop({ default: [] }) tableData!: []
   private gridOptions: any = {
     resizable: true,
     border: true,
@@ -106,7 +90,14 @@ export default class extends Vue {
     loading: false,
     height: 'auto',
     exportConfig: {},
+    treeConfig: {
+      transform: true,
+      rowField: 'id',
+      parentField: 'parentId'
+      // hasChild: 'hasChild', // 设置是否有子节点标识
+    },
     checkboxConfig: {
+      labelField: 'id',
       // 设置复选框支持分页勾选，需要设置 rowId 行数据主键
       reserve: true
     },
@@ -116,19 +107,22 @@ export default class extends Vue {
       pageSize: 10,
       pageSizes: [10, 20, 50, 100, 200, 500]
     },
-    editConfig: {
-      // 设置触发编辑为手动模式
-      trigger: 'manual',
-      // 设置为整行编辑模式
-      mode: 'row',
-      // 显示修改状态和新增状态
-      showStatus: true,
-      // 自定义可编辑列头的图标
-      icon: 'vxe-icon-question-circle-fill'
+    expandConfig: {
+      labelField: 'name'
     },
+    // editConfig: {
+    //   // 设置触发编辑为手动模式
+    //   trigger: 'manual',
+    //   // 设置为整行编辑模式
+    //   mode: 'row',
+    //   // 显示修改状态和新增状态
+    //   showStatus: true,
+    //   // 自定义可编辑列头的图标
+    //   icon: 'vxe-icon-question-circle-fill',
+    // },
     formConfig: this.formConfig,
     columns: this.columns, // 列表项数据
-    data: []
+    data: this.tableData
   }
 
   // 自定义工具栏
@@ -149,7 +143,7 @@ export default class extends Vue {
   ]
 
   created() {
-    this.findList()
+    // this.findList()
   }
 
   // 获取列表数据
@@ -209,7 +203,7 @@ export default class extends Vue {
   }
 
   // 编辑
-  private editRowEvent = (row) => {
+  private editRowEvent = (row: any) => {
     const $grid: any = (this.$refs as any).xGrid
     ;($grid as any).setActiveRow(row)
   }
@@ -227,7 +221,7 @@ export default class extends Vue {
   }
 
   // 删除
-  private removeRowEvent = async(row) => {
+  private removeRowEvent = async(row: any) => {
     const type = await VXETable.modal.confirm('您确定要删除该数据?')
     const $grid: any = (this.$refs as any).xGrid
     if (type === 'confirm') {
