@@ -14,31 +14,6 @@ const equipmentArchivesRouter: RouteConfig[] = [
       alwaysShow: true // will always show the root menu
     },
     children: [
-
-      {
-        path: 'equipmentCategory',
-        component: () =>
-          import(
-            /* webpackChunkName: "permission-page" */ '@/views/businessComponents/equipmentArchives/equipmentCategory/index.vue'
-          ),
-        name: 'equipmentCategory',
-        meta: {
-          title: 'equipmentCategory'
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'fileManagement',
-        component: () =>
-          import(
-            /* webpackChunkName: "permission-page" */ '@/views/businessComponents/equipmentArchives/fileManagement/index.vue'
-          ),
-        name: 'fileManagement',
-        meta: {
-          title: 'fileManagement'
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
       {
         path: 'inspectionRecords',
         component: () =>

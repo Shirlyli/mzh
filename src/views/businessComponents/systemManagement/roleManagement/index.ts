@@ -35,6 +35,7 @@ export default class extends Vue {
 
   private columns = [
     { type: 'seq', width: 60 },
+    { type: 'checkbox', width: 60 },
     { field: 'name', title: '授权角色' },
     { field: 'name', title: '角色名称' },
     { field: 'nickname', title: '角色类型' },

@@ -134,6 +134,18 @@ const businessRouter: RouteConfig[] = [
     },
     children: [
       {
+        path: 'equipmentCategory',
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ '@/views/businessComponents/equipmentArchives/equipmentCategory/index.vue'
+          ),
+        name: 'equipmentCategory',
+        meta: {
+          title: 'equipmentCategory'
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
         path: 'dictionaryManagement',
         component: () =>
           import(

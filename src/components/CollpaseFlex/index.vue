@@ -2,7 +2,8 @@
   <div class="wrapper">
     <!-- 布局左侧 -->
     <div class="wrapper-left"
-         :class="{ active: isOpen }">
+         :class="{active: isOpen}"
+         style="active">
       <div class="slot-left">
         <slot name="left"></slot>
       </div>
@@ -13,7 +14,7 @@
     </div>
     <!-- 布局右侧 -->
     <div class="wrapper-right"
-         :class="{ active: isOpen }">
+         :class="{active: isOpen}">
       <slot name="right"></slot>
     </div>
   </div>
@@ -22,17 +23,17 @@
 <script>
 export default {
   name: 'mainSubLayout',
-  data () {
+  data() {
     return {
-      isOpen: false, // 控制左侧显示隐藏开关
+      isOpen: false // 控制左侧显示隐藏开关
     }
   },
   methods: {
     // 处理开关点击
-    handleSwitch () {
+    handleSwitch() {
       this.isOpen = !this.isOpen
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -48,6 +49,9 @@ export default {
     // border: 1px solid #d9d9d9;
     border-radius: 4px;
     position: relative;
+    transition: all 0.3s;
+    opacity: 1;
+    max-width: 260px;
 
     .slot-left {
       width: 100%;
@@ -59,7 +63,10 @@ export default {
       width: 0;
 
       .slot-left {
-        display: none;
+        max-width: 0;
+        transition: all 0.3s;
+        opacity: 0;
+        pointer-events: 'none';
       }
       .switch-btn {
         left: -10px;

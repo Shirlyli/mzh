@@ -16,7 +16,7 @@ export default class extends Vue {
     { label: '设备资料', key: 'US' },
     { label: '采购信息', key: 'JP' },
     { label: '折旧信息', key: 'EU' }
-  ]
+  ];
 
   private formConfig = {
     data: {
@@ -35,10 +35,11 @@ export default class extends Vue {
       { field: 'time', title: '创建时间', slots: { default: 'create_time' } },
       { slots: { default: 'operate_item' } }
     ] // 表单项
-  }
+  };
 
   private columns = [
     { type: 'seq', width: 60 },
+    { type: 'checkbox', width: 60 },
     { field: 'name', title: '名称' },
     { field: 'name', title: '菜单路由' },
     { field: 'nickname', title: '权限标识' },
@@ -51,14 +52,14 @@ export default class extends Vue {
       slots: { default: 'operate' },
       showOverflow: true
     }
-  ]
+  ];
 
-  private activeName = 'CN'
-  private createdTimes = 0
-  private tableData = []
+  private activeName = 'CN';
+  private createdTimes = 0;
+  private tableData = [];
   @Watch('activeName')
   private onActiveNameChange(value: string) {
-    this.$router.push(`${this.$route.path}?tab=${value}`).catch((err) => {
+    this.$router.push(`${this.$route.path}?tab=${value}`).catch(err => {
       console.warn(err)
     })
   }

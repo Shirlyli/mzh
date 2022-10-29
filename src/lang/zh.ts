@@ -9,9 +9,10 @@ export default {
     outboundRecords: '出库记录',
     biddingDocuments: '招标文件',
     equipmentArchives: '设备管理', //= ====1
-    addNewEquipment: '拓扑树-科室分类',
-    equipmentCategory: '设备类别',
+    equipmentCategory: '设备类型管理',
     fileManagement: '档案管理',
+    addNewEquipment: '拓扑树-科室分类',
+    equipmentClass: '设备树-设备分类类别',
     inspectionRecords: '巡检记录',
     lostRecord: '丢失记录',
     scrapRecord: '报废记录',

@@ -14,7 +14,14 @@
         </el-card>
       </template>
       <template #right>
-        <RightContent />
+        <el-card class="card-wrapper card-wrapper-left">
+          <div slot="header"
+               class="clearfix">
+            <span>设备查询</span>
+          </div>
+          <VexTable :columns="columns"
+                    :formConfig="formConfig" />
+        </el-card>
       </template>
     </main-sub-layout>
 

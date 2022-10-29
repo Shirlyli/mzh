@@ -19,11 +19,25 @@ const fileManagementRouter: RouteConfig[] = [
         path: 'addNewEquipment',
         component: () =>
           import(
-            /* webpackChunkName: "dashboard" */ '@/views/businessComponents/addNewEquipment/index.vue'
+            /* webpackChunkName: "dashboard" */ '@/views/businessComponents/fileManagement/addNewEquipment/index.vue'
           ),
         name: 'addNewEquipment',
         meta: {
           title: 'addNewEquipment'
+          // icon: 'dashboard',
+          // affix: true
+        }
+      },
+      // 设备树-设备类别分类
+      {
+        path: 'equipmentClass',
+        component: () =>
+          import(
+            /* webpackChunkName: "dashboard" */ '@/views/businessComponents/fileManagement/equipmentClass/index.vue'
+          ),
+        name: 'equipmentClass',
+        meta: {
+          title: 'equipmentClass'
           // icon: 'dashboard',
           // affix: true
         }
