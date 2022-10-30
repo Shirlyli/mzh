@@ -3,6 +3,10 @@
     <!-- @form-submit="findList" -->
     <vxe-grid ref="xGrid"
               v-bind="gridOptions"
+              :loading="loading"
+              :data="tableData"
+              :tablePage="tablePage"
+              :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
               :toolbar-config="tableToolbar">
 
       <!-- 自定义工具栏 -->
@@ -62,12 +66,23 @@
                     @click="removeRowEvent(row)"></vxe-button>
       </template>
 
+      <!--分页 -->
+      <template #pager>
+        <vxe-pager :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
+                   :current-page.sync="tablePage.currentPage"
+                   :page-size.sync="tablePage.pageSize"
+                   :total="tablePage.total"
+                   @page-change="handlePageChange">
+        </vxe-pager>
+      </template>
+
     </vxe-grid>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { getNextNodeData } from '@/api/equipment'
+import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
 import VXETable from 'vxe-table'
 
 @Component({
@@ -75,25 +90,30 @@ import VXETable from 'vxe-table'
   components: {}
 })
 export default class extends Vue {
-  @Prop({
-    default: {}
-  })
-  formConfig!: any
-
+  @Prop({ default: {} }) formConfig!: any
   @Prop({ default: [] }) columns!: []
+  @Prop() paramsConfig!: any
+  @Watch('paramsConfig', { immediate: true, deep: true })
+  private onParamsConfigChange(newdata: any) {
+    console.log('🚀 ~ onParamsConfigChangenew', newdata)
+    this.findList(newdata)
+  }
 
-  @Prop({ default: [] }) tableData!: []
+  private tablePage = { total: 0, currentPage: 1, pageSize: 10 }
+  private loading = false
+  private tableData = []
   private gridOptions: any = {
     resizable: true,
     border: true,
     showOverflow: true,
-    loading: false,
     height: 'auto',
     exportConfig: {},
     treeConfig: {
       transform: true,
       rowField: 'id',
-      parentField: 'parentId'
+      parentField: 'pid',
+      iconOpen: 'vxe-icon-square-minus-fill',
+      iconClose: 'vxe-icon-square-plus-fill'
       // hasChild: 'hasChild', // 设置是否有子节点标识
     },
     checkboxConfig: {
@@ -101,28 +121,12 @@ export default class extends Vue {
       // 设置复选框支持分页勾选，需要设置 rowId 行数据主键
       reserve: true
     },
-    pagerConfig: {
-      total: 0,
-      currentPage: 1,
-      pageSize: 10,
-      pageSizes: [10, 20, 50, 100, 200, 500]
-    },
     expandConfig: {
-      labelField: 'name'
+      labelField: 'name',
+      expandAll: true
     },
-    // editConfig: {
-    //   // 设置触发编辑为手动模式
-    //   trigger: 'manual',
-    //   // 设置为整行编辑模式
-    //   mode: 'row',
-    //   // 显示修改状态和新增状态
-    //   showStatus: true,
-    //   // 自定义可编辑列头的图标
-    //   icon: 'vxe-icon-question-circle-fill',
-    // },
     formConfig: this.formConfig,
-    columns: this.columns, // 列表项数据
-    data: this.tableData
+    columns: this.columns // 列表项数据
   }
 
   // 自定义工具栏
@@ -143,63 +147,32 @@ export default class extends Vue {
   ]
 
   created() {
-    // this.findList()
+    this.findList(this.paramsConfig)
   }
 
   // 获取列表数据
-  private findList = () => {
-    const { gridOptions } = this
-    gridOptions.loading = true
-    setTimeout(() => {
-      gridOptions.data = [
-        {
-          id: 10001,
-          name: 'Test1',
-          nickname: 'T1',
-          role: 'Develop',
-          sex: '1',
-          age: 28,
-          address: 'Shenzhen'
-        },
-        {
-          id: 10002,
-          name: 'Test2',
-          nickname: 'T2',
-          role: 'Test',
-          sex: '0',
-          age: 22,
-          address: 'Guangzhou'
-        },
-        {
-          id: 10003,
-          name: 'Test3',
-          nickname: 'T3',
-          role: 'PM',
-          sex: '1',
-          age: 32,
-          address: 'Shanghai'
-        },
-        {
-          id: 10004,
-          name: 'Test4',
-          nickname: 'T4',
-          role: 'Designer',
-          sex: '0',
-          age: 23,
-          address: 'Shenzhen'
-        },
-        {
-          id: 10005,
-          name: 'Test5',
-          nickname: 'T5',
-          role: 'Develop',
-          sex: '0',
-          age: 30,
-          address: 'Shanghai'
-        }
-      ]
-      gridOptions.loading = false
-    }, 500)
+  private async findList(config: any) {
+    this.loading = true
+    const res: any = await getNextNodeData(config.params)
+    if (res.result && res.data) {
+      this.tableData = this.flatten(res.data)
+      this.tablePage.total = res.count
+      console.log('🚀 ~ this.tableData', this.tableData)
+    } else {
+      this.tableData = []
+    }
+    this.loading = false
+  }
+
+  private flatten(arr: any) {
+    // 多维menu数组 变成一维数组
+    return [].concat(
+      ...arr.map((item: any) => {
+        return item.children // 判断是否有子项，否则递归flatten报错
+          ? [].concat(item, ...this.flatten(item.children))
+          : [].concat(item)
+      })
+    )
   }
 
   // 编辑
@@ -227,6 +200,23 @@ export default class extends Vue {
     if (type === 'confirm') {
       ($grid as any).remove(row)
     }
+  }
+
+  // 新增
+  @Emit()
+  emitHandleInsert() {
+    console.log('🚀 ~@emit ~ emitHandleCreate')
+  }
+
+  private insertEvent = () => {
+    this.emitHandleInsert()
+  }
+
+  // 分页切换事件
+  private handlePageChange({ currentPage, pageSize }) {
+    this.tablePage.currentPage = currentPage
+    this.tablePage.pageSize = pageSize
+    this.findList(this.paramsConfig)
   }
 }
 </script>

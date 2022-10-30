@@ -1,23 +1,21 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import MainSubLayout from '@/components/CollpaseFlex/index.vue'
-import Tree from '@/components/Tree/index.vue'
 import VexTable from '@/components/VexTable/index.vue'
+import AddDialog from './addDialog.vue'
 @Component({
   name: 'Tab',
   components: {
-    MainSubLayout,
-    Tree,
-    VexTable
+    VexTable,
+    AddDialog
   }
 })
 export default class extends Vue {
-  private tabMapOptions = [
-    { label: '设备信息', key: 'CN' },
-    { label: '设备资料', key: 'US' },
-    { label: '采购信息', key: 'JP' },
-    { label: '折旧信息', key: 'EU' }
-  ];
+  mounted() {
+    // this.$on("emit-handle-insert", () => {
+    //   console.log("🚀 ~ emit-handle-insert");
+    // });
+  }
 
+  // 菜单列表查询项-表单
   private formConfig = {
     data: {
       name: '',
@@ -41,10 +39,11 @@ export default class extends Vue {
     ] // 表单项
   };
 
+  // 菜单列表项
   private columns = [
     // { type: "seq", width: 60 },
     // { type: "checkbox", width: 60 },
-    { field: 'name', title: '名称', treeNode: true },
+    { field: 'title', title: '名称', treeNode: true },
     { field: 'type', title: '菜单路由' },
     { field: 'size', title: '权限标识' },
     { field: 'date', title: '启用' },
@@ -58,11 +57,12 @@ export default class extends Vue {
     }
   ];
 
+  // 菜单数据
   private tableData = [
     {
       id: 10000,
       parentId: null,
-      name: 'test abc1',
+      title: 'test abc1',
       type: 'mp3',
       size: 1024,
       date: '2020-08-01'
@@ -70,7 +70,7 @@ export default class extends Vue {
     {
       id: 10050,
       parentId: null,
-      name: 'Test2',
+      title: 'Test2',
       type: 'mp4',
       size: null,
       date: '2021-04-01'
@@ -78,7 +78,7 @@ export default class extends Vue {
     {
       id: 24300,
       parentId: 10050,
-      name: 'Test3',
+      title: 'Test3',
       type: 'avi',
       size: 1024,
       date: '2020-03-01'
@@ -86,7 +86,7 @@ export default class extends Vue {
     {
       id: 20045,
       parentId: 24300,
-      name: 'test abc4',
+      title: 'test abc4',
       type: 'html',
       size: 600,
       date: '2021-04-01'
@@ -94,7 +94,7 @@ export default class extends Vue {
     {
       id: 10053,
       parentId: 24300,
-      name: 'test abc96',
+      title: 'test abc96',
       type: 'avi',
       size: null,
       date: '2021-04-01'
@@ -102,7 +102,7 @@ export default class extends Vue {
     {
       id: 24330,
       parentId: 10053,
-      name: 'test abc5',
+      title: 'test abc5',
       type: 'txt',
       size: 25,
       date: '2021-10-01'
@@ -110,7 +110,7 @@ export default class extends Vue {
     {
       id: 21011,
       parentId: 10053,
-      name: 'Test6',
+      title: 'Test6',
       type: 'pdf',
       size: 512,
       date: '2020-01-01'
@@ -118,7 +118,7 @@ export default class extends Vue {
     {
       id: 22200,
       parentId: 10053,
-      name: 'Test7',
+      title: 'Test7',
       type: 'js',
       size: 1024,
       date: '2021-06-01'
@@ -126,7 +126,7 @@ export default class extends Vue {
     {
       id: 23666,
       parentId: null,
-      name: 'Test8',
+      title: 'Test8',
       type: 'xlsx',
       size: 2048,
       date: '2020-11-01'
@@ -134,7 +134,7 @@ export default class extends Vue {
     {
       id: 23677,
       parentId: 23666,
-      name: 'Test7',
+      title: 'Test7',
       type: 'js',
       size: 1024,
       date: '2021-06-01'
@@ -142,7 +142,7 @@ export default class extends Vue {
     {
       id: 23671,
       parentId: 23677,
-      name: 'Test7',
+      title: 'Test7',
       type: 'js',
       size: 1024,
       date: '2021-06-01'
@@ -150,7 +150,7 @@ export default class extends Vue {
     {
       id: 23672,
       parentId: 23677,
-      name: 'Test7',
+      title: 'Test7',
       type: 'js',
       size: 1024,
       date: '2021-06-01'
@@ -158,7 +158,7 @@ export default class extends Vue {
     {
       id: 23688,
       parentId: 23666,
-      name: 'Test7',
+      title: 'Test7',
       type: 'js',
       size: 1024,
       date: '2021-06-01'
@@ -166,7 +166,7 @@ export default class extends Vue {
     {
       id: 23681,
       parentId: 23688,
-      name: 'Test7',
+      title: 'Test7',
       type: 'js',
       size: 1024,
       date: '2021-06-01'
@@ -174,7 +174,7 @@ export default class extends Vue {
     {
       id: 23682,
       parentId: 23688,
-      name: 'Test7',
+      title: 'Test7',
       type: 'js',
       size: 1024,
       date: '2021-06-01'
@@ -182,7 +182,7 @@ export default class extends Vue {
     {
       id: 24555,
       parentId: null,
-      name: 'test abc9',
+      title: 'test abc9',
       type: 'avi',
       size: 224,
       date: '2020-10-01'
@@ -190,7 +190,7 @@ export default class extends Vue {
     {
       id: 24566,
       parentId: 24555,
-      name: 'Test7',
+      title: 'Test7',
       type: 'js',
       size: 1024,
       date: '2021-06-01'
@@ -198,31 +198,27 @@ export default class extends Vue {
     {
       id: 24577,
       parentId: 24555,
-      name: 'Test7',
+      title: 'Test7',
       type: 'js',
       size: 1024,
       date: '2021-06-01'
     }
   ];
 
-  private activeName = 'CN';
-  private createdTimes = 0;
-  @Watch('activeName')
-  private onActiveNameChange(value: string) {
-    this.$router.push(`${this.$route.path}?tab=${value}`).catch(err => {
-      console.warn(err)
-    })
-  }
+  // 新增表单显隐
+  private dialogFormVisible = false;
+
+  // 新增或编辑
+  private dialogStatus = 'create';
 
   created() {
     // Init the default selected tab
-    const tab = this.$route.query.tab as string
-    if (tab) {
-      this.activeName = tab
-    }
   }
 
-  private showCreatedTimes() {
-    this.createdTimes = this.createdTimes + 1
-  }
+  // 接收新增表单事件
+  private insertMenuData = () => {
+    console.log('11111')
+    this.dialogFormVisible = true
+    this.dialogStatus = 'aaaa'
+  };
 }

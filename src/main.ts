@@ -6,7 +6,7 @@ import SvgIcon from 'vue-svgicon'
 
 import '@/styles/element-variables.scss'
 import '@/styles/index.scss'
-
+// import Loading from 'element-ui'
 import App from '@/App.vue'
 import store from '@/store'
 import { AppModule } from '@/store/modules/app'
@@ -23,6 +23,7 @@ import './global.scss'
 import 'xe-utils'
 import VXETable from 'vxe-table' // 注意xe-utils与VXETable的引入顺序,有些版本会报错
 import 'vxe-table/lib/index.css'
+// Vue.use(Loading);
 Vue.use(VXETable)
 // Vue.prototype.$XModal = VXETable.modal
 Vue.use(ElementUI, {

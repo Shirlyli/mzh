@@ -1,7 +1,8 @@
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
 import VexTable from '@/components/VexTable/index.vue'
+import { getTreeData } from '@/api/equipment'
 @Component({
   name: 'Tab',
   components: {
@@ -11,14 +12,7 @@ import VexTable from '@/components/VexTable/index.vue'
   }
 })
 export default class extends Vue {
-  private tabMapOptions = [
-    { label: '设备信息', key: 'CN' },
-    { label: '设备资料', key: 'US' },
-    { label: '采购信息', key: 'JP' },
-    { label: '折旧信息', key: 'EU' }
-  ]
-
-  private columns =[
+  private columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'name', title: '字典值' },
@@ -31,27 +25,36 @@ export default class extends Vue {
       slots: { default: 'operate' },
       showOverflow: true
     }
-  ]
+  ]; // 列表配置项
 
-  private activeName = 'CN'
-  private createdTimes = 0
-  private tableData = []
-  @Watch('activeName')
-  private onActiveNameChange(value: string) {
-    this.$router.push(`${this.$route.path}?tab=${value}`).catch((err) => {
-      console.warn(err)
-    })
-  }
+  private treeParams = {
+    page: '1',
+    limit: '10',
+    entity: {
+      id: 'F7BFB16412328A-3554-4755-BB10-057BA8A8A47E'
+    }
+  }; // 树形图传参
+
+  private tableData = []; // 列表数据
+  private loading = false; // loading是否
+  private url = '/common/dicInfo/queryTree'; // 接口url
 
   created() {
     // Init the default selected tab
     const tab = this.$route.query.tab as string
-    if (tab) {
-      this.activeName = tab
-    }
+    this.getTreeListData()
   }
 
-  private showCreatedTimes() {
-    this.createdTimes = this.createdTimes + 1
+  // 获取科室树形图数据
+  private async getTreeListData() {
+    this.loading = true
+    const res: any = await getTreeData(this.url, this.treeParams)
+    if (res?.code === 200) {
+      console.log('🚀 ~ res111', res.data)
+      this.$nextTick(() => {
+        this.tableData = res.data
+        this.loading = false
+      })
+    }
   }
 }

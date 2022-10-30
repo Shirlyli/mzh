@@ -1,10 +1,15 @@
 <template>
   <div class="p-md">
+    <!-- 列表 -->
     <el-card>
       <VexTable :formConfig="formConfig"
                 :columns="columns"
-                :tableData="tableData" />
+                :tableData="tableData"
+                @emit-handle-insert="insertMenuData" />
     </el-card>
+
+    <!-- 新增模态框 -->
+    <AddDialog :dialogFormVisible="dialogFormVisible" :dialogStatus="dialogStatus"/>
   </div>
 </template>
 
@@ -12,7 +17,4 @@
 </script>
 
 <style lang="scss" scoped>
-.tab-container {
-  margin: 30px;
-}
 </style>

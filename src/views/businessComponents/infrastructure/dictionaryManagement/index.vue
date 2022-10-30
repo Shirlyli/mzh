@@ -7,7 +7,7 @@
                class="clearfix">
             <span>字典管理</span>
           </div>
-          <Tree />
+          <Tree :url="url" :params="treeParams"/>
         </el-card>
       </template>
       <template #right>
@@ -16,7 +16,7 @@
                class="clearfix">
             <span>字典</span>
           </div>
-          <VexTable :columns="columns"/>
+          <VexTable :columns="columns" :loading="loading" :tableData="tableData" :formConfig="{}"/>
         </el-card>
       </template>
     </main-sub-layout>

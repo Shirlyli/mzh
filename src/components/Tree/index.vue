@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div v-loading="treeLoading">
     <el-input placeholder="输入关键字进行过滤"
-              v-model="filterText" clearable>
+              v-model="filterText"
+              clearable>
     </el-input>
     <div class="mt-md"></div>
-    <el-tree :data="data"
+    <el-tree :data="treeData"
              :props="defaultProps"
              default-expand-all
              @node-click="handleNodeClick"
@@ -14,32 +15,57 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
-import { TreeData } from '@/mock/tree'
-console.log('🚀 ~ TreeData', TreeData)
+import { getTreeData } from '@/api/equipment'
+import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
 @Component({
   name: 'Tree',
   components: {}
 })
 export default class extends Vue {
-  public data = TreeData.data
-  public filterText = ''
+  @Prop({ default: String }) url!: string
+  @Prop() params!: any
+  public filterText = '';
+  private treeData = [] // 树形数据
+  public treeLoading = false // loading是否
   created() {
-    console.log('🚀 ~ TreeData', this.data)
+    console.log('🚀 ~ url', this.url)
+    this.getTreeListData()
   }
 
+  // 获取科室树形图数据
+  private async getTreeListData() {
+    this.treeLoading = true
+    const res: any = await getTreeData(this.url, this.params)
+    if (res?.code === 200) {
+      console.log('🚀 ~ res', res.data)
+      this.$nextTick(() => {
+        this.treeData = res.data
+        this.treeLoading = false
+      })
+    }
+  }
+
+  // 监听输入框输入数据
   @Watch('filterText', { immediate: true, deep: true })
   onChangeValue(val: any) {
-    (this.$refs.tree as any).filter(val)
+    console.log(val)
+    ;(this.$refs.tree as any).filter(val)
   }
 
+  // 默认配置项
   public defaultProps = {
     children: 'children',
     label: 'title'
   }
 
+  @Emit()
+  emitHandleClick(data:any) {
+    return data
+  }
+
+  // 点击节点事件
   public handleNodeClick = (data: any) => {
-    console.log('🚀 ~ data', data)
+    this.emitHandleClick(data)
   }
 
   public filterNode(value: any, data: any) {
