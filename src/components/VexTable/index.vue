@@ -7,12 +7,13 @@
               :data="tableData"
               :tablePage="tablePage"
               :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
-              :toolbar-config="tableToolbar">
+              :toolbar-config="tableToolbar"
+              @checkbox-change="handleChange">
 
       <!-- 自定义工具栏 -->
       <template #toolbar_buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
-        <vxe-button @click="saveEvent"
+        <vxe-button @click="groupRemove"
                     status="warning">批量删除</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()">导入</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()">导出</vxe-button>
@@ -95,7 +96,6 @@ export default class extends Vue {
   @Prop() paramsConfig!: any
   @Watch('paramsConfig', { immediate: true, deep: true })
   private onParamsConfigChange(newdata: any) {
-    console.log('🚀 ~ onParamsConfigChangenew', newdata)
     this.findList(newdata)
   }
 
@@ -110,10 +110,10 @@ export default class extends Vue {
     exportConfig: {},
     treeConfig: {
       transform: true,
-      rowField: 'id',
-      parentField: 'pid',
-      iconOpen: 'vxe-icon-square-minus-fill',
-      iconClose: 'vxe-icon-square-plus-fill'
+      rowField: 'id'
+      // parentField: 'pid',
+      // iconOpen: 'vxe-icon-square-minus-fill',
+      // iconClose: 'vxe-icon-square-plus-fill',
       // hasChild: 'hasChild', // 设置是否有子节点标识
     },
     checkboxConfig: {
@@ -121,10 +121,10 @@ export default class extends Vue {
       // 设置复选框支持分页勾选，需要设置 rowId 行数据主键
       reserve: true
     },
-    expandConfig: {
-      labelField: 'name',
-      expandAll: true
-    },
+    // expandConfig: {
+    //   labelField: 'name',
+    //   expandAll: true,
+    // },
     formConfig: this.formConfig,
     columns: this.columns // 列表项数据
   }
@@ -146,6 +146,7 @@ export default class extends Vue {
     { value: '0', label: '女' }
   ]
 
+  private checkedList = [];// 已选列
   created() {
     this.findList(this.paramsConfig)
   }
@@ -153,11 +154,10 @@ export default class extends Vue {
   // 获取列表数据
   private async findList(config: any) {
     this.loading = true
-    const res: any = await getNextNodeData(config.params)
+    const res: any = await getNextNodeData(config.url, config.params)
     if (res.result && res.data) {
-      this.tableData = this.flatten(res.data)
+      this.tableData = res.data
       this.tablePage.total = res.count
-      console.log('🚀 ~ this.tableData', this.tableData)
     } else {
       this.tableData = []
     }
@@ -176,9 +176,13 @@ export default class extends Vue {
   }
 
   // 编辑
+  @Emit()
+  emitHandleUpdate(rowData: any) {
+    return rowData
+  }
+
   private editRowEvent = (row: any) => {
-    const $grid: any = (this.$refs as any).xGrid
-    ;($grid as any).setActiveRow(row)
+    this.emitHandleUpdate(row)
   }
 
   // 保存
@@ -194,11 +198,16 @@ export default class extends Vue {
   }
 
   // 删除
+  @Emit()
+  emitHandleRemove(rowData: any) {
+    return rowData
+  }
+
   private removeRowEvent = async(row: any) => {
     const type = await VXETable.modal.confirm('您确定要删除该数据?')
     const $grid: any = (this.$refs as any).xGrid
     if (type === 'confirm') {
-      ($grid as any).remove(row)
+      this.emitHandleRemove(row)
     }
   }
 
@@ -216,7 +225,24 @@ export default class extends Vue {
   private handlePageChange({ currentPage, pageSize }) {
     this.tablePage.currentPage = currentPage
     this.tablePage.pageSize = pageSize
+    this.paramsConfig.params.page = currentPage
+    console.log('🚀 ~ this.paramsConfig', this.paramsConfig)
     this.findList(this.paramsConfig)
+  }
+
+  // 批量删除
+  private async groupRemove() {
+    const type = await VXETable.modal.confirm('您确定要删除该数据?')
+    const $grid: any = (this.$refs as any).xGrid
+    if (type === 'confirm') {
+      this.emitHandleRemove(this.checkedList)
+    }
+  }
+
+  // 手动勾选并且值发生改变时触发的事件
+  private handleChange(checked: any) {
+    console.log('🚀 ~ checked', checked.records)
+    this.checkedList = checked.records
   }
 }
 </script>

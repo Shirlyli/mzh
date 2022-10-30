@@ -4,7 +4,8 @@ import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
 import VexTable from '@/components/VexTable/index.vue'
 import { Form } from 'element-ui'
-import { addEquipmentData } from '@/api/equipment'
+import { dealEquipmentData, updateEquipmentData } from '@/api/equipment'
+import _ from 'lodash'
 // import { TreeData } from "@/mock/tree";
 @Component({
   name: 'Tab',
@@ -16,17 +17,6 @@ import { addEquipmentData } from '@/api/equipment'
   }
 })
 export default class extends Vue {
-  created() {
-    // Init the default selected tab
-  }
-
-  mounted() {
-    // this.$on("emit-handle-click", (data: any) => {
-    //   console.log("🚀 ~ data", data);
-    //   console.log("🚀 ~ emit-handle-node-click");
-    // });
-  }
-
   private formConfig = {
     data: {
       name: '',
@@ -64,7 +54,8 @@ export default class extends Vue {
   private departmentData = {
     parentId: '',
     parentName: '',
-    departmentName: ''
+    departmentName: '',
+    departmentId: ''
   }; // 新增或编辑表单
 
   private rules = {
@@ -79,8 +70,8 @@ export default class extends Vue {
   private paramsConfig = {
     url: 'THospitalDepartmentInfo/querySelfAndPar',
     params: {
-      page: '1',
-      limit: '10',
+      page: 1,
+      limit: 10,
       entity: {
         id: '001'
       }
@@ -97,15 +88,14 @@ export default class extends Vue {
     this.departmentData = {
       parentId: id ?? '001',
       parentName: title ?? '医疗科室',
-      departmentName: ''
+      departmentName: '',
+      departmentId: ''
     }
-    console.log('🚀 ~ this.nodeClickData', this.nodeClickData)
   }
 
   // 接收树形组件点击节点数据
   private handleNodeClick(data: any) {
     this.nodeClickData = data
-    console.log('🚀 ~handleNodeClick~ data', data)
     // 查询科室及下级科室
     this.paramsConfig = {
       url: 'THospitalDepartmentInfo/querySelfAndPar',
@@ -119,11 +109,10 @@ export default class extends Vue {
     }
   }
 
-  // 模态框确认
+  // 新增科室
   private createData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        console.log('🚀 ~ this.departmentData', this.departmentData)
         const { parentId, departmentName } = this.departmentData
         const params = {
           id: '',
@@ -142,9 +131,13 @@ export default class extends Vue {
           note: null,
           isLeaf: ''
         }
-        const res: any = await addEquipmentData(params)
+        const res: any = await updateEquipmentData(params)
         if (res.result) {
-          (this.$refs.vexTable as any).findList(this.paramsConfig)
+          (this.$refs.vexTable as any).findList(this.paramsConfig);
+          (this.$refs.vxeTree as any).getTreeListData(
+            this.url,
+            this.treeParams
+          )
         }
         this.dialogVisible = false
         this.$notify({
@@ -157,17 +150,36 @@ export default class extends Vue {
     })
   }
 
-  // 模态框修改
+  // 修改科室
   private updateData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        // const tempData = Object.assign({}, this.tempArticleData)
-        // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-        // const { data } = await updateArticle(tempData.id, {
-        //   article: tempData
-        // })
-        // const index = this.list.findIndex((v: any) => v.id === data.article.id)
-        // this.list.splice(index, 1, data.article)
+        const { parentId, departmentName, departmentId } = this.departmentData
+        const params = {
+          id: departmentId,
+          pid: parentId,
+          name: departmentName,
+          dispindex: '',
+          dCode: null,
+          mobile: null,
+          phone: null,
+          status: 0,
+          companyInfoId: '',
+          flag: null,
+          ctime: null,
+          path: '',
+          dicId: '',
+          note: null,
+          isLeaf: ''
+        }
+        const res: any = await updateEquipmentData(params)
+        if (res.result) {
+          (this.$refs.vexTable as any).findList(this.paramsConfig);
+          (this.$refs.vxeTree as any).getTreeListData(
+            this.url,
+            this.treeParams
+          )
+        }
         this.dialogVisible = false
         this.$notify({
           title: '成功',
@@ -181,13 +193,43 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    console.log('🚀 ~ row', row)
-    // this.tempArticleData = Object.assign({}, row);
-    // this.tempArticleData.timestamp = +new Date(this.tempArticleData.timestamp);
+    const { name, id, pid } = row
+    this.departmentData = {
+      parentId: pid,
+      parentName: pid,
+      departmentName: name,
+      departmentId: id
+    }
     this.dialogStatus = 'update'
     this.dialogVisible = true
     this.$nextTick(() => {
       (this.$refs.dataForm as Form).clearValidate()
+    })
+  }
+
+  // 删除科室
+  private async handleRemove(row: any) {
+    let params = {}
+    if (Array.isArray(row)) {
+      const res = _.map(row, 'id')
+      params = {
+        ids: res.join(',')
+      }
+    } else {
+      params = {
+        ids: row.id
+      }
+    }
+    const res: any = await dealEquipmentData(params)
+    if (res.result) {
+      (this.$refs.vexTable as any).findList(this.paramsConfig);
+      (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams)
+    }
+    this.$notify({
+      title: '成功',
+      message: '删除成功',
+      type: 'success',
+      duration: 2000
     })
   }
 }

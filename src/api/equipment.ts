@@ -22,17 +22,25 @@ export const getTreeData = (url: any, data: any) =>
   })
 
 // 获取下级科室数据
-export const getNextNodeData = (data: any) =>
+export const getNextNodeData = (url:any, data: any) =>
   request({
-    url: 'THospitalDepartmentInfo/querySelfAndPar',
+    url,
     method: 'POST',
     data
   })
 
-// 新增科室数据
-export const addEquipmentData = (data: any) =>
+// 修改科室数据
+export const updateEquipmentData = (data: any) =>
   request({
     url: 'THospitalDepartmentInfo/save',
+    method: 'POST',
+    data
+  })
+
+// 删除科室
+export const dealEquipmentData = (data: any) =>
+  request({
+    url: 'THospitalDepartmentInfo/del',
     method: 'POST',
     data
   })

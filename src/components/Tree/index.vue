@@ -28,7 +28,6 @@ export default class extends Vue {
   private treeData = [] // 树形数据
   public treeLoading = false // loading是否
   created() {
-    console.log('🚀 ~ url', this.url)
     this.getTreeListData()
   }
 
@@ -48,8 +47,7 @@ export default class extends Vue {
   // 监听输入框输入数据
   @Watch('filterText', { immediate: true, deep: true })
   onChangeValue(val: any) {
-    console.log(val)
-    ;(this.$refs.tree as any).filter(val)
+    (this.$refs.tree as any).filter(val)
   }
 
   // 默认配置项

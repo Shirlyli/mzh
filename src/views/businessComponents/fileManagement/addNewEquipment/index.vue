@@ -7,7 +7,8 @@
                class="clearfix">
             <span>科室分类</span>
           </div>
-          <Tree :url="url"
+          <Tree ref="vxeTree"
+                :url="url"
                 :params="treeParams"
                 @emit-handle-click="handleNodeClick" />
         </el-card>
@@ -22,13 +23,15 @@
                     :formConfig="formConfig"
                     :columns="columns"
                     @emit-handle-insert="handleInsert"
+                    @emit-handle-update="handleUpdate"
+                    @emit-handle-remove="handleRemove"
                     :paramsConfig="paramsConfig" />
         </el-card>
       </template>
     </main-sub-layout>
 
     <!--  -->
-    <el-dialog title="新增"
+    <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
                :visible="dialogVisible"
                @close="dialogVisible = false">
       <!-- 主体区域 -->
