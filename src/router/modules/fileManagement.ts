@@ -14,7 +14,7 @@ const fileManagementRouter: RouteConfig[] = [
       alwaysShow: true // will always show the root menu
     },
     children: [
-      // 设备录入 -设备新增
+      // 设备录入 -科室分类
       {
         path: 'addNewEquipment',
         component: () =>
@@ -24,6 +24,20 @@ const fileManagementRouter: RouteConfig[] = [
         name: 'addNewEquipment',
         meta: {
           title: 'addNewEquipment'
+          // icon: 'dashboard',
+          // affix: true
+        }
+      },
+      // 医院管理
+      {
+        path: 'hospitalManagement',
+        component: () =>
+          import(
+            /* webpackChunkName: "dashboard" */ '@/views/businessComponents/fileManagement/hospitalManagement/index.vue'
+          ),
+        name: 'hospitalManagement',
+        meta: {
+          title: 'hospitalManagement'
           // icon: 'dashboard',
           // affix: true
         }

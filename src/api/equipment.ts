@@ -21,8 +21,8 @@ export const getTreeData = (url: any, data: any) =>
     data
   })
 
-// 获取下级科室数据
-export const getNextNodeData = (url:any, data: any) =>
+// 获取列表数据
+export const getTableDataList = (url:any, data: any) =>
   request({
     url,
     method: 'POST',
@@ -41,6 +41,22 @@ export const updateEquipmentData = (data: any) =>
 export const dealEquipmentData = (data: any) =>
   request({
     url: 'THospitalDepartmentInfo/del',
+    method: 'POST',
+    data
+  })
+
+// 修改医院数据 /api/hospitalInfo/save
+export const updateHospitalData = (data: any) =>
+  request({
+    url: 'hospitalInfo/save',
+    method: 'POST',
+    data
+  })
+
+// 删除医院
+export const dealHospitalData = (data: any) =>
+  request({
+    url: 'hospitalInfo/del',
     method: 'POST',
     data
   })

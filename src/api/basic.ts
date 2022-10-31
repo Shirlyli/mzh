@@ -9,7 +9,7 @@ export const getTreeData = (url: any, data: any) =>
   })
 
 // 获取下级字典数据
-export const getNextNodeData = (data: any) =>
+export const getTableDataList = (data: any) =>
   request({
     url: 'common/dicInfo/saver',
     method: 'POST',

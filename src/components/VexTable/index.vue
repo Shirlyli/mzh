@@ -35,7 +35,7 @@
         </vxe-select>
       </template>
       <template #create_time="{data}">
-        <el-date-picker v-model="data.time"
+        <el-date-picker v-model="data.createtime"
                         type="daterange"
                         range-separator="至"
                         start-placeholder="开始日期"
@@ -45,20 +45,22 @@
       <template #operate_item>
         <vxe-button type="submit"
                     status="success"
-                    content="查询"></vxe-button>
+                    content="查询"
+                    @click="searchFor"></vxe-button>
         <vxe-button type="reset"
-                    content="重置"></vxe-button>
+                    content="重置"
+                    @click="resetFor"></vxe-button>
       </template>
 
       <!-- 表格操作 -->
       <template #operate="{row}">
-        <vxe-button content="查看"></vxe-button>
-        <template v-if="$refs.xGrid.isActiveByRow(row)">
+        <!-- <vxe-button content="查看"></vxe-button> -->
+        <!-- <template v-if="$refs.xGrid.isActiveByRow(row)">
           <vxe-button status="primary"
                       content="保存"
                       @click="saveRowEvent(row)"></vxe-button>
-        </template>
-        <template v-else>
+        </template> -->
+        <template>
           <vxe-button content="编辑"
                       @click="editRowEvent(row)"></vxe-button>
         </template>
@@ -82,7 +84,7 @@
 </template>
 
 <script lang="ts">
-import { getNextNodeData } from '@/api/equipment'
+import { getTableDataList } from '@/api/equipment'
 import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
 import VXETable from 'vxe-table'
 
@@ -117,7 +119,7 @@ export default class extends Vue {
       // hasChild: 'hasChild', // 设置是否有子节点标识
     },
     checkboxConfig: {
-      labelField: 'id',
+      // labelField: 'id',
       // 设置复选框支持分页勾选，需要设置 rowId 行数据主键
       reserve: true
     },
@@ -146,7 +148,7 @@ export default class extends Vue {
     { value: '0', label: '女' }
   ]
 
-  private checkedList = [];// 已选列
+  private checkedList = [] // 已选列
   created() {
     this.findList(this.paramsConfig)
   }
@@ -154,7 +156,7 @@ export default class extends Vue {
   // 获取列表数据
   private async findList(config: any) {
     this.loading = true
-    const res: any = await getNextNodeData(config.url, config.params)
+    const res: any = await getTableDataList(config.url, config.params)
     if (res.result && res.data) {
       this.tableData = res.data
       this.tablePage.total = res.count
@@ -173,6 +175,17 @@ export default class extends Vue {
           : [].concat(item)
       })
     )
+  }
+
+  // 查询
+  private searchFor() {
+    console.log('🚀 ~ formConfig', this.formConfig.data)
+    this.findList(this.paramsConfig)
+  }
+
+  // 重置并查询
+  private resetFor() {
+    this.findList(this.paramsConfig)
   }
 
   // 编辑
@@ -205,7 +218,6 @@ export default class extends Vue {
 
   private removeRowEvent = async(row: any) => {
     const type = await VXETable.modal.confirm('您确定要删除该数据?')
-    const $grid: any = (this.$refs as any).xGrid
     if (type === 'confirm') {
       this.emitHandleRemove(row)
     }
@@ -214,7 +226,7 @@ export default class extends Vue {
   // 新增
   @Emit()
   emitHandleInsert() {
-    console.log('🚀 ~@emit ~ emitHandleCreate')
+    console.log('aaa')
   }
 
   private insertEvent = () => {
@@ -226,14 +238,12 @@ export default class extends Vue {
     this.tablePage.currentPage = currentPage
     this.tablePage.pageSize = pageSize
     this.paramsConfig.params.page = currentPage
-    console.log('🚀 ~ this.paramsConfig', this.paramsConfig)
     this.findList(this.paramsConfig)
   }
 
   // 批量删除
   private async groupRemove() {
     const type = await VXETable.modal.confirm('您确定要删除该数据?')
-    const $grid: any = (this.$refs as any).xGrid
     if (type === 'confirm') {
       this.emitHandleRemove(this.checkedList)
     }
@@ -241,7 +251,6 @@ export default class extends Vue {
 
   // 手动勾选并且值发生改变时触发的事件
   private handleChange(checked: any) {
-    console.log('🚀 ~ checked', checked.records)
     this.checkedList = checked.records
   }
 }

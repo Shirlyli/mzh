@@ -12,6 +12,7 @@ export default {
     equipmentCategory: '设备类型管理',
     fileManagement: '档案管理',
     addNewEquipment: '拓扑树-科室分类',
+    hospitalManagement: '医院管理',
     equipmentClass: '设备树-设备分类类别',
     inspectionRecords: '巡检记录',
     lostRecord: '丢失记录',
