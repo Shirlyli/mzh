@@ -1,16 +1,19 @@
 <template>
-  <div>
+  <div class="personalCard">
     <main-sub-layout class="main-wrapper rule-config-page">
       <template #left>
         <el-card>
           <div slot="header"
                class="clearfix">
             <span>设备类别</span>
-            <el-button style="float: right; padding: 3px 0"
+            <!-- <el-button style="float: right; padding: 3px 0"
                        type="text"
-                       @click="addNewEquipmentClass()">新增类别</el-button>
+                       @click="addNewEquipmentClass()">新增类别</el-button> -->
           </div>
-          <Tree />
+          <Tree ref="vxeTree"
+                :url="url"
+                :params="treeParams"
+                @emit-handle-click="handleNodeClick" />
         </el-card>
       </template>
       <template #right>
@@ -19,68 +22,41 @@
                class="clearfix">
             <span>设备查询</span>
           </div>
-          <VexTable :columns="columns"
-                    :formConfig="formConfig" />
+          <VexTable ref="vexTable"
+                    :formConfig="formConfig"
+                    :columns="columns"
+                    @emit-handle-insert="handleInsert"
+                    @emit-handle-update="handleUpdate"
+                    @emit-handle-remove="handleRemove"
+                    :paramsConfig="paramsConfig" />
         </el-card>
       </template>
     </main-sub-layout>
 
     <!-- 新增模态框 -->
-    <el-dialog :title="textMap[dialogStatus]"
-               :visible.sync="dialogFormVisible">
+    <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
+               :visible.sync="dialogVisible">
       <el-form ref="dataForm"
                :rules="rules"
-               :model="tempArticleData"
+               :model="equipmentCategoryData"
                label-position="left"
                label-width="100px"
                style="width: 400px; margin-left:50px;">
         <el-form-item :label="'设备名称'"
                       prop="type">
-          <el-select v-model="tempArticleData.type"
-                     class="filter-item"
-                     placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions"
-                       :key="item.key"
-                       :label="item.displayName"
-                       :value="item.key" />
-          </el-select>
+          <el-input v-model="equipmentCategoryData.cName"
+                    placeholder="请输入" />
         </el-form-item>
-        <el-form-item :label="$t('table.date')"
-                      prop="timestamp">
-          <el-date-picker v-model="tempArticleData.timestamp"
-                          type="datetime"
-                          placeholder="Please pick a date" />
-        </el-form-item>
-        <el-form-item :label="$t('table.title')"
-                      prop="title">
-          <el-input v-model="tempArticleData.title" />
-        </el-form-item>
-        <el-form-item :label="$t('table.status')">
-          <el-select v-model="tempArticleData.status"
-                     class="filter-item"
-                     placeholder="Please select">
-            <el-option v-for="item in statusOptions"
-                       :key="item"
-                       :label="item"
-                       :value="item" />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('table.importance')">
-          <el-rate v-model="tempArticleData.importance"
-                   :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                   :max="3"
-                   style="margin-top:8px;" />
-        </el-form-item>
-        <el-form-item :label="$t('table.remark')">
-          <el-input v-model="tempArticleData.abstractContent"
+        <el-form-item :label="'备注'">
+          <el-input v-model="equipmentCategoryData.note"
                     :autosize="{minRows: 2, maxRows: 4}"
                     type="textarea"
-                    placeholder="Please input" />
+                    placeholder="请输入" />
         </el-form-item>
       </el-form>
       <div slot="footer"
            class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
+        <el-button @click="dialogVisible = false">
           {{ $t('table.cancel') }}
         </el-button>
         <el-button type="primary"
@@ -89,24 +65,6 @@
         </el-button>
       </div>
     </el-dialog>
-    <!-- <el-dialog :visible.sync="dialogPageviewsVisible"
-               title="Reading statistics">
-      <el-table :data="pageviewsData"
-                border
-                fit
-                highlight-current-row
-                style="width: 100%">
-        <el-table-column prop="key"
-                         label="Channel" />
-        <el-table-column prop="pageviews"
-                         label="Pageviews" />
-      </el-table>
-      <span slot="footer"
-            class="dialog-footer">
-        <el-button type="primary"
-                   @click="dialogPageviewsVisible = false">{{ $t('table.confirm') }}</el-button>
-      </span>
-    </el-dialog>  -->
   </div>
 </template>
 

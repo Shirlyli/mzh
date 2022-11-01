@@ -30,43 +30,82 @@ import Layout from '@/layout/index.vue'
 */
 const businessRouter: RouteConfig[] = [
   // 控制台
-  {
-    path: '/controlPanel',
-    component: Layout,
-    // redirect: '/controlPanel',
-    children: [
-      {
-        path: 'index',
-        component: () =>
-          import(
-            /* webpackChunkName: "dashboard" */ '@/views/businessComponents/controlPanel/index.vue'
-          ),
-        name: 'controlPanel',
-        meta: {
-          title: 'controlPanel',
-          icon: 'dashboard'
-          // affix: true
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/controlPanel',
+  //   component: Layout,
+  //   // redirect: '/controlPanel',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () =>
+  //         import(
+  //           /* webpackChunkName: "dashboard" */ '@/views/businessComponents/controlPanel/index.vue'
+  //         ),
+  //       name: 'controlPanel',
+  //       meta: {
+  //         title: 'controlPanel',
+  //         icon: 'dashboard'
+  //         // affix: true
+  //       }
+  //     }
+  //   ]
+  // },
   // 数据决策
+  // {
+  //   path: '/dataDecision',
+  //   component: Layout,
+  //   // redirect: '/controlPanel',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () =>
+  //         import(
+  //           /* webpackChunkName: "dashboard" */ '@/views/businessComponents/dataDecision/index.vue'
+  //         ),
+  //       name: 'dataDecision',
+  //       meta: {
+  //         title: 'dataDecision',
+  //         icon: 'dashboard'
+  //         // affix: true
+  //       }
+  //     }
+  //   ]
+  // },
+
+  // 基础数据
   {
-    path: '/dataDecision',
+    path: '/infrastructure',
     component: Layout,
-    // redirect: '/controlPanel',
+    redirect: '/infrastructure/dictionaryManagement',
+    meta: {
+      title: 'infrastructure',
+      icon: 'lock',
+      roles: ['admin', 'editor'], // you can set roles in root nav
+      alwaysShow: true // will always show the root menu
+    },
     children: [
       {
-        path: 'index',
+        path: 'equipmentCategory',
         component: () =>
           import(
-            /* webpackChunkName: "dashboard" */ '@/views/businessComponents/dataDecision/index.vue'
+            /* webpackChunkName: "permission-page" */ '@/views/businessComponents/equipmentArchives/equipmentCategory/index.vue'
           ),
-        name: 'dataDecision',
+        name: 'equipmentCategory',
         meta: {
-          title: 'dataDecision',
-          icon: 'dashboard'
-          // affix: true
+          title: 'equipmentCategory'
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'dictionaryManagement',
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ '@/views/businessComponents/infrastructure/dictionaryManagement/index.vue'
+          ),
+        name: 'dictionaryManagement',
+        meta: {
+          title: 'dictionaryManagement'
+          // roles: ['admin'] // or you can only set roles in sub nav
         }
       }
     ]
@@ -116,44 +155,6 @@ const businessRouter: RouteConfig[] = [
         name: 'characterGroup',
         meta: {
           title: 'characterGroup'
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      }
-    ]
-  },
-  // 基础数据
-  {
-    path: '/infrastructure',
-    component: Layout,
-    redirect: '/infrastructure/dictionaryManagement',
-    meta: {
-      title: 'infrastructure',
-      icon: 'lock',
-      roles: ['admin', 'editor'], // you can set roles in root nav
-      alwaysShow: true // will always show the root menu
-    },
-    children: [
-      {
-        path: 'equipmentCategory',
-        component: () =>
-          import(
-            /* webpackChunkName: "permission-page" */ '@/views/businessComponents/equipmentArchives/equipmentCategory/index.vue'
-          ),
-        name: 'equipmentCategory',
-        meta: {
-          title: 'equipmentCategory'
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'dictionaryManagement',
-        component: () =>
-          import(
-            /* webpackChunkName: "permission-page" */ '@/views/businessComponents/infrastructure/dictionaryManagement/index.vue'
-          ),
-        name: 'dictionaryManagement',
-        meta: {
-          title: 'dictionaryManagement'
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       }

@@ -8,9 +8,9 @@ export default {
     inventoryRecords: '入库记录',
     outboundRecords: '出库记录',
     biddingDocuments: '招标文件',
-    equipmentArchives: '设备管理', //= ====1
+    equipmentArchives: '设备档案管理', //= ====1
     equipmentCategory: '设备类型管理',
-    fileManagement: '档案管理',
+    fileManagement: '档案管理', // ====1
     addNewEquipment: '拓扑树-科室分类',
     hospitalManagement: '医院管理',
     equipmentClass: '设备树-设备分类类别',
@@ -18,7 +18,7 @@ export default {
     lostRecord: '丢失记录',
     scrapRecord: '报废记录',
     diversionManage: '外调管理',
-    serviceManagement: '维修管理', //= ====1
+    serviceManagement: '设备检维修管理', //= ====1
     maintenancePersonManagement: '维修人管理',
     equipmentRepairService: '设备报修',
     maintenanceRecords: '维修记录',
@@ -44,7 +44,7 @@ export default {
     checkingSet: '巡检设置',
     meteringTestingSetup: '计量检测设置',
     inventorySettings: '盘点设置',
-    infrastructure: '基础数据', //= ====1
+    infrastructure: '基础数据管理', //= ====1
     personalData: '个人资料',
     APPMenu: 'APP菜单',
     userManagement: '用户管理',

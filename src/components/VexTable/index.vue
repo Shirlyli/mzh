@@ -156,13 +156,19 @@ export default class extends Vue {
   // 获取列表数据
   private async findList(config: any) {
     this.loading = true
-    const res: any = await getTableDataList(config.url, config.params)
-    if (res.result && res.data) {
-      this.tableData = res.data
-      this.tablePage.total = res.count
-    } else {
+    try {
+      const res: any = await getTableDataList(config.url, config.params)
+      if (res.result && res.data) {
+        this.tableData = res.data
+        this.tablePage.total = res.count
+      } else {
+        this.tableData = []
+      }
+    } catch (error) {
+      console.log('🚀 ~ error', error)
       this.tableData = []
     }
+
     this.loading = false
   }
 

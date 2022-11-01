@@ -1,272 +1,133 @@
 import { Component, Vue } from 'vue-property-decorator'
-import Pagination from '@/components/Pagination/index.vue'
 import MainSubLayout from '@/components/CollpaseFlex/index.vue'
-import ProTable from '@/components/Table/index.vue'
 import Tree from '@/components/Tree/index.vue'
-import {
-  getPageviews,
-  createArticle,
-  updateArticle,
-  defaultArticleData
-} from '@/api/articles'
 import { Form } from 'element-ui'
-import { cloneDeep } from 'lodash'
-import RightContent from '@/views/rightContent/index.vue'
 import VexTable from '@/components/VexTable/index.vue'
-const calendarTypeOptions = [
-  { key: 'CN', displayName: 'China' },
-  { key: 'US', displayName: 'USA' },
-  { key: 'JP', displayName: 'Japan' },
-  { key: 'EU', displayName: 'Eurozone' }
-]
-
-// arr to obj, such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = calendarTypeOptions.reduce(
-  (
-    acc: {
-      [key: string]: string
-    },
-    cur
-  ) => {
-    acc[cur.key] = cur.displayName
-    return acc
-  },
-  {}
-) as {
-  [key: string]: string
-}
+import {
+  dealEquipmentCategoryInfoData,
+  updateEquipmentCategoryInfoData
+} from '@/api/equipment'
+import _ from 'lodash'
 
 @Component({
   name: 'EquipmentCategory',
   components: {
-    Pagination,
     MainSubLayout,
-    ProTable,
     Tree,
-    RightContent,
     VexTable
-  },
-  filters: {
-    typeFilter: (type: string) => {
-      return calendarTypeKeyValue[type]
-    }
   }
 })
 export default class extends Vue {
-  private dialogStatus = '';
-  public dialogFormVisible = false; // 新增模态框显隐
-  private tempArticleData = defaultArticleData; // 默认新增模态框数据
-  private showReviewer = false;
-  // 新增设备类别
-  public addNewEquipmentClass = () => {
-    console.log('aaa')
-  };
-
-  private textMap = {
-    update: '编辑',
-    create: '添加'
-  };
-
-  private formConfig = {
-    data: {
-      name: '',
-      time: ''
-    },
-    items: [
-      { field: 'name', title: '角色名称', slots: { default: 'name_item' } },
-      { field: 'time', title: '创建时间', slots: { default: 'create_time' } },
-      { slots: { default: 'operate_item' } }
-    ] // 表单项
-  };
-
   private columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'name', title: '授权角色' },
-    { field: 'name', title: '角色名称' },
-    { field: 'nickname', title: '角色类型' },
-    { field: 'age', title: '角色描述' },
-    { field: 'age', title: '创建时间' },
+    { field: 'cName', title: '设备名称', treeNode: true },
+    { field: 'id', title: '设备ID' },
+    { field: 'note', title: '备注' },
     {
       width: 250,
       title: '操作',
       slots: { default: 'operate' },
       showOverflow: true
     }
-  ];
+  ]; // 列表配置项
 
-  private tableData = [
-    {
-      id: 10000,
-      parentId: null,
-      name: 'test abc1',
-      type: 'mp3',
-      size: 1024,
-      date: '2020-08-01'
-    },
-    {
-      id: 10050,
-      parentId: null,
-      name: 'Test2',
-      type: 'mp4',
-      size: null,
-      date: '2021-04-01'
-    },
-    {
-      id: 24300,
-      parentId: 10050,
-      name: 'Test3',
-      type: 'avi',
-      size: 1024,
-      date: '2020-03-01'
-    },
-    {
-      id: 20045,
-      parentId: 24300,
-      name: 'test abc4',
-      type: 'html',
-      size: 600,
-      date: '2021-04-01'
-    },
-    {
-      id: 10053,
-      parentId: 24300,
-      name: 'test abc96',
-      type: 'avi',
-      size: null,
-      date: '2021-04-01'
-    },
-    {
-      id: 24330,
-      parentId: 10053,
-      name: 'test abc5',
-      type: 'txt',
-      size: 25,
-      date: '2021-10-01'
-    },
-    {
-      id: 21011,
-      parentId: 10053,
-      name: 'Test6',
-      type: 'pdf',
-      size: 512,
-      date: '2020-01-01'
-    },
-    {
-      id: 22200,
-      parentId: 10053,
-      name: 'Test7',
-      type: 'js',
-      size: 1024,
-      date: '2021-06-01'
-    },
-    {
-      id: 23666,
-      parentId: null,
-      name: 'Test8',
-      type: 'xlsx',
-      size: 2048,
-      date: '2020-11-01'
-    },
-    {
-      id: 23677,
-      parentId: 23666,
-      name: 'Test7',
-      type: 'js',
-      size: 1024,
-      date: '2021-06-01'
-    },
-    {
-      id: 23671,
-      parentId: 23677,
-      name: 'Test7',
-      type: 'js',
-      size: 1024,
-      date: '2021-06-01'
-    },
-    {
-      id: 23672,
-      parentId: 23677,
-      name: 'Test7',
-      type: 'js',
-      size: 1024,
-      date: '2021-06-01'
-    },
-    {
-      id: 23688,
-      parentId: 23666,
-      name: 'Test7',
-      type: 'js',
-      size: 1024,
-      date: '2021-06-01'
-    },
-    {
-      id: 23681,
-      parentId: 23688,
-      name: 'Test7',
-      type: 'js',
-      size: 1024,
-      date: '2021-06-01'
-    },
-    {
-      id: 23682,
-      parentId: 23688,
-      name: 'Test7',
-      type: 'js',
-      size: 1024,
-      date: '2021-06-01'
-    },
-    {
-      id: 24555,
-      parentId: null,
-      name: 'test abc9',
-      type: 'avi',
-      size: 224,
-      date: '2020-10-01'
-    },
-    {
-      id: 24566,
-      parentId: 24555,
-      name: 'Test7',
-      type: 'js',
-      size: 1024,
-      date: '2021-06-01'
-    },
-    {
-      id: 24577,
-      parentId: 24555,
-      name: 'Test7',
-      type: 'js',
-      size: 1024,
-      date: '2021-06-01'
+  private treeParams = {
+    page: '1',
+    limit: '10',
+    entity: {
+      id: 'F7BFB16412328A-3554-4755-BB10-057BA8A8A47E'
     }
-  ];
+  }; // 树形图传参
 
-  private list: any = [];
+  private equipmentCategoryData = {
+    id: '',
+    pid: '',
+    pName: '',
+    cName: '',
+    note: ''
+  }; // 新增或编辑表单
+
   private rules = {
-    type: [{ required: true, message: 'type is required', trigger: 'change' }],
-    timestamp: [
-      { required: true, message: 'timestamp is required', trigger: 'change' }
-    ],
-    title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+    departmentName: [
+      { required: true, message: '请输入部门名称', trigger: 'change' }
+    ]
+  }; // 表单校验
+
+  private dialogVisible = false; // 新增模态框
+  private dialogStatus = 'create';
+  private paramsConfig = {
+    url: 'tHospitalEquipmentCategoryInfo/querySelfAndPar',
+    params: {
+      page: 1,
+      limit: 10,
+      entity: {
+        id: '1001'
+      }
+    }
   };
 
-  private dialogPageviewsVisible = false;
-  private pageviewsData = [];
-  mounted() {
-    console.log(this.dialogFormVisible)
+  private nodeClickData: any = {}; // 点击科室数据
+  private url = 'tHospitalEquipmentCategoryInfo/queryTree'; // 左侧字典
+
+  // 新增科室
+  private handleInsert() {
+    this.dialogVisible = true
+    const { title, id } = this.nodeClickData
+    // (this.$refs.dataForm as Form).setFiledsValue
+    this.equipmentCategoryData = {
+      id: '',
+      pid: id ?? '1001',
+      pName: '',
+      cName: '',
+      note: ''
+    }
   }
 
+  // 接收树形组件点击节点数据
+  private handleNodeClick(data: any) {
+    this.nodeClickData = data
+    // 查询科室及下级科室 /api/common/dicInfo/querySelfAndPar
+    this.paramsConfig = {
+      url: 'tHospitalEquipmentCategoryInfo/querySelfAndPar',
+      params: {
+        page: 1,
+        limit: 10,
+        entity: {
+          id: data.id
+        }
+      }
+    }
+  }
+
+  // 新增科室
   private createData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const articleData = this.tempArticleData
-        articleData.id = Math.round(Math.random() * 100) + 1024 // mock a id
-        articleData.author = 'vue-typescript-admin'
-        const { data } = await createArticle({ article: articleData })
-        data.article.timestamp = Date.parse(data.article.timestamp)
-        this.list.unshift(data.article)
-        this.dialogFormVisible = false
+        const { id, pid, pName, cName, note } = this.equipmentCategoryData
+        const params = {
+          id,
+          pid,
+          cName,
+          cCode: null,
+          cHospCode: null,
+          cFinancialCode: null,
+          dispindex: null,
+          flag: null,
+          ctime: null,
+          note,
+          isLeaf: null,
+          cLevel: null
+        }
+        const res: any = await updateEquipmentCategoryInfoData(params)
+        if (res.result) {
+          (this.$refs.vexTable as any).findList(this.paramsConfig);
+          (this.$refs.vxeTree as any).getTreeListData(
+            this.url,
+            this.treeParams
+          )
+        }
+        this.dialogVisible = false
         this.$notify({
           title: '成功',
           message: '创建成功',
@@ -277,27 +138,34 @@ export default class extends Vue {
     })
   }
 
-  private handleUpdate(row: any) {
-    this.tempArticleData = Object.assign({}, row)
-    this.tempArticleData.timestamp = +new Date(this.tempArticleData.timestamp)
-    this.dialogStatus = 'update'
-    this.dialogFormVisible = true
-    this.$nextTick(() => {
-      (this.$refs.dataForm as Form).clearValidate()
-    })
-  }
-
+  // 修改科室
   private updateData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const tempData = Object.assign({}, this.tempArticleData)
-        tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-        const { data } = await updateArticle(tempData.id, {
-          article: tempData
-        })
-        const index = this.list.findIndex((v: any) => v.id === data.article.id)
-        this.list.splice(index, 1, data.article)
-        this.dialogFormVisible = false
+        const { id, pid, pName, cName, note } = this.equipmentCategoryData
+        const params = {
+          id,
+          pid,
+          cName,
+          cCode: null,
+          cHospCode: null,
+          cFinancialCode: null,
+          dispindex: null,
+          flag: null,
+          ctime: null,
+          note,
+          isLeaf: null,
+          cLevel: null
+        }
+        const res: any = await updateEquipmentCategoryInfoData(params)
+        if (res.result) {
+          (this.$refs.vexTable as any).findList(this.paramsConfig);
+          (this.$refs.vxeTree as any).getTreeListData(
+            this.url,
+            this.treeParams
+          )
+        }
+        this.dialogVisible = false
         this.$notify({
           title: '成功',
           message: '更新成功',
@@ -308,13 +176,46 @@ export default class extends Vue {
     })
   }
 
-  private resetTempArticleData() {
-    this.tempArticleData = cloneDeep(defaultArticleData)
+  // 触发编辑事件
+  private handleUpdate(row: any) {
+    const { cName, id, pid, note } = row
+    this.equipmentCategoryData = {
+      pid,
+      pName: '',
+      cName,
+      id,
+      note
+    }
+    this.dialogStatus = 'update'
+    this.dialogVisible = true
+    this.$nextTick(() => {
+      (this.$refs.dataForm as Form).clearValidate()
+    })
   }
 
-  private async handleGetPageviews(pageviews: string) {
-    const { data } = await getPageviews({ pageviews })
-    this.pageviewsData = data.pageviews
-    this.dialogPageviewsVisible = true
+  // 删除科室
+  private async handleRemove(row: any) {
+    let params = {}
+    if (Array.isArray(row)) {
+      const res = _.map(row, 'id')
+      params = {
+        ids: res.join(',')
+      }
+    } else {
+      params = {
+        ids: row.id
+      }
+    }
+    const res: any = await dealEquipmentCategoryInfoData(params)
+    if (res.result) {
+      (this.$refs.vexTable as any).findList(this.paramsConfig);
+      (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams)
+    }
+    this.$notify({
+      title: '成功',
+      message: '删除成功',
+      type: 'success',
+      duration: 2000
+    })
   }
 }

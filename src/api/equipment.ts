@@ -22,7 +22,7 @@ export const getTreeData = (url: any, data: any) =>
   })
 
 // 获取列表数据
-export const getTableDataList = (url:any, data: any) =>
+export const getTableDataList = (url: any, data: any) =>
   request({
     url,
     method: 'POST',
@@ -57,6 +57,22 @@ export const updateHospitalData = (data: any) =>
 export const dealHospitalData = (data: any) =>
   request({
     url: 'hospitalInfo/del',
+    method: 'POST',
+    data
+  })
+
+// 删除设备
+export const dealEquipmentCategoryInfoData = (data: any) =>
+  request({
+    url: 'tHospitalEquipmentCategoryInfo/del',
+    method: 'POST',
+    data
+  })
+
+// 修改设备数据 /api/tHospitalEquipmentCategoryInfo/save
+export const updateEquipmentCategoryInfoData = (data: any) =>
+  request({
+    url: 'tHospitalEquipmentCategoryInfo/save ',
     method: 'POST',
     data
   })
