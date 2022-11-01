@@ -1,0 +1,14 @@
+// import request from '@/utils/request'
+import { EquipmentInfoData } from "./types";
+
+export const equipmentInfoData: EquipmentInfoData = {
+  id: 0,
+  username: "",
+  password: "",
+  name: "",
+  email: "",
+  phone: "",
+  avatar: "",
+  introduction: "",
+  roles: []
+};

@@ -1,0 +1,59 @@
+// 向上margin
+.mt-md {
+    margin-top: 12px;
+}
+
+.p-md {
+    padding: 16px;
+}
+
+// 表格全屏样式
+.wrapper-right .vxe-grid.is--maximize {
+    left: 210px;
+    width: 90%;
+}
+
+.common-el-offset {
+    text-align: right;
+}
+
+.personalCard {
+    .el-card__body {
+        height: 100%;
+        overflow-y: scroll;
+    }
+}
+
+.el-row {
+    padding: 0 20px;
+}
+
+.el-form--inline .el-form-item {
+    margin-bottom: 0;
+    display: flex;
+    .el-form-item__content {
+        width: 100%;
+    }
+    .filter-item {
+        width: 100% !important;
+    }
+}
+
+.vxe-table--main-wrapper {
+    height: calc(100vh - 290px);
+}
+
+.el-card {
+    height: calc(100vh - 110px);
+}
+
+// 展开收起按钮样式
+.expandBtn {
+    color: #1890ff;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.extraBtn {
+    margin-bottom: 10px;
+}
