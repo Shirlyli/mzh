@@ -196,7 +196,7 @@ export default class extends Vue {
         this.loading = true
         await UserModule.Login(this.loginForm)
         this.$router.push({
-          path: '/controlPanel/index' || '/',
+          path: '/rightsManagement/administratorManagement' || '/',
           query: this.otherQuery
         }).catch(err => {
           console.warn(err)
