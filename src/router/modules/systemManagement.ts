@@ -38,6 +38,7 @@ const systemManagementRouter: RouteConfig[] = [
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
+      // 用户管理
       {
         path: 'personManagement',
         component: () =>

@@ -21,13 +21,15 @@ export default class extends Vue {
       sex: ''
     },
     items: [
-      { field: 'userName', title: '用户姓名', slots: { default: 'name_item' } },
+      { field: 'eName', title: '用户姓名', slots: { default: 'name_item' } },
       {
-        field: 'userCtime',
+        field: 'createtime',
         title: '创建时间',
         slots: { default: 'create_time' },
         resetValue: []
       },
+      { field: 'sex', title: '性别', slots: { default: 'sex_item' } },
+
       { slots: { default: 'operate_item' } }
     ] // 表单项
   };
@@ -35,17 +37,27 @@ export default class extends Vue {
   private columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'userName', title: '用户名称', width: 120 },
-    { field: 'citizenNo', title: '电子邮箱', width: 120 },
-    { field: 'userStatus', title: '激活状态', width: 120 },
-    { field: 'nation', title: '所属科室', width: 120 },
-    { field: 'phoneNo', title: '所属角色', width: 120 },
-    { field: 'userCtime', title: '用户创建时间', width: 120 },
-    { field: 'userCtime', title: '修改时间', width: 120 },
-    { field: 'userCtime', title: '密码修改时间', width: 120 },
-    { field: 'userCtime', title: '解锁时间', width: 120 },
-    { field: 'userCtime', title: '上次登录时间', width: 120 },
+    { field: 'eName', title: '员工名称', width: 120 },
+    { field: 'citizenNo', title: '身份证', width: 120 },
+    { field: 'birth', title: '出生日期', width: 120 },
+    { field: 'nation', title: '国籍', width: 120 },
+    { field: 'phoneNo', title: '手机号码', width: 120 },
+    { field: 'officeNo', title: '办公号码', width: 120 },
+    { field: 'email', title: '邮箱', width: 120 },
+    { field: 'education', title: '学历', width: 120 },
+    { field: 'degree', title: '学位', width: 120 },
+    { field: 'deptId', title: '科室', width: 120 },
+    { field: 'photoUri', title: '图片来源', width: 120 },
+    { field: 'collage', title: '大学', width: 120 },
+    { field: 'eNo', title: '', width: 120 },
+    { field: 'eType', title: '职业类型', width: 120 },
+    { field: 'eProf', title: '专业', width: 120 },
+    { field: 'ePost', title: '职位', width: 120 },
+    { field: 'ePostState', title: '在职状态', width: 120 },
     { field: 'note', title: '备注', width: 120 },
+    { field: 'dispindex', title: '注销时间', width: 120 },
+    { field: 'createtime', title: '创建时间', width: 120 },
+    { field: 'sex', title: '性别', width: 120 },
     {
       width: 250,
       title: '操作',
@@ -98,14 +110,13 @@ export default class extends Vue {
   private dialogStatus = 'create';
   private paramsConfig = {
     // url: "/auth/employee/queryByDeptId",
-    url: '/auth/user/getUserByEmployeeId',
+    url: '/auth/employee/queryByCondition',
     params: {
-      // page: 1,
-      // limit: 10,
-      // entity: {
-      //   deptId: "001"
-      // }
-      empId: 'E1D6AB19EF6720-B4EA-46DF-BE10-96F03712FB65'
+      page: 1,
+      limit: 10,
+      entity: {
+        deptId: '001'
+      }
     }
   };
 
@@ -125,14 +136,13 @@ export default class extends Vue {
     // 查询科室及下级科室 /api/common/dicInfo/querySelfAndPar
     this.paramsConfig = {
       // url: "/auth/employee/queryByDeptId",
-      url: '/auth/user/getUserByEmployeeId',
+      url: '/auth/employee/queryByCondition',
       params: {
-        // page: 1,
-        // limit: 10,
-        // entity: {
-        //   deptId: data.id
-        // }
-        empId: 'E1D6AB19EF6720-B4EA-46DF-BE10-96F03712FB65'
+        page: 1,
+        limit: 10,
+        entity: {
+          deptId: data.id
+        }
       }
     }
   }

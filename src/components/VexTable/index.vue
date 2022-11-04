@@ -21,7 +21,7 @@
 
       <!-- 表单查询项 -->
       <template #name_item="{data}">
-        <vxe-input v-model="data.name"
+        <vxe-input v-model="data.eName"
                    type="text"
                    placeholder="请输入名称"></vxe-input>
       </template>
@@ -36,6 +36,7 @@
       </template>
       <template #create_time="{data}">
         <el-date-picker v-model="data.createtime"
+                        value-format="yyyy-MM-dd"
                         type="daterange"
                         range-separator="至"
                         start-placeholder="开始日期"
@@ -73,6 +74,7 @@
                     status='warning'
                     @click="removeRowEvent(row)"></vxe-button>
       </template>
+
       <!--分页 -->
       <template #pager>
         <vxe-pager :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
@@ -143,8 +145,8 @@ export default class extends Vue {
 
   // 表单项下啦数据
   private sexList1 = [
-    { value: '1', label: '男' },
-    { value: '0', label: '女' }
+    { value: '男', label: '男' },
+    { value: '女', label: '女' }
   ]
 
   private checkedList = [] // 已选列
@@ -185,11 +187,17 @@ export default class extends Vue {
   // 查询
   private searchFor() {
     console.log('🚀 ~ formConfig', this.formConfig.data)
+    this.paramsConfig.params.entity = {
+      ...this.paramsConfig.params.entity,
+      ...this.formConfig.data
+    }
     this.findList(this.paramsConfig)
   }
 
   // 重置并查询
   private resetFor() {
+    this.formConfig.data = {}
+    this.paramsConfig.params.entity = {}
     this.findList(this.paramsConfig)
   }
 

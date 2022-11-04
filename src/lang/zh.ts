@@ -65,7 +65,8 @@ export default {
     dictionaryManagement: '字典管理',
     menuManagement: '菜单管理',
     roleManagement: '角色管理',
-    personManagement: '员工管理',
+    personManagement: '用户管理',
+    employeeManagement: '员工管理',
     App: 'App',
 
     dashboard: '首页',

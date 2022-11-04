@@ -17,7 +17,7 @@
         <el-card>
           <div slot="header"
                class="clearfix">
-            <span>员工查询</span>
+            <span>用户查询</span>
           </div>
           <VexTable ref="vexTable"
                     :formConfig="formConfig"
@@ -33,103 +33,58 @@
     <!-- 模态框区域 -->
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
                :visible="dialogVisible"
-               @close="handleDialogClose">
+               @close="handleDialogClose"
+               width="80%">
       <el-form ref="dataForm"
                :rules="rules"
                :model="personalData"
                label-position="left"
-               label-width="100px"
-               style="width: 400px; margin-left:50px;">
-        <el-form-item :label="'用户名称'"
-                      prop="eName">
-          <el-input v-model="personalData.eName"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'身份证'"
-                      prop="citizenNo">
-          <el-input v-model="personalData.citizenNo"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'出生日期'"
-                      prop="birth">
-          <el-input v-model="personalData.birth"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'国籍'"
-                      prop="nation">
-          <el-input v-model="personalData.nation"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'手机号码'"
-                      prop="phoneNo">
-          <el-input v-model="personalData.phoneNo"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'办公号码'"
-                      prop="officeNo">
-          <el-input v-model="personalData.officeNo"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'邮箱'"
-                      prop="email">
-          <el-input v-model="personalData.email"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'学历'"
-                      prop="education">
-          <el-input v-model="personalData.education"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'学位'"
-                      prop="degree">
-          <el-input v-model="personalData.degree"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'科室'"
-                      prop="deptId">
-          <el-input v-model="personalData.deptId"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'图片来源'"
-                      prop="photoUri">
-          <el-input v-model="personalData.photoUri"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'大学'"
-                      prop="collage">
-          <el-input v-model="personalData.collage"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'职业类型'"
-                      prop="eType">
-          <el-input v-model="personalData.eType"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'专业'"
-                      prop="eProf">
-          <el-input v-model="personalData.eProf"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'职位'"
-                      prop="ePost">
-          <el-input v-model="personalData.ePost"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'在职状态'"
-                      prop="ePostState">
-          <el-input v-model="personalData.ePostState"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'性别'"
-                      prop="sex">
-          <el-input v-model="personalData.sex"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'备注'"
-                      prop="note">
-          <el-input v-model="personalData.note"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
+               label-width="80px"
+               style="width: 100%">
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item :label="'登录账号'"
+                          prop="eName">
+              <el-input v-model="personalData.eName"
+                        placeholder="请选择"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="'用户姓名'"
+                          prop="citizenNo">
+              <el-input v-model="personalData.citizenNo"
+                        placeholder="请选择"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="'用户密码'"
+                          prop="birth">
+              <el-input v-model="personalData.birth"
+                        placeholder="请选择"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="'确认密码'"
+                          prop="nation">
+              <el-input v-model="personalData.nation"
+                        placeholder="请选择"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="'所属角色'"
+                          prop="phoneNo">
+              <el-input v-model="personalData.phoneNo"
+                        placeholder="请选择"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="'所属科室'"
+                          prop="officeNo">
+              <el-input v-model="personalData.officeNo"
+                        placeholder="请选择"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
 
       <!-- 底部操作 -->
