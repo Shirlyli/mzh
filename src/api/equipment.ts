@@ -37,7 +37,7 @@ export const updateEquipmentData = (data: any) =>
     data
   })
 
-// 删除科室
+// 删除科室数据
 export const dealEquipmentData = (data: any) =>
   request({
     url: 'THospitalDepartmentInfo/del',
@@ -61,7 +61,7 @@ export const dealHospitalData = (data: any) =>
     data
   })
 
-// 删除设备
+// 删除设备类型
 export const dealEquipmentCategoryInfoData = (data: any) =>
   request({
     url: 'tHospitalEquipmentCategoryInfo/del',
@@ -69,10 +69,18 @@ export const dealEquipmentCategoryInfoData = (data: any) =>
     data
   })
 
-// 修改设备数据 /api/tHospitalEquipmentCategoryInfo/save
+// 修改设备类型数据
 export const updateEquipmentCategoryInfoData = (data: any) =>
   request({
     url: 'tHospitalEquipmentCategoryInfo/save ',
+    method: 'POST',
+    data
+  })
+
+// 根据设备id查询设备详情信息
+export const searchEquipmentCategoryInfoDetailsData = (data: any) =>
+  request({
+    url: 'equipment/getEquipmentInfoById ',
     method: 'POST',
     data
   })

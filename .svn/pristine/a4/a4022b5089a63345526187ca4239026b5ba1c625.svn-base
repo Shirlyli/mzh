@@ -1,5 +1,4 @@
 import { Component, Vue } from 'vue-property-decorator'
-import TabPane from './components/TabPane.vue'
 import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
 import VexTable from '@/components/VexTable/index.vue'
@@ -10,7 +9,6 @@ import _ from 'lodash'
 @Component({
   name: 'Tab',
   components: {
-    TabPane,
     MainSubLayout,
     Tree,
     VexTable

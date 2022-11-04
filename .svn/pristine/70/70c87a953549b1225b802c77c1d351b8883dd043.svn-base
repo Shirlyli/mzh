@@ -479,7 +479,7 @@ const beforeAsyncRoutes: RouteConfig[] = [
 export const asyncRoutes = [
   ...businessRouter,
   ...purchaseManagementRouter,
-  ...systemManagementRouter
+  ...systemManagementRouter,
   // ...beforeAsyncRoutes
 ]
 

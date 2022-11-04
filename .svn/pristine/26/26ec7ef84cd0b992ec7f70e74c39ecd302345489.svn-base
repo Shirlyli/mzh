@@ -10,9 +10,8 @@ export default {
     biddingDocuments: '招标文件',
     equipmentArchives: '设备档案管理', //= ====1
     equipmentCategory: '设备类型管理',
-    fileManagement: '设备档案管理', // ====1
-    addNewEquipment: '分类树-科室分类',
-    departmentClass: '拓扑树-科室分类',
+    fileManagement: '档案管理', // ====1
+    addNewEquipment: '拓扑树-科室分类',
     hospitalManagement: '医院管理',
     equipmentClass: '设备树-设备分类类别',
     inspectionRecords: '巡检记录',
@@ -65,7 +64,7 @@ export default {
     dictionaryManagement: '字典管理',
     menuManagement: '菜单管理',
     roleManagement: '角色管理',
-    personManagement: '员工管理',
+    personManagement: '用户管理',
     App: 'App',
 
     dashboard: '首页',

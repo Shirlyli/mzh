@@ -54,6 +54,12 @@
 
       <!-- 表格操作 -->
       <template #operate="{row}">
+        <vxe-button content="查看"></vxe-button>
+        <!-- <template v-if="$refs.xGrid.isActiveByRow(row)">
+          <vxe-button status="primary"
+                      content="保存"
+                      @click="saveRowEvent(row)"></vxe-button>
+        </template> -->
         <template>
           <vxe-button content="编辑"
                       @click="editRowEvent(row)"></vxe-button>
@@ -62,17 +68,7 @@
                     status='warning'
                     @click="removeRowEvent(row)"></vxe-button>
       </template>
-      <template #operateHasSearch="{row}">
-        <vxe-button content="查看"
-                    @click="searchForDetails(row)"></vxe-button>
-        <template>
-          <vxe-button content="编辑"
-                      @click="editRowEvent(row)"></vxe-button>
-        </template>
-        <vxe-button content="删除"
-                    status='warning'
-                    @click="removeRowEvent(row)"></vxe-button>
-      </template>
+
       <!--分页 -->
       <template #pager>
         <vxe-pager :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
@@ -257,17 +253,6 @@ export default class extends Vue {
   // 手动勾选并且值发生改变时触发的事件
   private handleChange(checked: any) {
     this.checkedList = checked.records
-  }
-
-  // 查看
-  @Emit()
-  emitHandleSearch(rowData: any) {
-    console.log('emitHandleSearch')
-    return rowData
-  }
-
-  private searchForDetails(row: any) {
-    this.emitHandleSearch(row)
   }
 }
 </script>
