@@ -1,0 +1,68 @@
+<template>
+  <div v-loading="loading">
+    <div class="handleBox">
+      <el-row>
+        <vxe-button @click="insertEvent"
+                    status="primary"
+                    icon="vxe-icon-user">新增员工</vxe-button>
+        <vxe-button @click="insertEvent"
+                    icon="vxe-icon-user">查看信息</vxe-button>
+        <vxe-button @click="insertEvent"
+                    status="warning"
+                    icon="vxe-icon-user">删除账户信息</vxe-button>
+        <vxe-button @click="groupRemove"
+                    icon="vxe-icon-user">查看角色</vxe-button>
+        <vxe-button @click="$refs.xGrid.exportData()"
+                    icon="vxe-icon-user">密码重置</vxe-button>
+        <vxe-button @click="$refs.xGrid.exportData()"
+                    icon="vxe-icon-user">关联角色</vxe-button>
+        <vxe-button @click="$refs.xGrid.exportData()"
+                    icon="vxe-icon-user">导入</vxe-button>
+        <vxe-button @click="$refs.xGrid.exportData()"
+                    icon="vxe-icon-user">导出</vxe-button>
+      </el-row>
+    </div>
+    <el-row :gutter="20">
+      <el-col :span="5"
+              v-for="(item,index) in personalData"
+              :key="index">
+        <div class="contentItem">
+          <span class="eName">
+            {{item.eName}}
+          </span>
+          <span class="citizenNo">
+            {{item.citizenNo}}
+          </span>
+        </div>
+      </el-col>
+    </el-row>
+  </div>
+</template>
+
+<script lang="ts" src="./content.ts"></script>
+
+<style scoped lang="scss">
+.handleBox {
+  margin-bottom: 12px;
+}
+.contentItem {
+  height: 120px;
+  // min-width: 250px;
+  margin-bottom: 12px;
+  margin-right: 12px;
+  background-color: rgba(227, 222, 222, 0.567);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  .eName {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  .citizenNo {
+    color: #999;
+  }
+}
+</style>

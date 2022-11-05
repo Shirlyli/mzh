@@ -168,6 +168,19 @@ const businessRouter: RouteConfig[] = [
             }
           }
         ]
+      },
+      // 员工管理
+      {
+        path: 'employeeManagement',
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ '@/views/businessComponents/OrganizationStructureManagement/employeeManagement/index.vue'
+          ),
+        name: 'employeeManagement',
+        meta: {
+          title: 'employeeManagement'
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
       }
     ]
   },
