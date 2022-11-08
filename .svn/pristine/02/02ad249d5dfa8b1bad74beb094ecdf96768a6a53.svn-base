@@ -27,7 +27,7 @@
       <el-col :span="5"
               v-for="(item,index) in employeeData"
               :key="index">
-        <div :class="[item.isClick?'clickContentItem':'notClickContentItem',item.userId?'hasLoginUser':'hasNotLoginUser','contentItem']"
+        <div :class="[item.isClick?'clickContentItem':'notClickContentItem','contentItem']"
              @click="showPersonalLoginDialog(item)">
           <span class="eName">
             {{item.eName}}
@@ -68,16 +68,9 @@
   }
 }
 .notClickContentItem {
-  // background-color: rgba(227, 222, 222, 0.567);
-}
-
-.hasLoginUser {
   background-color: rgba(227, 222, 222, 0.567);
 }
 
-.hasNotLoginUser {
-  background-color: rgba(245, 239, 239, 0.567);
-}
 .clickContentItem {
   background-color: #1890ff;
   .eName,

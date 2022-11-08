@@ -1,7 +1,6 @@
 import { getTableDataList } from "@/api/equipment";
 import { Component, Vue, Watch, Prop, Emit } from "vue-property-decorator";
-import _ from "lodash";
-import { Message } from "element-ui";
+
 @Component({
   name: "Content",
   components: {}
@@ -14,101 +13,74 @@ export default class extends Vue {
   }
 
   private loading = false;
-  private employeeData: any = []; //获取到的员工数据
-  private clickPersonalData: any = {}; //当前点击的员工数据
+  private personalData = []; //获取到的员工数据
+  private clickPersonalData = {}; //当前点击的员工数据
   created() {
     this.findList(this.paramsConfig);
   }
 
   // 获取列表数据
   private async findList(config: any) {
-    console.log("🚀 ~ config ~ 获取列表数据", config);
+    console.log("🚀 ~ config", config);
     this.loading = true;
     try {
       const res: any = await getTableDataList(config.url, config.params);
       if (res.result && res.data) {
-        this.employeeData = res.data;
+        this.personalData = res.data;
       } else {
-        this.employeeData = [];
+        this.personalData = [];
       }
     } catch (error) {
       console.log("🚀 ~ error", error);
-      this.employeeData = [];
+      this.personalData = [];
     }
 
     this.loading = false;
   }
 
   // 展示用户设置区域
-  @Emit()
-  emitLoginDialog(rowData: any) {
-    return rowData;
-  }
   private showPersonalLoginDialog(item: any) {
-    console.log("🚀 ~ item ~ 展示用户设置区域", item);
-    this.clickPersonalData = item;
-    const newPersonalData = _.map(this.employeeData, function(o: any) {
-      if (o.id === item.id) {
-        return { ...o, isClick: true };
-      }
-      return { ...o, isClick: false };
-    });
-    this.employeeData = newPersonalData;
-    this.emitLoginDialog(item);
+    console.log("🚀 ~ item", item)
+    this.clickPersonalData = item
   }
 
   // 新增员工
   @Emit()
   emitHandleInsert() {
-    console.log("新增员工===");
+    console.log("aaa");
   }
-  private insertEmployee() {
+  private insertPersonal() {
     this.emitHandleInsert();
   }
 
   // 查看员工信息
   @Emit()
   emitHandleSearch(rowData: any) {
-    console.log("~ 查看员工信息 ~ emitHandleSearch");
+    console.log("emitHandleSearch");
     return rowData;
   }
   private searchPersonalDetail() {
     this.emitHandleSearch(this.clickPersonalData);
   }
 
-  // 删除员工信息
+  // 删除账户信息
   @Emit()
   emitHandleRemove(rowData: any) {
     return rowData;
   }
-  private dealEmployeeInfo = async () => {
+  private dealPersonalInfo = async () => {
     // const type = await modal.confirm('您确定要删除该数据?')
     // if (type === 'confirm') {
-    if (!this.clickPersonalData.id) {
-      Message.error("请选择员工后删除");
-      return;
-    }
     this.emitHandleRemove(this.clickPersonalData);
     // }
   };
 
   // 查看角色
-
   private searchRole() {}
 
   // 密码重置
   private resetPassword() {}
 
   // 关联角色
-  @Emit()
-  emitAssociateRole(rowData: any) {
-    return rowData;
-  }
-  private associateRole() {
-    if (!this.clickPersonalData.id) {
-      Message.error("请选择员工后关联角色");
-      return;
-    }
-    this.emitAssociateRole(this.clickPersonalData);
-  }
+  private associateRole() {}
 }

@@ -8,14 +8,9 @@ import {
   bindPersonalInfo,
   dealPersonalData,
   getPersonalInfo,
-  getRoleTreeData,
-  personalBindRole,
-  personalUnbindRole,
-  queryRolesByUserId,
   updatePersonalData
 } from "@/api/basic";
 import Content from "./content.vue";
-import { VXETable } from "vxe-table";
 @Component({
   name: "Tab",
   components: {
@@ -118,14 +113,6 @@ export default class extends Vue {
     ]
   }; // 表单校验
 
-  private defaultProps = {
-    children: "children",
-    label: "title"
-  }; //角色树配置
-
-  private roleData = []; //角色数据
-  private roleDialogVisible = false; //角色关联模态框显隐
-
   private dialogVisible = false; // 新增模态框
   private personalDialogVisible = false; //用户设置模态框
   private dialogStatus = "create";
@@ -164,26 +151,6 @@ export default class extends Vue {
       { required: true, message: "请输入部门名称", trigger: "change" }
     ]
   }; // 用户设置表单校验
-  private loading = false; //角色绑定列表loading
-  private bindRoleData = []; //用户已绑定角色
-  private clickEmployeeInfo: any = {}; //当前点击员工数据
-  created() {
-    this.getRoleTreeData();
-  }
-
-  // 获取角色树数据
-  private async getRoleTreeData() {
-    const res: any = await getRoleTreeData();
-    if (res.code === 200) {
-      const newRoleData = res.data[0].children.map((item: any) => {
-        return {
-          ...item,
-          disabled: true
-        };
-      });
-      this.roleData = newRoleData;
-    }
-  }
 
   // 新增员工
   private handleInsert() {
@@ -315,7 +282,7 @@ export default class extends Vue {
 
   // 点击员工详情展示用户操作页面
   private async handleLoginDialog(row: any) {
-    console.log("🚀 ~ row ~点击员工详情展示用户操作页面", row);
+    console.log("🚀 ~ row", row);
     // this.personalDialogVisible = true;
     // const res = await getPersonalInfo({ empId: row.id });
     // console.log("🚀 ~ res", res);
@@ -344,84 +311,8 @@ export default class extends Vue {
     this.personalDialogVisible = false;
   }
 
-  private async queryRolesByUserIdData(row: any) {
-    this.loading = true;
-    const res: any = await queryRolesByUserId({ user_id: row.userId });
-    if (res.result) {
-      this.$notify({
-        title: "查询成功",
-        message: res.msg,
-        type: "success",
-        duration: 2000
-      });
-      this.bindRoleData = res.data;
-      this.loading = false;
-    }
-  }
-
   // 绑定角色信息
-  private async handleAssociateRole(row: any) {
-    this.clickEmployeeInfo = row;
-    console.log("🚀 ~ row ~ 绑定角色信息", row);
-    if (this.nodeClickData)
-      if (row.userId) {
-        this.roleDialogVisible = true;
-        this.queryRolesByUserIdData(row);
-      } else {
-        this.$notify({
-          title: "提示",
-          message: "该员工未注册用户，不能绑定角色",
-          type: "success",
-          duration: 2000
-        });
-      }
-  }
-
-  // 角色树点击事件
-  private async handleRoleNodeClick(data: any) {
-    console.log("🚀 ~ data ~ handleRoleNodeClick", data);
-    if (data.parentId !== "001") {
-      const res: any = await personalBindRole({
-        userId: this.clickEmployeeInfo.userId,
-        roleId: data.id
-      });
-      if (res.result) {
-        this.$notify({
-          title: "绑定成功",
-          message: res.msg,
-          type: "success",
-          duration: 2000
-        });
-        this.queryRolesByUserIdData(this.clickEmployeeInfo);
-      }
-    }
-  }
-
-  // 关联角色确认保存事件
-  private saveRelationRoleData() {
-    console.log((this.$refs.roleTree as any).getCheckedNodes());
-    console.log((this.$refs.roleTree as any).getCheckedKeys());
-  }
-
-  // 角色删除事件
-  private async handleDelete(row: any) {
-    console.log("🚀 ~ row ~角色删除事件", row);
-    const type = await VXETable.modal.confirm("您确定要删除该数据?");
-    const $table = this.$refs.xTable;
-    if (type === "confirm") {
-      const res: any = await personalUnbindRole({
-        userId: this.clickEmployeeInfo.userId,
-        roleId: row.id
-      });
-      if (res.result) {
-        this.$notify({
-          title: "成功",
-          message: "解绑成功",
-          type: "success",
-          duration: 2000
-        });
-        this.queryRolesByUserIdData(this.clickEmployeeInfo);
-      }
-    }
+  private handleAssociateRole(row: any) {
+    
   }
 }

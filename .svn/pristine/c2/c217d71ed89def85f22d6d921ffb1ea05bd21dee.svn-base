@@ -151,7 +151,7 @@ export default class extends Vue {
 
   private checkedList = [] // 已选列
   created() {
-    // this.findList(this.paramsConfig)
+    this.findList(this.paramsConfig)
   }
 
   // 获取列表数据
@@ -159,7 +159,7 @@ export default class extends Vue {
     this.loading = true
     try {
       const res: any = await getTableDataList(config.url, config.params)
-      if ((res.result || res.code === 200) && res.data) {
+      if (res.result && res.data) {
         this.tableData = res.data
         this.tablePage.total = res.count
       } else {

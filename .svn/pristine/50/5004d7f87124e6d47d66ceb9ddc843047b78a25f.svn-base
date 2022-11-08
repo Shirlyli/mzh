@@ -2,18 +2,18 @@
   <div v-loading="loading">
     <div class="handleBox">
       <el-row>
-        <vxe-button @click="searchPersonalDetail"
-                    icon="vxe-icon-user">用户设置</vxe-button>
-        <vxe-button @click="resetPassword"
-                    icon="vxe-icon-user">密码重置</vxe-button>
-        <vxe-button @click="insertEmployee"
+        <vxe-button @click="insertPersonal"
                     status="primary"
                     icon="vxe-icon-user">新增员工</vxe-button>
-        <vxe-button @click="dealEmployeeInfo"
+        <vxe-button @click="searchPersonalDetail"
+                    icon="vxe-icon-user">查看信息</vxe-button>
+        <vxe-button @click="dealPersonalInfo"
                     status="warning"
-                    icon="vxe-icon-user">删除员工信息</vxe-button>
+                    icon="vxe-icon-user">删除账户信息</vxe-button>
         <vxe-button @click="searchRole"
                     icon="vxe-icon-user">查看角色</vxe-button>
+        <vxe-button @click="resetPassword"
+                    icon="vxe-icon-user">密码重置</vxe-button>
         <vxe-button @click="associateRole"
                     icon="vxe-icon-user">关联角色</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()"
@@ -25,10 +25,9 @@
     <!-- 员工主体区域 -->
     <el-row :gutter="20">
       <el-col :span="5"
-              v-for="(item,index) in employeeData"
+              v-for="(item,index) in personalData"
               :key="index">
-        <div :class="[item.isClick?'clickContentItem':'notClickContentItem',item.userId?'hasLoginUser':'hasNotLoginUser','contentItem']"
-             @click="showPersonalLoginDialog(item)">
+        <div class="contentItem" @click="showPersonalLoginDialog">
           <span class="eName">
             {{item.eName}}
           </span>
@@ -44,15 +43,15 @@
 <script lang="ts" src="./content.ts"></script>
 
 <style scoped lang="scss">
-.handleBox {
+.handleBox{
   margin-bottom: 12px;
 }
-
 .contentItem {
   height: 120px;
   // min-width: 250px;
   margin-bottom: 12px;
   margin-right: 12px;
+  background-color: rgba(227, 222, 222, 0.567);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -65,24 +64,6 @@
   }
   .citizenNo {
     color: #999;
-  }
-}
-.notClickContentItem {
-  // background-color: rgba(227, 222, 222, 0.567);
-}
-
-.hasLoginUser {
-  background-color: rgba(227, 222, 222, 0.567);
-}
-
-.hasNotLoginUser {
-  background-color: rgba(245, 239, 239, 0.567);
-}
-.clickContentItem {
-  background-color: #1890ff;
-  .eName,
-  .citizenNo {
-    color: #fff;
   }
 }
 </style>

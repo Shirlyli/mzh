@@ -194,7 +194,7 @@
       </div>
     </el-dialog>
 
-    <!-- 用户设置 -->
+    <!-- 登录 -->
     <el-dialog :title="'用户设置'"
                :visible="personalDialogVisible"
                @close="personalDialogVisible = false"
@@ -307,77 +307,6 @@
 
       </div>
     </el-dialog>
-
-    <!-- 角色绑定 -->
-    <el-dialog title="关联角色"
-               :visible="roleDialogVisible"
-               @close="roleDialogVisible = false"
-               width="80%" height="80%">
-      <div class="roleBox">
-        <main-sub-layout class="main-wrapper rule-config-page">
-          <template #left>
-            <el-card>
-              <div slot="header"
-                   class="clearfix">
-                <span>授权角色</span>
-              </div>
-              <el-tree :data="roleData"
-                       class="filter-tree"
-                       default-expand-all
-                       node-key="id"
-                       ref="roleTree"
-                       :props="defaultProps"
-                       @node-click="handleRoleNodeClick"></el-tree>
-            </el-card>
-          </template>
-          <template #right>
-            <el-card>
-              <div slot="header"
-                   class="clearfix">
-                <span>已授角色</span>
-              </div>
-              <vxe-table border
-                         resizable
-                         show-overflow
-                         ref="xTable"
-                         height="500"
-                         :loading="loading"
-                         :row-config="{isHover: true}"
-                         :data="bindRoleData"
-                         @cell-dblclick="cellDBLClickEvent">
-                <vxe-column type="seq"
-                            width="60"></vxe-column>
-                <vxe-column field="rName"
-                            title="角色名称"></vxe-column>
-                <vxe-column field="rDesc"
-                            title="角色路径"></vxe-column>
-                <vxe-column title="操作"
-                            width="100"
-                            show-overflow>
-                  <template #default="{ row }">
-                    <vxe-button type="text"
-                                status="danger"
-                                icon="vxe-icon-delete"
-                                @click="handleDelete(row)">删除</vxe-button>
-                  </template>
-                </vxe-column>
-              </vxe-table>
-            </el-card>
-          </template>
-        </main-sub-layout>
-      </div>
-      <!-- 底部操作 -->
-      <div slot="footer"
-           class="dialog-footer">
-        <el-button @click="roleDialogVisible = false">
-          {{ $t('table.cancel') }}
-        </el-button>
-        <!-- <el-button type="primary"
-                   @click="saveRelationRoleData">
-          {{ '保存'}}
-        </el-button> -->
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -387,23 +316,5 @@
 <style lang="scss" scoped>
 .tab-container {
   margin: 30px;
-}
-.roleBox {
-  .el-tree {
-    width: 200px;
-  }
-
-  .el-table {
-    flex: 1;
-  }
-}
-
-.el-dialog{
-  .wrapper{
-    padding:0;
-    .el-card{
-      height: calc(100vh - 382px);
-    }
-  }
 }
 </style>

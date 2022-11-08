@@ -22,7 +22,7 @@ export default class extends Vue {
 
   // 获取列表数据
   private async findList(config: any) {
-    console.log("🚀 ~ config ~ 获取列表数据", config);
+    console.log("🚀 ~ config", config);
     this.loading = true;
     try {
       const res: any = await getTableDataList(config.url, config.params);
@@ -45,7 +45,7 @@ export default class extends Vue {
     return rowData;
   }
   private showPersonalLoginDialog(item: any) {
-    console.log("🚀 ~ item ~ 展示用户设置区域", item);
+    console.log("🚀 ~ item", item);
     this.clickPersonalData = item;
     const newPersonalData = _.map(this.employeeData, function(o: any) {
       if (o.id === item.id) {
@@ -60,7 +60,7 @@ export default class extends Vue {
   // 新增员工
   @Emit()
   emitHandleInsert() {
-    console.log("新增员工===");
+    console.log("aaa");
   }
   private insertEmployee() {
     this.emitHandleInsert();
@@ -69,7 +69,7 @@ export default class extends Vue {
   // 查看员工信息
   @Emit()
   emitHandleSearch(rowData: any) {
-    console.log("~ 查看员工信息 ~ emitHandleSearch");
+    console.log("emitHandleSearch");
     return rowData;
   }
   private searchPersonalDetail() {
