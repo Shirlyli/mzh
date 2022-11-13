@@ -5,6 +5,7 @@
 
 ```txt
 - Login / Logout
+- "pre-commit": "lint-staged"
 
 - Permission Authentication
   - Page permission

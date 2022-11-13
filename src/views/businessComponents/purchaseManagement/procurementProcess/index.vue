@@ -1,177 +1,93 @@
 <template>
-  <div class="app-container">
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%"
-    >
-      <el-table-column
-        align="center"
-        label="ID"
-        width="80"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
-        </template>
-      </el-table-column>
+  <div>
+    <el-card>
+      <div slot="header"
+           class="clearfix">
+        <span>流程配置</span>
+      </div>
+      <VexTable ref="vexTable"
+                :formConfig="formConfig"
+                :columns="columns"
+                type="process"
+                @emit-handle-insert="handleInsert"
+                @emit-handle-update="handleUpdate"
+                @emit-handle-remove="handleRemove"
+                :paramsConfig="paramsConfig" />
+    </el-card>
+    <!-- 新增模态框 -->
+    <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
+               :visible="dialogVisible"
+               @close="dialogVisible = false">
+      <!-- 主体区域 -->
+      <el-form ref="dataForm"
+               :rules="rules"
+               :model="processData"
+               label-position="left"
+               label-width="100px"
+               style="width: 400px; margin-left:50px;">
+        <el-form-item :label="'流程名称'"
+                      prop="processName">
+          <el-input v-model="processData.processName"
+                    placeholder="请选择"></el-input>
+        </el-form-item>
+        <el-form-item :label="'流程代码'"
+                      prop="processCode">
+          <el-input v-model="processData.processCode"
+                    placeholder="请输入" />
+        </el-form-item>
+        <el-form-item :label="'节点名称'"
+                      prop="nodeName">
+          <el-input v-model="processData.nodeName"
+                    placeholder="请输入" />
+        </el-form-item>
+        <el-form-item :label="'节点名称编码'"
+                      prop="nodeNameCode">
+          <el-input v-model="processData.nodeNameCode"
+                    placeholder="请输入" />
+        </el-form-item>
+        <el-form-item :label="'节点顺序'"
+                      prop="nodeSort">
+          <el-input v-model="processData.nodeSort"
+                    placeholder="请输入" />
+        </el-form-item>
+        <el-form-item :label="'是否禁用'"
+                      prop="isDisable">
+          <el-radio v-model="processData.isDisable"
+                    :label="0">是</el-radio>
+          <el-radio v-model="processData.isDisable"
+                    :label="1">否</el-radio>
+        </el-form-item>
+        <el-form-item :label="'角色类型'"
+                      prop="roleType">
+          <el-radio v-model="processData.roleType"
+                    label="0">role</el-radio>
+          <el-radio v-model="processData.roleType"
+                    label="1">user</el-radio>
+        </el-form-item>
+        <el-form-item :label="'角色类型Id'"
+                      prop="roleTypeId">
+          <el-input v-model="processData.roleTypeId"
+                    placeholder="请输入" />
+        </el-form-item>
+      </el-form>
 
-      <el-table-column
-        width="180px"
-        align="center"
-        label="Date"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        align="center"
-        label="Author"
-        width="180px"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        width="105px"
-        label="Importance"
-      >
-        <template slot-scope="{row}">
-          <svg-icon
-            v-for="n in +row.importance"
-            :key="n"
-            name="star"
-            class="meta-item__icon"
-          />
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        class-name="status-col"
-        label="Status"
-        width="110"
-      >
-        <template slot-scope="{row}">
-          <el-tag :type="row.status | articleStatusFilter">
-            {{ row.status }}
-          </el-tag>
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        min-width="250px"
-        label="Title"
-      >
-        <template slot-scope="{row}">
-          <template v-if="row.edit">
-            <el-input
-              v-model="row.title"
-              class="edit-input"
-              size="small"
-            />
-            <el-button
-              class="cancel-btn"
-              size="small"
-              icon="el-icon-refresh"
-              type="warning"
-              @click="cancelEdit(row)"
-            >
-              cancel
-            </el-button>
-          </template>
-          <span v-else>{{ row.title }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column
-        align="center"
-        label="Actions"
-        width="120"
-      >
-        <template slot-scope="{row}">
-          <el-button
-            v-if="row.edit"
-            type="success"
-            size="small"
-            icon="el-icon-circle-check-outline"
-            @click="confirmEdit(row)"
-          >
-            Ok
-          </el-button>
-          <el-button
-            v-else
-            type="primary"
-            size="small"
-            icon="el-icon-edit"
-            @click="row.edit=!row.edit"
-          >
-            Edit
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+      <!-- 底部操作 -->
+      <div slot="footer"
+           class="dialog-footer">
+        <el-button @click="dialogVisible = false">
+          {{ $t('table.cancel') }}
+        </el-button>
+        <el-button type="primary"
+                   @click="dialogStatus==='create'?createData():updateData()">
+          {{ $t('table.confirm') }}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
+
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { getArticles } from '@/api/articles'
-import { IArticleData } from '@/api/types'
-
-@Component({
-  name: 'InlineEditTable'
-})
-export default class extends Vue {
-  private list: IArticleData[] = []
-  private listLoading = true
-  private listQuery = {
-    page: 1,
-    limit: 10
-  }
-
-  created() {
-    this.getList()
-  }
-
-  private async getList() {
-    this.listLoading = true
-    const { data } = await getArticles(this.listQuery)
-    const items = data.items
-    this.list = items.map((v: any) => {
-      this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html
-      v.originalTitle = v.title // will be used when user click the cancel botton
-      return v
-    })
-    // Just to simulate the time of the request
-    setTimeout(() => {
-      this.listLoading = false
-    }, 0.5 * 1000)
-  }
-
-  private cancelEdit(row: any) {
-    row.title = row.originalTitle
-    row.edit = false
-    this.$message({
-      message: 'The title has been restored to the original value',
-      type: 'warning'
-    })
-  }
-
-  private confirmEdit(row: any) {
-    row.edit = false
-    row.originalTitle = row.title
-    this.$message({
-      message: 'The title has been edited',
-      type: 'success'
-    })
-  }
-}
+<script lang="ts" src="./index.ts">
 </script>
 
 <style lang="scss" scoped>

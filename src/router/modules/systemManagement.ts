@@ -63,7 +63,19 @@ const systemManagementRouter: RouteConfig[] = [
           title: 'employeeManagement'
           // roles: ['admin'] // or you can only set roles in sub nav
         }
-      }
+      },
+      {
+        path: 'procurementProcess',
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ '@/views/businessComponents/purchaseManagement/procurementProcess/index.vue'
+          ),
+        name: 'procurementProcess',
+        meta: {
+          title: 'procurementProcess'
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
     ]
   }
 ]

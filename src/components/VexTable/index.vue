@@ -93,7 +93,7 @@
 import { getTableDataList } from '@/api/equipment'
 import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
 import VXETable from 'vxe-table'
-
+import _ from 'lodash'
 @Component({
   name: 'VexTable',
   components: {},
@@ -106,7 +106,7 @@ export default class extends Vue {
   private onParamsConfigChange(newdata: any) {
     this.findList(newdata)
   }
-
+  @Prop() type!: string //表格类型
   private tablePage = { total: 0, currentPage: 1, pageSize: 10 }
   private loading = false
   private tableData = []
@@ -117,7 +117,7 @@ export default class extends Vue {
     exportConfig: {},
     treeConfig: {
       transform: true,
-      rowField: 'id',
+      rowField: this.type === 'process' ? 'processCode' : 'id',
       // parentField: 'pid',
       // iconOpen: 'vxe-icon-square-minus-fill',
       // iconClose: 'vxe-icon-square-plus-fill',
@@ -159,11 +159,15 @@ export default class extends Vue {
     this.loading = true
     try {
       const res: any = await getTableDataList(config.url, config.params)
-      if ((res.result || res.code === 200) && res.data) {
-        this.tableData = res.data
-        this.tablePage.total = res.count
+      if (this.type === 'process') {
+        this.tableData = res.data[0].processInfo
       } else {
-        this.tableData = []
+        if ((res.result || res.code === 200) && res.data) {
+          this.tableData = res.data
+          this.tablePage.total = res.count
+        } else {
+          this.tableData = []
+        }
       }
     } catch (error) {
       console.log('🚀 ~ error', error)
@@ -238,12 +242,24 @@ export default class extends Vue {
 
   // 新增
   @Emit()
-  emitHandleInsert() {
-    console.log('aaa')
+  emitHandleInsert(rowData: any) {
+    console.log('🚀 ~ emitHandleInsert', rowData)
+    return rowData
   }
 
-  private insertEvent = () => {
-    this.emitHandleInsert()
+  private insertEvent() {
+    if (this.type === 'process' && this.checkedList.length) {
+      this.emitHandleInsert(this.checkedList)
+    } else if (this.checkedList.length && this.type !== 'process') {
+      this.emitHandleInsert([])
+    } else {
+      this.$notify({
+        title: '失败',
+        message: '请选择流程后新增！',
+        type: 'error',
+        duration: 2000,
+      })
+    }
   }
 
   // 分页切换事件

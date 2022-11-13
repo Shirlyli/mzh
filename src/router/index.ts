@@ -5,10 +5,6 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import Layout from '@/layout/index.vue'
 
 /* Router modules */
-import componentsRouter from './modules/components'
-import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
 import businessRouter from './modules/business'
 import purchaseManagementRouter from './modules/purchaseManagement'
 import systemManagementRouter from './modules/systemManagement'
@@ -194,10 +190,6 @@ const beforeAsyncRoutes: RouteConfig[] = [
     ]
   },
   /** when your routing map is too long, you can split it into small modules **/
-  componentsRouter,
-  chartsRouter,
-  nestedRouter,
-  tableRouter,
   {
     path: '/example',
     component: Layout,

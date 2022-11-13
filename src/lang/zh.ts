@@ -1,9 +1,11 @@
 export default {
   route: {
     controlPanel: '控制台', //= ====1
+    workBench:'我的工作台',
     dataDecision: '数据决策', //= ====1
     purchaseManagement: '采购管理', //= ====1
-    procurementProcess: '采购流程',
+    equipmentRequest:'科室申请',
+    procurementProcess: '流程配置',
     purchasingRecords: '采购记录',
     inventoryRecords: '入库记录',
     outboundRecords: '出库记录',

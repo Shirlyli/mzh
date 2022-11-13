@@ -104,17 +104,6 @@ export default class extends Vue {
   // 新增表单显隐
   private dialogFormVisible = false;
 
-  // 新增科室
-  private handleInsert() {
-    this.dialogVisible = true;
-    const { id } = this.nodeClickData;
-    // (this.$refs.dataForm as Form).setFiledsValue
-    this.menuData = {
-      ...this.menuData,
-      pid: id
-    };
-  }
-
   // 接收树形组件点击节点数据
   private handleNodeClick(data: any) {
     console.log("🚀 ~ data ~ 接收树形组件点击节点数据", data);
@@ -129,6 +118,17 @@ export default class extends Vue {
           pid: data.id
         }
       }
+    };
+  }
+
+  // 新增科室
+  private handleInsert() {
+    this.dialogVisible = true;
+    const { id } = this.nodeClickData;
+    // (this.$refs.dataForm as Form).setFiledsValue
+    this.menuData = {
+      ...this.menuData,
+      pid: id
     };
   }
 

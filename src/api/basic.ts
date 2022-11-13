@@ -57,7 +57,7 @@ export const getPersonalInfo = (data: any) =>
   });
 
 // 新增用户账号信息 --修改
-// /api/auth/user/bindAccount
+// /auth/user/bindAccount
 export const bindPersonalInfo = (data: any) =>
   request({
     url: "/auth/user/bindAccount",
@@ -66,7 +66,7 @@ export const bindPersonalInfo = (data: any) =>
   });
 
 // 删除用户账号信息
-// /api/auth/user/del
+// /auth/user/del
 export const delPersonalInfo = (data: any) =>
   request({
     url: "/auth/user/del",
@@ -81,7 +81,7 @@ export const getRoleTreeData = () =>
     method: "POST"
   });
 
-// 用户关联角色 /api/auth/userRole/bindRole
+// 用户关联角色 /auth/userRole/bindRole
 export const personalBindRole = (data: { userId: string; roleId: string }) =>
   request({
     url: "/auth/userRole/bindRole",
@@ -89,7 +89,7 @@ export const personalBindRole = (data: { userId: string; roleId: string }) =>
     data
   });
 
-// 查看用户已关联绑定角色 /api/auth/role/queryRolesByUserId
+// 查看用户已关联绑定角色 /auth/role/queryRolesByUserId
 export const queryRolesByUserId = (data: { user_id: string }) =>
   request({
     url: "/auth/role/queryRolesByUserId",
@@ -97,7 +97,7 @@ export const queryRolesByUserId = (data: { user_id: string }) =>
     data
   });
 
-// 解绑用户关联角色 /api/auth/userRole/unbindRole
+// 解绑用户关联角色 /auth/userRole/unbindRole
 export const personalUnbindRole = (data: { userId: string; roleId: string }) =>
   request({
     url: "/auth/userRole/unbindRole",
@@ -105,30 +105,17 @@ export const personalUnbindRole = (data: { userId: string; roleId: string }) =>
     data
   });
 
-// 获取菜单树   /api/auth/menu/queryTree
+// 获取菜单树   /auth/menu/queryTree
 export const queryMenuTree = () =>
   request({
     url: "/auth/menu/queryTree",
     method: "POST"
   });
 
-// 新增菜单  /api/auth/menu/save
+// 新增菜单  /auth/menu/save
 /**
- * {
-  mName: string;
-  mCode: string;
-  mUrl: string;
-  mIcon: string;
-  pid: string;
-  pName: string;
-  mType: string;
-  mOpentype: string;
-  mDesc: string;
-  note: string;
-  mIsavailable: string;
-}
- * @param data 
- * @returns 
+ * @param data
+ * @returns
  */
 export const saveMenuInfo = (data: any) =>
   request({
@@ -137,7 +124,7 @@ export const saveMenuInfo = (data: any) =>
     data
   });
 
-// 菜单树删除 /api/auth/menu/del {ids:string}
+// 菜单树删除 /auth/menu/del {ids:string}
 export const delMenuInfo = (data: any) =>
   request({
     url: "/auth/menu/del",
@@ -145,7 +132,7 @@ export const delMenuInfo = (data: any) =>
     data
   });
 
-// 菜单树点击  /api/auth/menu/queryByCondition
+// 菜单树点击  /auth/menu/queryByCondition
 export const queryByCondition = (data: {
   page: string;
   limit: string;
@@ -159,6 +146,30 @@ export const queryByCondition = (data: {
     data
   });
 
+// 菜单关联角色 /auth/menuRole/bindRole
+export const onMenuIdBindRole = (data: { menuId: string; roleId: string }) =>
+  request({
+    url: "/auth/menuRole/bindRole",
+    method: "POST",
+    data
+  });
+
+// 菜单解绑角色 /auth/menuRole/unbindRole
+export const onMenuIdUnBindRole = (data: { menuId: string; roleId: string }) =>
+  request({
+    url: "/auth/menuRole/unbindRole",
+    method: "POST",
+    data
+  });
+
+//  菜单查询已绑定的角色 /auth/role/queryRolesByMenuId
+export const queryRolesByMenuId = (data: { menu_id: string }) =>
+  request({
+    url: "/auth/role/queryRolesByMenuId",
+    method: "POST",
+    data
+  });
+
 // 角色修改
 export const saveRoleInfo = (data: any) =>
   request({
@@ -167,10 +178,96 @@ export const saveRoleInfo = (data: any) =>
     data
   });
 
-// 菜单树删除 /api/auth/menu/del {ids:string}
+// 菜单树删除 /auth/menu/del {ids:string}
 export const delRoleInfo = (data: any) =>
   request({
     url: "/auth/role/del",
+    method: "POST",
+    data
+  });
+
+// 获取流程配置列表
+export const queryProcessData = (data: any) =>
+  request({
+    url: "/hospitalProcess/query",
+    method: "POST",
+    data
+  });
+
+// 添加流程配置--修改流程配置
+export const updateProcessData = (data: any) =>
+  request({
+    url: "/hospitalProcess/save",
+    method: "POST",
+    data
+  });
+
+// 删除流程配置
+export const delProcessData = (data: any) =>
+  request({
+    url: "/hospitalProcess/del",
+    method: "POST",
+    data
+  });
+
+//获取节点人员权限列表  /hospitalProcess/getUserListProcessCodeAndBh
+export const getUserListProcessCode = (data: any) =>
+  request({
+    url: "/hospitalProcess/getUserListProcessCodeAndBh",
+    method: "POST",
+    data
+  });
+
+// 转科申请查询  /rollDepartment/getRollDepartmentInfo
+
+// 通过科室id查询转科申请  /rollDepartment/getRollDepartmentById
+
+// 保存转科申请 /rollDepartment/saveRollDepartment
+
+// 获取节点信息 /hospitalProcess/getProcessNodeInfoByProcessCodeAndBh
+export const getProcessNodeInfoByProcessCodeAndBh = (data: any) =>
+  request({
+    url: "/hospitalProcess/getProcessNodeInfoByProcessCodeAndBh",
+    method: "POST",
+    data
+  });
+
+// 获取流程操作记录 /hospitalProcessRecord/queryProcessRecordList
+export const queryProcessRecordList = (data: any) =>
+  request({
+    url: "/hospitalProcessRecord/queryProcessRecordList",
+    method: "POST",
+    data
+  });
+
+// 发起科室申请流程 /hospitalProcessBusiness/save
+export const queryHospitalProcessBusinessSave = (data: any) =>
+  request({
+    url: "/hospitalProcessBusiness/save",
+    method: "POST",
+    data
+  });
+
+// 获取流程列表 /hospitalProcessBusiness/queryProcessList
+export const queryProcessList = (data: any) =>
+  request({
+    url: "/hospitalProcessBusiness/queryProcessList",
+    method: "POST",
+    data
+  });
+
+// 删除业务流程 /hospitalProcessBusiness/del
+export const delHospitalProcessBusiness = (data: any) =>
+  request({
+    url: "/hospitalProcessBusiness/del",
+    method: "POST",
+    data
+  });
+
+// 获取科室数据 THospitalDepartmentInfo/queryTree
+export const queryDepartmentInfoTree = (data: any) =>
+  request({
+    url: "/THospitalDepartmentInfo/queryTree",
     method: "POST",
     data
   });
