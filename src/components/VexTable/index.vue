@@ -54,6 +54,12 @@
       </template>
 
       <!-- 表格操作 -->
+      <template #operateProcess="{row}">
+        <template>
+          <vxe-button content="查看"
+                      @click="searchForDetails(row)"></vxe-button>
+        </template>
+      </template>
       <template #operate="{row}">
         <template>
           <vxe-button content="编辑"
@@ -106,6 +112,7 @@ export default class extends Vue {
   private onParamsConfigChange(newdata: any) {
     this.findList(newdata)
   }
+  @Prop({ default: false }) hasNotSlotButton!: boolean
   @Prop() type!: string //表格类型
   private tablePage = { total: 0, currentPage: 1, pageSize: 10 }
   private loading = false
@@ -139,7 +146,7 @@ export default class extends Vue {
     zoom: true,
     custom: true,
     slots: {
-      buttons: 'toolbar_buttons',
+      buttons: this.hasNotSlotButton ? '' : 'toolbar_buttons',
     },
   }
 
@@ -250,7 +257,7 @@ export default class extends Vue {
   private insertEvent() {
     if (this.type === 'process' && this.checkedList.length) {
       this.emitHandleInsert(this.checkedList)
-    } else if (this.checkedList.length && this.type !== 'process') {
+    } else if (this.type !== 'process') {
       this.emitHandleInsert([])
     } else {
       this.$notify({

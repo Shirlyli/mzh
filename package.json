@@ -13,7 +13,6 @@
         "mock": "cd mock && ts-node-dev mock-server.ts"
     },
     "dependencies": {
-        "@riophae/vue-treeselect": "^0.4.0",
         "@tinymce/tinymce-vue": "^3.2.6",
         "@toast-ui/editor": "^2.5.1",
         "axios": "^0.21.1",
@@ -31,6 +30,7 @@
         "jsonlint": "^1.6.3",
         "jszip": "^3.6.0",
         "lodash": "^4.17.21",
+        "moment": "^2.29.4",
         "morgan": "^1.10.0",
         "normalize.css": "^8.0.1",
         "nprogress": "^0.2.0",

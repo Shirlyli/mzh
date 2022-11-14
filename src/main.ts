@@ -3,7 +3,7 @@ import Vue, { DirectiveOptions } from 'vue'
 import 'normalize.css'
 import ElementUI from 'element-ui'
 import SvgIcon from 'vue-svgicon'
-
+import moment from 'moment'
 import '@/styles/element-variables.scss'
 import '@/styles/index.scss'
 // import Loading from 'element-ui'
@@ -30,6 +30,7 @@ Vue.use(ElementUI, {
   size: AppModule.size, // Set element-ui default size
   i18n: (key: string, value: string) => i18n.t(key, value)
 })
+Vue.prototype.$moment = moment;
 
 Vue.use(SvgIcon, {
   tagName: 'svg-icon',

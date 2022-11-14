@@ -186,6 +186,9 @@ export const delRoleInfo = (data: any) =>
     data
   });
 
+/***
+ *  流程相关start
+ */
 // 获取流程配置列表
 export const queryProcessData = (data: any) =>
   request({
@@ -248,6 +251,14 @@ export const queryHospitalProcessBusinessSave = (data: any) =>
     data
   });
 
+// 审批流程 hospitalProcessBusiness/update
+export const queryHospitalProcessBusinessUpdate = (data: any) =>
+  request({
+    url: "/hospitalProcessBusiness/update",
+    method: "POST",
+    data
+  });
+
 // 获取流程列表 /hospitalProcessBusiness/queryProcessList
 export const queryProcessList = (data: any) =>
   request({
@@ -263,6 +274,10 @@ export const delHospitalProcessBusiness = (data: any) =>
     method: "POST",
     data
   });
+
+/***
+ *  流程相关end
+ */
 
 // 获取科室数据 THospitalDepartmentInfo/queryTree
 export const queryDepartmentInfoTree = (data: any) =>

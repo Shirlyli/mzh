@@ -93,3 +93,11 @@ export const searchEquipmentCategoryInfoDetailsData = (data: any) =>
     data
   })
 
+  // 根据科室类别获取设备 equipment/getEquipmentInfo
+  export const getEquipmentInfoByDepartmentId = (data: any) =>
+  request({
+    url: 'equipment/getEquipmentInfo',
+    method: 'POST',
+    data
+  })
+
