@@ -32,7 +32,7 @@
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>医院管理</span>
+        <span>供应商管理</span>
       </div>
       <VexTable ref="vexTable"
                 :formConfig="formConfig"

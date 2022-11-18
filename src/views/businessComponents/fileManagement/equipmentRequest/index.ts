@@ -84,6 +84,18 @@ export default class extends Vue {
     }
   };
 
+  private doneFormConfig ={
+    url: "/hospitalProcessBusiness/queryProcessList", // 根据表单查询项查询数据
+    params: {
+      page: "1",
+      limit: "20",
+      // nextNodeExecutor: "0D0228B583E85D-949F-47CF-B9DA-BC532A206EF4",
+      // nextNodeExecutor: "5644995402AD41-1CC3-40ED-B375-7A3B831B4AA1",
+      processCode: "pro_kssq",
+      nextNodeState: "审核不通过"
+    }
+  }
+
   private equipmentProcessData = {
     projectName: "",
     purchaseType: "",

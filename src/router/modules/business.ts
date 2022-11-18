@@ -128,11 +128,23 @@ const businessRouter: RouteConfig[] = [
           title: "dictionaryManagement"
           // roles: ['admin'] // or you can only set roles in sub nav
         }
+      },
+      {
+        path: "supplierManagement",
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/infrastructure/supplierManagement/index.vue"
+          ),
+        name: "supplierManagement",
+        meta: {
+          title: "supplierManagement"
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
       }
     ]
   },
 
-  // 组织机构管理 OrganizationStructureManagement
+  // 组织机构管理 
   {
     path: "/OrganizationStructureManagement",
     component: Layout,

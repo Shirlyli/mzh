@@ -21,7 +21,14 @@
                     :paramsConfig="paramsConfig" />
         </el-tab-pane>
         <el-tab-pane label="已处理任务"
-                     name="dealTask">已处理任务</el-tab-pane>
+                     name="dealTask">
+          <VexTable ref="vexTable"
+                    :formConfig="doneFormConfig"
+                    :columns="columns"
+                    hasNotSlotButton="true"
+                    @emit-handle-search="handleSearch"
+                    :paramsConfig="paramsConfig" />
+        </el-tab-pane>
       </el-tabs>
     </el-card>
     <!-- 新增流程申请 -->

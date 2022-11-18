@@ -8,6 +8,11 @@ export const getTreeData = (url: any, data: any) =>
     data
   });
 
+/**
+ * 字典管理start
+ * @param data
+ * @returns
+ */
 // 获取下级字典数据
 export const getTableDataList = (data: any) =>
   request({
@@ -32,6 +37,13 @@ export const dealCommonData = (data: any) =>
     data
   });
 
+/**
+ * 字典管理end
+ */
+
+/**
+ * 员工管理start
+ */
 // 修改员工信息
 export const updatePersonalData = (data: any) =>
   request({
@@ -48,6 +60,13 @@ export const dealPersonalData = (data: any) =>
     data
   });
 
+/**
+ * 员工管理end
+ */
+
+/**
+ * 用户管理start
+ */
 // 获取用户信息根据员工id
 export const getPersonalInfo = (data: any) =>
   request({
@@ -104,7 +123,13 @@ export const personalUnbindRole = (data: { userId: string; roleId: string }) =>
     method: "POST",
     data
   });
+/**
+ * 用户管理end
+ */
 
+/**
+ * 菜单管理start
+ */
 // 获取菜单树   /auth/menu/queryTree
 export const queryMenuTree = () =>
   request({
@@ -170,14 +195,6 @@ export const queryRolesByMenuId = (data: { menu_id: string }) =>
     data
   });
 
-// 角色修改
-export const saveRoleInfo = (data: any) =>
-  request({
-    url: "/auth/role/save",
-    method: "POST",
-    data
-  });
-
 // 菜单树删除 /auth/menu/del {ids:string}
 export const delRoleInfo = (data: any) =>
   request({
@@ -185,6 +202,23 @@ export const delRoleInfo = (data: any) =>
     method: "POST",
     data
   });
+/**
+ * 菜单管理end
+ */
+
+/**
+ * 角色管理start
+ */
+// 角色修改
+export const saveRoleInfo = (data: any) =>
+  request({
+    url: "/auth/role/save",
+    method: "POST",
+    data
+  });
+/**
+ * 角色管理end
+ */
 
 /***
  *  流程相关start
@@ -286,3 +320,33 @@ export const queryDepartmentInfoTree = (data: any) =>
     method: "POST",
     data
   });
+
+/**
+ *供应商管理start
+ */
+// 供应商查询 /api/supplier/queryByCondition
+export const queryByConditionSupplier = (data: any) =>
+  request({
+    url: "/supplier/queryByCondition",
+    method: "POST",
+    data
+  });
+
+// 供应商新增
+export const handleSupplierSave = (data: any) =>
+  request({
+    url: "/supplier/save",
+    method: "POST",
+    data
+  });
+
+// 供应商删除
+export const handleSupplierDel = (data: any) =>
+  request({
+    url: "/supplier/del",
+    method: "POST",
+    data
+  });
+/**
+ *供应商管理end
+ */

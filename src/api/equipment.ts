@@ -14,7 +14,7 @@ export const equipmentInfoData: EquipmentInfoData = {
 }
 
 // 获取科室左侧树形数据
-export const getTreeData = (url: any, data: any) =>
+export const getTreeData = (url:string, data: any) =>
   request({
     url,
     method: 'POST',
@@ -22,7 +22,7 @@ export const getTreeData = (url: any, data: any) =>
   })
 
 // 获取列表数据
-export const getTableDataList = (url: any, data: any) =>
+export const getTableDataList = (url:string, data: any) =>
   request({
     url,
     method: 'POST',

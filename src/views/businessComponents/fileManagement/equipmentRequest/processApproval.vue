@@ -1,23 +1,42 @@
 <template>
-  <div>
+  <div class="approvalBox">
     <el-drawer title="流程审批"
                :visible.sync="dialogVisible"
                size="50%"
                @close="handleCancelApproval">
+
+      <template slot="title">
+        <span>流程审批</span>
+        <!-- 操作按钮 -->
+        <div class="btnBox">
+          <el-button @click="handleSubmit"
+                     type="primary">
+            {{'审核通过' }}
+          </el-button>
+          <el-button type="error"
+                     @click="handleCancel">
+            {{ '审核不通过' }}
+          </el-button>
+          <el-button type="error"
+                     @click="handleEnd">
+            {{ '终止' }}
+          </el-button>
+        </div>
+      </template>
 
       <!-- 基本信息 -->
       <div class="dividerBox">
         <el-divider direction="vertical"></el-divider>
         <span>基本信息</span>
       </div>
-      <div>
+      <div class="contentBox">
         <el-row :gutter="20">
           <el-col :span="12"
                   v-for="(item,index) in basicInfo"
                   :key="index">
             <div class="basicBox">
               <span class="title">{{item.title}}:</span>
-              <span class="value">{{processData[item.field]}}</span>
+              <span class="value">{{processData[item.field]?processData[item.field]:'-'}}</span>
             </div>
           </el-col>
         </el-row>
@@ -28,7 +47,31 @@
         <el-divider direction="vertical"></el-divider>
         <span>设备明细</span>
       </div>
-      <div>
+      <div class="contentBox">
+        <el-table :data="processRecordListData"
+                  style="width: 100%"
+                  border>
+          <el-table-column prop="nodeName"
+                           label="设备名称"
+                           width="180">
+          </el-table-column>
+          <el-table-column prop="auditStatus"
+                           label="单位"
+                           width="180">
+          </el-table-column>
+          <el-table-column prop="auditmind"
+                           label="数量">
+          </el-table-column>
+          <el-table-column prop="nextOperator"
+                           label="单价">
+          </el-table-column>
+          <el-table-column prop="operator"
+                           label="是否进口">
+          </el-table-column>
+          <el-table-column prop="operatorTime"
+                           label="操作时间">
+          </el-table-column>
+        </el-table>
 
       </div>
 
@@ -37,37 +80,92 @@
         <el-divider direction="vertical"></el-divider>
         <span>附件信息</span>
       </div>
+      <div class="contentBox">
+        <el-table :data="processRecordListData"
+                  style="width: 100%"
+                  border>
+          <el-table-column prop="nodeName"
+                           label="文件名"
+                           width="180">
+          </el-table-column>
+          <el-table-column prop="auditStatus"
+                           label="提交人"
+                           width="180">
+          </el-table-column>
+          <el-table-column prop="auditmind"
+                           label="上传时间">
+          </el-table-column>
+          <el-table-column prop="nextOperator"
+                           label="操作">
+          </el-table-column>
+        </el-table>
+      </div>
 
       <!-- 操作记录 -->
       <div class="dividerBox">
         <el-divider direction="vertical"></el-divider>
         <span>操作记录</span>
       </div>
+      <div class="contentBox">
+        <el-table :data="processRecordListData"
+                  style="width: 100%"
+                  border>
+          <el-table-column prop="nodeName"
+                           label="节点名"
+                           width="180">
+          </el-table-column>
+          <el-table-column prop="auditStatus"
+                           label="审核状态"
+                           width="180">
+          </el-table-column>
+          <el-table-column prop="auditmind"
+                           label="审核原因">
+          </el-table-column>
+          <el-table-column prop="nextOperator"
+                           label="下一节点执行人">
+          </el-table-column>
+          <el-table-column prop="operator"
+                           label="操作人">
+          </el-table-column>
+          <el-table-column prop="operatorTime"
+                           label="操作时间">
+          </el-table-column>
+        </el-table>
 
-      <!-- 操作按钮 -->
-      <div>
-        <el-row>
-          <el-col :span="12"
-                  :offset="12">
-            <el-button @click="handleSubmit"
-                       type="primary">
-              {{'审核通过' }}
-            </el-button>
-            <el-button type="error"
-                       @click="handleCancel">
-              {{ '审核不通过' }}
-            </el-button>
-            <el-button type="error"
-                       @click="handleEnd">
-              {{ '终止' }}
-            </el-button>
-          </el-col>
-        </el-row>
       </div>
 
+      <!-- 审批节点 -->
+      <div class="dividerBox">
+        <el-divider direction="vertical"></el-divider>
+        <span>科室审批</span>
+      </div>
+      <div>
+        <el-form ref="dataForm"
+                 :rules="rules"
+                 :model="equipmentProcessData"
+                 label-position="left"
+                 label-width="60px"
+                 style="margin-left:20px;">
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item :label="'询价'"
+                            prop="nextNodeName">
+                <el-input :value="equipmentProcessData.nodeName"></el-input>
+
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item :label="'询价人'"
+                            prop="nextNodeExecutor">
+                <el-input :value="equipmentProcessData.nodeName"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
     </el-drawer>
 
-    <!--  -->
+    <!-- 提交审批流程确认模态框  -->
     <el-dialog :title="title"
                :visible.sync="nextDialogVisible"
                width="30%">
@@ -100,167 +198,10 @@
                    @click="handleSubmitProcess">确 定</el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 
-<script lang="ts">
-import {
-  delHospitalProcessBusiness,
-  getProcessNodeInfoByProcessCodeAndBh,
-  getUserListProcessCode,
-  queryHospitalProcessBusinessUpdate,
-} from '@/api/basic'
-import { Form } from 'element-ui'
-import { truncate } from 'lodash'
-import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator'
-import { CREATE_FORM_LIST } from './formColumns'
-@Component({
-  name: 'ProcessApproval',
-  components: {},
-})
-export default class extends Vue {
-  private type = 'submit'
-  @Prop({ default: false }) dialogVisible!: boolean
-  @Watch('dialogVisible')
-  private onChangeDialogVisible(value: any) {}
-  @Prop() processData!: any
-  @Watch('processData')
-  private onChangeProcessData(data: any) {
-    console.log('🚀 ~ data', data)
-  }
-  private nextDialogVisible = false
-  private title = '流程审批'
-  private basicInfo = CREATE_FORM_LIST
-  private equipmentProcessData = {
-    nextNodeName: '',
-    nextNodeExecutor: '',
-  }
-  private rules = {}
-  private nextNodeNameData: any = {} //下一节点名称
-  private nextNodeExecutorData: any = {} //下一节点处理人
-  created() {}
-  private async queryCurrentCodeAndBhResData(nodeNameCode: any) {
-    const nextCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
-      processCode: 'pro_kssq',
-      nodeNameCode,
-    })
-    if (nextCodeData.code == '200') {
-      console.log('🚀 ~ nextCodeData', nextCodeData)
-      this.queryUserListProcessCode(nextCodeData.data.nodeSort)
-      this.queryNextCodeAndBhResData(nextCodeData.data.nodeSort)
-    }
-  }
-  /**
-   * 获取下一节点
-   */
-  private async queryNextCodeAndBhResData(nodeSort: any) {
-    const nextCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
-      processCode: 'pro_kssq',
-      nodeSort: nodeSort + 1,
-    })
-    if (nextCodeData.code == '200') {
-      this.nextNodeNameData = nextCodeData.data
-    }
-  }
-
-  /**
-   * 获取权限处理人
-   */
-  private async queryUserListProcessCode(nodeSort: any) {
-    const nextNodeExecutorData: any = await getUserListProcessCode({
-      processCode: 'pro_kssq',
-      nodeSort: nodeSort + 1,
-    })
-    if (nextNodeExecutorData.code == '200') {
-      this.nextNodeExecutorData = nextNodeExecutorData.data[0]
-    }
-  }
-
-  private handleSubmit() {
-    this.queryCurrentCodeAndBhResData(this.processData.nextNodeCode)
-    console.log('🚀 ~ this.processData', this.processData)
-    this.nextDialogVisible = true
-  }
-
-  @Emit()
-  emitHandleSubmit(value: boolean) {
-    console.log('🚀 ~ emitHandleSubmit')
-    return value
-  }
-  /**
-   * 确认流程处理 /api/hospitalProcess/getProcessNodeInfoByProcessCodeAndBh
-   */
-  private async handleSubmitProcess() {
-    const { nextNodeName, nextNodeCode, id } = this.processData
-
-    if (this.type === 'submit') {
-      ;(this.$refs.dataForm as Form).validate(async (valid) => {
-        this.nextDialogVisible = false
-        if (valid) {
-          const params = {
-            id,
-            currentNodeName: nextNodeName,
-            currentNodeCode: nextNodeCode,
-            nextNodeName: this.nextNodeNameData.nodeName,
-            nextNodeCode: this.nextNodeNameData.nodeNameCode,
-            nextNodeExecutor:
-              this.nextNodeExecutorData.user_id ||
-              '0D0228B583E85D-949F-47CF-B9DA-BC532A206EF4',
-            operator: '操作人',
-          }
-          const res: any = await queryHospitalProcessBusinessUpdate(params)
-          if (res.result) {
-            this.nextDialogVisible = false
-            this.emitHandleSubmit(true)
-          }
-          this.dialogVisible = false
-          ;(this.$refs.dataForm as Form).resetFields()
-          this.$notify({
-            title: '成功',
-            message: '创建成功',
-            type: 'success',
-            duration: 2000,
-          })
-        }
-      })
-    } else if (this.type === 'end') {
-      const res: any = await delHospitalProcessBusiness({ ids: id })
-      if (res.result) {
-        this.nextDialogVisible = false
-        this.emitHandleSubmit(true)
-        this.$notify({
-          title: '成功',
-          message: '删除流程成功',
-          type: 'success',
-          duration: 2000,
-        })
-      }
-    }
-  }
-
-  // 审批通过框
-  private handleCancelProcess() {
-    this.nextDialogVisible = false
-  }
-
-  private handleCancelApproval() {
-    this.emitHandleSubmit(false)
-  }
-
-  /**
-   * 流程审批不同意
-   */
-  private handleCancel() {}
-
-  /**
-   * 终止流程
-   */
-  private handleEnd() {
-    this.nextDialogVisible = true
-    this.type = 'end'
-  }
-}
+<script lang="ts" src="./processApproval.ts">
 </script>
 
 <style lang="scss" scoped>
@@ -268,20 +209,30 @@ export default class extends Vue {
   margin: 12px 0;
   .el-divider--vertical {
     background-color: blue;
-    width: 2px;
+    width: 6px;
   }
 }
 .basicBox {
   display: flex;
   margin-bottom: 12px;
+  color: #333;
   .title {
     width: 100px;
   }
   .value {
     color: #999;
+    flex: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }
-.el-drawer__body {
-  padding: 0 24px;
+
+.contentBox {
+  padding-left: 18px;
+}
+.btnBox {
+  // margin-top: 12px;
+  float: right;
 }
 </style>

@@ -21,14 +21,23 @@ import * as filters from '@/filters'
 import './global.scss'
 
 import 'xe-utils'
-import VXETable from 'vxe-table' // 注意xe-utils与VXETable的引入顺序,有些版本会报错
-import 'vxe-table/lib/index.css'
+import VXETable ,{ Input }from 'vxe-table' // 注意xe-utils与VXETable的引入顺序,有些版本会报错
+import 'vxe-table/lib/index.css';
+
 // Vue.use(Loading);
-Vue.use(VXETable)
+Vue.use(VXETable);
 // Vue.prototype.$XModal = VXETable.modal
 Vue.use(ElementUI, {
   size: AppModule.size, // Set element-ui default size
   i18n: (key: string, value: string) => i18n.t(key, value)
+})
+VXETable.renderer.add('runningState',{
+  renderDefault(h,cellRender,params){
+    const {row,column} = params
+    console.log("🚀 ~ column", column)
+    console.log("🚀 ~ row", row)
+    return h('span','222')
+  }
 })
 Vue.prototype.$moment = moment;
 

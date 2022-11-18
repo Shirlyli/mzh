@@ -5,6 +5,7 @@ export default {
     dataDecision: '数据决策', //= ====1
     purchaseManagement: '采购管理', //= ====1
     equipmentRequest:'科室申请',
+    supplierManagement:'供应商管理',
     procurementProcess: '流程配置',
     purchasingRecords: '采购记录',
     inventoryRecords: '入库记录',
