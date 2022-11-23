@@ -1,33 +1,6 @@
 import { RouteConfig } from "vue-router";
 import Layout from "@/layout/index.vue";
-/*
-  Note: sub-menu only appear when children.length>=1
-  Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
-*/
 
-/*
-  name:'router-name'             the name field is required when using <keep-alive>, it should also match its component's name property
-                                 detail see : https://vuejs.org/v2/guide/components-dynamic-async.html#keep-alive-with-Dynamic-Components
-  redirect:                      if set to 'noredirect', no redirect action will be trigger when clicking the breadcrumb
-  meta: {
-    roles: ['admin', 'editor']   will control the page roles (allow setting multiple roles)
-    title: 'title'               the name showed in subMenu and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon showed in the sidebar
-    hidden: true                 if true, this route will not show in the sidebar (default is false)
-    alwaysShow: true             if true, will always show the root menu (default is false)
-                                 if false, hide the root menu when has less or equal than one children route
-    breadcrumb: false            if false, the item will be hidden in breadcrumb (default is true)
-    noCache: true                if true, the page will not be cached (default is false)
-    affix: true                  if true, the tag will affix in the tags-view
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
-*/
-
-/**
-  ConstantRoutes
-  a base page that does not have permission requirements
-  all roles can be accessed
-*/
 const businessRouter: RouteConfig[] = [
   // 控制台
   // {
@@ -54,7 +27,7 @@ const businessRouter: RouteConfig[] = [
   {
     path: "/workBench",
     component: Layout,
-    redirect: '/workBench/index',
+    redirect: "/workBench/index",
     children: [
       {
         path: "index",
@@ -143,8 +116,69 @@ const businessRouter: RouteConfig[] = [
       }
     ]
   },
-
-  // 组织机构管理 
+  // 采购管理
+  {
+    path: "/purchaseManagement",
+    component: Layout,
+    redirect: "/purchaseManagement/procurementProcess",
+    meta: {
+      title: "purchaseManagement",
+      icon: "lock",
+      roles: ["admin", "editor"], // you can set roles in root nav
+      alwaysShow: true // will always show the root menu
+    },
+    children: [
+      {
+        path: "purchasingRecords",
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/purchaseManagement/purchasingRecords/index.vue"
+          ),
+        name: "procurementProcess",
+        meta: {
+          title: "purchasingRecords"
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: "inventoryRecords",
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/purchaseManagement/inventoryRecords/index.vue"
+          ),
+        name: "inventoryRecords",
+        meta: {
+          title: "inventoryRecords"
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: "outboundRecords",
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/purchaseManagement/outboundRecords/index.vue"
+          ),
+        name: "outboundRecords",
+        meta: {
+          title: "outboundRecords"
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: "biddingDocuments",
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/purchaseManagement/biddingDocuments/index.vue"
+          ),
+        name: "biddingDocuments",
+        meta: {
+          title: "biddingDocuments"
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }
+    ]
+  },
+  // 组织机构管理
   {
     path: "/OrganizationStructureManagement",
     component: Layout,
@@ -243,7 +277,7 @@ const businessRouter: RouteConfig[] = [
           // icon: 'dashboard',
           // affix: true
         }
-      },
+      }
       // {
       //   path: "departmentClass",
       //   component: () =>
@@ -322,50 +356,126 @@ const businessRouter: RouteConfig[] = [
     ]
   },
   // 权限管理
+  // {
+  //   path: "/rightsManagement",
+  //   component: Layout,
+  //   redirect: "/rightsManagement/administratorManagement",
+  //   meta: {
+  //     title: "rightsManagement",
+  //     icon: "lock",
+  //     roles: ["admin", "editor"], // you can set roles in root nav
+  //     alwaysShow: true // will always show the root menu
+  //   },
+  //   children: [
+  //     {
+  //       path: "administratorManagement",
+  //       component: () =>
+  //         import(
+  //           /* webpackChunkName: "permission-page" */ "@/views/businessComponents/rightsManagement/administratorManagement/index.vue"
+  //         ),
+  //       name: "administratorManagement",
+  //       meta: {
+  //         title: "administratorManagement"
+  //         // roles: ['admin'] // or you can only set roles in sub nav
+  //       }
+  //     },
+  //     {
+  //       path: "administratorLogs",
+  //       component: () =>
+  //         import(
+  //           /* webpackChunkName: "permission-page" */ "@/views/businessComponents/rightsManagement/administratorLogs/index.vue"
+  //         ),
+  //       name: "administratorLogs",
+  //       meta: {
+  //         title: "administratorLogs"
+  //         // roles: ['admin'] // or you can only set roles in sub nav
+  //       }
+  //     },
+  //     {
+  //       path: "characterGroup",
+  //       component: () =>
+  //         import(
+  //           /* webpackChunkName: "permission-page" */ "@/views/businessComponents/rightsManagement/characterGroup/index.vue"
+  //         ),
+  //       name: "characterGroup",
+  //       meta: {
+  //         title: "characterGroup"
+  //         // roles: ['admin'] // or you can only set roles in sub nav
+  //       }
+  //     }
+  //   ]
+  // },
+  // 系统管理
   {
-    path: "/rightsManagement",
+    path: "/systemManagement",
     component: Layout,
-    redirect: "/rightsManagement/administratorManagement",
+    redirect: "/systemManagement/menuManagement",
     meta: {
-      title: "rightsManagement",
+      title: "systemManagement",
       icon: "lock",
       roles: ["admin", "editor"], // you can set roles in root nav
       alwaysShow: true // will always show the root menu
     },
     children: [
       {
-        path: "administratorManagement",
+        path: "menuManagement",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/rightsManagement/administratorManagement/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/systemManagement/menuManagement/index.vue"
           ),
-        name: "administratorManagement",
+        name: "menuManagement",
         meta: {
-          title: "administratorManagement"
+          title: "menuManagement"
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
       {
-        path: "administratorLogs",
+        path: "roleManagement",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/rightsManagement/administratorLogs/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/systemManagement/roleManagement/index.vue"
           ),
-        name: "administratorLogs",
+        name: "roleManagement",
         meta: {
-          title: "administratorLogs"
+          title: "roleManagement"
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      // 用户管理
+      {
+        path: "personManagement",
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/systemManagement/personManagement/index.vue"
+          ),
+        name: "personManagement",
+        meta: {
+          title: "personManagement"
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      // 员工管理
+      {
+        path: "employeeManagement",
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/systemManagement/employeeManagement/index.vue"
+          ),
+        name: "employeeManagement",
+        meta: {
+          title: "employeeManagement"
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
       {
-        path: "characterGroup",
+        path: "procurementProcess",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/rightsManagement/characterGroup/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/purchaseManagement/procurementProcess/index.vue"
           ),
-        name: "characterGroup",
+        name: "procurementProcess",
         meta: {
-          title: "characterGroup"
+          title: "procurementProcess"
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       }

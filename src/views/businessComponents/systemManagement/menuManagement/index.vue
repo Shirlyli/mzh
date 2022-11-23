@@ -47,8 +47,47 @@
                     placeholder="请选择"></el-input>
         </el-form-item>
         <el-form-item :label="'菜单路由'"
-                      prop="mCode">
+                      prop="mUrl">
           <el-input v-model="menuData.mUrl"
+                    placeholder="请输入" />
+        </el-form-item>
+        <el-form-item :label="'菜单类型'"
+                      prop="mType">
+          <el-select v-model="menuData.mType"
+                     placeholder="请选择">
+            <el-option v-for="item in options"
+                       :key="item.value"
+                       :label="item.label"
+                       :value="item.value">
+            </el-option>
+          </el-select>
+
+        </el-form-item>
+        <el-form-item :label="'菜单图标'"
+                      prop="mIcon">
+          <el-input v-model="menuData.mIcon"
+                    placeholder="请输入" />
+        </el-form-item>
+        <el-form-item :label="'父菜单名称'"
+                      prop="pName">
+          <el-input v-model="menuData.pName"
+                    placeholder="请输入" />
+        </el-form-item>
+        <el-form-item :label="'是否启用'"
+                      prop="mIsavailable">
+          <el-radio v-model="menuData.mIsavailable"
+                    label="0">不启用</el-radio>
+          <el-radio v-model="menuData.mIsavailable"
+                    label="1">启用</el-radio>
+        </el-form-item>
+        <el-form-item :label="'描述'"
+                      prop="mDesc">
+          <el-input v-model="menuData.mDesc"
+                    placeholder="请输入" />
+        </el-form-item>
+        <el-form-item :label="'备注'"
+                      prop="note">
+          <el-input v-model="menuData.note"
                     placeholder="请输入" />
         </el-form-item>
       </el-form>
