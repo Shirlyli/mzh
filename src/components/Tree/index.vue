@@ -7,6 +7,7 @@
     <div class="mt-md"></div>
     <el-tree :data="treeData"
              :props="defaultProps"
+             :expand-on-click-node="false"
              default-expand-all
              @node-click="handleNodeClick"
              :filter-node-method="filterNode"

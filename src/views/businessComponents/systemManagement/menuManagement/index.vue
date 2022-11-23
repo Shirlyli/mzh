@@ -44,7 +44,12 @@
         <el-form-item :label="'菜单名称'"
                       prop="mName">
           <el-input v-model="menuData.mName"
-                    placeholder="请选择"></el-input>
+                    placeholder="请输入"></el-input>
+        </el-form-item>
+        <el-form-item :label="'菜单编号'"
+                      prop="mCode">
+          <el-input v-model="menuData.mCode"
+                    placeholder="请输入" />
         </el-form-item>
         <el-form-item :label="'菜单路由'"
                       prop="mUrl">
@@ -89,6 +94,38 @@
                       prop="note">
           <el-input v-model="menuData.note"
                     placeholder="请输入" />
+        </el-form-item>
+        <el-form-item :label="'菜单类型'"
+                      prop="mType">
+          <el-select v-model="menuData.mType"
+                     placeholder="菜单类型">
+            <el-option label="目录"
+                       value="1"></el-option>
+            <el-option label="菜单"
+                       value="2"></el-option>
+            <el-option label="按钮"
+                       value="3"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="'父级菜单'"
+                      prop="pName">
+          <el-input v-model="menuData.pName"
+                    disabled="disabled" />
+        </el-form-item>
+        <el-form-item :label="'父级菜单ID'"
+                      prop="pid">
+          <el-input v-model="menuData.pid"
+                    disabled="disabled" />
+        </el-form-item>
+        <el-form-item :label="'是否启用'"
+                      prop="mIsavailable">
+          <el-select v-model="menuData.mIsavailable"
+                     placeholder="是否启用">
+            <el-option label="启用"
+                       value="1"></el-option>
+            <el-option label="禁用"
+                       value="0"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
 

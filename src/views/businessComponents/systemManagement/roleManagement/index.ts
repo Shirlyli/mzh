@@ -26,14 +26,18 @@ export default class extends Vue {
       {
         field: "name",
         title: "名称",
-        slots: { default: "name_item" }
+        itemRender: { name: "$input", props: { placeholder: "请输入名称" } }
       },
       {
         field: "sex",
         title: "菜单路由",
-        slots: { default: "sex_item" }
+        itemRender: { name: "$input", props: { placeholder: "请输入菜单路由" } }
       },
-      { field: "time", title: "权限标识", slots: { default: "create_time" } },
+      {
+        field: "time",
+        title: "权限标识",
+        itemRender: { name: "$input", props: { placeholder: "请输入权限标识" } }
+      },
       { field: "time", title: "创建时间", slots: { default: "create_time" } },
       { slots: { default: "operate_item" } }
     ] // 表单项
@@ -82,14 +86,14 @@ export default class extends Vue {
     ]
   }; // 表单校验
   private roleData = {
-    id: '',
+    id: "",
     rName: "",
     pid: "",
     pName: "",
-    isLeaf: ''
+    isLeaf: ""
   };
 
-  created() { }
+  created() {}
 
   // 菜单数据
   private tableData = [];

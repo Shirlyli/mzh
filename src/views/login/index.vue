@@ -1,9 +1,10 @@
 <template>
   <div class="login-container">
+    <!-- :rules="loginRules" -->
     <el-form
       ref="loginForm"
       :model="loginForm"
-      :rules="loginRules"
+      
       class="login-form"
       autocomplete="on"
       label-position="left"
@@ -139,6 +140,8 @@ export default class extends Vue {
   }
 
   private loginForm = {
+    // username: 'nanke_zhuren_ceshi',
+    // password: 'MTIzNDU2',
     username: 'admin',
     password: '111111'
   }
@@ -192,11 +195,13 @@ export default class extends Vue {
 
   private handleLogin() {
     (this.$refs.loginForm as ElForm).validate(async(valid: boolean) => {
+
       if (valid) {
         this.loading = true
-        await UserModule.Login(this.loginForm)
+        await UserModule.Login({userName: 'nanke_zhuren_ceshi',userPwd: 'MTIzNDU2'})
+        //  await UserModule.Login(this.loginForm)
         this.$router.push({
-          path: '/rightsManagement/administratorManagement' || '/',
+          path: '/fileManagement/equipmentRequest' || '/',
           query: this.otherQuery
         }).catch(err => {
           console.warn(err)

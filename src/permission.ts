@@ -27,17 +27,20 @@ router.beforeEach(async(to: Route, _: Route, next: any) => {
 
   // Determine whether the user has logged in
   if (UserModule.token) {
+    console.log("🚀 ~ UserModule", UserModule)
     if (to.path === '/login') {
       // If is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done()
     } else {
+      console.log("🚀 ~ UserModule", UserModule.roles)
       // Check whether the user has obtained his permission roles
       if (UserModule.roles.length === 0) {
         try {
           // Note: roles must be a object array! such as: ['admin'] or ['developer', 'editor']
           await UserModule.GetUserInfo()
           const roles = UserModule.roles
+          console.log("🚀 ~ roles", roles)
           // Generate accessible routes map based on role
           PermissionModule.GenerateRoutes(roles)
           // Dynamically add accessible routes
@@ -50,7 +53,7 @@ router.beforeEach(async(to: Route, _: Route, next: any) => {
         } catch (err) {
           // Remove token and redirect to login page
           UserModule.ResetToken()
-          Message.error(err || 'Has Error')
+          Message({ type: 'error', message:  err || 'Has Error'})
           next(`/login?redirect=${to.path}`)
           NProgress.done()
         }

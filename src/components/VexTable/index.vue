@@ -25,6 +25,17 @@
                    type="text"
                    placeholder="请输入名称"></vxe-input>
       </template>
+
+      <template #type_item="{data}">
+        <vxe-select v-model="data.mType"
+                    transfer>
+          <vxe-option v-for="item in mType"
+                      :key="item.value"
+                      :value="item.value"
+                      :label="item.label"></vxe-option>
+        </vxe-select>
+      </template>
+
       <template #sex_item="{data}">
         <vxe-select v-model="data.sex"
                     transfer>
@@ -156,6 +167,14 @@ export default class extends Vue {
     { value: '女', label: '女' },
   ]
 
+  //菜单类型下拉
+  private mType = [
+      { value: '1', label: '目录' },
+      { value: '2', label: '菜单' },
+      { value: '3', label: '按钮' },
+  ]
+
+
   private checkedList = [] // 已选列
   created() {
     // this.findList(this.paramsConfig)
@@ -198,6 +217,7 @@ export default class extends Vue {
   // 查询
   private searchFor() {
     console.log('🚀 ~ formConfig', this.formConfig.data)
+      debugger;
     this.paramsConfig.params.entity = {
       ...this.paramsConfig.params.entity,
       ...this.formConfig.data,
@@ -229,7 +249,7 @@ export default class extends Vue {
       this.gridOptions.loading = true
       setTimeout(() => {
         this.gridOptions.loading = false
-        VXETable.modal.message({ content: '保存成功！', status: 'success' })
+        //VXETable.modal.message({ content: '保存成功！', status: 'success' })
       }, 300)
     })
   }

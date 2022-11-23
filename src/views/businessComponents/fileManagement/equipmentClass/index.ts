@@ -28,7 +28,11 @@ export default class extends Vue {
       createtime: ""
     },
     items: [
-      { field: "name", title: "设备名称", slots: { default: "name_item" } },
+      {
+        field: "name",
+        title: "设备名称",
+        itemRender: { name: "$input", props: { placeholder: "请输入设备名称" } }
+      },
       {
         field: "createtime",
         title: "创建时间",
@@ -128,7 +132,7 @@ export default class extends Vue {
     params: {
       page: 1,
       limit: 10,
-      entity: {...this.equipmentCategoryData}
+      entity: { ...this.equipmentCategoryData }
     }
   };
 
@@ -142,8 +146,8 @@ export default class extends Vue {
     // (this.$refs.dataForm as Form).setFiledsValue
     this.equipmentCategoryData = {
       ...this.equipmentCategoryData,
-      departmentId: id ?? "1001",
-      
+      departmentId: id ?? "1001"
+
     };
   }
 
@@ -166,7 +170,7 @@ export default class extends Vue {
   // 触发编辑事件
   private handleUpdate(row: any) {
     const { cName, id, pid, note } = row;
-    this.equipmentCategoryData = {...this.equipmentCategoryData};
+    this.equipmentCategoryData = { ...this.equipmentCategoryData };
     this.dialogStatus = "update";
     this.dialogVisible = true;
     this.$nextTick(() => {

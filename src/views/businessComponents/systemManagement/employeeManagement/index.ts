@@ -33,14 +33,28 @@ export default class extends Vue {
       sex: ""
     },
     items: [
-      { field: "eName", title: "用户姓名", slots: { default: "name_item" } },
+      {
+        field: "eName",
+        title: "用户姓名",
+        itemRender: { name: "$input", props: { placeholder: "请输入名称" } }
+      },
       {
         field: "createtime",
         title: "创建时间",
         slots: { default: "create_time" },
         resetValue: []
       },
-      { field: "sex", title: "性别", slots: { default: "sex_item" } },
+      {
+        field: "sex",
+        title: "性别",
+        itemRender: {
+          name: "$select",
+          options: [
+            { label: "男", value: 1 },
+            { label: "女", value: 2 }
+          ]
+        }
+      },
 
       { slots: { default: "operate_item" } }
     ] // 表单项
@@ -67,7 +81,7 @@ export default class extends Vue {
     { field: "ePost", title: "职位", width: 120 },
     { field: "ePostState", title: "在职状态", width: 120 },
     { field: "note", title: "备注", width: 120 },
-    { field: "dispindex", title: "注销时间", width: 120 },
+    { field: "dispindex", title: "排序", width: 120 },
     { field: "createtime", title: "创建时间", width: 120 },
     { field: "sex", title: "性别", width: 120 },
     {

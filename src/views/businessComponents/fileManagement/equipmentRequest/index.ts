@@ -35,12 +35,12 @@ export default class extends Vue {
       {
         field: "processName",
         title: "流程名称",
-        slots: { default: "name_item" }
+        itemRender: { name: "$input", props: { placeholder: "请输入流程名称" } }
       },
       {
         field: "nodeName",
         title: "节点名称",
-        slots: { default: "sex_item" }
+        itemRender: { name: "$input", props: { placeholder: "请输入节点名称" } }
       },
       {
         field: "cteaterTime",
@@ -84,7 +84,7 @@ export default class extends Vue {
     }
   };
 
-  private doneFormConfig ={
+  private doneFormConfig = {
     url: "/hospitalProcessBusiness/queryProcessList", // 根据表单查询项查询数据
     params: {
       page: "1",
@@ -94,7 +94,7 @@ export default class extends Vue {
       processCode: "pro_kssq",
       nextNodeState: "审核不通过"
     }
-  }
+  };
 
   private equipmentProcessData = {
     projectName: "",

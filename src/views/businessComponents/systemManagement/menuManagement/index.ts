@@ -18,20 +18,24 @@ export default class extends Vue {
   private formConfig = {
     data: {
       mName: "",
-      mUrl: "",
-      size: "",
-      mMtime: ""
+      mType: ""
     },
     items: [
       {
         field: "mName",
-        title: "名称",
+        title: "菜单名称",
         itemRender: { name: "$input", props: { placeholder: "请输入名称" } }
       },
       {
         field: "mUrl",
         title: "菜单路由",
         itemRender: { name: "$input", props: { placeholder: "请输入菜单路由" } }
+       
+      },
+      {
+        field: "mType",
+        title: "菜单类型",
+        slots: { default: "type_item" }
       },
       {
         field: "size",
@@ -48,6 +52,8 @@ export default class extends Vue {
     { type: "seq", width: 60 },
     { type: "checkbox", width: 60 },
     { field: "mName", title: "名称", treeNode: true },
+    { field: "mCode", title: "编码"},
+    { field: "mType", title: "菜单类型"},
     { field: "mUrl", title: "菜单路由" },
     { field: "size", title: "权限标识" },
     { field: "mIsavailable", title: "是否启用", formatter: this.formatMType },
@@ -162,11 +168,14 @@ export default class extends Vue {
     };
   }
   // 新增菜单
+  // 新增
   private handleInsert() {
     this.resetForm();
     this.dialogVisible = true;
     this.dialogStatus = "create";
     const { id, title } = this.nodeClickData;
+    this.dialogStatus = "create";
+    // (this.$refs.dataForm as Form).setFiledsValue
     this.menuData = {
       ...this.menuData,
       pid: id,

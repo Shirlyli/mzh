@@ -1,16 +1,28 @@
 <template>
   <div class="app-container">
-    <el-tabs v-model="activeName"
-             @tab-click="handleClick"
-             type="card">
-      <el-tab-pane label="申请历史"
-                   name="applyHistory">申请历史</el-tab-pane>
-      <el-tab-pane label="待处理任务"
-                   name="toDoTask">待处理任务</el-tab-pane>
-      <el-tab-pane label="已处理任务"
-                   name="dealTask">已处理任务</el-tab-pane>
-    </el-tabs>
+    <el-card>
+      <div slot="header"
+           class="clearfix">
+        <span>待办事项</span>
+      </div>
+      <div class="todoBox">
+        <div v-for="o in toDoList"
+             :key="o"
+             class="item"
+             :style="{border:`1px solid ${o.bgcolor}` }">
+          <div class="itemContent">
+            <div class="contentLeft"
+                 :style="{backgroundColor:o.bgcolor}"> <i :class="o.icon"
+                 :style='{color:o.color,}'></i></div>
+            <div class="contentRight">
+              <span class="title">{{o.title}}</span>
+              <span class="count">{{o.count}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
+    </el-card>
   </div>
 </template>
 
@@ -22,22 +34,92 @@ import { Component, Vue } from 'vue-property-decorator'
 })
 export default class extends Vue {
   private listLoading = true
-  private activeName = 'applyHistory'
 
-  created() {}
-
-  private handleClick() {}
+  private toDoList = [
+    {
+      title: '维修派工',
+      count: 22,
+      icon: 'el-icon-user-solid',
+      color: '#FBA529',
+      bgcolor: 'rgba(251, 165, 41, 0.1)',
+    },
+    {
+      title: '维修派工',
+      count: 22,
+      icon: 'el-icon-user-solid',
+      color: 'rgb(129,214,83)',
+      bgcolor: 'rgb(242, 250, 237)',
+    },
+    {
+      title: '维修派工',
+      count: 22,
+      icon: 'el-icon-user-solid',
+      color: 'rgb(11,104,230)',
+      bgcolor: 'rgba(230, 239, 252)',
+    },
+    {
+      title: '维修派工',
+      count: 22,
+      icon: 'el-icon-user-solid',
+      color: 'rgb(11,104,230)',
+      bgcolor: 'rgba(230, 239, 252)',
+    },
+    {
+      title: '维修派工',
+      count: 22,
+      icon: 'el-icon-user-solid',
+      color: 'rgb(11,104,230)',
+      bgcolor: 'rgba(230, 239, 252)',
+    },
+  ]
 }
 </script>
 
 <style lang="scss" scoped>
-.edit-input {
-  padding-right: 100px;
-}
+.todoBox {
+  display: flex;
+  justify-content: space-between;
 
-.cancel-btn {
-  position: absolute;
-  right: 15px;
-  top: 10px;
+  .item {
+    width: 220px;
+    padding: 22px;
+    // border: 1px solid #888;
+    .itemContent {
+      width: 100%;
+      display: flex;
+      align-content: center;
+      align-items: center;
+
+      .contentLeft {
+        width: 50px;
+        border-radius: 50%;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        i {
+          font-size: 30px;
+          text-align: center;
+        }
+      }
+
+      .contentRight {
+        flex: 1;
+        margin-left: 12px;
+        span {
+          display: block;
+        }
+        .title {
+          font-size: 22px;
+        }
+
+        .count {
+          margin-top: 12px;
+          font-size: 24px;
+          font-weight: bold;
+        }
+      }
+    }
+  }
 }
 </style>

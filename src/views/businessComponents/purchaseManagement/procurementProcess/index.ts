@@ -21,12 +21,12 @@ export default class extends Vue {
       {
         field: "processName",
         title: "流程名称",
-        slots: { default: "name_item" }
+        itemRender: { name: "$input", props: { placeholder: "请输入流程名称" } }
       },
       {
         field: "nodeName",
         title: "节点名称",
-        slots: { default: "sex_item" }
+        itemRender: { name: "$input", props: { placeholder: "请输入节点名称" } }
       },
       {
         field: "cteaterTime",
