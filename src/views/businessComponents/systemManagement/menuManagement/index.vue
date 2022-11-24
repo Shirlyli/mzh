@@ -22,6 +22,7 @@
           <VexTable ref="vexTable"
                     :formConfig="formConfig"
                     :columns="columns"
+                    hasAssociate="true"
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"

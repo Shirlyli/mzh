@@ -15,7 +15,7 @@
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="groupRemove"
                     status="warning">批量删除</vxe-button>
-        <vxe-button @click="associateRole">关联角色</vxe-button>
+        <vxe-button @click="associateRole" v-if="hasAssociate">关联角色</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()">导入</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()">导出</vxe-button>
       </template>
@@ -124,7 +124,8 @@ export default class extends Vue {
   private onParamsConfigChange(newdata: any) {
     this.findList(newdata)
   }
-  @Prop({ default: false }) hasNotSlotButton!: boolean
+  @Prop ({ default: false }) hasAssociate!:boolean //是否含有关联角色
+  @Prop({ default: false }) hasNotSlotButton!: boolean //是否含有操作按钮
   @Prop() type!: string //表格类型
   private tablePage = { total: 0, currentPage: 1, pageSize: 10 }
   private loading = false
@@ -183,6 +184,7 @@ export default class extends Vue {
   // 获取列表数据
   private async findList(config: any) {
     this.loading = true
+    this.checkedList = []
     try {
       const res: any = await getTableDataList(config.url, config.params)
       if (this.type === 'process') {

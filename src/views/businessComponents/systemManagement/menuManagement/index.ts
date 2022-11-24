@@ -74,8 +74,10 @@ export default class extends Vue {
   private nodeClickData: any = {};
   private dialogVisible = false; // 新增模态框
   private dialogStatus = "create"; // 模态框新增或修改
+
+  // 根据表单查询项查询数据
   private paramsConfig: any = {
-    url: "/auth/menu/queryByCondition", // 根据表单查询项查询数据
+    url: "/auth/menu/queryByCondition", 
     params: {
       page: "1",
       limit: "10",
@@ -84,19 +86,27 @@ export default class extends Vue {
       }
     }
   };
-  private url = "/auth/menu/queryTree"; // 左侧字典
+
+  // 左侧字典url
+  private url = "/auth/menu/queryTree";
+
+  // 树形图传参
   private treeParams = {
     page: "1",
     limit: "10",
     entity: {
       id: "F7BFB16412328A-3554-4755-BB10-057BA8A8A47E"
     }
-  }; // 树形图传参
+  };
+
+  // 表单校验
   private rules = {
     departmentName: [
       { required: true, message: "请输入部门名称", trigger: "change" }
     ]
-  }; // 表单校验
+  };
+
+  // 新增菜单form表单数据
   private menuData = {
     mName: "",
     mCode: "",
@@ -135,10 +145,13 @@ export default class extends Vue {
 
   // 关联角色模态框显隐
   private isAssociateDialogVisible = false;
+
+  // 列表菜单类型数据回显
   private formatMType(data: any) {
     return _.find(this.options, ["value", data.cellValue])?.label;
   }
 
+  // 列表是否启用数据回显
   private formatMIsavailable(data: any) {
     return data.cellValue === "1"
       ? "启用"
