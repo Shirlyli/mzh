@@ -16,6 +16,7 @@
           <VexTable ref="vexTable"
                     :formConfig="formConfig"
                     :columns="columns"
+                    editColumns="['search']"
                     hasNotSlotButton="true"
                     @emit-handle-search="handleSearch"
                     :paramsConfig="paramsConfig" />

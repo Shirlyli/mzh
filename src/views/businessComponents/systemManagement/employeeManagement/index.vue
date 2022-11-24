@@ -30,6 +30,7 @@
           <!-- <VexTable ref="vexTable"
                     :formConfig="formConfig"
                     :columns="columns"
+                    editColumns="['edit','del']"
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"
@@ -342,6 +343,7 @@
                          show-overflow
                          ref="xTable"
                          height="500"
+                         editColumns="['edit','del']"
                          :loading="loading"
                          :row-config="{isHover: true}"
                          :data="bindRoleData"

@@ -67,7 +67,7 @@ export default class extends Vue {
     {
       width: 160,
       title: "操作",
-      slots: { default: "operateProcess" },
+      slots: { default: "operateHasSearch", },
       showOverflow: true
     }
   ];

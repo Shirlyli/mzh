@@ -25,6 +25,7 @@
           <VexTable ref="vexTable"
                     :formConfig="formConfig"
                     :columns="columns"
+                    editColumns="['edit','del']"
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"

@@ -36,7 +36,14 @@ export default class extends Vue {
       {
         field: "mType",
         title: "菜单类型",
-        slots: { default: "type_item" }
+        itemRender: {
+          name: "$select",
+          options: [
+            { value: "1", label: "目录" },
+            { value: "2", label: "菜单" },
+            { value: "3", label: "按钮" }
+          ]
+        }
       },
       {
         field: "size",
@@ -67,7 +74,7 @@ export default class extends Vue {
     {
       width: 160,
       title: "操作",
-      slots: { default: "operate" },
+      slots: { default: "operateHasSearch" },
       showOverflow: true
     }
   ];
@@ -77,7 +84,7 @@ export default class extends Vue {
 
   // 根据表单查询项查询数据
   private paramsConfig: any = {
-    url: "/auth/menu/queryByCondition", 
+    url: "/auth/menu/queryByCondition",
     params: {
       page: "1",
       limit: "10",

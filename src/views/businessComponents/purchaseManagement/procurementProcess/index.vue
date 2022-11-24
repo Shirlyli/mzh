@@ -9,6 +9,7 @@
                 :formConfig="formConfig"
                 :columns="columns"
                 type="process"
+                editColumns="['edit','del']"
                 @emit-handle-insert="handleInsert"
                 @emit-handle-update="handleUpdate"
                 @emit-handle-remove="handleRemove"

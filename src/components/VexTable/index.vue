@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- @form-submit="findList" -->
     <vxe-grid ref="xGrid"
               v-bind="gridOptions"
               :loading="loading"
@@ -15,37 +14,13 @@
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="groupRemove"
                     status="warning">批量删除</vxe-button>
-        <vxe-button @click="associateRole" v-if="hasAssociate">关联角色</vxe-button>
+        <vxe-button @click="associateRole"
+                    v-if="hasAssociate">关联角色</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()">导入</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()">导出</vxe-button>
       </template>
 
       <!-- 表单查询项 -->
-      <template #name_item="{data}">
-        <vxe-input v-model="data.eName"
-                   type="text"
-                   placeholder="请输入名称"></vxe-input>
-      </template>
-
-      <template #type_item="{data}">
-        <vxe-select v-model="data.mType"
-                    transfer>
-          <vxe-option v-for="item in mType"
-                      :key="item.value"
-                      :value="item.value"
-                      :label="item.label"></vxe-option>
-        </vxe-select>
-      </template>
-
-      <template #sex_item="{data}">
-        <vxe-select v-model="data.sex"
-                    transfer>
-          <vxe-option v-for="item in sexList1"
-                      :key="item.value"
-                      :value="item.value"
-                      :label="item.label"></vxe-option>
-        </vxe-select>
-      </template>
       <template #create_time="{data}">
         <el-date-picker v-model="data.createtime"
                         value-format="yyyy-MM-dd"
@@ -66,30 +41,18 @@
       </template>
 
       <!-- 表格操作 -->
-      <template #operateProcess="{row}">
-        <template>
-          <vxe-button content="查看"
-                      @click="searchForDetails(row)"></vxe-button>
-        </template>
-      </template>
-      <template #operate="{row}">
-        <template>
-          <vxe-button content="编辑"
-                      @click="editRowEvent(row)"></vxe-button>
-        </template>
-        <vxe-button content="删除"
-                    status='warning'
-                    @click="removeRowEvent(row)"></vxe-button>
-      </template>
       <template #operateHasSearch="{row}">
         <vxe-button content="查看"
+                    v-if="editColumns.includes('search')"
                     @click="searchForDetails(row)"></vxe-button>
         <template>
           <vxe-button content="编辑"
+                      v-if="editColumns.includes('edit')"
                       @click="editRowEvent(row)"></vxe-button>
         </template>
         <vxe-button content="删除"
                     status='warning'
+                    v-if="editColumns.includes('del')"
                     @click="removeRowEvent(row)"></vxe-button>
       </template>
 
@@ -124,8 +87,9 @@ export default class extends Vue {
   private onParamsConfigChange(newdata: any) {
     this.findList(newdata)
   }
-  @Prop ({ default: false }) hasAssociate!:boolean //是否含有关联角色
+  @Prop({ default: false }) hasAssociate!: boolean //是否含有关联角色
   @Prop({ default: false }) hasNotSlotButton!: boolean //是否含有操作按钮
+  @Prop({ default: ['search', 'edit', 'del'] }) editColumns!: any
   @Prop() type!: string //表格类型
   private tablePage = { total: 0, currentPage: 1, pageSize: 10 }
   private loading = false
@@ -163,23 +127,8 @@ export default class extends Vue {
     },
   }
 
-  // 表单项下啦数据
-  private sexList1 = [
-    { value: '男', label: '男' },
-    { value: '女', label: '女' },
-  ]
-
-  //菜单类型下拉
-  private mType = [
-    { value: '1', label: '目录' },
-    { value: '2', label: '菜单' },
-    { value: '3', label: '按钮' },
-  ]
-
   private checkedList = [] // 已选列
-  created() {
-    // this.findList(this.paramsConfig)
-  }
+  created() {}
 
   // 获取列表数据
   private async findList(config: any) {
@@ -203,17 +152,6 @@ export default class extends Vue {
     }
 
     this.loading = false
-  }
-
-  private flatten(arr: any) {
-    // 多维menu数组 变成一维数组
-    return [].concat(
-      ...arr.map((item: any) => {
-        return item.children // 判断是否有子项，否则递归flatten报错
-          ? [].concat(item, ...this.flatten(item.children))
-          : [].concat(item)
-      })
-    )
   }
 
   // 查询
@@ -334,7 +272,7 @@ export default class extends Vue {
 
   // 关联角色
   @Emit()
-  emitAssociateRole(value:any) {
+  emitAssociateRole(value: any) {
     return value
   }
   private associateRole() {
@@ -346,7 +284,7 @@ export default class extends Vue {
         duration: 2000,
       })
       return
-    }else if(this.checkedList.length>1){
+    } else if (this.checkedList.length > 1) {
       this.$notify({
         title: '失败',
         message: '请单次操作一条数据',
