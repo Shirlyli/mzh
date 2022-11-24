@@ -15,6 +15,7 @@
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="groupRemove"
                     status="warning">批量删除</vxe-button>
+        <vxe-button @click="associateRole">关联角色</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()">导入</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()">导出</vxe-button>
       </template>
@@ -169,11 +170,10 @@ export default class extends Vue {
 
   //菜单类型下拉
   private mType = [
-      { value: '1', label: '目录' },
-      { value: '2', label: '菜单' },
-      { value: '3', label: '按钮' },
+    { value: '1', label: '目录' },
+    { value: '2', label: '菜单' },
+    { value: '3', label: '按钮' },
   ]
-
 
   private checkedList = [] // 已选列
   created() {
@@ -217,7 +217,7 @@ export default class extends Vue {
   // 查询
   private searchFor() {
     console.log('🚀 ~ formConfig', this.formConfig.data)
-      debugger;
+    debugger
     this.paramsConfig.params.entity = {
       ...this.paramsConfig.params.entity,
       ...this.formConfig.data,
@@ -299,6 +299,15 @@ export default class extends Vue {
 
   // 批量删除
   private async groupRemove() {
+    if (!this.checkedList.length) {
+      this.$notify({
+        title: '失败',
+        message: '请选择后进行操作！',
+        type: 'error',
+        duration: 2000,
+      })
+      return
+    }
     const type = await VXETable.modal.confirm('您确定要删除该数据?')
     if (type === 'confirm') {
       this.emitHandleRemove(this.checkedList)
@@ -319,6 +328,32 @@ export default class extends Vue {
 
   private searchForDetails(row: any) {
     this.emitHandleSearch(row)
+  }
+
+  // 关联角色
+  @Emit()
+  emitAssociateRole(value:any) {
+    return value
+  }
+  private associateRole() {
+    if (!this.checkedList.length) {
+      this.$notify({
+        title: '失败',
+        message: '请选择菜单后进行操作！',
+        type: 'error',
+        duration: 2000,
+      })
+      return
+    }else if(this.checkedList.length>1){
+      this.$notify({
+        title: '失败',
+        message: '请单次操作一条数据',
+        type: 'error',
+        duration: 2000,
+      })
+      return
+    }
+    this.emitAssociateRole(this.checkedList)
   }
 }
 </script>

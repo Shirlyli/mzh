@@ -1,4 +1,4 @@
-import request from '@/utils/businessRequest'
+import request from '@/utils/request'
 import { EquipmentInfoData } from './types'
 
 export const equipmentInfoData: EquipmentInfoData = {

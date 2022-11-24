@@ -1,4 +1,4 @@
-import request from "@/utils/businessRequest";
+import request from "@/utils/request";
 
 // 获取字典左侧树形数据
 export const getTreeData = (url: any, data: any) =>

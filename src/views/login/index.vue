@@ -198,10 +198,11 @@ export default class extends Vue {
 
       if (valid) {
         this.loading = true
+        console.log("🚀 ~ UserModule", UserModule)
         await UserModule.Login({userName: 'nanke_zhuren_ceshi',userPwd: 'MTIzNDU2'})
         //  await UserModule.Login(this.loginForm)
         this.$router.push({
-          path: '/fileManagement/equipmentRequest' || '/',
+          path: '/workBench/index',
           query: this.otherQuery
         }).catch(err => {
           console.warn(err)
@@ -273,7 +274,7 @@ export default class extends Vue {
   height: 100%;
   width: 100%;
   overflow: hidden;
-  background-color: $loginBg;
+  background-color: rgb(31, 59, 114);
 
   .login-form {
     position: relative;

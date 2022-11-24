@@ -6,7 +6,7 @@ import { ITagsViewState } from './modules/tags-view'
 import { IErrorLogState } from './modules/error-log'
 import { IPermissionState } from './modules/permission'
 import { ISettingsState } from './modules/settings'
-
+import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 
 export interface IRootState {
@@ -15,7 +15,8 @@ export interface IRootState {
   tagsView: ITagsViewState
   errorLog: IErrorLogState
   permission: IPermissionState
-  settings: ISettingsState
+  settings: ISettingsState,
+  // plugins:[createPersistedState]
 }
 
 // Declare empty store first, dynamically register all modules later.

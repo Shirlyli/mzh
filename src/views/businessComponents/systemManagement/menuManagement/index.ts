@@ -5,12 +5,14 @@ import VexTable from "@/components/VexTable/index.vue";
 import { Form } from "element-ui";
 import { delMenuInfo, saveMenuInfo } from "@/api/basic";
 import _ from "lodash";
+import AssociateRole from "@/components/associateRole/index.vue";
 @Component({
   name: "Tab",
   components: {
     MainSubLayout,
     Tree,
-    VexTable
+    VexTable,
+    AssociateRole
   }
 })
 export default class extends Vue {
@@ -30,7 +32,6 @@ export default class extends Vue {
         field: "mUrl",
         title: "菜单路由",
         itemRender: { name: "$input", props: { placeholder: "请输入菜单路由" } }
-       
       },
       {
         field: "mType",
@@ -52,11 +53,15 @@ export default class extends Vue {
     { type: "seq", width: 60 },
     { type: "checkbox", width: 60 },
     { field: "mName", title: "名称", treeNode: true },
-    { field: "mCode", title: "编码"},
-    { field: "mType", title: "菜单类型"},
+    { field: "mCode", title: "编码" },
+    { field: "mType", title: "菜单类型", formatter: this.formatMType },
     { field: "mUrl", title: "菜单路由" },
     { field: "size", title: "权限标识" },
-    { field: "mIsavailable", title: "是否启用", formatter: this.formatMType },
+    {
+      field: "mIsavailable",
+      title: "是否启用",
+      formatter: this.formatMIsavailable
+    },
     { field: "note", title: "备注" },
     { field: "mMtime", title: "创建时间" },
     {
@@ -126,8 +131,15 @@ export default class extends Vue {
 
   // 新增表单显隐
   private dialogFormVisible = false;
+  private checkedMenuList = [];
 
+  // 关联角色模态框显隐
+  private isAssociateDialogVisible = false;
   private formatMType(data: any) {
+    return _.find(this.options, ["value", data.cellValue])?.label;
+  }
+
+  private formatMIsavailable(data: any) {
     return data.cellValue === "1"
       ? "启用"
       : data.cellValue === "0"
@@ -152,7 +164,7 @@ export default class extends Vue {
     };
   }
 
-  private resetForm(){
+  private resetForm() {
     this.menuData = {
       mName: "",
       mCode: "",
@@ -202,7 +214,7 @@ export default class extends Vue {
           type: "success",
           duration: 2000
         });
-        this.resetForm()
+        this.resetForm();
       }
     });
   }
@@ -226,7 +238,7 @@ export default class extends Vue {
           type: "success",
           duration: 2000
         });
-        this.resetForm()
+        this.resetForm();
       }
     });
   }
@@ -265,5 +277,16 @@ export default class extends Vue {
       type: "success",
       duration: 2000
     });
+  }
+
+  // 接收关联角色事件
+  private handleAssociateRole(data: any) {
+    console.log("🚀 ~ data", data);
+    this.isAssociateDialogVisible = true;
+    this.checkedMenuList = data;
+  }
+
+  private handleCloseAssociateDialog(data: any) {
+    this.isAssociateDialogVisible = false;
   }
 }

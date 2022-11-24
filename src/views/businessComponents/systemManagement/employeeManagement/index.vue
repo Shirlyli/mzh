@@ -324,6 +324,7 @@
               <el-tree :data="roleData"
                        class="filter-tree"
                        default-expand-all
+                       :expand-on-click-node="false"
                        node-key="id"
                        ref="roleTree"
                        :props="defaultProps"

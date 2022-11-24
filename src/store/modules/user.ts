@@ -1,138 +1,145 @@
-import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-decorators'
-import { login, logout, getUserInfo } from '@/api/users'
-import { getToken, setToken, removeToken } from '@/utils/cookies'
-import router, { resetRouter } from '@/router'
-import { PermissionModule } from './permission'
-import { TagsViewModule } from './tags-view'
-import store from '@/store'
+import {
+  VuexModule,
+  Module,
+  Action,
+  Mutation,
+  getModule
+} from "vuex-module-decorators";
+import { login, logout, getUserInfo } from "@/api/users";
+import { getToken, setToken, removeToken } from "@/utils/cookies";
+import router, { resetRouter } from "@/router";
+import { PermissionModule } from "./permission";
+import { TagsViewModule } from "./tags-view";
+import store from "@/store";
 
 export interface IUserState {
-  token: string
-  name: string
-  avatar: string
-  introduction: string
-  roles: string[]
-  email: string
-  loginForm:object
+  token: string;
+  name: string;
+  avatar: string;
+  introduction: string;
+  roles: string[];
+  email: string;
+  loginForm: object;
 }
 
-@Module({ dynamic: true, store, name: 'user' })
+@Module({ dynamic: true, store, name: "user" })
 class User extends VuexModule implements IUserState {
-  public token =   ''
-  public name = ''
-  public avatar = ''
-  public introduction = ''
-  public roles: string[] = []
-  public email = ''
-  public loginForm = {}
+  public token = "";
+  public name = "";
+  public avatar = "";
+  public introduction = "";
+  public roles: string[] = [];
+  public email = "";
+  public loginForm = {};
   @Mutation
   private SET_TOKEN(token: string) {
-    this.token = token
+    this.token = token;
   }
 
   @Mutation
   private SET_NAME(name: string) {
-    this.name = name
+    this.name = name;
   }
 
   @Mutation
   private SET_AVATAR(avatar: string) {
-    this.avatar = avatar
+    this.avatar = avatar;
   }
 
   @Mutation
   private SET_INTRODUCTION(introduction: string) {
-    this.introduction = introduction
+    this.introduction = introduction;
   }
 
   @Mutation
   private SET_ROLES(roles: string[]) {
-    this.roles = roles
+    this.roles = roles;
   }
 
   @Mutation
   private SET_LOGIN_FORM(loginForm: object) {
-    this.loginForm = loginForm
+    this.loginForm = loginForm;
   }
 
   @Mutation
   private SET_EMAIL(email: string) {
-    this.email = email
+    this.email = email;
   }
 
   @Action
   public async Login(userInfo: any) {
-    this.SET_LOGIN_FORM(userInfo)
-    let { username, password } = userInfo
-    let { userName, userPwd } = userInfo
+    this.SET_LOGIN_FORM(userInfo);
+    let { username, password } = userInfo;
+    let { userName, userPwd } = userInfo;
     // username = username.trim()
-    const { data } = await login({ userName, userPwd  })
-    console.log("🚀 ~ data", data)
-    // setToken(data.token)
-    this.SET_TOKEN(data.token)
+    const { data } = await login({ userName, userPwd });
+    console.log("🚀 ~ data", data);
+    setToken(data.token);
+    this.SET_TOKEN(data.token);
   }
 
   @Action
   public ResetToken() {
-    removeToken()
-    this.SET_TOKEN('')
-    this.SET_ROLES([])
+    removeToken();
+    this.SET_TOKEN("");
+    this.SET_ROLES([]);
   }
 
-  @Action({rawError: true})
+  @Action({ rawError: true })
   public async GetUserInfo() {
-    if (this.token === '') {
-      throw Error('GetUserInfo: token is undefined!')
+    if (this.token === "") {
+      throw Error("GetUserInfo: token is undefined!");
     }
-    const res = await getUserInfo(this.loginForm)
-    console.log("🚀 ~ res", res)
+    const state = JSON.parse(sessionStorage.getItem("state") || "0");
+    const res = await getUserInfo(this.loginForm);
+    console.log("🚀 ~ res", res);
     if (!res.data) {
-      throw Error('Verification failed, please Login again.')
+      throw Error("Verification failed, please Login again.");
     }
-    const { roles,userName } = res.data
+    const { roles, userName } = res.data;
     // roles must be a non-empty array
     // if (!roles || roles.length <= 0) {
     //   throw Error('GetUserInfo: roles must be a non-null array!')
     // }
-    this.SET_ROLES(['admin'])
-    this.SET_NAME(userName)
-    this.SET_AVATAR('')
-    this.SET_INTRODUCTION('')
-    this.SET_EMAIL('')
+    this.SET_ROLES(["admin"]);
+    this.SET_NAME(userName);
+    this.SET_AVATAR("");
+    this.SET_INTRODUCTION("");
+    this.SET_EMAIL("");
   }
 
   @Action
   public async ChangeRoles(role: string) {
     // Dynamically modify permissions
-    const token = role + '-token'
-    this.SET_TOKEN(token)
-    setToken(token)
-    await this.GetUserInfo()
-    resetRouter()
+    const token = role + "-token";
+    this.SET_TOKEN(token);
+    setToken(token);
+    await this.GetUserInfo();
+    resetRouter();
     // Generate dynamic accessible routes based on roles
-    PermissionModule.GenerateRoutes(this.roles)
+    PermissionModule.GenerateRoutes(this.roles);
     // Add generated routes
     PermissionModule.dynamicRoutes.forEach(route => {
-      router.addRoute(route)
-    })
+      router.addRoute(route);
+    });
     // Reset visited views and cached views
-    TagsViewModule.delAllViews()
+    TagsViewModule.delAllViews();
   }
 
   @Action
   public async LogOut() {
-    if (this.token === '') {
-      throw Error('LogOut: token is undefined!')
+    if (this.token === "") {
+      throw Error("LogOut: token is undefined!");
     }
-    await logout()
-    removeToken()
-    resetRouter()
+    await logout();
+    removeToken();
+    resetRouter();
 
     // Reset visited views and cached views
-    TagsViewModule.delAllViews()
-    this.SET_TOKEN('')
-    this.SET_ROLES([])
+    TagsViewModule.delAllViews();
+    this.SET_TOKEN("");
+    this.SET_ROLES([]);
   }
 }
 
-export const UserModule = getModule(User)
+export const UserModule = getModule(User);

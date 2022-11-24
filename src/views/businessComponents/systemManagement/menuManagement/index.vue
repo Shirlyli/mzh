@@ -25,6 +25,7 @@
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"
+                    @emit-associate-role="handleAssociateRole"
                     :paramsConfig="paramsConfig" />
         </el-card>
       </template>
@@ -141,6 +142,9 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <!-- 关联角色 -->
+    <AssociateRole :roleDialogVisible='isAssociateDialogVisible' :checkedMenuList="checkedMenuList" @emit-close-associate-dialog="handleCloseAssociateDialog"/>
   </div>
 </template>
 

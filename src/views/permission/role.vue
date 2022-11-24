@@ -88,6 +88,7 @@
           <el-tree
             ref="tree"
             :check-strictly="checkStrictly"
+            :expand-on-click-node="false"
             :data="routesTreeData"
             :props="defaultProps"
             show-checkbox
