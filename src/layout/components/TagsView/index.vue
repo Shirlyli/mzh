@@ -176,6 +176,7 @@ export default class extends Vue {
     })
   }
 
+  // 删除当前选中项
   private closeSelectedTag(view: ITagView) {
     TagsViewModule.delView(view)
     if (this.isActive(view)) {
@@ -193,6 +194,7 @@ export default class extends Vue {
     this.moveToCurrentTag()
   }
 
+  // 删除所有选项
   private closeAllTags(view: ITagView) {
     TagsViewModule.delAllViews()
     if (this.affixTags.some(tag => tag.path === this.$route.path)) {
@@ -202,7 +204,9 @@ export default class extends Vue {
   }
 
   private toLastView(visitedViews: ITagView[], view: ITagView) {
+    console.log("🚀 ~ view", view)
     const latestView = visitedViews.slice(-1)[0]
+    console.log("🚀 ~ latestView", latestView)
     if (latestView !== undefined && latestView.fullPath !== undefined) {
       this.$router.push(latestView.fullPath).catch(err => {
         console.warn(err)
@@ -215,7 +219,8 @@ export default class extends Vue {
           console.warn(err)
         })
       } else {
-        this.$router.push('/').catch(err => {
+        console.log("🚀 ~ view", view)
+        this.$router.push('/workBench/index').catch(err => {
           console.warn(err)
         })
       }
