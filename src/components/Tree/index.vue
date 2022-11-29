@@ -30,7 +30,7 @@
         public filterText = ''
         public treeData = [] // 树形数据
         public treeLoading = false // loading是否
-        public expandData = []//默认展开数据集合
+        public expandData:any = []//默认展开数据集合
         created() {
             this.getTreeListData()
         }
@@ -42,11 +42,10 @@
                 const res: any = await getTreeData(this.url, this.params)
                 if (res?.code === 200) {
                     if (res.data[0] && res.data[0].children) {
-                        res.data[0].children.forEach(element => {
+                        res.data[0].children.forEach((element:any) => {
                             this.expandData.push(element.id)
                         });
                     }
-                    console.log('🚀 ~ res', res.data)
                     this.$nextTick(() => {
                         this.treeData = res.data
                     })

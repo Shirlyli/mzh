@@ -38,6 +38,7 @@ export default class extends Vue {
         title: "菜单类型",
         itemRender: {
           name: "$select",
+          props: { placeholder: "请选择" },
           options: [
             { value: "1", label: "目录" },
             { value: "2", label: "菜单" },

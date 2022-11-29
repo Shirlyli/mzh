@@ -51,7 +51,7 @@ export default class extends Vue {
     { field: "userCtime", title: "上次登录时间", width: 120 },
     { field: "note", title: "备注", width: 120 },
     {
-      width: 250,
+      width: 160,
       title: "操作",
       slots: { default: "operateHasSearch" },
       showOverflow: true,

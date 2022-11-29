@@ -10,6 +10,7 @@ import { asyncRoutes, constantRoutes } from "@/router";
 import store from "@/store";
 import { queryLeftMenuData } from "@/api/basic";
 import Layout from "@/layout/index.vue";
+import { Message } from "element-ui";
 const hasPermission = (roles: string[], route: RouteConfig) => {
   if (route.meta && route.meta.roles) {
     return roles.some(role => route.meta.roles.includes(role));

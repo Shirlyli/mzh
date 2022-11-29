@@ -1,5 +1,5 @@
 <template>
-  <div class="p-md">
+  <div class="personalCard">
     <main-sub-layout class="main-wrapper rule-config-page">
       <template #left>
         <el-card>

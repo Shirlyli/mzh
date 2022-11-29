@@ -277,20 +277,20 @@ export default class extends Vue {
   /**
    * 附件上传
    */
-  private handleRemoveField(file, fileList) {
+  private handleRemoveField(file:any, fileList:any) {
     console.log(file, fileList);
   }
-  private handlePreview(file) {
+  private handlePreview(file:any) {
     console.log(file);
   }
-  private handleExceed(files, fileList) {
+  private handleExceed(files:any, fileList:any) {
     this.$message.warning(
       `当前限制选择 3 个文件，本次选择了 ${
         files.length
       } 个文件，共选择了 ${files.length + fileList.length} 个文件`
     );
   }
-  private beforeRemove(file, fileList) {
+  private beforeRemove(file:any, fileList:any) {
     return this.$confirm(`确定移除 ${file.name}？`);
   }
 

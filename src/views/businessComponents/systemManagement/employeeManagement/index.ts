@@ -85,7 +85,7 @@ export default class extends Vue {
     { field: "createtime", title: "创建时间", width: 120 },
     { field: "sex", title: "性别", width: 120 },
     {
-      width: 250,
+      width: 160,
       title: "操作",
       slots: { default: "operateHasSearch" },
       showOverflow: true,

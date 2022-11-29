@@ -22,7 +22,7 @@ export default class extends Vue {
     { field: 'dicType', title: '字典备注' },
     { field: 'flag', title: '状态' },
     {
-      width: 250,
+      width: 160,
       title: '操作',
       slots: { default: 'operateHasSearch' },
       showOverflow: true

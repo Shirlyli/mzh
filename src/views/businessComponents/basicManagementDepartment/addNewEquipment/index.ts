@@ -38,7 +38,7 @@ export default class extends Vue {
     { field: "name", title: " 科室名称", treeNode: true },
     { field: "basicData", title: "创建时间" },
     {
-      width: 250,
+      width: 160,
       title: "操作",
       slots: { default: "operateHasSearch" },
       showOverflow: true

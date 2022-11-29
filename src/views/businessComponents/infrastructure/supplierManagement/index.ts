@@ -110,7 +110,7 @@ export default class extends Vue {
     { field: "phoneNo", title: "座机" },
     { field: "dispindex", title: " 排序" },
     {
-      width: 180,
+      width: 160,
       title: "操作",
       slots: { default: "operateHasSearch" },
       showOverflow: true

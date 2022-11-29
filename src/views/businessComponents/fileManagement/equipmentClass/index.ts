@@ -60,7 +60,7 @@ export default class extends Vue {
     { field: "createtime", title: "创建时间", width: 100 },
     { field: "note", title: "备注", width: 100 },
     {
-      width: 240,
+      width: 160,
       title: "操作",
       slots: { default: "operateHasSearch" },
       showOverflow: true,
