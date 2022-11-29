@@ -1,7 +1,7 @@
 let _crysuff = 'decrypt/api/'; // 访问路径前缀
 // 对ajax配置整体修改加密
 
-alertcrypturl = function (url, mycrinfo) { // 修改加密地址
+function alertcrypturl  (url, mycrinfo) { // 修改加密地址
     // 修改url，到加密拦截地址
     if (!mycrinfo) {
         if (_cryinfo && _cryinfo.decryptType){
@@ -52,7 +52,7 @@ alertcrypturl = function (url, mycrinfo) { // 修改加密地址
         }
     }
 }
-myencodeajaxopton = function (ajaxoption) {
+function myencodeajaxopton  (ajaxoption) {
     if (ajaxoption && ajaxoption.url) {
         if (typeof(ajaxoption.url) == "object") {
             var urlobj = ajaxoption.url;
@@ -417,7 +417,7 @@ _myextjsencryptofunction = function (params, url) {
 }
 
 // extjs 中修改url到拦截url 中
-_myextjsencryptourl = function (url) {
+function _myextjsencryptourl = function (url) {
     if (_needcrypAjax) {
     if (url.indexOf(_javabasepath) >= 0) {
         return alertcrypturl(url);

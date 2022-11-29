@@ -1,38 +1,9 @@
 <template>
   <div>
-    <!-- <main-sub-layout class="main-wrapper rule-config-page">
-      <template #left>
-        <el-card>
-          <div slot="header"
-               class="clearfix">
-            <span>医院管理</span>
-          </div>
-          <Tree ref="vxeTree"
-                :url="url"
-                :params="treeParams"
-                @emit-handle-click="handleNodeClick" />
-        </el-card>
-      </template>
-      <template #right>
-        <el-card>
-          <div slot="header"
-               class="clearfix">
-            <span>科室查询</span>
-          </div>
-          <VexTable ref="vexTable"
-                    :formConfig="formConfig"
-                    :columns="columns"
-                    @emit-handle-insert="handleInsert"
-                    @emit-handle-update="handleUpdate"
-                    @emit-handle-remove="handleRemove"
-                    :paramsConfig="paramsConfig" />
-        </el-card>
-      </template>
-    </main-sub-layout> -->
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>供应商管理</span>
+        <span>设备厂商管理</span>
       </div>
       <VexTable ref="vexTable"
                 :formConfig="formConfig"

@@ -23,6 +23,10 @@ export interface SupplierFormTypes {
    * 纳税识别号，模糊查询
    */
   taxId: string;
+  /**
+   *厂商类型
+   */
+  suppliesType: string;
 }
 
 export interface FormItemTypes {

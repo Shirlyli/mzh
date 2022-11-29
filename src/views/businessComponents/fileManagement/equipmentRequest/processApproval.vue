@@ -2,7 +2,7 @@
   <div class="approvalBox">
     <el-drawer title="流程审批"
                :visible.sync="dialogVisible"
-               size="50%"
+               size="70%"
                @close="handleCancelApproval">
 
       <template slot="title">

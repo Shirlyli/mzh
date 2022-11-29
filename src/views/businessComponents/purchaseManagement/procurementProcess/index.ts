@@ -3,6 +3,7 @@ import VexTable from "@/components/VexTable/index.vue";
 import _ from "lodash";
 import { delProcessData, updateProcessData } from "@/api/basic";
 import { Form } from "element-ui";
+import { formatMIsAvailable } from "@/shared/utils";
 @Component({
   name: "InlineEditTable",
   components: {
@@ -37,6 +38,22 @@ export default class extends Vue {
     ] // 表单项
   };
 
+  private getformatMIsAvailable = (data: any) => {
+    return data.cellValue == "1"
+      ? "禁用"
+      : data.cellValue == "0"
+      ? "不禁用"
+      : "-";
+  };
+
+  private formatMIsRoleType(data: any) {
+    return data.cellValue === "1"
+      ? "角色"
+      : data.cellValue === "0"
+      ? "用户"
+      : "-";
+  }
+
   // 流程配置列表项
   private columns = [
     { type: "seq", width: 60 },
@@ -46,9 +63,17 @@ export default class extends Vue {
     { field: "nodeName", title: "节点名称" },
     { field: "nodeNameCode", title: "节点名称编码" },
     { field: "nodeSort", title: " 节点顺序 " },
-    { field: "isDisable", title: " 是否禁用 " },
-    { field: "roleType", title: " 角色类型 " },
-    { field: "roleTypeId", title: " 角色类型id " },
+    {
+      field: "isDisable",
+      title: " 是否禁用 ",
+      formatter: this.getformatMIsAvailable
+    },
+    {
+      field: "roleType",
+      title: " 角色类型 ",
+      formatter: this.formatMIsRoleType
+    },
+    // { field: "roleTypeId", title: " 角色类型id " },
     { field: "cteator", title: "创建人" },
     { field: "cteaterTime", title: "创建时间" },
     {
@@ -65,7 +90,7 @@ export default class extends Vue {
       page: "1",
       limit: "10",
       entity: {
-        process_code: "pro_kssq"
+        process_code: ""
       }
     }
   };

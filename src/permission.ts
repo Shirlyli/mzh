@@ -22,11 +22,9 @@ const getPageTitle = (key: string) => {
 };
 
 router.beforeEach(async (to: Route, _: Route, next: any) => {
-  // Start progress bar
   NProgress.start();
   const state = JSON.parse(sessionStorage.getItem("state") || "0");
-  console.log("🚀 ~ to.path", to);
-  // Determine whether the user has logged in
+  // console.log("🚀 ~ to.path", to);
   if (UserModule.token) {
     if (to.path === "/login") {
       // If is logged in, redirect to the home page
@@ -55,7 +53,6 @@ router.beforeEach(async (to: Route, _: Route, next: any) => {
           NProgress.done();
         }
       } else {
-        console.log("next", next);
         next();
       }
     }

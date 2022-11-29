@@ -31,42 +31,22 @@ export default class extends Vue {
       name: "",
       nameAbbreviation: "",
       runningState: "",
-      taxId: ""
+      taxId: "",
+      suppliesType: ""
     },
     items: [
       {
-        field: "domicile",
-        title: "注册地",
-        itemRender: { name: "$input", props: { placeholder: "请输入注册地" } }
-      },
-      {
-        field: "id",
-        title: "主键",
-        itemRender: { name: "$input", props: { placeholder: "请输入主键" } }
-      },
-      {
         field: "name",
-        title: "供应商名称",
+        title: "厂商名称",
         itemRender: {
           name: "$input",
-          props: { placeholder: "请输入供应商名称" }
+          props: { placeholder: "请输入厂商名称" }
         }
       },
       {
         field: "nameAbbreviation",
         title: "简称",
         itemRender: { name: "$input", props: { placeholder: "请输入简称" } }
-      },
-      {
-        field: "runningState",
-        title: "运营状态",
-        itemRender: {
-          name: "$select",
-          options: [
-            { label: "正常", value: 1 },
-            { label: "注销", value: 2 }
-          ]
-        }
       },
       {
         field: "taxId",
@@ -76,6 +56,36 @@ export default class extends Vue {
           props: { placeholder: "请输入纳税识别号" }
         }
       },
+      {
+        field: "suppliesType",
+        title: "厂商类型",
+        itemRender: {
+          name: "$select",
+          props: { placeholder: '请选择' },
+          options: [
+            { label: "生产商", value: "生产商" },
+            { label: "供应商", value: "供应商" },
+            { label: "维修商", value: "维修商" }
+          ]
+        }
+      },
+      {
+        field: "runningState",
+        title: "运营状态",
+        itemRender: {
+          name: "$select",
+          props: { placeholder: '请选择' },
+          options: [
+            { label: "正常", value: 1 },
+            { label: "注销", value: 2 }
+          ]
+        }
+      },
+      {
+        field: "domicile",
+        title: "注册地",
+        itemRender: { name: "$input", props: { placeholder: "请输入注册地" } }
+      },
       { slots: { default: "operate_item" } }
     ] // 表单项
   };
@@ -83,24 +93,22 @@ export default class extends Vue {
   private columns = [
     { type: "seq", width: 60 },
     { type: "checkbox", width: 60 },
-    { field: "name", title: "供应商名称" },
-    { field: "assetsPro", title: " 资产性质" },
-    { field: "ctime", title: " 创建时间" },
-    { field: "dispindex", title: " 排序" },
-    { field: "domicile", title: " 注册地" },
-    { field: "email", title: " 电子邮件" },
-    { field: "foxNo", title: " 传真" },
-    { field: "legalPerson", title: "法人" },
-    { field: "phoneNo", title: "联系电话" },
-    { field: "postcode", title: "邮政编码" },
+    { field: "name", title: "厂商名称" },
+    { field: "nameAbbreviation", title: "简称" },
+    { field: "taxId", title: "纳税识别号" },
+    { field: "suppliesType", title: "厂商类型" },
     {
       field: "runningState",
       title: "运营状态",
       cellRender: {
-        name: "runningState"
+        name: " "
       }
     },
-    { field: "taxId", title: "纳税识别号" },
+    { field: "assetsPro", title: " 资产性质" },
+    { field: "domicile", title: " 注册地" },
+    { field: "legalPerson", title: "法人" },
+    { field: "phoneNo", title: "座机" },
+    { field: "dispindex", title: " 排序" },
     {
       width: 180,
       title: "操作",

@@ -350,3 +350,14 @@ export const handleSupplierDel = (data: any) =>
 /**
  *供应商管理end
  */
+
+/**
+ * 获取左侧菜单栏数据
+ * @param data
+ */
+export const queryLeftMenuData = (data: any) =>
+  request({
+    url: "/auth/menu/queryIndexMenu",
+    method: "POST",
+    data
+  });

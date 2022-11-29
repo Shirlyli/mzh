@@ -4,7 +4,7 @@
 }
 
 .p-md {
-    padding: 16px;
+    padding: 2px;
 }
 
 // 表格全屏样式
@@ -21,6 +21,7 @@
     .el-card__body {
         height: 100%;
         overflow-y: scroll;
+        padding-bottom: 80px;
     }
 }
 

@@ -11,6 +11,7 @@ import router, { resetRouter } from "@/router";
 import { PermissionModule } from "./permission";
 import { TagsViewModule } from "./tags-view";
 import store from "@/store";
+import { queryLeftMenuData } from "@/api/basic";
 
 export interface IUserState {
   token: string;
@@ -20,6 +21,7 @@ export interface IUserState {
   roles: string[];
   email: string;
   loginForm: object;
+  menu: any;
 }
 
 @Module({ dynamic: true, store, name: "user" })
@@ -31,6 +33,7 @@ class User extends VuexModule implements IUserState {
   public roles: string[] = [];
   public email = "";
   public loginForm = {};
+  public menu = [];
   @Mutation
   private SET_TOKEN(token: string) {
     this.token = token;
@@ -66,16 +69,27 @@ class User extends VuexModule implements IUserState {
     this.email = email;
   }
 
+  @Mutation
+  private SET_MENU(menu: []) {
+    this.menu = menu;
+  }
+
   @Action
   public async Login(userInfo: any) {
     this.SET_LOGIN_FORM(userInfo);
-    let { username, password } = userInfo;
     let { userName, userPwd } = userInfo;
-    // username = username.trim()
+    userName = userName.trim();
     const { data } = await login({ userName, userPwd });
     console.log("🚀 ~ data", data);
     setToken(data.token);
     this.SET_TOKEN(data.token);
+  }
+
+  @Action
+  public async userMenu() {
+    const { data } = await queryLeftMenuData({});
+    console.log("🚀 ~ data", data);
+    this.SET_MENU(data)
   }
 
   @Action

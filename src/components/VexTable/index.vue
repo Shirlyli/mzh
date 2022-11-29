@@ -157,7 +157,6 @@ export default class extends Vue {
   // 查询
   private searchFor() {
     console.log('🚀 ~ formConfig', this.formConfig.data)
-    debugger
     this.paramsConfig.params.entity = {
       ...this.paramsConfig.params.entity,
       ...this.formConfig.data,
