@@ -322,7 +322,7 @@ export const queryDepartmentInfoTree = (data: any) =>
   });
 
 /**
- *供应商管理start
+ *厂商管理start
  */
 // 供应商查询 /api/supplier/queryByCondition
 export const queryByConditionSupplier = (data: any) =>
@@ -348,7 +348,7 @@ export const handleSupplierDel = (data: any) =>
     data
   });
 /**
- *供应商管理end
+ *厂商管理end
  */
 
 /**
@@ -361,3 +361,57 @@ export const queryLeftMenuData = (data: any) =>
     method: "POST",
     data
   });
+
+/**
+ * 厂商联系人开始
+ */
+export const handleLinkmanAdd = (data: any) =>
+  request({
+    url: "/supplierLinkman/insert",
+    method: "POST",
+    data
+  });
+
+export const handleLinkmanUpdate = (data: any) =>
+  request({
+    url: "/supplierLinkman/update",
+    method: "POST",
+    data
+  });
+
+export const handleLinkmanDel = (data: { ids: string } | {}) =>
+  request({
+    url: "/supplierLinkman/del",
+    method: "POST",
+    data
+  });
+/**
+ * 厂商联系人结束
+ */
+
+/**
+ * 合同管理开始
+ */
+export const handleSupplierContractAdd = (data: any) =>
+  request({
+    url: "/supplierContract/insert",
+    method: "POST",
+    data
+  });
+
+export const handleSupplierContractUpdate = (data: any) =>
+  request({
+    url: "/supplierContract/update",
+    method: "POST",
+    data
+  });
+
+export const handleSupplierContractDel = (data: { ids: string } | {}) =>
+  request({
+    url: "/supplierContract/del",
+    method: "POST",
+    data
+  });
+/**
+ * 合同管理结束
+ */

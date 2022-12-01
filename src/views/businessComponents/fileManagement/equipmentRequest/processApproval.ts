@@ -60,10 +60,16 @@ export default class extends Vue {
     });
     console.log("🚀 ~ nextCodeData", nextCodeData);
     if (nextCodeData.code == "200") {
-      this.equipmentProcessData.currentNodeCode = nextCodeData.nodeNameCode;
-      this.equipmentProcessData.currentNodeName = nextCodeData.nodeName;
+      this.equipmentProcessData.currentNodeCode =
+        nextCodeData.data.nodeNameCode;
+      this.equipmentProcessData.currentNodeName = nextCodeData.data.nodeName;
       this.queryUserListProcessCode(nextCodeData.data.nodeSort);
       this.queryNextCodeAndBhResData(nextCodeData.data.nodeSort);
+      this.nextDialogVisible = true;
+      this.title = "审批同意";
+      this.type = "submit";
+    }else{
+      Message.error('获取节点信息失败，请重试')
     }
   }
   /**
@@ -101,8 +107,6 @@ export default class extends Vue {
   // 审核通过点击事件
   private handleSubmit() {
     this.queryCurrentCodeAndBhResData(this.processData.nextNodeCode);
-    this.nextDialogVisible = true;
-    this.type = "submit";
   }
 
   //
@@ -125,35 +129,28 @@ export default class extends Vue {
             ...this.equipmentProcessData,
             id,
             operator: "操作人",
-            auditStatus: "审核通过", //审核状态(审核通过,审核不通过，回退,作废)
+            auditStatus: "审核通过" //审核状态(审核通过,审核不通过，回退,作废)
           };
-          console.log("🚀 ~ params", params)
-          // const res: any = await queryHospitalProcessBusinessUpdate(params);
-          // if (res.result) {
-          //   this.nextDialogVisible = false;
-          //   this.emitHandleSubmit(true);
-          // }
-          // this.dialogVisible = false;
-          // (this.$refs.dataForm as Form).resetFields();
-          // Message.success("审批成功");
+          console.log("🚀 ~ params", params);
+          const res: any = await queryHospitalProcessBusinessUpdate(params);
+          if (res.result) {
+            this.nextDialogVisible = false;
+            this.emitHandleSubmit(true);
+          }
+          this.dialogVisible = false;
+          (this.$refs.dataForm as Form).resetFields();
+          Message.success("审批成功");
         }
       });
     } else if (this.type === "end") {
-      console.log("🚀 ~ this.type", this.type);
     } else if (this.type === "back") {
       (this.$refs.dataForm as Form).validate(async valid => {
         this.nextDialogVisible = false;
         if (valid) {
           const params = {
+            ...this.equipmentProcessData,
             id,
-            currentNodeName: nextNodeName,
-            currentNodeCode: nextNodeCode,
-            nextNodeName: _.find(this.nextNodeExecutorData, [
-              "nodeNameCode",
-              this.equipmentProcessData.nextNodeCode
-            ]).nodeName,
-            nextNodeCode: this.equipmentProcessData.nextNodeCode,
-            nextNodeExecutor: this.equipmentProcessData.nextNodeExecutor
+            auditStatus: "回退" //审核状态(审核通过,审核不通过，回退,作废)
           };
           console.log("🚀 ~ params", params);
           const res: any = await queryHospitalProcessBusinessUpdate(params);
@@ -183,9 +180,7 @@ export default class extends Vue {
    * 流程审批退回
    */
   private handleBack() {
-    this.queryAllProcess();
-    this.type = "back";
-    this.nextDialogVisible = true;
+    const flag = this.queryAllProcess();
   }
 
   /**
@@ -212,8 +207,16 @@ export default class extends Vue {
         0,
         dept.nodeSort - 1
       );
-      this.equipmentProcessData.nextNodeCode = this.nextNodeExecutorData[0].nodeNameCode;
+      if (!this.nextNodeExecutorData.length) {
+        Message.error("次流程处于初始节点，无法回退");
+        return false;
+      }
+      this.equipmentProcessData.nextNodeCode = this.nextNodeExecutorData?.[0].nodeNameCode;
+      this.equipmentProcessData.nextNodeName = this.nextNodeExecutorData?.[0].nodeName;
       console.log("🚀 ~ this.nextNodeExecutorData ", this.nextNodeExecutorData);
+      this.type = "back";
+      this.title = "回退流程";
+      this.nextDialogVisible = true;
     }
   }
 
@@ -221,10 +224,8 @@ export default class extends Vue {
    * 退回时选中退回节点，获取节点对应处理人
    */
   private handleNodeChange(value: number) {
-    console.log("🚀 ~ value", value);
     const nodeSort = _.find(this.allProcessList, ["nodeNameCode", value])
       .nodeSort;
-    console.log("🚀 ~ nodeSort", nodeSort);
     this.queryUserListProcessCode(nodeSort - 1, "back");
   }
 
@@ -234,5 +235,6 @@ export default class extends Vue {
   private handleEnd() {
     this.nextDialogVisible = true;
     this.type = "end";
+    this.title = "终止流程";
   }
 }

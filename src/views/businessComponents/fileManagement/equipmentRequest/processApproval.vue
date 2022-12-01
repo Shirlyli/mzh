@@ -15,7 +15,7 @@
           </el-button>
           <el-button type="error"
                      @click="handleBack">
-            {{ '退回' }}
+            {{ '回退' }}
           </el-button>
           <el-button type="error"
                      @click="handleEnd">
@@ -193,7 +193,6 @@
         </div>
         <!-- 终止 -->
         <div v-else-if="type=='end'">
-          <div>是否终止该流程？</div>
           <el-form-item :label="'意见 '"
                         prop="auditReason">
             <el-input v-model="equipmentProcessData.auditReason"></el-input>

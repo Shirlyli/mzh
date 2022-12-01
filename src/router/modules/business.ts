@@ -113,6 +113,30 @@ const businessRouter: RouteConfig[] = [
           title: "supplierManagement"
           // roles: ['admin'] // or you can only set roles in sub nav
         }
+      },
+      {
+        path:'venderContactorManagement',
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/infrastructure/venderContactorManagement/index.vue"
+          ),
+        name: "venderContactorManagement",
+        meta: {
+          title: "venderContactorManagement"
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path:'contractManagement',
+        component: () =>
+          import(
+            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/infrastructure/contractManagement/index.vue"
+          ),
+        name: "contractManagement",
+        meta: {
+          title: "contractManagement"
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
       }
     ]
   },

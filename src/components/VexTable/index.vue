@@ -92,7 +92,7 @@ export default class extends Vue {
   }
   @Prop({ default: false }) hasAssociate!: boolean //是否含有关联角色
   @Prop({ default: false }) hasNotSlotButton!: boolean //是否含有操作按钮
-  @Prop({ default: ['search', 'edit', 'del'] }) editColumns!: any
+  @Prop({ default: ['search', 'edit', 'del','record'] }) editColumns!: any
   @Prop() type!: string //表格类型
   private tablePage = { total: 0, currentPage: 1, pageSize: 10 }
   private loading = false
@@ -165,14 +165,12 @@ export default class extends Vue {
       ...this.paramsConfig.params.entity,
       ...this.formConfig.data,
     }
-    this.findList(this.paramsConfig)
   }
 
   // 重置并查询
   private resetFor() {
     this.formConfig.data = {}
     this.paramsConfig.params.entity = {}
-    this.findList(this.paramsConfig)
   }
 
   // 编辑
@@ -237,9 +235,9 @@ export default class extends Vue {
 
   // 批量删除
   private async groupRemove() {
+    console.log("🚀 ~ this.checkedList", this.checkedList)
     if (!this.checkedList.length) {
       Message.error('请选择后进行操作！')
-
       return
     }
     const type = await VXETable.modal.confirm('您确定要删除该数据?')

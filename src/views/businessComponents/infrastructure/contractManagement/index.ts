@@ -4,9 +4,9 @@ import Tree from "@/components/Tree/index.vue";
 import VexTable from "@/components/VexTable/index.vue";
 import { Form } from "element-ui";
 import {
-  delSupplierData,
+  dealHospitalData,
   getTableDataList,
-  updateSupplierData
+  updateHospitalData
 } from "@/api/equipment";
 import { FormItemTypes, SupplierFormTypes } from "./type";
 import _ from "lodash";
@@ -147,13 +147,13 @@ export default class extends Vue {
   }; // 新增或编辑表单
 
   private rules = {
-    name: [{ required: true, message: "请输入厂商名称", trigger: "change" }]
+    name: [{ required: true, message: "请输入厂站名称", trigger: "change" }]
   }; // 表单校验
 
   private dialogVisible = false; // 新增过模态框
   private dialogStatus = "create";
   private paramsConfig = {
-    url: "/supplier/queryByCondition",
+    url: "/supplierContract/queryByCondition",
     params: {
       page: 1,
       limit: 10,
@@ -165,6 +165,22 @@ export default class extends Vue {
 
   private hLevelList = []; // 字典表
 
+  // 获取医院等级
+  private async getCommonTreeData() {
+    const params = {
+      page: 1,
+      limit: 10,
+      entity: { id: "58CC52594FA7C8-1A54-4DC6-9854-FD8BB128B194" }
+    };
+    const res: any = await getTableDataList(
+      "common/dicInfo/querySelfAndPar",
+      params
+    );
+    if (res.result) {
+      console.log("🚀 ~ getCommonTreeData ~ res", res.data);
+      this.hLevelList = res.data;
+    }
+  }
 
   // 新增供应商
   private handleInsert() {
@@ -212,7 +228,7 @@ export default class extends Vue {
           phoneNo,
           note,
         };
-        const res: any = await updateSupplierData(params);
+        const res: any = await updateHospitalData(params);
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig);
         }
@@ -249,7 +265,7 @@ export default class extends Vue {
           phoneNo,
           note,
         };
-        const res: any = await updateSupplierData(params);
+        const res: any = await updateHospitalData(params);
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig);
         }
@@ -296,7 +312,7 @@ export default class extends Vue {
         ids: row.id
       };
     }
-    const res: any = await delSupplierData(params);
+    const res: any = await dealHospitalData(params);
     if (res.result) {
       (this.$refs.vexTable as any).findList(this.paramsConfig);
     }

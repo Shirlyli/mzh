@@ -101,7 +101,7 @@ export const searchEquipmentCategoryInfoDetailsData = (data: any) =>
     data
   })
 
-// 修改供应商数据 /api/hospitalInfo/save
+// 修改厂商数据 /api/hospitalInfo/save
 export const updateSupplierData = (data: any) =>
   request({
     url: 'supplier/save',
@@ -109,10 +109,35 @@ export const updateSupplierData = (data: any) =>
     data
   })
 
-// 删除医院
+// 删除厂商数据
 export const delSupplierData = (data: any) =>
   request({
     url: 'supplier/del',
+    method: 'POST',
+    data
+  })
+
+
+// 新增厂商联系人数据 /api/hospitalInfo/insert
+export const insertSupplierLinkmanData = (data: any) =>
+  request({
+    url: 'supplierLinkman/insert',
+    method: 'POST',
+    data
+  })
+
+// 修改厂商联系人数据 /api/hospitalInfo/update
+export const updateSupplierLinkmanData = (data: any) =>
+  request({
+    url: 'supplierLinkman/update',
+    method: 'POST',
+    data
+  })
+
+// 删除厂商联系人数据
+export const delSupplierLinkmanData = (data: any) =>
+  request({
+    url: 'supplierLinkman/del',
     method: 'POST',
     data
   })

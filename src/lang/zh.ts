@@ -5,7 +5,7 @@ export default {
     dataDecision: '数据决策', //= ====1
     purchaseManagement: '采购管理', //= ====1
     equipmentRequest:'科室申请',
-    supplierManagement:'供应商管理',
+    supplierManagement:'厂商管理',
     procurementProcess: '流程配置',
     purchasingRecords: '采购记录',
     inventoryRecords: '入库记录',
@@ -34,6 +34,7 @@ export default {
     measurementManagement: '计量管理',
     adverseEventReporting: '不良事件上报',
     vendorManagement: '厂商管理', //= ====1
+    venderContactorManagement :'厂商联系人',
     manufacturerMaintenance: '厂商维护',
     documentsManagement: '证件管理',
     contractManagement: '合同管理',

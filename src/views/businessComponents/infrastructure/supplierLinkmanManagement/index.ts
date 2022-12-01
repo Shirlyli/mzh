@@ -4,11 +4,12 @@ import Tree from "@/components/Tree/index.vue";
 import VexTable from "@/components/VexTable/index.vue";
 import { Form } from "element-ui";
 import {
-  delSupplierData,
+  delSupplierLinkmanData,
   getTableDataList,
-  updateSupplierData
+  updateSupplierLinkmanData,
+  insertSupplierLinkmanData
 } from "@/api/equipment";
-import { FormItemTypes, SupplierFormTypes } from "./type";
+import { FormItemTypes, SupplierLinkmanFormTypes } from "./type";
 import _ from "lodash";
 // import { TreeData } from "@/mock/tree";
 @Component({
@@ -41,14 +42,12 @@ export default class extends Vue {
         itemRender: {
           name: "$input",
           props: { placeholder: "请输入厂商名称" }
-        },
-        resetValue:''
+        }
       },
       {
         field: "nameAbbreviation",
         title: "简称",
-        itemRender: { name: "$input", props: { placeholder: "请输入简称" } },
-        resetValue:''
+        itemRender: { name: "$input", props: { placeholder: "请输入简称" } }
       },
       {
         field: "taxId",
@@ -56,8 +55,7 @@ export default class extends Vue {
         itemRender: {
           name: "$input",
           props: { placeholder: "请输入纳税识别号" }
-        },
-        resetValue:''
+        }
       },
       {
         field: "suppliesType",
@@ -70,8 +68,7 @@ export default class extends Vue {
             { label: "供应商", value: "供应商" },
             { label: "维修商", value: "维修商" }
           ]
-        },
-        resetValue:''
+        }
       },
       {
         field: "runningState",
@@ -83,14 +80,12 @@ export default class extends Vue {
             { label: "正常", value: 1 },
             { label: "注销", value: 2 }
           ]
-        },
-        resetValue:''
+        }
       },
       {
         field: "domicile",
         title: "注册地",
-        itemRender: { name: "$input", props: { placeholder: "请输入注册地" } },
-        resetValue:''
+        itemRender: { name: "$input", props: { placeholder: "请输入注册地" } }
       },
       { slots: { default: "operate_item" } }
     ] // 表单项
@@ -106,6 +101,9 @@ export default class extends Vue {
     {
       field: "runningState",
       title: "运营状态",
+      cellRender: {
+        name: " "
+      }
     },
     { field: "assetsPro", title: " 资产性质" },
     { field: "domicile", title: " 注册地" },
@@ -147,7 +145,7 @@ export default class extends Vue {
   }; // 新增或编辑表单
 
   private rules = {
-    name: [{ required: true, message: "请输入厂商名称", trigger: "change" }]
+    name: [{ required: true, message: "请输入厂站名称", trigger: "change" }]
   }; // 表单校验
 
   private dialogVisible = false; // 新增过模态框
@@ -165,6 +163,22 @@ export default class extends Vue {
 
   private hLevelList = []; // 字典表
 
+  // 获取医院等级
+  private async getCommonTreeData() {
+    const params = {
+      page: 1,
+      limit: 10,
+      entity: { id: "58CC52594FA7C8-1A54-4DC6-9854-FD8BB128B194" }
+    };
+    const res: any = await getTableDataList(
+      "common/dicInfo/querySelfAndPar",
+      params
+    );
+    if (res.result) {
+      console.log("🚀 ~ getCommonTreeData ~ res", res.data);
+      this.hLevelList = res.data;
+    }
+  }
 
   // 新增供应商
   private handleInsert() {
@@ -212,7 +226,7 @@ export default class extends Vue {
           phoneNo,
           note,
         };
-        const res: any = await updateSupplierData(params);
+        const res: any = await updateSupplierLinkmanData(params);
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig);
         }
@@ -227,7 +241,7 @@ export default class extends Vue {
     });
   }
 
-  // 修改供应商
+  // 修改厂商联系人
   private updateData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
@@ -249,7 +263,7 @@ export default class extends Vue {
           phoneNo,
           note,
         };
-        const res: any = await updateSupplierData(params);
+        const res: any = await updateSupplierLinkmanData(params);
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig);
         }
@@ -283,7 +297,7 @@ export default class extends Vue {
     });
   }
 
-  // 删除供应商
+  // 删除厂商联系人
   private async handleRemove(row: any) {
     let params = {};
     if (Array.isArray(row)) {
@@ -296,7 +310,7 @@ export default class extends Vue {
         ids: row.id
       };
     }
-    const res: any = await delSupplierData(params);
+    const res: any = await delSupplierLinkmanData(params);
     if (res.result) {
       (this.$refs.vexTable as any).findList(this.paramsConfig);
     }
