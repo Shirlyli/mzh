@@ -221,7 +221,7 @@ export default class extends Vue {
       }
     });
     if (res.result) {
-      console.log("🚀 ~ res", res.data);
+      console.log("🚀 ~ handleSearchForDetail ~ res", res.data);
     }
   }
 }

@@ -47,6 +47,7 @@ export default class extends Vue {
   private showPersonalLoginDialog(item: any) {
     console.log("🚀 ~ item ~ 展示用户设置区域", item);
     this.clickPersonalData = item;
+    console.log("🚀 ~ this.clickPersonalData", this.clickPersonalData);
     const newPersonalData = _.map(this.employeeData, function(o: any) {
       if (o.id === item.id) {
         return { ...o, isClick: true };
@@ -66,13 +67,17 @@ export default class extends Vue {
     this.emitHandleInsert();
   }
 
-  // 查看员工信息
+  // 用户设置
   @Emit()
   emitHandleSearch(rowData: any) {
     console.log("~ 查看员工信息 ~ emitHandleSearch");
     return rowData;
   }
   private searchPersonalDetail() {
+    if (!this.clickPersonalData.id) {
+      Message.error("请选择员工后进行用户设置");
+      return;
+    }
     this.emitHandleSearch(this.clickPersonalData);
   }
 
@@ -81,20 +86,24 @@ export default class extends Vue {
   emitHandleRemove(rowData: any) {
     return rowData;
   }
-  private dealEmployeeInfo = async () => {
-    // const type = await modal.confirm('您确定要删除该数据?')
-    // if (type === 'confirm') {
+  private dealEmployeeInfo() {
+    console.log("🚀 ~ this.clickPersonalData", this.clickPersonalData);
     if (!this.clickPersonalData.id) {
       Message.error("请选择员工后删除");
       return;
     }
     this.emitHandleRemove(this.clickPersonalData);
     // }
-  };
+  }
 
   // 查看角色
 
-  private searchRole() {}
+  private searchRole() {
+    if (!this.clickPersonalData.id) {
+      Message.error("请选择员工后查看角色");
+      return;
+    }
+  }
 
   // 密码重置
   private resetPassword() {}
@@ -105,6 +114,7 @@ export default class extends Vue {
     return rowData;
   }
   private associateRole() {
+    console.log("🚀 ~ this.clickPersonalData", this.clickPersonalData);
     if (!this.clickPersonalData.id) {
       Message.error("请选择员工后关联角色");
       return;

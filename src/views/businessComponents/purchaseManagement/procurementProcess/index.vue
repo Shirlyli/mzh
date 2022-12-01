@@ -61,9 +61,9 @@
         <el-form-item :label="'角色类型'"
                       prop="roleType">
           <el-radio v-model="processData.roleType"
-                    label="0">role</el-radio>
+                    label="role">role</el-radio>
           <el-radio v-model="processData.roleType"
-                    label="1">user</el-radio>
+                    label="user">user</el-radio>
         </el-form-item>
         <el-form-item :label="'角色类型Id'"
                       prop="roleTypeId">

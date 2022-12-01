@@ -20,45 +20,45 @@
                @close="handleDialogClose">
       <el-form ref="dataForm"
                :rules="rules"
-               :model="hospitalData"
+               :model="supplierData"
                label-position="left"
                label-width="100px"
                style="width: 400px; margin-left:50px;">
-        <el-form-item :label="'医院名称'"
-                      prop="hName">
-          <el-input v-model="hospitalData.hName"
-                    placeholder="请选择"></el-input>
+        <el-form-item :label="'厂商名称'"
+                      prop="name">
+          <el-input v-model="supplierData.name"
+                    placeholder="请输入厂商名称"></el-input>
         </el-form-item>
-        <el-form-item :label="'医院地址'"
-                      prop="hAddress">
-          <el-input v-model="hospitalData.hAddress"
-                    placeholder="请选择"></el-input>
+        <el-form-item :label="'厂商简称'"
+                      prop="nameAbbreviation">
+          <el-input v-model="supplierData.nameAbbreviation"
+                    placeholder="请输入厂商简称"></el-input>
         </el-form-item>
-        <el-form-item :label="'医院等级'"
-                      prop="hLevel">
-          <el-select v-model="hospitalData.hLevel"
+        <el-form-item :label="'厂商类型'"
+                      prop="suppliesType">
+          <el-select v-model="supplierData.suppliesType"
                      transfer
                      placeholder="请选择">
-            <el-option v-for="item in hLevelList"
-                       :key="item.dicCode"
-                       :value="item.dicCode"
-                       :label="item.dicName">
+            <el-option v-for="item in suppliesType"
+                       :key="item.value"
+                       :label="item.label"
+                       :value="item.value">
               </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="'医院类型'"
-                      prop="hType">
-          <el-input v-model="hospitalData.hType"
-                    placeholder="请选择"></el-input>
+        <el-form-item :label="'资产性质'"
+                      prop="assetsPro">
+          <el-input v-model="supplierData.assetsPro"
+                    placeholder="请输入资产性质"></el-input>
         </el-form-item>
-        <el-form-item :label="'电话'"
+        <el-form-item :label="'座机电话'"
                       prop="hPhone">
-          <el-input v-model="hospitalData.hPhone"
+          <el-input v-model="supplierData.phoneNo"
                     placeholder="请选择"></el-input>
         </el-form-item>
         <el-form-item :label="'备注'"
                       prop="note">
-          <el-input v-model="hospitalData.note"
+          <el-input v-model="supplierData.note"
                     placeholder="请选择"></el-input>
         </el-form-item>
       </el-form>

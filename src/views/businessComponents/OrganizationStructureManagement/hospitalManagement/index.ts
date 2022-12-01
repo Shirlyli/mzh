@@ -112,7 +112,6 @@ export default class extends Vue {
       params
     );
     if (res.result) {
-      console.log("🚀 ~ res", res.data);
       this.hLevelList = res.data;
     }
   }

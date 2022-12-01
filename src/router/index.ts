@@ -4,7 +4,6 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Layout from "@/layout/index.vue";
 /* Router modules */
 import businessRouter from "./modules/business";
-import { queryLeftMenuData } from "@/api/basic";
 Vue.use(VueRouter);
 
 export const constantRoutes: RouteConfig[] = [

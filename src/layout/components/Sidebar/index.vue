@@ -29,7 +29,6 @@ import { SettingsModule } from '@/store/modules/settings'
 import SidebarItem from './SidebarItem.vue'
 import SidebarLogo from './SidebarLogo.vue'
 import variables from '@/styles/_variables.scss'
-import { queryLeftMenuData } from '@/api/basic'
 
 @Component({
   name: 'SideBar',
@@ -40,7 +39,6 @@ import { queryLeftMenuData } from '@/api/basic'
 })
 export default class extends Vue {
   mounted() {
-    this.getMenuDataRoutes()
   }
   get sidebar() {
     return AppModule.sidebar
@@ -79,11 +77,6 @@ export default class extends Vue {
 
   get isCollapse() {
     return !this.sidebar.opened
-  }
-
-  private getMenuDataRoutes = async () => {
-    const res = await queryLeftMenuData({})
-    console.log('🚀 ~ res', res)
   }
 }
 </script>

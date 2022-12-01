@@ -90,7 +90,7 @@ export default class extends Vue {
       page: "1",
       limit: "10",
       entity: {
-        process_code: ""
+        process_code: "pro_kssq"
       }
     }
   };

@@ -39,10 +39,11 @@ export interface IPermissionState {
 }
 
 export function generaMenu(routes: any, data: any) {
+  console.log("🚀 ~ generaMenu ~ data", data)
   //data挨个遍历
   data.forEach((item: any) => {
     //path不为空的话，就新建一个对象，装数据
-    if (item.basicData.mUrl !== "") {
+    if (item.basicData.mUrl) {
       //这个就仿照目录的机构，搭建
       const menu: any = {
         path: item.basicData.mUrl,
@@ -62,6 +63,7 @@ export function generaMenu(routes: any, data: any) {
           meta: item.meta
         };
         //加入到主目录的children中去
+        console.log("🚀 ~ menu", menu);
         menu.children.push(menu2);
       });
       //追加
@@ -103,7 +105,6 @@ class Permission extends VuexModule implements IPermissionState {
       // 【新加入】开始
       const loadMenuData: any = [];
       queryLeftMenuData({}).then((response: any) => {
-        console.log("🚀 ~ response", response);
         let data = response;
         //我的code为100200为正常
         if (response.code !== 200) {
@@ -111,10 +112,15 @@ class Permission extends VuexModule implements IPermissionState {
         } else {
           //获取目录的json
           data = response.data[0].children;
+          console.log("🚀 ~ queryLeftMenuData ~ response", data);
           //把data的数据拷贝到loadMenuData里面
           Object.assign(loadMenuData, data);
           //把asyncRoutes的数据拷贝到tempAsyncRoutes里面
           const tempAsyncRoutes = Object.assign([], asyncRoutes);
+          console.log(
+            "🚀 ~ queryLeftMenuData ~ tempAsyncRoutes",
+            tempAsyncRoutes
+          );
           // 最最重要的，把loadMenuData追加到tempAsyncRoutes后面
           generaMenu(tempAsyncRoutes, loadMenuData);
           //定义accessedRoutes

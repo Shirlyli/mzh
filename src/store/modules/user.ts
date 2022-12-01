@@ -106,7 +106,7 @@ class User extends VuexModule implements IUserState {
     }
     const state = JSON.parse(sessionStorage.getItem("state") || "0");
     const res = await getUserInfo(this.loginForm);
-    console.log("🚀 ~ res", res);
+    console.log("🚀 ~ GetUserInfo ~ res", res);
     if (!res.data) {
       throw Error("Verification failed, please Login again.");
     }

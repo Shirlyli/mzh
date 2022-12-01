@@ -21,7 +21,7 @@ import _ from "lodash";
 })
 export default class extends Vue {
   created() {
-    this.getCommonTreeData();
+
   }
 
   private formConfig: { data: SupplierFormTypes; items: FormItemTypes[] } = {
@@ -117,18 +117,34 @@ export default class extends Vue {
     }
   ];
 
-  private hospitalData = {
-    hName: "",
-    hAddress: "",
-    hLevel: "",
-    hType: "",
-    hPhone: "",
+  // 菜单类型
+  private suppliesTypeOptions = [
+    {
+      value: "1",
+      label: "目录"
+    },
+    {
+      value: "2",
+      label: "菜单"
+    },
+    {
+      value: "3",
+      label: "按钮"
+    }
+  ];
+
+  private supplierData = {
+    name: "",
+    nameAbbreviation: "",
+    suppliesType: "",
+    assetsPro: "",
+    phoneNo: "",
     note: "",
     id: ""
   }; // 新增或编辑表单
 
   private rules = {
-    hName: [{ required: true, message: "请输入医院名称", trigger: "change" }]
+    name: [{ required: true, message: "请输入厂站名称", trigger: "change" }]
   }; // 表单校验
 
   private dialogVisible = false; // 新增过模态框
@@ -158,7 +174,7 @@ export default class extends Vue {
       params
     );
     if (res.result) {
-      console.log("🚀 ~ res", res.data);
+      console.log("🚀 ~ getCommonTreeData ~ res", res.data);
       this.hLevelList = res.data;
     }
   }
@@ -177,12 +193,12 @@ export default class extends Vue {
   // 模态框关闭事件
   private handleDialogClose() {
     this.dialogVisible = false;
-    this.hospitalData = {
-      hName: "",
-      hAddress: "",
-      hLevel: "",
-      hType: "",
-      hPhone: "",
+    this.supplierData = {
+      name: "",
+      nameAbbreviation: "",
+      suppliesType: "",
+      assetsPro: "",
+      phoneNo: "",
       note: "",
       id: ""
     };
@@ -193,23 +209,21 @@ export default class extends Vue {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
         const {
-          hName,
-          hAddress,
-          hLevel,
-          hType,
-          hPhone,
-          note
-        } = this.hospitalData;
+          name,
+          nameAbbreviation,
+          suppliesType,
+          assetsPro,
+          phoneNo,
+          note,
+        } = this.supplierData;
         const params = {
           id: "",
-          hName,
-          hAddress,
-          hLevel,
-          hType,
-          hPhone,
+          name,
+          nameAbbreviation,
+          suppliesType,
+          assetsPro,
+          phoneNo,
           note,
-          createtime: "",
-          createrId: "00000001-测试用户id"
         };
         const res: any = await updateHospitalData(params);
         if (res.result) {
@@ -232,23 +246,21 @@ export default class extends Vue {
       if (valid) {
         const {
           id,
-          hName,
-          hAddress,
-          hLevel,
-          hType,
-          hPhone,
-          note
-        } = this.hospitalData;
+          name,
+          nameAbbreviation,
+          suppliesType,
+          assetsPro,
+          phoneNo,
+          note,
+        } = this.supplierData;
         const params = {
           id,
-          hName,
-          hAddress,
-          hLevel,
-          hType,
-          hPhone,
+          name,
+          nameAbbreviation,
+          suppliesType,
+          assetsPro,
+          phoneNo,
           note,
-          createtime: "",
-          createrId: "00000001-测试用户id"
         };
         const res: any = await updateHospitalData(params);
         if (res.result) {
@@ -267,14 +279,14 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    const { id, hName, hAddress, hLevel, hType, hPhone, note } = row;
-    this.hospitalData = {
+    const { id, name, nameAbbreviation, suppliesType, assetsPro, phoneNo, note } = row;
+    this.supplierData = {
       id,
-      hName,
-      hAddress,
-      hLevel,
-      hType,
-      hPhone,
+      name,
+      nameAbbreviation,
+      suppliesType,
+      assetsPro,
+      phoneNo,
       note
     };
     this.dialogStatus = "update";

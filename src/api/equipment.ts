@@ -101,3 +101,19 @@ export const searchEquipmentCategoryInfoDetailsData = (data: any) =>
     data
   })
 
+// 修改供应商数据 /api/hospitalInfo/save
+export const updateSupplierData = (data: any) =>
+  request({
+    url: 'supplier/save',
+    method: 'POST',
+    data
+  })
+
+// 删除医院
+export const delSupplierData = (data: any) =>
+  request({
+    url: 'supplier/del',
+    method: 'POST',
+    data
+  })
+

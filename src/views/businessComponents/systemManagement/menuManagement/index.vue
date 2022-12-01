@@ -10,7 +10,8 @@
           <Tree ref="vxeTree"
                 :url="url"
                 :params="treeParams"
-                @emit-handle-click="handleNodeClick" />
+                @emit-handle-click="handleNodeClick"
+          />
         </el-card>
       </template>
       <template #right>
@@ -23,12 +24,13 @@
                     :formConfig="formConfig"
                     :columns="columns"
                     hasAssociate="true"
-                    editColumns="['edit','del']"
+                    editColumns="['edit','del','associate']"
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"
                     @emit-associate-role="handleAssociateRole"
-                    :paramsConfig="paramsConfig" />
+                    @emit-associate-role-row="handleAssociateRoleRow"
+                    :paramsConfig="paramsConfig"/>
         </el-card>
       </template>
     </main-sub-layout>
@@ -44,7 +46,7 @@
                :model="menuData"
                label-position="left"
                label-width="100px"
-               style="width: 400px; margin-left:50px;">
+               style="width: 500px; margin-left:50px;">
         <el-form-item :label="'菜单名称'"
                       prop="mName">
           <el-input v-model="menuData.mName"
@@ -53,12 +55,12 @@
         <el-form-item :label="'菜单编号'"
                       prop="mCode">
           <el-input v-model="menuData.mCode"
-                    placeholder="请输入" />
+                    placeholder="请输入"/>
         </el-form-item>
         <el-form-item :label="'菜单路由'"
                       prop="mUrl">
           <el-input v-model="menuData.mUrl"
-                    placeholder="请输入" />
+                    placeholder="请输入"/>
         </el-form-item>
         <el-form-item :label="'菜单类型'"
                       prop="mType">
@@ -75,61 +77,38 @@
         <el-form-item :label="'菜单图标'"
                       prop="mIcon">
           <el-input v-model="menuData.mIcon"
-                    placeholder="请输入" />
+                    placeholder="请输入"/>
         </el-form-item>
         <el-form-item :label="'父菜单名称'"
                       prop="pName">
           <el-input v-model="menuData.pName"
-                    placeholder="请输入" />
-        </el-form-item>
-        <el-form-item :label="'是否启用'"
-                      prop="mIsavailable">
-          <el-radio v-model="menuData.mIsavailable"
-                    label="0">不启用</el-radio>
-          <el-radio v-model="menuData.mIsavailable"
-                    label="1">启用</el-radio>
-        </el-form-item>
-        <el-form-item :label="'描述'"
-                      prop="mDesc">
-          <el-input v-model="menuData.mDesc"
-                    placeholder="请输入" />
-        </el-form-item>
-        <el-form-item :label="'备注'"
-                      prop="note">
-          <el-input v-model="menuData.note"
-                    placeholder="请输入" />
-        </el-form-item>
-        <el-form-item :label="'菜单类型'"
-                      prop="mType">
-          <el-select v-model="menuData.mType"
-                     placeholder="菜单类型">
-            <el-option label="目录"
-                       value="1"></el-option>
-            <el-option label="菜单"
-                       value="2"></el-option>
-            <el-option label="按钮"
-                       value="3"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="'父级菜单'"
-                      prop="pName">
-          <el-input v-model="menuData.pName"
-                    disabled="disabled" />
+                    placeholder="请输入"/>
         </el-form-item>
         <el-form-item :label="'父级菜单ID'"
                       prop="pid">
           <el-input v-model="menuData.pid"
-                    disabled="disabled" />
+          />
         </el-form-item>
         <el-form-item :label="'是否启用'"
                       prop="mIsavailable">
-          <el-select v-model="menuData.mIsavailable"
-                     placeholder="是否启用">
-            <el-option label="启用"
-                       value="1"></el-option>
-            <el-option label="禁用"
-                       value="0"></el-option>
-          </el-select>
+          <el-radio-group v-model="menuData.mIsavailable">
+            <el-radio
+              label="0">不启用
+            </el-radio>
+            <el-radio
+              label="1">启用
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item :label="'描述'"
+                      prop="mDesc">
+          <el-input type="textarea" v-model="menuData.mDesc"
+                    placeholder="请输入"/>
+        </el-form-item>
+        <el-form-item :label="'备注'"
+                      prop="note">
+          <el-input type="textarea" v-model="menuData.note"
+                    placeholder="请输入"/>
         </el-form-item>
       </el-form>
 
@@ -147,12 +126,11 @@
     </el-dialog>
 
     <!-- 关联角色 -->
-    <AssociateRole :roleDialogVisible='isAssociateDialogVisible' :checkedMenuList="checkedMenuList" @emit-close-associate-dialog="handleCloseAssociateDialog"/>
+    <AssociateRole :roleDialogVisible='isAssociateDialogVisible' :checkedMenuList="checkedMenuList"
+                   @emit-close-associate-dialog="handleCloseAssociateDialog"/>
   </div>
 </template>
 
 <script lang="ts" src="./index.ts">
 </script>
 
-<style lang="scss" scoped>
-</style>

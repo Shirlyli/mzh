@@ -113,6 +113,7 @@ export default class extends Vue {
     education: "",
     degree: "",
     deptId: "",
+    deptName: "",
     photoUri: "",
     collage: "",
     eNo: "",
@@ -142,6 +143,7 @@ export default class extends Vue {
 
   private dialogVisible = false; // 新增模态框
   private personalDialogVisible = false; //用户设置模态框
+  private personalDialogType = "add"; //
   private dialogStatus = "create";
   private paramsConfig = {
     // url: "/auth/employee/queryByDeptId",
@@ -201,9 +203,23 @@ export default class extends Vue {
 
   // 新增员工
   private handleInsert() {
-    this.dialogVisible = true;
     const { title, id } = this.nodeClickData;
-    this.employeeData = { ...this.employeeData, deptId: id ?? "001" };
+    if (!id) {
+      this.$notify({
+        title: "失败",
+        message: "请选择科室后新增员工",
+        type: "error",
+        duration: 2000
+      });
+      return;
+    }
+    this.dialogVisible = true;
+    this.employeeData = {
+      ...this.employeeData,
+      deptName: title,
+      deptId: id ?? "001"
+    };
+    console.log("🚀 ~ nodeClickData", this.nodeClickData);
   }
 
   // 接收树形组件点击节点数据
@@ -310,7 +326,13 @@ export default class extends Vue {
 
   // 查看用户设置
   private async handleSearchForDetail(row: any) {
+    console.log("🚀 ~ row", row);
     this.personalDialogVisible = true;
+    if (!row) {
+      this.personalDialogType = "edit";
+    } else {
+      this.personalDialogType = "add";
+    }
     const res: any = await getPersonalInfo({ empId: row.id });
     if (res.result && res.count === 1) {
       this.personalData = {
@@ -332,7 +354,6 @@ export default class extends Vue {
     console.log("🚀 ~ row ~点击员工详情展示用户操作页面", row);
     // this.personalDialogVisible = true;
     // const res = await getPersonalInfo({ empId: row.id });
-    // console.log("🚀 ~ res", res);
   }
 
   // 保存用户设置

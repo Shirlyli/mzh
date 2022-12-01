@@ -11,15 +11,19 @@
         <div class="btnBox">
           <el-button @click="handleSubmit"
                      type="primary">
-            {{'审核通过' }}
+            {{'同意' }}
           </el-button>
           <el-button type="error"
-                     @click="handleCancel">
-            {{ '审核不通过' }}
+                     @click="handleBack">
+            {{ '退回' }}
           </el-button>
           <el-button type="error"
                      @click="handleEnd">
             {{ '终止' }}
+          </el-button>
+          <el-button type="error"
+                     @click="handleEnd">
+            {{ '转审' }}
           </el-button>
         </div>
       </template>
@@ -48,7 +52,7 @@
         <span>设备明细</span>
       </div>
       <div class="contentBox">
-        <el-table :data="processRecordListData"
+        <el-table :data="[]"
                   style="width: 100%"
                   border>
           <el-table-column prop="nodeName"
@@ -74,14 +78,13 @@
         </el-table>
 
       </div>
-
       <!-- 附件信息 -->
       <div class="dividerBox">
         <el-divider direction="vertical"></el-divider>
         <span>附件信息</span>
       </div>
       <div class="contentBox">
-        <el-table :data="processRecordListData"
+        <el-table :data="[]"
                   style="width: 100%"
                   border>
           <el-table-column prop="nodeName"
@@ -101,45 +104,12 @@
         </el-table>
       </div>
 
-      <!-- 操作记录 -->
-      <div class="dividerBox">
-        <el-divider direction="vertical"></el-divider>
-        <span>操作记录</span>
-      </div>
-      <div class="contentBox">
-        <el-table :data="processRecordListData"
-                  style="width: 100%"
-                  border>
-          <el-table-column prop="nodeName"
-                           label="节点名"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="auditStatus"
-                           label="审核状态"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="auditmind"
-                           label="审核原因">
-          </el-table-column>
-          <el-table-column prop="nextOperator"
-                           label="下一节点执行人">
-          </el-table-column>
-          <el-table-column prop="operator"
-                           label="操作人">
-          </el-table-column>
-          <el-table-column prop="operatorTime"
-                           label="操作时间">
-          </el-table-column>
-        </el-table>
-
-      </div>
-
       <!-- 审批节点 -->
-      <div class="dividerBox">
+      <!-- <div class="dividerBox">
         <el-divider direction="vertical"></el-divider>
         <span>科室审批</span>
-      </div>
-      <div>
+      </div> -->
+      <!-- <div>
         <el-form ref="dataForm"
                  :rules="rules"
                  :model="equipmentProcessData"
@@ -162,35 +132,74 @@
             </el-col>
           </el-row>
         </el-form>
-      </div>
+      </div> -->
     </el-drawer>
 
-    <!-- 提交审批流程确认模态框  -->
+    <!-- 提交审批流程模态框  -->
     <el-dialog :title="title"
                :visible.sync="nextDialogVisible"
                width="30%">
-      <div v-if="type=='submit'">
-        <el-form ref="dataForm"
-                 :rules="rules"
-                 :model="equipmentProcessData"
-                 label-position="left"
-                 label-width="120px"
-                 style="margin-left:20px;">
-          <!-- <el-row :gutter="20"> -->
-          <!-- <el-col :span="12"> -->
+      <el-form ref="dataForm"
+               :rules="rules"
+               :model="equipmentProcessData"
+               label-position="left"
+               label-width="120px"
+               style="margin-left:20px;">
+        <!-- 同意 -->
+        <div v-if="type=='submit'">
           <el-form-item :label="'下一节点名称'"
                         prop="nextNodeName">
-            <span>{{nextNodeNameData.nodeName}}</span>
+            <el-input v-model="equipmentProcessData.nextNodeName"
+                      disabled></el-input>
           </el-form-item>
-          <el-form-item :label="'下一节点执行人 '"
+          <el-form-item :label="'审批人'"
                         prop="nextNodeExecutor">
-            <span>{{nextNodeExecutorData.user_name}}</span>
+            <el-select v-model="equipmentProcessData.nextNodeExecutor"
+                       placeholder="请选择">
+              <el-option :label="item.user_name"
+                         :value="item.user_id"
+                         v-for="(item) in nextNodeExecutorData"
+                         :key="item.user_id"></el-option>
+            </el-select>
           </el-form-item>
-        </el-form>
-      </div>
-      <div v-else-if="type=='end'">
-        是否终止该流程？
-      </div>
+          <el-form-item :label="'意见 '"
+                        prop="auditReason">
+            <el-input v-model="equipmentProcessData.auditReason"></el-input>
+          </el-form-item>
+        </div>
+        <!-- 退回 -->
+        <div v-else-if="type === 'back'">
+          <el-form-item :label="'节点名称'"
+                        prop="nextNodeCode">
+            <el-select v-model="equipmentProcessData.nextNodeCode"
+                       placeholder="请选择"
+                       @change="handleNodeChange">
+              <el-option :label="item.nodeName"
+                         :value="item.nodeNameCode"
+                         v-for="(item) in nextNodeExecutorData"
+                         :key="item.nodeName"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="'审批人'"
+                        prop="nextNodeExecutor">
+            <el-select v-model="equipmentProcessData.nextNodeExecutor"
+                       placeholder="请选择">
+              <el-option :label="item.user_name"
+                         :value="item.user_id"
+                         v-for="(item) in nodeExecutorData"
+                         :key="item.user_id"></el-option>
+            </el-select>
+          </el-form-item>
+        </div>
+        <!-- 终止 -->
+        <div v-else-if="type=='end'">
+          <div>是否终止该流程？</div>
+          <el-form-item :label="'意见 '"
+                        prop="auditReason">
+            <el-input v-model="equipmentProcessData.auditReason"></el-input>
+          </el-form-item>
+        </div>
+      </el-form>
       <span slot="footer"
             class="dialog-footer">
         <el-button @click="handleCancelProcess">取 消</el-button>
@@ -206,7 +215,8 @@
 
 <style lang="scss" scoped>
 .dividerBox {
-  margin: 12px 0;
+  margin: 12px 0 24px 0;
+  font-size: 18px;
   .el-divider--vertical {
     background-color: blue;
     width: 6px;

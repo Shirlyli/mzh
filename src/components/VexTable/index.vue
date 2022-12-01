@@ -45,15 +45,17 @@
         <vxe-button content="查看"
                     v-if="editColumns.includes('search')"
                     @click="searchForDetails(row)"></vxe-button>
-        <template>
-          <vxe-button content="编辑"
-                      v-if="editColumns.includes('edit')"
-                      @click="editRowEvent(row)"></vxe-button>
-        </template>
+        <vxe-button content="编辑"
+                    v-if="editColumns.includes('edit')"
+                    @click="editRowEvent(row)"></vxe-button>
+        <vxe-button content="操作记录"
+                    v-if="editColumns.includes('record')"
+                    @click="handleRecord(row)"></vxe-button>
         <vxe-button content="删除"
                     status='warning'
                     v-if="editColumns.includes('del')"
                     @click="removeRowEvent(row)"></vxe-button>
+
       </template>
 
       <!--分页 -->
@@ -69,12 +71,13 @@
     </vxe-grid>
   </div>
 </template>
-
-<script lang="ts">
+  
+  <script lang="ts">
 import { getTableDataList } from '@/api/equipment'
 import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
 import VXETable from 'vxe-table'
 import _ from 'lodash'
+import { Message } from 'element-ui'
 @Component({
   name: 'VexTable',
   components: {},
@@ -132,6 +135,7 @@ export default class extends Vue {
 
   // 获取列表数据
   private async findList(config: any) {
+    console.log('🚀 ~ config', config)
     this.loading = true
     this.checkedList = []
     try {
@@ -219,12 +223,7 @@ export default class extends Vue {
     } else if (this.type !== 'process') {
       this.emitHandleInsert([])
     } else {
-      this.$notify({
-        title: '失败',
-        message: '请选择流程后新增！',
-        type: 'error',
-        duration: 2000,
-      })
+      Message.error('请选择流程后新增！')
     }
   }
 
@@ -239,12 +238,8 @@ export default class extends Vue {
   // 批量删除
   private async groupRemove() {
     if (!this.checkedList.length) {
-      this.$notify({
-        title: '失败',
-        message: '请选择后进行操作！',
-        type: 'error',
-        duration: 2000,
-      })
+      Message.error('请选择后进行操作！')
+
       return
     }
     const type = await VXETable.modal.confirm('您确定要删除该数据?')
@@ -276,23 +271,23 @@ export default class extends Vue {
   }
   private associateRole() {
     if (!this.checkedList.length) {
-      this.$notify({
-        title: '失败',
-        message: '请选择菜单后进行操作！',
-        type: 'error',
-        duration: 2000,
-      })
+      Message.error('请选择菜单后进行操作！')
       return
     } else if (this.checkedList.length > 1) {
-      this.$notify({
-        title: '失败',
-        message: '请单次操作一条数据',
-        type: 'error',
-        duration: 2000,
-      })
+      Message.error('请单次操作一条数据')
       return
     }
     this.emitAssociateRole(this.checkedList)
   }
+
+  // 操作记录
+  @Emit()
+  emitHandleRecord(value: any) {
+    return value
+  }
+  private handleRecord(row: any){
+    this.emitHandleRecord(row)
+  }
 }
 </script>
+  

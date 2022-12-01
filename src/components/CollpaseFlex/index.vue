@@ -42,7 +42,7 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 16px 24px;
-  height: calc(100vh -400px);
+  height: calc(100vh - 400px);
   &-left {
     width: 260px;
     background: #fff;

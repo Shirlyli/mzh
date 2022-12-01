@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 列表区域 -->
     <el-card>
       <div slot="header"
            class="clearfix">
@@ -16,14 +17,16 @@
           <VexTable ref="vexTable"
                     :formConfig="formConfig"
                     :columns="columns"
-                    editColumns="['search']"
+                    editColumns="['search','del','record']"
                     hasNotSlotButton="true"
                     @emit-handle-search="handleSearch"
+                    @emit-handle-remove="handleRemove"
+                    @emit-handle-record="handleRecord"
                     :paramsConfig="paramsConfig" />
         </el-tab-pane>
         <el-tab-pane label="已处理任务"
                      name="dealTask">
-          <VexTable ref="vexTable"
+          <VexTable ref="vexDoneTable"
                     :formConfig="doneFormConfig"
                     :columns="columns"
                     hasNotSlotButton="true"
@@ -32,10 +35,11 @@
         </el-tab-pane>
       </el-tabs>
     </el-card>
+
     <!-- 新增流程申请 -->
     <el-drawer title="发起申请"
                :visible.sync="dialogVisible"
-               size="50%"
+               size="60%"
                @close="dialogVisible = false">
       <el-form ref="dataForm"
                :rules="rules"
@@ -62,17 +66,19 @@
                           prop="purchaseType">
               <el-select v-model="equipmentProcessData.purchaseType"
                          placeholder="请选择">
-                <el-option key="购置类别"
+                <el-option key="新增"
                            label="新增"
-                           value="购置类别">
+                           value="新增">
                 </el-option>
-                <el-option key="购置类别"
+                <el-option key="复购"
                            label="复购"
-                           value="购置类别">
+                           value="复购">
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="'申请科室'"
                           prop="applyDept">
@@ -99,6 +105,8 @@
               </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="'申请理由'"
                           prop="applyReson">
@@ -114,6 +122,8 @@
                         disabled />
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="'当前节点名称'"
                           prop="currentNodeName">
@@ -122,6 +132,7 @@
                         disabled />
             </el-form-item>
           </el-col>
+          <el-col :span="12"></el-col>
         </el-row>
 
         <!-- 设备明细 -->
@@ -164,11 +175,8 @@
               </el-upload>
             </el-form-item>
           </el-col>
-          <!-- 审批信息  -->
-          <!-- <div class="dividerBox">
-          <el-divider direction="vertical"></el-divider>
-          <span>审批信息</span></span>
-        </div> -->
+        </el-row>
+        <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="'下一节点名称'"
                           prop="nextNodeName">
@@ -180,19 +188,18 @@
           <el-col :span="12">
             <el-form-item :label="'下一节点执行人 '"
                           prop="nextNodeExecutor">
-              <!-- <el-select v-model="equipmentProcessData.nextNodeExecutor"
+              <el-select v-model="equipmentProcessData.nextNodeExecutor"
                          placeholder="请选择">
-                <el-option v-for="item in nextNodeExecutorData"
-                           :key="item.id"
-                           :label="item.title"
-                           :value="item.id">
-                </el-option>
-              </el-select> -->
-              <el-input v-model="equipmentProcessData.nextNodeExecutor"
-                        placeholder="请输入"
-                        disabled />
+                <el-option :label="item.user_name"
+                           :value="item.user_id"
+                           v-for="(item) in nextNodeExecutorData"
+                           :key="item.user_id"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="20"
+                class="editBox">
           <el-col :span="12"
                   :offset="12">
             <el-form-item>
@@ -215,6 +222,37 @@
                      :processData="clickProcessData"
                      @emit-handle-submit="emitHandleSubmit"
                      v-show="approvalDialogVisible" />
+
+    <!-- 操作记录 -->
+    <el-dialog title="操作记录"
+               :visible="processRecordDialogVisible"
+               @close="processRecordDialogVisible = false">
+      <div class="contentBox">
+        <el-table :data="processRecordListData"
+                  style="width: 100%"
+                  border>
+          <el-table-column prop="nodeName"
+                           label="节点名称"
+                           width="180">
+          </el-table-column>
+          <el-table-column prop="nodeCode"
+                           label="节点编码"
+                           width="180">
+          </el-table-column>
+          <el-table-column prop="auditStatus"
+                           label="审核状态"
+                           width="180">
+          </el-table-column>
+          <el-table-column prop="auditmind"
+                           label="审核原因">
+          </el-table-column>
+          <el-table-column prop="operatorTime"
+                           label="操作时间">
+          </el-table-column>
+        </el-table>
+
+      </div>
+    </el-dialog>
   </div>
 
 </template>
@@ -226,11 +264,12 @@
 .el-select {
   width: 100%;
 }
-
 .dividerBox {
-  margin-bottom: 12px;
+  margin: 12px 0 24px 0;
+  font-size: 18px;
   .el-divider--vertical {
-    color: blue;
+    background-color: blue;
+    width: 6px;
   }
 }
 .edit-input {
@@ -241,5 +280,11 @@
   position: absolute;
   right: 15px;
   top: 10px;
+}
+
+.editBox {
+  .el-form-item__content {
+    text-align: right;
+  }
 }
 </style>

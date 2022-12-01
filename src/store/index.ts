@@ -6,7 +6,6 @@ import { ITagsViewState } from './modules/tags-view'
 import { IErrorLogState } from './modules/error-log'
 import { IPermissionState } from './modules/permission'
 import { ISettingsState } from './modules/settings'
-import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex)
 
 export interface IRootState {

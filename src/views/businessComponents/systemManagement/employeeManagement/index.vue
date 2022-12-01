@@ -27,15 +27,6 @@
                    @emit-handle-search="handleSearchForDetail"
                    @emit-login-dialog="handleLoginDialog"
                    @emit-associate-role="handleAssociateRole" />
-          <!-- <VexTable ref="vexTable"
-                    :formConfig="formConfig"
-                    :columns="columns"
-                    editColumns="['edit','del']"
-                    @emit-handle-insert="handleInsert"
-                    @emit-handle-update="handleUpdate"
-                    @emit-handle-remove="handleRemove"
-                    @emit-handle-search="handleSearchForDetail"
-                    :paramsConfig="paramsConfig" /> -->
         </el-card>
       </template>
     </main-sub-layout>
@@ -68,8 +59,12 @@
           <el-col :span="8">
             <el-form-item :label="'出生日期'"
                           prop="birth">
-              <el-input v-model="employeeData.birth"
-                        placeholder="请选择"></el-input>
+              <el-date-picker v-model="employeeData.birth"
+                              type="date"
+                              placeholder="选择日期"
+                              value-format="yyyy-MM-dd">
+              </el-date-picker>
+
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -116,8 +111,8 @@
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'科室'"
-                          prop="deptId">
-              <el-input v-model="employeeData.deptId"
+                          prop="deptName">
+              <el-input v-model="employeeData.deptName"
                         placeholder="请选择"></el-input>
             </el-form-item>
           </el-col>
@@ -242,42 +237,28 @@
                         placeholder="请选择"></el-input>
             </el-form-item>
           </el-col>
-          <!-- <el-col :span="8">
-            <el-form-item :label="'登录起始时间'"
-                          prop="deptId">
-              <el-input v-model="personalData.deptId"
-                        placeholder="请选择"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item :label="'登录终止时间'"
-                          prop="photoUri">
-              <el-input v-model="personalData.photoUri"
-                        placeholder="请选择"></el-input>
-            </el-form-item>
-          </el-col> -->
-          <el-col :span="8">
+          <el-col :span="8" v-if="personalDialogType=== 'edit'">
             <el-form-item :label="'用户创建时间'"
                           prop="collage">
               <el-input v-model="personalData.userCtime"
                         placeholder="请选择"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="8" v-if="personalDialogType=== 'edit'">
             <el-form-item :label="'用户修改时间'"
                           prop="eType">
               <el-input v-model="personalData.userLtime"
                         placeholder="请选择"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="8" v-if="personalDialogType=== 'edit'">
             <el-form-item :label="'密码修改时间'"
                           prop="eProf">
               <el-input v-model="personalData.userPmtime"
                         placeholder="请选择"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="8" v-if="personalDialogType=== 'edit'">
             <el-form-item :label="'用户解锁时间'"
                           prop="ePost">
               <el-input v-model="personalData.userUnlocktime"
@@ -313,7 +294,8 @@
     <el-dialog title="关联角色"
                :visible="roleDialogVisible"
                @close="roleDialogVisible = false"
-               width="80%" height="80%">
+               width="80%"
+               height="80%">
       <div class="roleBox">
         <main-sub-layout class="main-wrapper rule-config-page">
           <template #left>
@@ -401,10 +383,10 @@
   }
 }
 
-.el-dialog{
-  .wrapper{
-    padding:0;
-    .el-card{
+.el-dialog {
+  .wrapper {
+    padding: 0;
+    .el-card {
       height: calc(100vh - 382px);
     }
   }
