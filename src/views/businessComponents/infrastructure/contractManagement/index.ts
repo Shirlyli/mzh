@@ -2,15 +2,19 @@ import { Component, Vue } from "vue-property-decorator";
 import MainSubLayout from "@/components/CollpaseFlex/index.vue";
 import Tree from "@/components/Tree/index.vue";
 import VexTable from "@/components/VexTable/index.vue";
-import { Form } from "element-ui";
+import { Form, Message } from "element-ui";
 import {
   dealHospitalData,
   getTableDataList,
   updateHospitalData
 } from "@/api/equipment";
-import { FormItemTypes, SupplierFormTypes } from "./type";
+import { FormItemTypes, ContractTypes, ContractFormTypes } from "./type";
 import _ from "lodash";
-// import { TreeData } from "@/mock/tree";
+import {
+  handleSupplierContractAdd,
+  handleSupplierContractDel,
+  handleSupplierContractUpdate
+} from "@/api/basic";
 @Component({
   name: "Tab",
   components: {
@@ -20,77 +24,41 @@ import _ from "lodash";
   }
 })
 export default class extends Vue {
-  created() {
+  created() {}
 
-  }
-
-  private formConfig: { data: SupplierFormTypes; items: FormItemTypes[] } = {
+  private formConfig: { data: ContractTypes; items: FormItemTypes[] } = {
     data: {
-      domicile: "",
-      id: "",
-      name: "",
-      nameAbbreviation: "",
-      runningState: "",
-      taxId: "",
-      suppliesType: ""
+      cName: "",
+      cCode: "",
+      supplierId: ""
     },
     items: [
       {
-        field: "name",
-        title: "厂商名称",
+        field: "cName",
+        title: "合同名称",
         itemRender: {
           name: "$input",
-          props: { placeholder: "请输入厂商名称" }
+          props: { placeholder: "请输入合同名称" }
         },
-        resetValue:''
+        resetValue: ""
       },
       {
-        field: "nameAbbreviation",
-        title: "简称",
-        itemRender: { name: "$input", props: { placeholder: "请输入简称" } },
-        resetValue:''
-      },
-      {
-        field: "taxId",
-        title: "纳税识别号",
+        field: "cCode",
+        title: "合同编码",
         itemRender: {
           name: "$input",
-          props: { placeholder: "请输入纳税识别号" }
+          props: { placeholder: "请输入合同编码" }
         },
-        resetValue:''
+        resetValue: ""
       },
       {
-        field: "suppliesType",
-        title: "厂商类型",
+        field: "supplierId",
+        title: "厂商ID",
         itemRender: {
-          name: "$select",
-          props: { placeholder: '请选择' },
-          options: [
-            { label: "生产商", value: "生产商" },
-            { label: "供应商", value: "供应商" },
-            { label: "维修商", value: "维修商" }
-          ]
+          name: "$input",
+          props: { placeholder: "请输入厂商ID" }
         },
-        resetValue:''
-      },
-      {
-        field: "runningState",
-        title: "运营状态",
-        itemRender: {
-          name: "$select",
-          props: { placeholder: '请选择' },
-          options: [
-            { label: "正常", value: 1 },
-            { label: "注销", value: 2 }
-          ]
-        },
-        resetValue:''
-      },
-      {
-        field: "domicile",
-        title: "注册地",
-        itemRender: { name: "$input", props: { placeholder: "请输入注册地" } },
-        resetValue:''
+        resetValue: ""
       },
       { slots: { default: "operate_item" } }
     ] // 表单项
@@ -99,19 +67,19 @@ export default class extends Vue {
   private columns = [
     { type: "seq", width: 60 },
     { type: "checkbox", width: 60 },
-    { field: "name", title: "厂商名称" },
-    { field: "nameAbbreviation", title: "简称" },
-    { field: "taxId", title: "纳税识别号" },
-    { field: "suppliesType", title: "厂商类型" },
+    { field: "cName", title: "合同名称" },
+    { field: "cCode", title: "合同编码" },
+    { field: "cSignDate", title: "签订日期" },
+    { field: "cEffective", title: "有效期限" },
     {
-      field: "runningState",
-      title: "运营状态",
+      field: "cDefend",
+      title: "经办人"
     },
-    { field: "assetsPro", title: " 资产性质" },
-    { field: "domicile", title: " 注册地" },
-    { field: "legalPerson", title: "法人" },
-    { field: "phoneNo", title: "座机" },
-    { field: "dispindex", title: " 排序" },
+    { field: "cTotal", title: " 合同总金额" },
+    { field: "ctime", title: " 创建时间" },
+    { field: "supplierId", title: "厂商ID" },
+    { field: "cAttahUrl", title: "附件" },
+    { field: "note", title: " 排序" },
     {
       width: 160,
       title: "操作",
@@ -120,29 +88,18 @@ export default class extends Vue {
     }
   ];
 
-  // 菜单类型
-  private suppliesTypeOptions = [
-    {
-      value: "1",
-      label: "目录"
-    },
-    {
-      value: "2",
-      label: "菜单"
-    },
-    {
-      value: "3",
-      label: "按钮"
-    }
-  ];
-
-  private supplierData = {
-    name: "",
-    nameAbbreviation: "",
-    suppliesType: "",
-    assetsPro: "",
-    phoneNo: "",
+  private contractFormData: ContractFormTypes = {
+    cAttahUrl: "",
+    cCode: "",
+    cDefend: "",
+    cEffective: "",
+    cName: "",
+    cSignDate: "",
+    ctime: "",
+    cTotal: "",
+    dispindex: "",
     note: "",
+    supplierId: "",
     id: ""
   }; // 新增或编辑表单
 
@@ -150,6 +107,7 @@ export default class extends Vue {
     name: [{ required: true, message: "请输入厂站名称", trigger: "change" }]
   }; // 表单校验
 
+  private fileList = []; //附件
   private dialogVisible = false; // 新增过模态框
   private dialogStatus = "create";
   private paramsConfig = {
@@ -161,136 +119,80 @@ export default class extends Vue {
     }
   };
 
-  private nodeClickData: any = {}; // 点击供应商数据
+  private nodeClickData: any = {}; // 点击合同数据
 
-  private hLevelList = []; // 字典表
-
-  // 获取医院等级
-  private async getCommonTreeData() {
-    const params = {
-      page: 1,
-      limit: 10,
-      entity: { id: "58CC52594FA7C8-1A54-4DC6-9854-FD8BB128B194" }
-    };
-    const res: any = await getTableDataList(
-      "common/dicInfo/querySelfAndPar",
-      params
-    );
-    if (res.result) {
-      console.log("🚀 ~ getCommonTreeData ~ res", res.data);
-      this.hLevelList = res.data;
-    }
-  }
-
-  // 新增供应商
+  // 新增合同
   private handleInsert() {
     this.dialogStatus = "create";
     this.dialogVisible = true;
-    (this.$refs.dataForm as Form).resetFields();
+    this.handleReset();
   }
 
   private handleReset() {
-    (this.$refs.dataForm as Form).resetFields();
+    this.contractFormData = {
+      cAttahUrl: "",
+      cCode: "",
+      cDefend: "",
+      cEffective: "",
+      cName: "",
+      cSignDate: "",
+      ctime: "",
+      cTotal: "",
+      dispindex: "",
+      note: "",
+      supplierId: "",
+      id: ""
+    };
   }
 
   // 模态框关闭事件
   private handleDialogClose() {
     this.dialogVisible = false;
-    this.supplierData = {
-      name: "",
-      nameAbbreviation: "",
-      suppliesType: "",
-      assetsPro: "",
-      phoneNo: "",
-      note: "",
-      id: ""
-    };
+    this.handleReset();
   }
 
-  // 新增供应商
+  // 新增合同
   private createData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const {
-          name,
-          nameAbbreviation,
-          suppliesType,
-          assetsPro,
-          phoneNo,
-          note,
-        } = this.supplierData;
         const params = {
-          id: "",
-          name,
-          nameAbbreviation,
-          suppliesType,
-          assetsPro,
-          phoneNo,
-          note,
+          ...this.contractFormData
         };
-        const res: any = await updateHospitalData(params);
+        const res: any = await handleSupplierContractAdd(params);
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig);
         }
         this.dialogVisible = false;
-        this.$notify({
-          title: "成功",
-          message: "创建成功",
-          type: "success",
-          duration: 2000
-        });
+        Message.success("创建成功");
       }
     });
   }
 
-  // 修改供应商
+  // 修改合同
   private updateData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const {
-          id,
-          name,
-          nameAbbreviation,
-          suppliesType,
-          assetsPro,
-          phoneNo,
-          note,
-        } = this.supplierData;
+        const { id } = this.contractFormData;
         const params = {
           id,
-          name,
-          nameAbbreviation,
-          suppliesType,
-          assetsPro,
-          phoneNo,
-          note,
+          ...this.contractFormData
         };
-        const res: any = await updateHospitalData(params);
+        const res: any = await handleSupplierContractUpdate(params);
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig);
         }
         this.dialogVisible = false;
-        this.$notify({
-          title: "成功",
-          message: "更新成功",
-          type: "success",
-          duration: 2000
-        });
+        Message.success("更新成功");
       }
     });
   }
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    const { id, name, nameAbbreviation, suppliesType, assetsPro, phoneNo, note } = row;
-    this.supplierData = {
+    const { id, _X_ROW_CHILD, _X_ROW_KEY, children, ...filterRow } = row;
+    this.contractFormData = {
       id,
-      name,
-      nameAbbreviation,
-      suppliesType,
-      assetsPro,
-      phoneNo,
-      note
+      ...filterRow
     };
     this.dialogStatus = "update";
     this.dialogVisible = true;
@@ -299,7 +201,7 @@ export default class extends Vue {
     });
   }
 
-  // 删除供应商
+  // 删除合同
   private async handleRemove(row: any) {
     let params = {};
     if (Array.isArray(row)) {
@@ -312,15 +214,33 @@ export default class extends Vue {
         ids: row.id
       };
     }
-    const res: any = await dealHospitalData(params);
+    const res: any = await handleSupplierContractDel(params);
     if (res.result) {
       (this.$refs.vexTable as any).findList(this.paramsConfig);
     }
-    this.$notify({
-      title: "成功",
-      message: "删除成功",
-      type: "success",
-      duration: 2000
-    });
+    Message.success("删除成功");
+  }
+
+  /**
+   * 附件上传
+   */
+  private handleRemoveField(file: any, fileList: any) {
+    console.log(file, fileList);
+  }
+
+  private handlePreview(file: any) {
+    console.log(file);
+  }
+
+  private handleExceed(files: any, fileList: any) {
+    this.$message.warning(
+      `当前限制选择 3 个文件，本次选择了 ${
+        files.length
+      } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+    );
+  }
+
+  private beforeRemove(file: any, fileList: any) {
+    return this.$confirm(`确定移除 ${file.name}？`);
   }
 }

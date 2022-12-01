@@ -1,32 +1,20 @@
-export interface SupplierFormTypes {
+export interface ContractTypes {
   /**
-   * 注册地，先不用绑定字典，手填
+   * 合同编码
    */
-  domicile: string;
+  cCode: string;
+  /**
+   * 合同名称
+   */
+  cName: string;
   /**
    * 主键
    */
-  id: string;
+  id?: string;
   /**
-   * 供应商名称，供应商名字查询 模糊查询
+   * 厂商id
    */
-  name: string;
-  /**
-   * 简称，武汉大学-武大 简称查询 模糊查询
-   */
-  nameAbbreviation: string;
-  /**
-   * 运营状态，1：正常 2：注销
-   */
-  runningState: string;
-  /**
-   * 纳税识别号，模糊查询
-   */
-  taxId: string;
-  /**
-   *厂商类型
-   */
-  suppliesType: string;
+  supplierId: string;
 }
 
 export interface FormItemTypes {
@@ -35,8 +23,8 @@ export interface FormItemTypes {
   slots?: {
     default: string;
   };
-  itemRender?:any,
-  resetValue? :any
+  itemRender?: any;
+  resetValue?: any;
 }
 
 export interface SupplierResDataType {
@@ -64,66 +52,54 @@ export interface SupplierResDataType {
 
 export interface DataResTypes {
   /**
-   * 地址
+   * 附件
    */
-  address?: string;
+  cAttahUrl?: null;
   /**
-   * 资产性质
+   * 合同编码
    */
-  assetsPro?: string;
-  checkCode?: string;
+  cCode?: null;
   /**
-   * 创建时间
+   * 经办人
    */
-  ctime: string;
+  cDefend?: null;
   /**
-   * 排序
+   * 有效期限
    */
-  dispindex: string;
+  cEffective?: null;
   /**
-   * 注册地
+   * 合同名称
    */
-  domicile?: string;
+  cName?: string;
   /**
-   * 电子邮件
+   * 签订日期
    */
-  email?: string;
+  cSignDate?: null;
+  ctime?: null;
   /**
-   * 传真
+   * 合同总金额
    */
-  foxNo?: string;
+  cTotal?: null;
+  dispindex?: null;
   /**
-   * 主键，影藏
+   * 主键
    */
   id?: string;
-  /**
-   * 法人
-   */
-  legalPerson?: string;
-  /**
-   * 供应商名称
-   */
-  name?: string;
-  /**
-   * 供应商简称
-   */
-  nameAbbreviation: string;
+  note?: null;
+  supplierId?: null;
+}
+
+export interface ContractFormTypes {
+  cAttahUrl: string;
+  cCode: string;
+  cDefend: string;
+  cEffective: string;
+  cName: string;
+  cSignDate: string;
+  ctime: string;
+  cTotal: string;
+  dispindex: string;
   note: string;
-  /**
-   * 联系电话
-   */
-  phoneNo: string;
-  /**
-   * 邮政编码
-   */
-  postcode: string;
-  /**
-   * 运营状态，1：正常 2：注销
-   */
-  runningState: string;
-  suppliesType: string;
-  /**
-   * 纳税识别号
-   */
-  taxId: string;
+  supplierId: string;
+  id?:string
 }

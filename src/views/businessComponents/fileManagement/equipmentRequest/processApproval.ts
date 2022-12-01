@@ -52,14 +52,14 @@ export default class extends Vue {
   mounted() {}
 
   // 获取当前节点信息，并根据当前节点信息获取下一节点信息数据
-  private async queryCurrentCodeAndBhResData(nodeNameCode: any) {
+  private async queryCurrentCodeAndBhResData(nodeNameCode: any, type: string) {
     console.log("🚀 ~ nodeNameCode", nodeNameCode);
     const nextCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
       processCode: "pro_kssq",
       nodeNameCode
     });
     console.log("🚀 ~ nextCodeData", nextCodeData);
-    if (nextCodeData.code == "200") {
+    if (nextCodeData.code == "200" && type === "submit") {
       this.equipmentProcessData.currentNodeCode =
         nextCodeData.data.nodeNameCode;
       this.equipmentProcessData.currentNodeName = nextCodeData.data.nodeName;
@@ -68,8 +68,16 @@ export default class extends Vue {
       this.nextDialogVisible = true;
       this.title = "审批同意";
       this.type = "submit";
-    }else{
-      Message.error('获取节点信息失败，请重试')
+    } else if (nextCodeData.code == "200" && type === "end") {
+      this.equipmentProcessData.currentNodeCode =
+        nextCodeData.data.nodeNameCode;
+      this.equipmentProcessData.currentNodeName = nextCodeData.data.nodeName;
+      this.nextDialogVisible = true;
+      this.type = "end";
+      this.title = "终止流程";
+    }
+    {
+      Message.error("获取节点信息失败，请重试");
     }
   }
   /**
@@ -106,7 +114,7 @@ export default class extends Vue {
 
   // 审核通过点击事件
   private handleSubmit() {
-    this.queryCurrentCodeAndBhResData(this.processData.nextNodeCode);
+    this.queryCurrentCodeAndBhResData(this.processData.nextNodeCode, "submit");
   }
 
   //
@@ -143,6 +151,25 @@ export default class extends Vue {
         }
       });
     } else if (this.type === "end") {
+      (this.$refs.dataForm as Form).validate(async valid => {
+        this.nextDialogVisible = false;
+        if (valid) {
+          const params = {
+            ...this.equipmentProcessData,
+            id,
+            auditStatus: "作废" //审核状态(审核通过,审核不通过，回退,作废)
+          };
+          console.log("🚀 ~ params", params);
+          const res: any = await queryHospitalProcessBusinessUpdate(params);
+          if (res.result) {
+            this.nextDialogVisible = false;
+            this.emitHandleSubmit(true);
+          }
+          this.dialogVisible = false;
+          (this.$refs.dataForm as Form).resetFields();
+          Message.success("终止成功");
+        }
+      });
     } else if (this.type === "back") {
       (this.$refs.dataForm as Form).validate(async valid => {
         this.nextDialogVisible = false;
@@ -233,8 +260,6 @@ export default class extends Vue {
    * 终止流程
    */
   private handleEnd() {
-    this.nextDialogVisible = true;
-    this.type = "end";
-    this.title = "终止流程";
+    this.queryCurrentCodeAndBhResData(this.processData.nextNodeCode, "end");
   }
 }
