@@ -149,7 +149,7 @@ export default class extends Vue {
 
   // 新增表单显隐
   private dialogFormVisible = false;
-  private checkedMenuList = [];
+  private checkedMenuList :any= [];
 
   // 关联角色模态框显隐
   private isAssociateDialogVisible = false;

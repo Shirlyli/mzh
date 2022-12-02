@@ -1,65 +1,71 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm"
-             :model="loginForm"
-             class="login-form"
-             :rules="loginRules"
-             autocomplete="on"
-             label-position="left">
-      <div class="title-container">
-        <h3 class="title">
-          {{ $t('login.title') }}
-        </h3>
-        <lang-select class="set-language" />
-      </div>
-
-      <el-form-item prop="userName">
-        <span class="svg-container">
-          <svg-icon name="user" />
-        </span>
-        <el-input ref="username"
-                  v-model="loginForm.userName"
-                  :placeholder="$t('login.username')"
-                  name="username"
-                  type="text"
-                  tabindex="1"
-                  autocomplete="on" />
-      </el-form-item>
-
-      <el-tooltip v-model="capsTooltip"
-                  content="Caps lock is On"
-                  placement="right"
-                  manual>
-        <el-form-item prop="userPwd">
+    <div class="img-box">
+      <img src="../../assets/login-left.png"
+           alt="">
+    </div>
+    <div>
+      <p>酶之宏医疗器械经营管理系统</p>
+      <el-form ref="loginForm"
+               :model="loginForm"
+               class="login-form"
+               :rules="loginRules"
+               autocomplete="on"
+               label-position="left">
+        <!-- <div class="title-container">
+          <h3 class="title">
+            {{ $t('login.title') }}
+          </h3>
+          <lang-select class="set-language" />
+        </div> -->
+        <el-form-item prop="userName">
           <span class="svg-container">
-            <svg-icon name="password" />
+            <svg-icon name="user" />
           </span>
-          <el-input :key="passwordType"
-                    ref="password"
-                    v-model="loginForm.userPwd"
-                    :type="passwordType"
-                    :placeholder="$t('login.password')"
-                    name="password"
-                    tabindex="2"
-                    autocomplete="on"
-                    @keyup.native="checkCapslock"
-                    @blur="capsTooltip = false"
-                    @keyup.enter.native="handleLogin" />
-          <span class="show-pwd"
-                @click="showPwd">
-            <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
-          </span>
+          <el-input ref="username"
+                    v-model="loginForm.userName"
+                    :placeholder="$t('login.username')"
+                    name="username"
+                    type="text"
+                    tabindex="1"
+                    autocomplete="on" />
         </el-form-item>
-      </el-tooltip>
 
-      <el-button :loading="loading"
-                 type="primary"
-                 style="width:100%; margin-bottom:30px;"
-                 @click.native.prevent="handleLogin">
-        {{ $t('login.logIn') }}
-      </el-button>
+        <el-tooltip v-model="capsTooltip"
+                    content="Caps lock is On"
+                    placement="right"
+                    manual>
+          <el-form-item prop="userPwd">
+            <span class="svg-container">
+              <svg-icon name="password" />
+            </span>
+            <el-input :key="passwordType"
+                      ref="password"
+                      v-model="loginForm.userPwd"
+                      :type="passwordType"
+                      :placeholder="$t('login.password')"
+                      name="password"
+                      tabindex="2"
+                      autocomplete="on"
+                      @keyup.native="checkCapslock"
+                      @blur="capsTooltip = false"
+                      @keyup.enter.native="handleLogin" />
+            <span class="show-pwd"
+                  @click="showPwd">
+              <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
+            </span>
+          </el-form-item>
+        </el-tooltip>
 
-      <!-- <div style="position:relative">
+        <el-button :loading="loading"
+                   type="primary"
+                   style="width:100%; margin-bottom:30px;"
+                   class="button"
+                   @click.native.prevent="handleLogin">
+          {{ $t('login.logIn') }}
+        </el-button>
+
+        <!-- <div style="position:relative">
         <div class="tips">
           <span>{{ $t('login.username') }} : admin </span>
           <span>{{ $t('login.password') }} : {{ $t('login.any') }} </span>
@@ -77,9 +83,9 @@
           {{ $t('login.thirdparty') }}
         </el-button>
       </div> -->
-    </el-form>
+      </el-form>
 
-    <!-- <el-dialog
+      <!-- <el-dialog
       :title="$t('login.thirdparty')"
       :visible.sync="showDialog"
     >
@@ -87,8 +93,9 @@
       <br>
       <br>
       <br>
-      <social-sign /> -->
-    </el-dialog>
+      <social-sign />
+    </el-dialog> -->
+    </div>
   </div>
 </template>
 
@@ -218,15 +225,37 @@ export default class extends Vue {
 @supports (-webkit-mask: none) and (not (cater-color: $loginCursorColor)) {
   .login-container .el-input {
     input {
-      color: $loginCursorColor;
+      // color: $loginCursorColor;
     }
     input::first-line {
-      color: $lightGray;
+      // color: $lightGray;
     }
   }
 }
 
 .login-container {
+  min-height: 720px;
+  height: 100%;
+  background-image: url('../../assets/login-full.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: space-evenly;
+
+  > div {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    > p {
+      color: rgb(56, 151, 255);
+      font-size: 50px;
+      margin-top: 28%;
+      margin-bottom: 90px;
+    }
+  }
+
   .el-input {
     display: inline-block;
     height: 47px;
@@ -237,8 +266,9 @@ export default class extends Vue {
       background: transparent;
       border: 0px;
       border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $lightGray;
+      font-weight: bold;
+      // padding: 12px 5px 12px 15px;
+      color: #606266;
       caret-color: $loginCursorColor;
       -webkit-appearance: none;
 
@@ -251,9 +281,9 @@ export default class extends Vue {
 
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
+    background: #fff;
     border-radius: 5px;
-    color: #454545;
+    color: #606266;
   }
 }
 </style>
@@ -269,9 +299,21 @@ export default class extends Vue {
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    // padding: 160px 35px 0;
     margin: 0 auto;
     overflow: hidden;
+
+    .button {
+      width: 100%;
+      height: 60px;
+      line-height: 40px;
+      font-size: 24px;
+      font-weight: bold;
+      > span {
+        display: inline-flex;
+        align-items: center;
+      }
+    }
   }
 
   .tips {
@@ -335,6 +377,11 @@ export default class extends Vue {
     .thirdparty-button {
       display: none;
     }
+  }
+
+  .el-form-item__content {
+    height: 70px;
+    line-height: 70px;
   }
 }
 </style>

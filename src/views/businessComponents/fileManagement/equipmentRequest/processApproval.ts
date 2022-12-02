@@ -75,8 +75,7 @@ export default class extends Vue {
       this.nextDialogVisible = true;
       this.type = "end";
       this.title = "终止流程";
-    }
-    {
+    } else {
       Message.error("获取节点信息失败，请重试");
     }
   }

@@ -100,6 +100,7 @@ export default class extends Vue {
 
   // 新增流程表单form
   private equipmentProcessData = {
+    processName:"",
     projectName: "", //* 项目名称 /
     purchaseType: "", // 购置类别 /
     applyDept: "", // 申请科室 /
