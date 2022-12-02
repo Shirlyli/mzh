@@ -14,10 +14,6 @@ import elementItLocale from 'element-ui/lib/locale/lang/it'
 // User defined lang
 import enLocale from './en'
 import zhLocale from './zh'
-import esLocale from './es'
-import jaLocale from './ja'
-import koLocale from './ko'
-import itLocale from './it'
 
 Vue.use(VueI18n)
 
@@ -30,22 +26,6 @@ const messages = {
     ...zhLocale,
     ...elementZhLocale
   },
-  es: {
-    ...esLocale,
-    ...elementEsLocale
-  },
-  ja: {
-    ...jaLocale,
-    ...elementJaLocale
-  },
-  ko: {
-    ...koLocale,
-    ...elementKoLocale
-  },
-  it: {
-    ...itLocale,
-    ...elementItLocale
-  }
 }
 
 export const getLocale = () => {

@@ -86,7 +86,7 @@ class User extends VuexModule implements IUserState {
   }
 
   @Action
-  public async userMenu() {
+  public async GetMenu() {
     const { data } = await queryLeftMenuData({});
     console.log("🚀 ~ data", data);
     this.SET_MENU(data)

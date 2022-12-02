@@ -4,6 +4,11 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Layout from "@/layout/index.vue";
 /* Router modules */
 import businessRouter from "./modules/business";
+import beforeAsyncRoutes from "./modules/beforeAsyncRoutes";
+import chartsRouter from "./modules/charts";
+import componentsRouter from "./modules/components";
+import nestedRoutes from "./modules/nested";
+
 Vue.use(VueRouter);
 
 export const constantRoutes: RouteConfig[] = [
@@ -69,7 +74,11 @@ export const constantRoutes: RouteConfig[] = [
 ];
 
 export const asyncRoutes = [
-  ...businessRouter
+  ...businessRouter,
+  // ...beforeAsyncRoutes,
+  // ...chartsRouter,
+  // componentsRouter,
+  // nestedRoutes
 ];
 
 const createRouter = () =>

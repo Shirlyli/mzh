@@ -14,24 +14,30 @@
                type="card">
         <el-tab-pane label="待处理任务"
                      name="toDoTask">
-          <VexTable ref="vexTable"
-                    :formConfig="formConfig"
-                    :columns="columns"
-                    editColumns="['search','del','record']"
-                    hasNotSlotButton="true"
-                    @emit-handle-search="handleSearch"
-                    @emit-handle-remove="handleRemove"
-                    @emit-handle-record="handleRecord"
-                    :paramsConfig="paramsConfig" />
+          <keep-alive>
+            <VexTable v-if="activeName === 'toDoTask'"
+                      ref="vexTable"
+                      :formConfig="formConfig"
+                      :columns="columns"
+                      editColumns="['search','del','record']"
+                      hasNotSlotButton="true"
+                      @emit-handle-search="handleSearch"
+                      @emit-handle-remove="handleRemove"
+                      @emit-handle-record="handleRecord"
+                      :paramsConfig="paramsConfig" />
+          </keep-alive>
         </el-tab-pane>
         <el-tab-pane label="已处理任务"
                      name="dealTask">
-          <VexTable ref="vexDoneTable"
-                    :formConfig="doneFormConfig"
-                    :columns="columns"
-                    hasNotSlotButton="true"
-                    @emit-handle-search="handleSearch"
-                    :paramsConfig="paramsConfig" />
+          <keep-alive>
+            <VexTable v-if="activeName === 'dealTask'"
+                      ref="vexDoneTable"
+                      :formConfig="doneFormConfig"
+                      :columns="columns"
+                      hasNotSlotButton="true"
+                      @emit-handle-search="handleSearch"
+                      :paramsConfig="paramsConfig" />
+          </keep-alive>
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -221,6 +227,8 @@
 
     <!-- 操作记录 -->
     <el-dialog title="操作记录"
+                width="60%"
+                top="30px"
                :visible="processRecordDialogVisible"
                @close="processRecordDialogVisible = false">
       <div class="contentBox">

@@ -191,9 +191,10 @@ export default class extends Vue {
       if (valid) {
         this.loading = true
         await UserModule.Login(this.loginForm)
+        await UserModule.GetMenu()
         this.$router
           .push({
-            path: '/workBench/index',
+            path: '/WDGZT',
             query: this.otherQuery,
           })
           .catch((err) => {

@@ -62,9 +62,9 @@ export default class extends Vue {
     { field: "projectName", title: "项目名称" },
     { field: "purchaseType", title: "购置类别" },
     { field: "purchaseType", title: " 采购类型 " },
-    { field: "nextNodeName", title: " 当前节点信息 " },
-    { field: "count", title: " 数量 " },
-    { field: "money", title: " 总金额 " },
+    { field: "nextNodeName", title: " 当前节点" },
+    // { field: "count", title: " 数量 " },
+    // { field: "money", title: " 总金额 " },
     { field: "nextNodeState", title: " 状态 " },
     {
       width: 250,
@@ -276,7 +276,9 @@ export default class extends Vue {
     this.dialogVisible = true;
   }
 
-  private handleClick() {
+  private handleClick(value:any) {
+    console.log("🚀 ~ value", value.name)
+    this.activeName = value.name
     // (this.$refs.vexDoneTable as any).findList(this.paramsConfig);
   }
 

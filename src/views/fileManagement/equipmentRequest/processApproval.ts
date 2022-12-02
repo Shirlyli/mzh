@@ -239,6 +239,7 @@ export default class extends Vue {
       }
       this.equipmentProcessData.nextNodeCode = this.nextNodeExecutorData?.[0].nodeNameCode;
       this.equipmentProcessData.nextNodeName = this.nextNodeExecutorData?.[0].nodeName;
+      this.queryUserListProcessCode(this.nextNodeExecutorData?.[0].nodeSort, "back");
       console.log("🚀 ~ this.nextNodeExecutorData ", this.nextNodeExecutorData);
       this.type = "back";
       this.title = "回退流程";
