@@ -165,6 +165,7 @@ export default class extends Vue {
       ...this.paramsConfig.params.entity,
       ...this.formConfig.data,
     }
+    this.findList(this.paramsConfig)
   }
 
   // 重置并查询

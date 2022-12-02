@@ -12,7 +12,7 @@ const businessRouter: RouteConfig[] = [
   //       path: 'index',
   //       component: () =>
   //         import(
-  //           /* webpackChunkName: "dashboard" */ '@/views/businessComponents/controlPanel/index.vue'
+  //           /* webpackChunkName: "dashboard" */ '@/views/controlPanel/index.vue'
   //         ),
   //       name: 'controlPanel',
   //       meta: {
@@ -33,7 +33,7 @@ const businessRouter: RouteConfig[] = [
         path: "index",
         component: () =>
           import(
-            /* webpackChunkName: "dashboard" */ "@/views/businessComponents/workBench/index.vue"
+            /* webpackChunkName: "dashboard" */ "@/views/workBench/index.vue"
           ),
         name: "workBench",
         meta: {
@@ -54,7 +54,7 @@ const businessRouter: RouteConfig[] = [
   //       path: 'index',
   //       component: () =>
   //         import(
-  //           /* webpackChunkName: "dashboard" */ '@/views/businessComponents/dataDecision/index.vue'
+  //           /* webpackChunkName: "dashboard" */ '@/views/dataDecision/index.vue'
   //         ),
   //       name: 'dataDecision',
   //       meta: {
@@ -82,7 +82,7 @@ const businessRouter: RouteConfig[] = [
         path: "equipmentCategory",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/equipmentArchives/equipmentCategory/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/infrastructure/equipmentCategory/index.vue"
           ),
         name: "equipmentCategory",
         meta: {
@@ -94,7 +94,7 @@ const businessRouter: RouteConfig[] = [
         path: "dictionaryManagement",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/infrastructure/dictionaryManagement/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/infrastructure/dictionaryManagement/index.vue"
           ),
         name: "dictionaryManagement",
         meta: {
@@ -106,7 +106,7 @@ const businessRouter: RouteConfig[] = [
         path: "supplierManagement",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/infrastructure/supplierManagement/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/infrastructure/supplierManagement/index.vue"
           ),
         name: "supplierManagement",
         meta: {
@@ -118,7 +118,7 @@ const businessRouter: RouteConfig[] = [
         path:'venderContactorManagement',
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/infrastructure/venderContactorManagement/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/infrastructure/venderContactorManagement/index.vue"
           ),
         name: "venderContactorManagement",
         meta: {
@@ -130,7 +130,7 @@ const businessRouter: RouteConfig[] = [
         path:'contractManagement',
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/infrastructure/contractManagement/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/infrastructure/contractManagement/index.vue"
           ),
         name: "contractManagement",
         meta: {
@@ -156,7 +156,7 @@ const businessRouter: RouteConfig[] = [
   //       path: "purchasingRecords",
   //       component: () =>
   //         import(
-  //           /* webpackChunkName: "permission-page" */ "@/views/businessComponents/purchaseManagement/purchasingRecords/index.vue"
+  //           /* webpackChunkName: "permission-page" */ "@/views/purchaseManagement/purchasingRecords/index.vue"
   //         ),
   //       name: "procurementProcess",
   //       meta: {
@@ -168,7 +168,7 @@ const businessRouter: RouteConfig[] = [
   //       path: "inventoryRecords",
   //       component: () =>
   //         import(
-  //           /* webpackChunkName: "permission-page" */ "@/views/businessComponents/purchaseManagement/inventoryRecords/index.vue"
+  //           /* webpackChunkName: "permission-page" */ "@/views/purchaseManagement/inventoryRecords/index.vue"
   //         ),
   //       name: "inventoryRecords",
   //       meta: {
@@ -180,7 +180,7 @@ const businessRouter: RouteConfig[] = [
   //       path: "outboundRecords",
   //       component: () =>
   //         import(
-  //           /* webpackChunkName: "permission-page" */ "@/views/businessComponents/purchaseManagement/outboundRecords/index.vue"
+  //           /* webpackChunkName: "permission-page" */ "@/views/purchaseManagement/outboundRecords/index.vue"
   //         ),
   //       name: "outboundRecords",
   //       meta: {
@@ -192,7 +192,7 @@ const businessRouter: RouteConfig[] = [
   //       path: "biddingDocuments",
   //       component: () =>
   //         import(
-  //           /* webpackChunkName: "permission-page" */ "@/views/businessComponents/purchaseManagement/biddingDocuments/index.vue"
+  //           /* webpackChunkName: "permission-page" */ "@/views/purchaseManagement/biddingDocuments/index.vue"
   //         ),
   //       name: "biddingDocuments",
   //       meta: {
@@ -220,7 +220,7 @@ const businessRouter: RouteConfig[] = [
         path: "hospitalManagement",
         component: () =>
           import(
-            /* webpackChunkName: "dashboard" */ "@/views/businessComponents/OrganizationStructureManagement/hospitalManagement/index.vue"
+            /* webpackChunkName: "dashboard" */ "@/views/OrganizationStructureManagement/hospitalManagement/index.vue"
           ),
         name: "hospitalManagement",
         meta: {
@@ -234,7 +234,7 @@ const businessRouter: RouteConfig[] = [
         path: "basicManagementDepartment",
         component: () =>
           import(
-            /* webpackChunkName: "dashboard" */ "@/views/businessComponents/basicManagementDepartment/index.vue"
+            /* webpackChunkName: "dashboard" */ "@/views/basicManagementDepartment/index.vue"
           ),
         redirect:
           "/OrganizationStructureManagement/basicManagementDepartment/addNewEquipment",
@@ -249,7 +249,7 @@ const businessRouter: RouteConfig[] = [
             path: "addNewEquipment",
             component: () =>
               import(
-                /* webpackChunkName: "dashboard" */ "@/views/businessComponents/basicManagementDepartment/addNewEquipment/index.vue"
+                /* webpackChunkName: "dashboard" */ "@/views/basicManagementDepartment/addNewEquipment/index.vue"
               ),
             name: "addNewEquipment",
             meta: {
@@ -279,7 +279,7 @@ const businessRouter: RouteConfig[] = [
         path: "equipmentClass",
         component: () =>
           import(
-            /* webpackChunkName: "dashboard" */ "@/views/businessComponents/fileManagement/equipmentClass/index.vue"
+            /* webpackChunkName: "dashboard" */ "@/views/fileManagement/equipmentClass/index.vue"
           ),
         name: "equipmentClass",
         meta: {
@@ -293,7 +293,7 @@ const businessRouter: RouteConfig[] = [
         path: "equipmentRequest",
         component: () =>
           import(
-            /* webpackChunkName: "dashboard" */ "@/views/businessComponents/fileManagement/equipmentRequest/index.vue"
+            /* webpackChunkName: "dashboard" */ "@/views/fileManagement/equipmentRequest/index.vue"
           ),
         name: "equipmentRequest",
         meta: {
@@ -306,7 +306,7 @@ const businessRouter: RouteConfig[] = [
       //   path: "departmentClass",
       //   component: () =>
       //     import(
-      //       /* webpackChunkName: "dashboard" */ "@/views/businessComponents/fileManagement/departmentClass/index.vue"
+      //       /* webpackChunkName: "dashboard" */ "@/views/fileManagement/departmentClass/index.vue"
       //     ),
       //   name: "departmentClass",
       //   meta: {
@@ -333,7 +333,7 @@ const businessRouter: RouteConfig[] = [
         path: "inspectionRecords",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/equipmentArchives/inspectionRecords/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/equipmentArchives/inspectionRecords/index.vue"
           ),
         name: "inspectionRecords",
         meta: {
@@ -345,7 +345,7 @@ const businessRouter: RouteConfig[] = [
         path: "lostRecord",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/equipmentArchives/lostRecord/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/equipmentArchives/lostRecord/index.vue"
           ),
         name: "lostRecord",
         meta: {
@@ -357,7 +357,7 @@ const businessRouter: RouteConfig[] = [
         path: "scrapRecord",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/equipmentArchives/scrapRecord/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/equipmentArchives/scrapRecord/index.vue"
           ),
         name: "scrapRecord",
         meta: {
@@ -369,7 +369,7 @@ const businessRouter: RouteConfig[] = [
         path: "diversionManage",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/equipmentArchives/diversionManage/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/equipmentArchives/diversionManage/index.vue"
           ),
         name: "diversionManage",
         meta: {
@@ -395,7 +395,7 @@ const businessRouter: RouteConfig[] = [
   //       path: "administratorManagement",
   //       component: () =>
   //         import(
-  //           /* webpackChunkName: "permission-page" */ "@/views/businessComponents/rightsManagement/administratorManagement/index.vue"
+  //           /* webpackChunkName: "permission-page" */ "@/views/rightsManagement/administratorManagement/index.vue"
   //         ),
   //       name: "administratorManagement",
   //       meta: {
@@ -407,7 +407,7 @@ const businessRouter: RouteConfig[] = [
   //       path: "administratorLogs",
   //       component: () =>
   //         import(
-  //           /* webpackChunkName: "permission-page" */ "@/views/businessComponents/rightsManagement/administratorLogs/index.vue"
+  //           /* webpackChunkName: "permission-page" */ "@/views/rightsManagement/administratorLogs/index.vue"
   //         ),
   //       name: "administratorLogs",
   //       meta: {
@@ -419,7 +419,7 @@ const businessRouter: RouteConfig[] = [
   //       path: "characterGroup",
   //       component: () =>
   //         import(
-  //           /* webpackChunkName: "permission-page" */ "@/views/businessComponents/rightsManagement/characterGroup/index.vue"
+  //           /* webpackChunkName: "permission-page" */ "@/views/rightsManagement/characterGroup/index.vue"
   //         ),
   //       name: "characterGroup",
   //       meta: {
@@ -445,7 +445,7 @@ const businessRouter: RouteConfig[] = [
         path: "menuManagement",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/systemManagement/menuManagement/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/systemManagement/menuManagement/index.vue"
           ),
         name: "menuManagement",
         meta: {
@@ -457,7 +457,7 @@ const businessRouter: RouteConfig[] = [
         path: "roleManagement",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/systemManagement/roleManagement/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/systemManagement/roleManagement/index.vue"
           ),
         name: "roleManagement",
         meta: {
@@ -470,7 +470,7 @@ const businessRouter: RouteConfig[] = [
         path: "personManagement",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/systemManagement/personManagement/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/systemManagement/personManagement/index.vue"
           ),
         name: "personManagement",
         meta: {
@@ -483,7 +483,7 @@ const businessRouter: RouteConfig[] = [
         path: "employeeManagement",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/systemManagement/employeeManagement/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/systemManagement/employeeManagement/index.vue"
           ),
         name: "employeeManagement",
         meta: {
@@ -495,7 +495,7 @@ const businessRouter: RouteConfig[] = [
         path: "procurementProcess",
         component: () =>
           import(
-            /* webpackChunkName: "permission-page" */ "@/views/businessComponents/purchaseManagement/procurementProcess/index.vue"
+            /* webpackChunkName: "permission-page" */ "@/views/purchaseManagement/procurementProcess/index.vue"
           ),
         name: "procurementProcess",
         meta: {

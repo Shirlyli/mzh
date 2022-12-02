@@ -357,7 +357,7 @@ export const handleSupplierDel = (data: any) =>
  */
 export const queryLeftMenuData = (data: any) =>
   request({
-    url: "/auth/menu/queryIndexMenu",
+    url: "/mainPage/leftMenuTree",
     method: "POST",
     data
   });
