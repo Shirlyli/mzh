@@ -15,6 +15,7 @@ import {
   handleLinkmanDel,
   handleLinkmanUpdate
 } from "@/api/basic";
+import ALL_OPTIONS from '@/shared/options'
 @Component({
   name: "Tab",
   components: {
@@ -148,11 +149,7 @@ export default class extends Vue {
 
   private hLevelList = []; // 字典表
 
-  private suppliesType = [
-    { label: "重要", value: "重要" },
-    { label: "次要", value: "次要" },
-    { label: "一般", value: "一般" }
-  ];
+  private IMPORTANT = ALL_OPTIONS.IMPORTANT
   // 获取医院等级
   private async getCommonTreeData() {
     const params = {

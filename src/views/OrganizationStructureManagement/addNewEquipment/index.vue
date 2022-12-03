@@ -5,7 +5,7 @@
         <el-card>
           <div slot="header"
                class="clearfix">
-            <span>角色管理</span>
+            <span>科室分类</span>
           </div>
           <Tree ref="vxeTree"
                 :url="url"
@@ -17,7 +17,7 @@
         <el-card>
           <div slot="header"
                class="clearfix">
-            <span>角色列表和授权</span>
+            <span>科室查询</span>
           </div>
           <VexTable ref="vexTable"
                     :formConfig="formConfig"
@@ -31,25 +31,25 @@
       </template>
     </main-sub-layout>
 
-    <!-- 新增模态框 -->
+    <!--  -->
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
                :visible="dialogVisible"
                @close="dialogVisible = false">
       <!-- 主体区域 -->
       <el-form ref="dataForm"
                :rules="rules"
-               :model="roleData"
+               :model="departmentData"
                label-position="left"
                label-width="100px"
                style="width: 400px; margin-left:50px;">
-        <el-form-item :label="'角色名称'"
-                      prop="rName">
-          <el-input v-model="roleData.rName"
+        <el-form-item :label="'上级科室'"
+                      prop="parentId">
+          <el-input v-model="departmentData.parentName"
                     placeholder="请选择"></el-input>
         </el-form-item>
-        <el-form-item :label="'角色路径'"
-                      prop="mCode">
-          <el-input v-model="roleData.mUrl"
+        <el-form-item :label="'科室名称'"
+                      prop="departmentName">
+          <el-input v-model="departmentData.departmentName"
                     placeholder="请输入" />
         </el-form-item>
       </el-form>
@@ -73,4 +73,7 @@
 </script>
 
 <style lang="scss" scoped>
+.tab-container {
+  margin: 30px;
+}
 </style>

@@ -1,4 +1,4 @@
-import { Component, Vue, Watch, Prop } from "vue-property-decorator";
+import { Component, Vue, Watch, Prop, Emit } from "vue-property-decorator";
 import {
   equipmentBasicInfo,
   equipmentProperty,
@@ -6,9 +6,10 @@ import {
   purchaseInfo,
   biddingInfo,
   contractInfo,
-  acceptanceInfo
-} from "@/store/formlist/index";
-import { Form } from "element-ui";
+  acceptanceInfo,
+  EquipmentInfoTypes
+} from "../formlist/index";
+import { Form, Message } from "element-ui";
 import { updateEquipmentInfoData } from "@/api/equipment";
 @Component({
   name: "EquipmentFormDialog"
@@ -18,12 +19,16 @@ export default class extends Vue {
   @Prop({ default: false }) dialogVisible!: boolean;
   private tabMapOptions = [
     { label: "设备信息", key: "equipmentInfo" },
-    { label: "设备资料", key: "equipmentData" },
-    { label: "采购信息", key: "purchaseInfo" },
-    { label: "折旧信息", key: "depreciateInfo" }
+    { label: "设备资料", key: "thospitalEquipmentResources" },
+    { label: "设备采购信息", key: "equipmentBuy" },
+    { label: "设备保养", key: "tHospitalEquipmentResourceWithBLOBs" },
+    { label: "设备巡检", key: "tmzhEquipmentInspectionWithBLOBs" },
+    { label: "仓库记录", key: "tHospitalEquipmentStocks" },
+    { label: "出入库记录", key: "tHospitalEquipmentStores" },
+    { label: "设备折旧", key: "tHospitalEquipmentDepreciations" }
   ]; // tab栏
 
-  private formList: any = []; // 表单项
+  private allFormList: any = []; // 表单项
   private rules = {
     departmentName: [
       { required: true, message: "请输入部门名称", trigger: "change" }
@@ -34,9 +39,10 @@ export default class extends Vue {
   @Watch("activeName") // 监听tab页
   private onActiveNameChange(value: string) {
     console.log("🚀 ~ value", value);
+    console.log(this.$refs.dataForm)
     switch (this.activeName) {
       case "equipmentInfo":
-        this.formList = [
+        this.allFormList = [
           {
             基本信息: equipmentBasicInfo
           },
@@ -48,8 +54,10 @@ export default class extends Vue {
           }
         ];
         break;
-      case "equipmentData":
-        this.formList = [
+      case "thospitalEquipmentResources":
+        break;
+      case "tHospitalEquipmentResourceWithBLOBs":
+        this.allFormList = [
           {
             申购信息: purchaseInfo
           },
@@ -64,8 +72,8 @@ export default class extends Vue {
           }
         ];
         break;
-      case "purchaseInfo":
-        this.formList = [
+      case "tMzhEquipmentInspectionWithBLOBs":
+        this.allFormList = [
           {
             基本信息: equipmentBasicInfo
           },
@@ -77,8 +85,34 @@ export default class extends Vue {
           }
         ];
         break;
-      case "depreciateInfo":
-        this.formList = [
+      case "tHospitalEquipmentStocks":
+        this.allFormList = [
+          {
+            基本信息: equipmentBasicInfo
+          },
+          {
+            设备属性: equipmentProperty
+          },
+          {
+            资金结构: capitalStructure
+          }
+        ];
+        break;
+      case "tHospitalEquipmentStores":
+        this.allFormList = [
+          {
+            基本信息: equipmentBasicInfo
+          },
+          {
+            设备属性: equipmentProperty
+          },
+          {
+            资金结构: capitalStructure
+          }
+        ];
+        break;
+      case "tHospitalEquipmentDepreciations":
+        this.allFormList = [
           {
             基本信息: equipmentBasicInfo
           },
@@ -95,10 +129,11 @@ export default class extends Vue {
     }
   }
   @Prop() equipmentCategoryData!: any;
-  private defaultEquipmentInfoData = this.equipmentCategoryData; // 默认新增模态框数据
+  private defaultEquipmentInfoData: EquipmentInfoTypes = this
+    .equipmentCategoryData; // 默认新增模态框数据
 
   created() {
-    this.formList = [
+    this.allFormList = [
       {
         基本信息: equipmentBasicInfo
       },
@@ -111,32 +146,22 @@ export default class extends Vue {
     ];
   }
 
-  // 新增科室
+  // 新增设备
+  @Emit()
+  emitSubmit(value: boolean) {
+    return value;
+  }
   private createData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { id } = this.defaultEquipmentInfoData;
-        console.log(
-          "🚀 ~ this.defaultEquipmentInfoData",
-          this.defaultEquipmentInfoData
-        );
-        const res: any = await updateEquipmentInfoData(
-          this.defaultEquipmentInfoData
-        );
-        // if (res.result) {
-        //   (this.$refs.vexTable as any).findList(this.paramsConfig);
-        //   (this.$refs.vxeTree as any).getTreeListData(
-        //     this.url,
-        //     this.treeParams
-        //   );
-        // }
-        // this.dialogVisible = false;
-        // this.$notify({
-        //   title: "成功",
-        //   message: "创建成功",
-        //   type: "success",
-        //   duration: 2000
-        // });
+        let params = [];
+        params.push(this.defaultEquipmentInfoData);
+        console.log("🚀 ~ this.defaultEquipmentInfoData", params);
+        const res: any = await updateEquipmentInfoData(params);
+        if (res.code == 200) {
+          this.emitSubmit(true);
+        }
+        Message.success("创建成功");
       }
     });
   }
@@ -145,7 +170,10 @@ export default class extends Vue {
   private updateData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        console.log("🚀 ~ this.equipmentCategoryData", this.defaultEquipmentInfoData)
+        console.log(
+          "🚀 ~ this.equipmentCategoryData",
+          this.defaultEquipmentInfoData
+        );
         const res: any = await updateEquipmentInfoData(
           this.equipmentCategoryData
         );
@@ -165,5 +193,14 @@ export default class extends Vue {
         // });
       }
     });
+  }
+
+  // 关闭模态框
+  @Emit()
+  emitCloseDialog() {
+    return false;
+  }
+  private handleCloseDialog() {
+    this.emitCloseDialog();
   }
 }

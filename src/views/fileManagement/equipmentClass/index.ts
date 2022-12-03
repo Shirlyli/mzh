@@ -1,17 +1,19 @@
 import { Component, Vue } from "vue-property-decorator";
 import MainSubLayout from "@/components/CollpaseFlex/index.vue";
 import Tree from "@/components/Tree/index.vue";
-import { Form } from "element-ui";
+import { Form, Message } from "element-ui";
 import VexTable from "@/components/VexTable/index.vue";
 import {
   dealEquipmentCategoryInfoData,
   searchEquipmentCategoryInfoDetailsData,
-  updateEquipmentCategoryInfoData
+  updateEquipmentCategoryInfoData,
+  updateEquipmentInfoData
 } from "@/api/equipment";
 import EquipmentFormDialog from "./components/index.vue";
 import _ from "lodash";
 import { RESULT_DATA_TYPE } from "@/utils/index.type";
 import { AxiosResponse } from "axios";
+import { EquipmentInfoTypes } from "./formlist";
 @Component({
   name: "EquipmentCategory",
   components: {
@@ -60,7 +62,7 @@ export default class extends Vue {
     { field: "createtime", title: "创建时间", width: 100 },
     { field: "note", title: "备注", width: 100 },
     {
-      width: 160,
+      width: 250,
       title: "操作",
       slots: { default: "operateHasSearch" },
       showOverflow: true,
@@ -76,34 +78,34 @@ export default class extends Vue {
     }
   }; // 树形图传参
 
-  private equipmentCategoryData = {
+  private equipmentCategoryData: EquipmentInfoTypes = {
     id: "",
-    name: "",
-    createtime: "",
-    departmentId: "",
-    marking: "",
-    brand: "",
+    name: "健康小屋",
+    createtime: "2022-11-01T00:00:00.000+00:00",
+    departmentId: "81C391DDD2E928-800F-4392-B564-98F50E40063A",
+    marking: "XH-ZZ-05A",
+    brand: "新海健康",
     origin: "",
     equipmentCategoryId: "",
-    activationTime: "",
-    guarantee: "",
-    state: "",
-    hospitalId: "",
-    manufactorId: "",
-    equipmentStates: "",
+    activationTime: "2021-09-11T00:00:00.000+00:00",
+    guarantee: 0,
+    state: 1,
+    hospitalId: "13",
+    manufactorId: "0",
+    equipmentStates: 1,
     idCode: "",
-    price: "",
-    batchNumber: "",
+    price: 50000.0,
+    batchNumber: "MZH-20210009",
     registrationCertificat: "",
     productionName: "",
     productionTime: "",
     validity: "",
     region: "",
     purchaseTime: "",
-    isExordium: "",
-    meterings: "",
+    isExordium: 1,
+    meterings: 0,
     source: "",
-    isMetering: "",
+    isMetering: 0,
     meteringTime: "",
     meteringType: "",
     isEmergency: "",
@@ -121,7 +123,113 @@ export default class extends Vue {
     img: "",
     scoringGuideUrl: "",
     qrcode: "",
-    barCode: ""
+    barCode: "",
+    thospitalEquipmentMaintainWithBLOBs: [
+      {
+        id: "",
+        equipmentId: "",
+        lastMaintainTime: "2021-12-31T16:00:00.000+00:00",
+        nextMaintainTime: "",
+        cost: 580.0,
+        createtime: "",
+        companyInfoId: "14",
+        userId: "87",
+        warrantyPeriod: "",
+        facilitator: "",
+        facilitatorPhone: "facilitator_phone",
+        parts: "配件丢失",
+        img: "",
+        description: "零件损坏，需要更换"
+      }
+    ],
+    thospitalEquipmentStores: [
+      {
+        id: "",
+        equipmentId: "",
+        departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
+        boundTime: "2021-12-31T16:00:00",
+        boundType: "入库",
+        bounder: "50B978FC6A069E-A0F3-4481-96C7-BD45AEC295EC",
+        receivePerson: "",
+        boundNums: "10",
+        beforeBoundNum: "0",
+        afterBoundNum: "10",
+        note: "入库"
+      },
+      {
+        id: "",
+        equipmentId: "",
+        departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
+        boundTime: "2022-12-31T16:00:00",
+        boundType: "出库",
+        bounder: "C076245F7D308A-CAD4-49E8-BAB6-987544490306",
+        receivePerson: "E1D6AB19EF6720-B4EA-46DF-BE10-96F03712FB65",
+        boundNums: "2",
+        beforeBoundNum: "10",
+        afterBoundNum: "8",
+        note: "出库"
+      }
+    ],
+    thospitalEquipmentResources: [
+      {
+        id: "",
+        equipmentId: "",
+        maintainUrl:
+          "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
+        meteringUrl:
+          "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
+        technologyUrl:
+          "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
+        paymentUrl:
+          "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
+        instructionsUrl:
+          "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
+        maintainName: "保养说明书名称",
+        meteringName: "计量操作文档名称",
+        technologyName: "技术参数名称",
+        paymentName: "付款计划名称",
+        instructionsName: "使用说明书名称"
+      }
+    ],
+    thospitalEquipmentStocks: [
+      {
+        id: "",
+        equipmentId: "",
+        departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
+        boundNums: "8"
+      }
+    ],
+    thospitalEquipmentDepreciations: [
+      {
+        id: "",
+        equipmentId: "",
+        depreciationTime: "2023-12-31T16:00:00",
+        depreciationLimit: "10年",
+        depreciationAmount: "100000",
+        depreciationPeriods: "8",
+        depreciationUser: "50B978FC6A069E-A0F3-4481-96C7-BD45AEC295EC"
+      }
+    ],
+    tmzhEquipmentInspectionWithBLOBs: [
+      {
+        id: "",
+        equipmentId: "008C17837C8D11-D3B1-4191-928D-A72141D9632B",
+        isPeriod: 1,
+        isAppearance: 0,
+        isParts: 0,
+        isFunction: 0,
+        inspectionTime: "2021-12-31T16:00:00.000+00:00",
+        createtime: "",
+        userId: "22",
+        appearance: "外观出现破损",
+        parts: "配件丢失",
+        function: "功能异常",
+        img:
+          "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
+        description: "设备出现大问题",
+        note: ""
+      }
+    ]
   }; // 新增或编辑表单
 
   private dialogVisible = false; // 新增模态框
@@ -132,14 +240,14 @@ export default class extends Vue {
     params: {
       page: 1,
       limit: 10,
-      entity: { ...this.equipmentCategoryData }
+      entity: {}
     }
   };
 
   private nodeClickData: any = {}; // 点击科室数据
   private url = "THospitalDepartmentInfo/queryTree"; // 左侧字典
 
-  // 新增科室
+  // 新增设备
   private handleInsert() {
     this.dialogVisible = true;
     const { title, id } = this.nodeClickData;
@@ -147,7 +255,6 @@ export default class extends Vue {
     this.equipmentCategoryData = {
       ...this.equipmentCategoryData,
       departmentId: id ?? "1001"
-
     };
   }
 
@@ -169,8 +276,8 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    const { cName, id, pid, note } = row;
-    this.equipmentCategoryData = { ...this.equipmentCategoryData };
+    this.equipmentCategoryData = { ...row };
+    console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData);
     this.dialogStatus = "update";
     this.dialogVisible = true;
     this.$nextTick(() => {
@@ -180,30 +287,25 @@ export default class extends Vue {
 
   // 删除设备
   private async handleRemove(row: any) {
-    let params = {};
+    console.log("🚀 ~ row", row);
+    let params = [];
     if (Array.isArray(row)) {
-      const res = _.map(row, "id");
-      params = {
-        ids: res.join(",")
-      };
+      const res = _.map(row, function(o) {
+        return { id: o.id, state: 0};
+      });
+      params = res;
     } else {
-      params = {
-        ids: row.id
-      };
+      params.push({
+        id: row.id,
+        state: 0
+      });
     }
-    const res: RESULT_DATA_TYPE | any = await dealEquipmentCategoryInfoData(
-      params
-    );
+    const res: RESULT_DATA_TYPE | any = await updateEquipmentInfoData(params);
     if (res.result) {
       (this.$refs.vexTable as any).findList(this.paramsConfig);
       (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams);
     }
-    this.$notify({
-      title: "成功",
-      message: "删除成功",
-      type: "success",
-      duration: 2000
-    });
+    Message.success("删除成功");
   }
 
   // 点击查看按钮接收数据事件
@@ -224,10 +326,10 @@ export default class extends Vue {
       console.log("🚀 ~ handleSearchForDetail ~ res", res.data);
     }
   }
+
+  //新增设备确认事件
+  private handleSubmit(value: boolean) {
+    (this.$refs.vexTable as any).findList(this.paramsConfig);
+    (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams);
+  }
 }
-
-// /api/equipment/getEquipmentInfoByDepartMentId 通过组织id获取设备信息
-
-// /api/equipment/getEquipmentInfoByLike 设备名称模糊查询
-
-// /api/equipment/getEquipmentInfo 设备查询

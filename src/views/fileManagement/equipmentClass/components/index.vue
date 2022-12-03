@@ -1,7 +1,9 @@
 <template>
   <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
              :visible.sync="dialogVisible"
-             width="80%">
+             top="30px"
+             width="80%"
+             @close="handleCloseDialog()">
     <el-form ref="dataForm"
              :rules="rules"
              :model="defaultEquipmentInfoData"
@@ -16,7 +18,7 @@
                      :name="item.key">
           <keep-alive>
             <div>
-              <div v-for="(item,index) in formList"
+              <div v-for="(item,index) in allFormList"
                    :key="index">
                 <p style="font-size: 18px;">{{Object.keys(item)[0]}}</p>
                 <el-row :gutter="20">
@@ -38,7 +40,7 @@
     </el-form>
     <div slot="footer"
          class="dialog-footer">
-      <el-button @click="dialogVisible = false">
+      <el-button @click="handleCloseDialog()">
         {{ $t('table.cancel') }}
       </el-button>
       <el-button type="primary"

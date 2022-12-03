@@ -25,12 +25,11 @@ const businessRouter: RouteConfig[] = [
   // },
   // 工作台
   {
-    path: "/workBench",
+    path: "/WDGZT",
     component: Layout,
-    redirect: "/workBench/index",
     children: [
       {
-        path: "index",
+        path: "/WDGZT",
         component: () =>
           import(
             /* webpackChunkName: "dashboard" */ "@/views/workBench/index.vue"
@@ -206,8 +205,8 @@ const businessRouter: RouteConfig[] = [
   {
     path: "/OrganizationStructureManagement",
     component: Layout,
-    redirect:
-      "/OrganizationStructureManagement/basicManagementDepartment/addNewEquipment",
+    // redirect:
+    //   "/OrganizationStructureManagement/basicManagementDepartment/addNewEquipment",
     meta: {
       title: "OrganizationStructureManagement",
       icon: "lock",
@@ -236,8 +235,8 @@ const businessRouter: RouteConfig[] = [
           import(
             /* webpackChunkName: "dashboard" */ "@/views/basicManagementDepartment/index.vue"
           ),
-        redirect:
-          "/OrganizationStructureManagement/basicManagementDepartment/addNewEquipment",
+        // redirect:
+        //   "/OrganizationStructureManagement/basicManagementDepartment/addNewEquipment",
         meta: {
           title: "basicManagementDepartment",
           // icon: "lock",

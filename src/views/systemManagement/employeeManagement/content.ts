@@ -67,6 +67,15 @@ export default class extends Vue {
     this.emitHandleInsert();
   }
 
+  // 修改员工
+  @Emit()
+  emitHandleUpdate() {
+    console.log("修改员工===");
+  }
+  private updateEmployee() {
+    this.emitHandleUpdate();
+  }
+
   // 用户设置
   @Emit()
   emitHandleSearch(rowData: any) {

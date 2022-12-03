@@ -5,7 +5,7 @@
         <el-card>
           <div slot="header"
                class="clearfix">
-            <span>科室分类</span>
+            <span>组织机构</span>
           </div>
           <Tree ref="vxeTree"
                 :url="url"

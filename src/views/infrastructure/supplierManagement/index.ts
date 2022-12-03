@@ -10,7 +10,7 @@ import {
 } from "@/api/equipment";
 import { FormItemTypes, SupplierFormTypes } from "./type";
 import _ from "lodash";
-// import { TreeData } from "@/mock/tree";
+import ALL_OPTIONS from "@/shared/options";
 @Component({
   name: "Tab",
   components: {
@@ -20,9 +20,7 @@ import _ from "lodash";
   }
 })
 export default class extends Vue {
-  created() {
-
-  }
+  created() {}
 
   private formConfig: { data: SupplierFormTypes; items: FormItemTypes[] } = {
     data: {
@@ -42,13 +40,13 @@ export default class extends Vue {
           name: "$input",
           props: { placeholder: "请输入厂商名称" }
         },
-        resetValue:''
+        resetValue: ""
       },
       {
         field: "nameAbbreviation",
         title: "简称",
         itemRender: { name: "$input", props: { placeholder: "请输入简称" } },
-        resetValue:''
+        resetValue: ""
       },
       {
         field: "taxId",
@@ -57,40 +55,33 @@ export default class extends Vue {
           name: "$input",
           props: { placeholder: "请输入纳税识别号" }
         },
-        resetValue:''
+        resetValue: ""
       },
       {
         field: "suppliesType",
         title: "厂商类型",
         itemRender: {
           name: "$select",
-          props: { placeholder: '请选择' },
-          options: [
-            { label: "生产商", value: "生产商" },
-            { label: "供应商", value: "供应商" },
-            { label: "维修商", value: "维修商" }
-          ]
+          props: { placeholder: "请选择" },
+          options: ALL_OPTIONS.suppliesType
         },
-        resetValue:''
+        resetValue: ""
       },
       {
         field: "runningState",
         title: "运营状态",
         itemRender: {
           name: "$select",
-          props: { placeholder: '请选择' },
-          options: [
-            { label: "正常", value: 1 },
-            { label: "注销", value: 2 }
-          ]
+          props: { placeholder: "请选择" },
+          options: ALL_OPTIONS.runningState
         },
-        resetValue:''
+        resetValue: ""
       },
       {
         field: "domicile",
         title: "注册地",
         itemRender: { name: "$input", props: { placeholder: "请输入注册地" } },
-        resetValue:''
+        resetValue: ""
       },
       { slots: { default: "operate_item" } }
     ] // 表单项
@@ -105,7 +96,7 @@ export default class extends Vue {
     { field: "suppliesType", title: "厂商类型" },
     {
       field: "runningState",
-      title: "运营状态",
+      title: "运营状态"
     },
     { field: "assetsPro", title: " 资产性质" },
     { field: "domicile", title: " 注册地" },
@@ -121,20 +112,7 @@ export default class extends Vue {
   ];
 
   // 菜单类型
-  private suppliesTypeOptions = [
-    {
-      value: "1",
-      label: "目录"
-    },
-    {
-      value: "2",
-      label: "菜单"
-    },
-    {
-      value: "3",
-      label: "按钮"
-    }
-  ];
+  private suppliesTypeOptions = ALL_OPTIONS.MENU_TYPES;
 
   private supplierData = {
     name: "",
@@ -164,7 +142,6 @@ export default class extends Vue {
   private nodeClickData: any = {}; // 点击供应商数据
 
   private hLevelList = []; // 字典表
-
 
   // 新增供应商
   private handleInsert() {
@@ -201,7 +178,7 @@ export default class extends Vue {
           suppliesType,
           assetsPro,
           phoneNo,
-          note,
+          note
         } = this.supplierData;
         const params = {
           id: "",
@@ -210,7 +187,7 @@ export default class extends Vue {
           suppliesType,
           assetsPro,
           phoneNo,
-          note,
+          note
         };
         const res: any = await updateSupplierData(params);
         if (res.result) {
@@ -238,7 +215,7 @@ export default class extends Vue {
           suppliesType,
           assetsPro,
           phoneNo,
-          note,
+          note
         } = this.supplierData;
         const params = {
           id,
@@ -247,7 +224,7 @@ export default class extends Vue {
           suppliesType,
           assetsPro,
           phoneNo,
-          note,
+          note
         };
         const res: any = await updateSupplierData(params);
         if (res.result) {
@@ -266,7 +243,15 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    const { id, name, nameAbbreviation, suppliesType, assetsPro, phoneNo, note } = row;
+    const {
+      id,
+      name,
+      nameAbbreviation,
+      suppliesType,
+      assetsPro,
+      phoneNo,
+      note
+    } = row;
     this.supplierData = {
       id,
       name,

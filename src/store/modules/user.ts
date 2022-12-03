@@ -12,7 +12,7 @@ import { PermissionModule } from "./permission";
 import { TagsViewModule } from "./tags-view";
 import store from "@/store";
 import { queryLeftMenuData } from "@/api/basic";
-
+import {Base64} from 'js-base64'
 export interface IUserState {
   token: string;
   name: string;

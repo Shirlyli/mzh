@@ -28,13 +28,13 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const res = response.data;
-    if ((res.code !== 200 || res.code !== 100200) && !res.data && !res.result) {
+    if (res.code !== 200 && !res.data && !res.result) {
       Message({
-        message: res.message || "Error",
+        message: res.msg || "Error",
         type: "error",
         duration: 5 * 1000
       });
-      if (res.code === 201 || res.code === 50012 || res.code === 50014) {
+      if (res.code === 201) {
         MessageBox.confirm(
           "你已被登出，可以取消继续留在该页面，或者重新登录",
           "确定登出",
@@ -48,7 +48,7 @@ service.interceptors.response.use(
           location.reload(); // To prevent bugs from vue-router
         });
       }
-      return Promise.reject(new Error(res.message || "Error"));
+      return Promise.reject(new Error(res.msg || "Error"));
     } else {
       return response.data;
     }

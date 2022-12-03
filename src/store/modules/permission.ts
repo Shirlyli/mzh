@@ -12,7 +12,7 @@ import { queryLeftMenuData } from "@/api/basic";
 import Layout from "@/layout/index.vue";
 import { Message } from "element-ui";
 import { UserModule } from "@/store/modules/user";
-
+import mockData from "./routes";
 const hasPermission = (roles: string[], route: RouteConfig) => {
   if (route.meta && route.meta.roles) {
     return roles.some(role => route.meta.roles.includes(role));
@@ -58,7 +58,7 @@ export function generaMenu(routes: any, data: any) {
               {
                 path: `/${item.path}`,
                 component: (resolve: any) =>
-                  require([`@/views${item.component}.vue`], resolve),
+                  require([`@/views${item.component}/index.vue`], resolve),
                 name: item.name,
                 meta: item.meta
               }
@@ -67,14 +67,47 @@ export function generaMenu(routes: any, data: any) {
         meta: item.meta
       };
       //遍历子标签，并加入到主目录的children中去
-      item.children.forEach((item: any) => {
+      item.children.forEach((i: any) => {
         const menu2 = {
-          path: item.path,
+          path: `/${i.path}`,
           component: (resolve: any) =>
-            require([`@/views${item.component}.vue`], resolve),
-          name: item.name,
-          meta: item.meta
+            require([`@/views${i.component}/index.vue`], resolve),
+          name: i.name,
+          meta: i.meta,
+          children: i.children.length
+            ? []
+            : [
+                {
+                  path: `${i.path}`,
+                  component: (resolve: any) =>
+                    require([`@/views${i.component}/index.vue`], resolve),
+                  name: i.name,
+                  meta: i.meta
+                }
+              ]
         };
+        // 遍历二级子标签，并加入到二级目录的children中
+        i.children.forEach((o: any) => {
+          const menu3 = {
+            path: `${o.path}`,
+            component: (resolve: any) =>
+              require([`@/views${o.component}/index.vue`], resolve),
+            name: o.name,
+            meta: o.meta,
+            children: o.children.length
+              ? []
+              : [
+                  {
+                    path: `${o.path}`,
+                    component: (resolve: any) =>
+                      require([`@/views${o.component}/index.vue`], resolve),
+                    name: o.name,
+                    meta: o.meta
+                  }
+                ]
+          };
+          menu2.children.push(menu3);
+        });
         //加入到主目录的children中去
         menu.children.push(menu2);
       });
@@ -105,42 +138,43 @@ class Permission extends VuexModule implements IPermissionState {
   @Action
   public GenerateRoutes(roles: string[]) {
     return new Promise(resolve => {
-      let accessedRoutes;
+      // let accessedRoutes;
       // if (roles.includes("admin")) {
       //   accessedRoutes = asyncRoutes;
-      //   console.log("🚀 ~ asyncRoutes", asyncRoutes);
       // } else {
       //   accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
       // }
+      // console.log("🚀 ~ asyncRoutes", asyncRoutes);
       // this.SET_ROUTES(accessedRoutes);
       // 【新加入】开始
-      console.log(UserModule.menu)
+      console.log(UserModule.menu);
       const loadMenuData: any = [];
       // queryLeftMenuData({}).then((response: any) => {
-        // console.log("🚀 ~ response", response);
-        let data;
-        //我的code为100200为正常
-        // if (response.code !== 200) {
-        //   Message({ type: "error", message: "菜单数据加载异常" });
-        // } else {
-          //获取目录的json
-          data = UserModule.menu;
-          //把data的数据拷贝到loadMenuData里面
-          Object.assign(loadMenuData, data);
-          //把asyncRoutes的数据拷贝到tempAsyncRoutes里面
-          const tempAsyncRoutes = Object.assign([]);
-          // 最最重要的，把loadMenuData追加到tempAsyncRoutes后面
-          generaMenu(tempAsyncRoutes, loadMenuData);
-          //定义accessedRoutes
-          let newaccessedRoutes;
-          // 把 tempAsyncRoutes 的值给 accessedRoutes ，并输出
-          // eslint-disable-next-line prefer-const
-          newaccessedRoutes = tempAsyncRoutes || [];
-          console.log("🚀 ~ newaccessedRoutes", newaccessedRoutes);
-          //下面这些就是加载目录了
-          this.SET_ROUTES(newaccessedRoutes);
-          resolve(newaccessedRoutes);
-        // }
+      // console.log("🚀 ~ response", response);
+      let data;
+      //我的code为100200为正常
+      // if (response.code !== 200) {
+      //   Message({ type: "error", message: "菜单数据加载异常" });
+      // } else {
+      //获取目录的json
+      data = UserModule.menu;
+      // data = mockData.data;
+      //把data的数据拷贝到loadMenuData里面
+      Object.assign(loadMenuData, data);
+      //把asyncRoutes的数据拷贝到tempAsyncRoutes里面
+      const tempAsyncRoutes = Object.assign([]);
+      // 最最重要的，把loadMenuData追加到tempAsyncRoutes后面
+      generaMenu(tempAsyncRoutes, loadMenuData);
+      //定义accessedRoutes
+      let newaccessedRoutes;
+      // 把 tempAsyncRoutes 的值给 accessedRoutes ，并输出
+      // eslint-disable-next-line prefer-const
+      newaccessedRoutes = tempAsyncRoutes || [];
+      console.log("🚀 ~ newaccessedRoutes", newaccessedRoutes);
+      //下面这些就是加载目录了
+      this.SET_ROUTES(newaccessedRoutes);
+      resolve(newaccessedRoutes);
+      // }
       // });
     }).catch(error => {
       console.log("🚀 ~ error", error);

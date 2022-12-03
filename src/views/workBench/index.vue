@@ -9,7 +9,7 @@
         <div v-for="o in toDoList"
              :key="o"
              class="item"
-             :style="{border:`1px solid ${o.bgcolor}` }">
+             :style="{ border:`1px solid ${o.bgcolor}` }">
           <div class="itemContent">
             <div class="contentLeft"
                  :style="{backgroundColor:o.bgcolor}"> <i :class="o.icon"

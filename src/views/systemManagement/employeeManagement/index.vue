@@ -5,7 +5,7 @@
         <el-card>
           <div slot="header"
                class="clearfix">
-            <span>科室分类</span>
+            <span>组织机构</span>
           </div>
           <Tree ref="vxeTree"
                 :url="url"
@@ -17,7 +17,7 @@
         <el-card>
           <div slot="header"
                class="clearfix">
-            <span>员工查询</span>
+            <span>账户管理、绑定账号和关联角色</span>
           </div>
           <Content ref="vexTable"
                    :paramsConfig="paramsConfig"

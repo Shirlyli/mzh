@@ -3,23 +3,28 @@
     <div class="handleBox">
       <el-row>
         <vxe-button @click="searchPersonalDetail"
-                    icon="vxe-icon-user">用户设置</vxe-button>
+                    icon="vxe-icon-user">绑定账号</vxe-button>
+        <vxe-button @click="searchPersonalDetail"
+                    icon="vxe-icon-user">删除账号绑定</vxe-button>
         <vxe-button @click="resetPassword"
                     icon="vxe-icon-user">密码重置</vxe-button>
         <vxe-button @click="insertEmployee"
                     status="primary"
-                    icon="vxe-icon-user">新增员工</vxe-button>
+                    icon="vxe-icon-user">新增员工信息</vxe-button>
+        <vxe-button @click="updateEmployee"
+                    status="primary"
+                    icon="vxe-icon-user">修改员工信息</vxe-button>
         <vxe-button @click="dealEmployeeInfo"
                     status="warning"
                     icon="vxe-icon-user">删除员工信息</vxe-button>
-        <vxe-button @click="searchRole"
-                    icon="vxe-icon-user">查看角色</vxe-button>
+       <!-- <vxe-button @click="searchRole"
+                    icon="vxe-icon-user">查看角色</vxe-button>-->
         <vxe-button @click="associateRole"
-                    icon="vxe-icon-user">关联角色</vxe-button>
-        <vxe-button @click="$refs.xGrid.exportData()"
+                    icon="vxe-icon-user">查看并关联角色</vxe-button>
+       <!-- <vxe-button @click="$refs.xGrid.exportData()"
                     icon="vxe-icon-user">导入</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()"
-                    icon="vxe-icon-user">导出</vxe-button>
+                    icon="vxe-icon-user">导出</vxe-button>-->
       </el-row>
     </div>
     <!-- 员工主体区域 -->

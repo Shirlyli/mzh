@@ -58,6 +58,7 @@ import { RouteConfig } from 'vue-router'
 import { PermissionModule } from '@/store/modules/permission'
 import { TagsViewModule, ITagView } from '@/store/modules/tags-view'
 import ScrollPane from './ScrollPane.vue'
+import { UserModule } from '@/store/modules/user'
 
 @Component({
   name: 'TagsView',
@@ -220,7 +221,7 @@ export default class extends Vue {
         })
       } else {
         console.log("🚀 ~ view", view)
-        this.$router.push('/workBench/index').catch(err => {
+        this.$router.push((UserModule.menu as any)[0]?.path).catch(err => {
           console.warn(err)
         })
       }

@@ -1,11 +1,12 @@
-import {Component, Vue, Watch} from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import MainSubLayout from "@/components/CollpaseFlex/index.vue";
 import Tree from "@/components/Tree/index.vue";
 import VexTable from "@/components/VexTable/index.vue";
-import {Form} from "element-ui";
-import {delMenuInfo, saveMenuInfo} from "@/api/basic";
+import { Form } from "element-ui";
+import { delMenuInfo, saveMenuInfo } from "@/api/basic";
 import _ from "lodash";
 import AssociateRole from "@/components/associateRole/index.vue";
+import ALL_OPTIONS from "@/shared/options";
 
 @Component({
   name: "Tab",
@@ -27,7 +28,7 @@ export default class extends Vue {
       {
         field: "mName",
         title: "菜单名称",
-        itemRender: {name: "$input", props: {placeholder: "请输入名称"}}
+        itemRender: { name: "$input", props: { placeholder: "请输入名称" } }
       },
       /*{
         field: "mUrl",
@@ -40,11 +41,7 @@ export default class extends Vue {
         itemRender: {
           name: "$select",
           props: { placeholder: "请选择" },
-          options: [
-            {value: "1", label: "目录"},
-            {value: "2", label: "菜单"},
-            {value: "3", label: "按钮"}
-          ]
+          options: ALL_OPTIONS.MENU_TYPES
         }
       },
       /*{
@@ -53,29 +50,29 @@ export default class extends Vue {
         itemRender: {name: "$input", props: {placeholder: "请输入权限标识"}}
       },
       {field: "mMtime", title: "创建时间", slots: {default: "create_time"}},*/
-      {slots: {default: "operate_item"}}
+      { slots: { default: "operate_item" } }
     ] // 表单项
   };
 
   // 菜单列表项
   private columns = [
-    {type: "seq", width: 60},
-    {type: "checkbox", width: 60},
-    {field: "mName", title: "名称", treeNode: true},
-    {field: "mCode", title: "编码"},
-    {field: "mType", title: "菜单类型", formatter: this.formatMType},
-    {field: "mUrl", title: "菜单路由"},
+    { type: "seq", width: 60 },
+    { type: "checkbox", width: 60 },
+    { field: "mName", title: "名称", treeNode: true },
+    { field: "mCode", title: "编码" },
+    { field: "mType", title: "菜单类型", formatter: this.formatMType },
+    { field: "mUrl", title: "菜单路由" },
     {
       field: "mIsavailable",
       title: "是否启用",
       formatter: this.formatMIsavailable
     },
-    {field: "note", title: "备注"},
-    {field: "mMtime", title: "创建时间"},
+    { field: "note", title: "备注" },
+    { field: "mMtime", title: "创建时间" },
     {
       width: 260,
       title: "操作",
-      slots: {default: "operateHasSearch"},
+      slots: { default: "operateHasSearch" },
       showOverflow: true
     }
   ];
@@ -110,7 +107,7 @@ export default class extends Vue {
   // 表单校验
   private rules = {
     departmentName: [
-      {required: true, message: "请输入部门名称", trigger: "change"}
+      { required: true, message: "请输入部门名称", trigger: "change" }
     ]
   };
 
@@ -129,27 +126,14 @@ export default class extends Vue {
     mIsavailable: ""
   };
   // 菜单类型
-  private options = [
-    {
-      value: "1",
-      label: "目录"
-    },
-    {
-      value: "2",
-      label: "菜单"
-    },
-    {
-      value: "3",
-      label: "按钮"
-    }
-  ];
+  private options = ALL_OPTIONS.MENU_TYPES;
 
   // 菜单数据
   private tableData = [];
 
   // 新增表单显隐
   private dialogFormVisible = false;
-  private checkedMenuList :any= [];
+  private checkedMenuList: any = [];
 
   // 关联角色模态框显隐
   private isAssociateDialogVisible = false;
@@ -164,8 +148,8 @@ export default class extends Vue {
     return data.cellValue === "1"
       ? "启用"
       : data.cellValue === "0"
-        ? "不启用"
-        : "-";
+      ? "不启用"
+      : "-";
   }
 
   // 接收树形组件点击节点数据
@@ -204,12 +188,14 @@ export default class extends Vue {
   // 新增菜单
   // 新增
   private handleInsert() {
-  debugger;
+    debugger;
     this.resetForm();
     this.dialogVisible = true;
     this.dialogStatus = "create";
     const id = this.nodeClickData.id ? this.nodeClickData.id : "001";
-    const title = this.nodeClickData.title ? this.nodeClickData.title : "菜单管理";
+    const title = this.nodeClickData.title
+      ? this.nodeClickData.title
+      : "菜单管理";
     /*const { id, title } = this.nodeClickData;*/
     this.dialogStatus = "create";
     // (this.$refs.dataForm as Form).setFiledsValue
@@ -217,7 +203,7 @@ export default class extends Vue {
       ...this.menuData,
       pid: id,
       pName: title,
-      mIsavailable: '1'
+      mIsavailable: "1"
     };
   }
 
@@ -271,7 +257,7 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    this.menuData = {...this.menuData, ...row};
+    this.menuData = { ...this.menuData, ...row };
     this.dialogStatus = "update";
     this.dialogVisible = true;
     this.$nextTick(() => {
@@ -312,16 +298,14 @@ export default class extends Vue {
     this.checkedMenuList = data;
   }
 
-// 接收关联角色事件
+  // 接收关联角色事件
   private handleAssociateRoleRow(data: any) {
     debugger;
     console.log("🚀 ~ data", data);
-    this.checkedMenuList= [];
+    this.checkedMenuList = [];
     this.isAssociateDialogVisible = true;
     this.checkedMenuList.push(data);
   }
-
-
 
   private handleCloseAssociateDialog(data: any) {
     this.isAssociateDialogVisible = false;

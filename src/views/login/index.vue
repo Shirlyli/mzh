@@ -108,6 +108,7 @@ import { UserModule } from '@/store/modules/user'
 import { isValidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect/index.vue'
 import SocialSign from './components/SocialSignin.vue'
+import { encode } from 'js-base64'
 
 @Component({
   name: 'Login',
@@ -134,8 +135,8 @@ export default class extends Vue {
   }
 
   private loginForm = {
-    userName: 'nanke_zhuren_ceshi',
-    userPwd: 'MTIzNDU2',
+    userName: 'admin',
+    userPwd: '123456',
   }
 
   private loginRules = {
@@ -190,11 +191,13 @@ export default class extends Vue {
     ;(this.$refs.loginForm as ElForm).validate(async (valid: boolean) => {
       if (valid) {
         this.loading = true
-        await UserModule.Login(this.loginForm)
+        let { userName, userPwd } = this.loginForm
+        await UserModule.Login({ userPwd: encode(userPwd), userName })
         await UserModule.GetMenu()
+        console.log(UserModule.menu)
         this.$router
           .push({
-            path: '/WDGZT',
+            path: (UserModule.menu as any)[0]?.path,
             query: this.otherQuery,
           })
           .catch((err) => {
@@ -205,6 +208,7 @@ export default class extends Vue {
           this.loading = false
         }, 0.5 * 1000)
       } else {
+        this.loading = false
         return false
       }
     })
@@ -249,6 +253,9 @@ export default class extends Vue {
     display: flex;
     flex-direction: column;
     align-items: center;
+    >img{
+      height: 100%;
+    }
     > p {
       color: rgb(56, 151, 255);
       font-size: 50px;

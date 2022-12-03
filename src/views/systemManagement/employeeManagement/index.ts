@@ -2,7 +2,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import MainSubLayout from "@/components/CollpaseFlex/index.vue";
 import Tree from "@/components/Tree/index.vue";
 import VexTable from "@/components/VexTable/index.vue";
-import { Form } from "element-ui";
+import { Form, Message } from "element-ui";
 import _ from "lodash";
 import {
   bindPersonalInfo,
@@ -16,6 +16,7 @@ import {
 } from "@/api/basic";
 import Content from "./content.vue";
 import { VXETable } from "vxe-table";
+import ALL_OPTIONS from "@/shared/options";
 @Component({
   name: "Tab",
   components: {
@@ -49,10 +50,7 @@ export default class extends Vue {
         title: "性别",
         itemRender: {
           name: "$select",
-          options: [
-            { label: "男", value: 1 },
-            { label: "女", value: 2 }
-          ]
+          options: ALL_OPTIONS.sex
         }
       },
 
@@ -415,20 +413,13 @@ export default class extends Vue {
   // 角色树点击事件
   private async handleRoleNodeClick(data: any) {
     console.log("🚀 ~ data ~ handleRoleNodeClick", data);
-    if (data.parentId !== "001") {
-      const res: any = await personalBindRole({
-        userId: this.clickEmployeeInfo.userId,
-        roleId: data.id
-      });
-      if (res.result) {
-        this.$notify({
-          title: "绑定成功",
-          message: res.msg,
-          type: "success",
-          duration: 2000
-        });
-        this.queryRolesByUserIdData(this.clickEmployeeInfo);
-      }
+    const res: any = await personalBindRole({
+      userId: this.clickEmployeeInfo.userId,
+      roleId: data.id
+    });
+    if (res.result) {
+      Message.success('关联成功')
+      this.queryRolesByUserIdData(this.clickEmployeeInfo);
     }
   }
 

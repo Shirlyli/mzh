@@ -38,7 +38,9 @@
     <!-- 新增模态框 -->
     <EquipmentFormDialog :dialogStatus="dialogStatus"
                          :dialogVisible="dialogVisible"
-                         :equipmentCategoryData="equipmentCategoryData" />
+                         :equipmentCategoryData="equipmentCategoryData"
+                         @emit-submit="handleSubmit"
+                         @emit-close-dialog="(dialogStatus = false)" />
   </div>
 </template>
 
