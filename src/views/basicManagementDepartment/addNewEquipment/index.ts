@@ -142,12 +142,7 @@ export default class extends Vue {
           );
         }
         this.dialogVisible = false;
-        this.$notify({
-          title: "成功",
-          message: "创建成功",
-          type: "success",
-          duration: 2000
-        });
+        this.$message.success("创建成功");
       }
     });
   }
@@ -183,12 +178,7 @@ export default class extends Vue {
           );
         }
         this.dialogVisible = false;
-        this.$notify({
-          title: "成功",
-          message: "更新成功",
-          type: "success",
-          duration: 2000
-        });
+        this.$message.success("更新成功");
       }
     });
   }
@@ -227,11 +217,6 @@ export default class extends Vue {
       (this.$refs.vexTable as any).findList(this.paramsConfig);
       (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams);
     }
-    this.$notify({
-      title: "成功",
-      message: "删除成功",
-      type: "success",
-      duration: 2000
-    });
+    this.$message.success("删除成功");
   }
 }

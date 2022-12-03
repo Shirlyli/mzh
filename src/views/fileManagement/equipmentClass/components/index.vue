@@ -1,9 +1,9 @@
 <template>
   <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
-             :visible.sync="dialogVisible"
+             :visible.sync="equipmentVisible"
              top="30px"
              width="80%"
-             @close="handleCloseDialog()">
+             @close="equipmentVisible=false">
     <el-form ref="dataForm"
              :rules="rules"
              :model="defaultEquipmentInfoData"
@@ -18,16 +18,15 @@
                      :name="item.key">
           <keep-alive>
             <div>
-              <div v-for="(item,index) in allFormList"
+              <div v-for="(formItem,index) in allFormList[item.key]"
                    :key="index">
-                <p style="font-size: 18px;">{{Object.keys(item)[0]}}</p>
+                <!-- <p style="font-size: 18px;">{{Object.keys(formItem)[0]}}</p> -->
                 <el-row :gutter="20">
                   <el-col :span="8"
-                          v-for="(formitems,i) in Object.values(item)[0]"
                           :key="i">
-                    <el-form-item :label="formitems.label"
+                    <el-form-item :label="formItem.label"
                                   prop="type">
-                      <el-input v-model="defaultEquipmentInfoData[formitems.key]" />
+                      <el-input v-model="defaultEquipmentInfoData[item.key][formItem.key]" />
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -40,7 +39,7 @@
     </el-form>
     <div slot="footer"
          class="dialog-footer">
-      <el-button @click="handleCloseDialog()">
+      <el-button @click="(equipmentVisible=false)">
         {{ $t('table.cancel') }}
       </el-button>
       <el-button type="primary"

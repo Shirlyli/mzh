@@ -166,12 +166,7 @@ export default class extends Vue {
       roleId: row.id,
     })
     if (res.result) {
-      this.$notify({
-        title: '成功',
-        message: '解绑成功',
-        type: 'success',
-        duration: 2000,
-      })
+      this.$message.success("解绑成功");
       this.getBindRoleTreeData(this.checkedMenuList)
     }
   }

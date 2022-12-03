@@ -10,7 +10,7 @@ const name = 'Vue Typescript Admin' // TODO: get this variable from setting.ts
 
 module.exports = {
     publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
-    lintOnSave: process.env.NODE_ENV === 'development',
+    lintOnSave: process.env.NODE_ENV === 'production',
     productionSourceMap: false,
     devServer: {
         host: 'localhost',
@@ -29,19 +29,11 @@ module.exports = {
         proxy: {
             // change xxx-api/login => /mock-api/v1/login
             // detail: https://cli.vuejs.org/config/#devserver-proxy
-            [process.env.VUE_APP_BASE_API]: {
-                target: `http://127.0.0.1:${mockServerPort}/mock-api/v1`,
-                changeOrigin: true, // needed for virtual hosted sites
-                ws: true, // proxy websockets
-                pathRewrite: {
-                    ['^' + process.env.VUE_APP_BASE_API]: ''
-                }
-            },
             [process.env.VUE_APP_BASE_API_TH]: {
                 target: 'http://47.114.72.245:8082/',
                 changeOrigin: true, // needed for virtual hosted sites
                 pathRewrite: {
-                    ['^' + process.env.VUE_APP_BASE_API]: ''
+                    ['^' + process.env.VUE_APP_BASE_API_TH]: ''
                 }
             }
         }

@@ -13,7 +13,7 @@ import EquipmentFormDialog from "./components/index.vue";
 import _ from "lodash";
 import { RESULT_DATA_TYPE } from "@/utils/index.type";
 import { AxiosResponse } from "axios";
-import { EquipmentInfoTypes } from "./formlist";
+import { EquipmentInfoTypes } from "./formlist/interface.type";
 @Component({
   name: "EquipmentCategory",
   components: {
@@ -80,65 +80,115 @@ export default class extends Vue {
 
   private equipmentCategoryData: EquipmentInfoTypes = {
     id: "",
-    name: "健康小屋",
-    createtime: "2022-11-01T00:00:00.000+00:00",
-    departmentId: "81C391DDD2E928-800F-4392-B564-98F50E40063A",
-    marking: "XH-ZZ-05A",
-    brand: "新海健康",
-    origin: "",
-    equipmentCategoryId: "",
-    activationTime: "2021-09-11T00:00:00.000+00:00",
-    guarantee: 0,
     state: 1,
-    hospitalId: "13",
-    manufactorId: "0",
-    equipmentStates: 1,
-    idCode: "",
-    price: 50000.0,
-    batchNumber: "MZH-20210009",
-    registrationCertificat: "",
-    productionName: "",
-    productionTime: "",
-    validity: "",
-    region: "",
-    purchaseTime: "",
-    isExordium: 1,
-    meterings: 0,
-    source: "",
-    isMetering: 0,
-    meteringTime: "",
-    meteringType: "",
-    isEmergency: "",
-    isFixedassets: "",
-    isSpecial: "",
-    fixedassetsType: "",
-    intakeDate: "",
-    financialNo: "",
-    equipmentLocation: "",
-    fixedAssetsNo: "",
-    recordNo: "",
-    unit: "",
-    equipmentPrincipal: "",
-    barCodeNo: "",
-    img: "",
-    scoringGuideUrl: "",
-    qrcode: "",
-    barCode: "",
+    tHospitalEquipment: {
+      id: "",
+      state: 1,
+      name: "健康小屋",
+      createtime: "2022-11-01T00:00:00.000+00:00",
+      departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
+      marking: "XH-ZZ-05A",
+      brand: "新海健康",
+      origin: "",
+      equipmentCategoryId: "",
+      activationTime: "2021-09-11T00:00:00.000+00:00",
+      guarantee: "2022-11-12",
+      hospitalId: "13",
+      manufactorId: "0",
+      equipmentStates: "1",
+      idCode: "",
+      price: " 50000.0",
+      batchNumber: "MZH-20210009",
+      registrationCertificat: "",
+      productionName: "",
+      productionTime: "",
+      validity: "",
+      region: "",
+      purchaseTime: "",
+      isExordium: "1",
+      meterings: "0",
+      source: "",
+      isMetering: "0",
+      meteringTime: "",
+      meteringType: "",
+      isEmergency: "",
+      isFixedassets: "",
+      isSpecial: "",
+      fixedassetsType: "",
+      intakeDate: "",
+      financialNo: "",
+      equipmentLocation: "",
+      fixedAssetsNo: "",
+      recordNo: "",
+      unit: "",
+      equipmentPrincipal: "",
+      barCodeNo: "",
+      img: "",
+      scoringGuideUrl: "",
+      qrcode: "",
+      barCode: ""
+    },
+    tHospitalEquipmentPurchases: [
+      {
+        installTime:'',
+        id: "",
+        aogDeadlineTime: "",
+        aogTime: "",
+        argumentationTime: "",
+        biddingTime: "",
+        budget: "",
+        checkNote: "",
+        contractAmount: "",
+        contractDeadlineTime: "",
+        contractName: "",
+        contractNum: "",
+        equipmentId: "",
+        invitationType: "",
+        partyBPhone: "",
+        partyBUnit: "",
+        partyBUser: "",
+        projectNote: "",
+        purchaseNote: "",
+        acceptanceTime: "",
+        oneCheckTime: "",
+        twoCheckTime: "",
+        firstAmountTime: "",
+        endAmountTime: "",
+        purchaseTime: "",
+        purchaseType: "",
+        purchaseWay: "",
+        recordNum: "",
+        recordUser: "",
+        resource: "",
+        signingTime: "",
+        tHospitalEquipmentPayments: [
+          {
+            id: "",
+            amount: "",
+            paymentTime: "",
+            periods: "",
+            prepaymentTime: "",
+            purchaseId: "",
+            status: ""
+          }
+        ]
+      }
+    ],
     thospitalEquipmentMaintainWithBLOBs: [
       {
         id: "",
         equipmentId: "",
         lastMaintainTime: "2021-12-31T16:00:00.000+00:00",
-        nextMaintainTime: "",
+        nextMaintainTime: null,
         cost: 580.0,
-        createtime: "",
+        createtime: null,
         companyInfoId: "14",
         userId: "87",
-        warrantyPeriod: "",
-        facilitator: "",
+        warrantyPeriod: null,
+        facilitator: null,
         facilitatorPhone: "facilitator_phone",
         parts: "配件丢失",
-        img: "",
+        img: null,
         description: "零件损坏，需要更换"
       }
     ],
@@ -219,7 +269,7 @@ export default class extends Vue {
         isParts: 0,
         isFunction: 0,
         inspectionTime: "2021-12-31T16:00:00.000+00:00",
-        createtime: "",
+        createtime: null,
         userId: "22",
         appearance: "外观出现破损",
         parts: "配件丢失",
@@ -227,7 +277,7 @@ export default class extends Vue {
         img:
           "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
         description: "设备出现大问题",
-        note: ""
+        note: null
       }
     ]
   }; // 新增或编辑表单
@@ -250,12 +300,13 @@ export default class extends Vue {
   // 新增设备
   private handleInsert() {
     this.dialogVisible = true;
-    const { title, id } = this.nodeClickData;
-    // (this.$refs.dataForm as Form).setFiledsValue
+    this.dialogStatus = "create";
+    const { id } = this.nodeClickData;
+    console.log("🚀 ~ this.nodeClickData", this.nodeClickData.id);
     this.equipmentCategoryData = {
-      ...this.equipmentCategoryData,
-      departmentId: id ?? "1001"
+      ...this.equipmentCategoryData
     };
+    console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData);
   }
 
   // 接收树形组件点击节点数据
@@ -291,7 +342,7 @@ export default class extends Vue {
     let params = [];
     if (Array.isArray(row)) {
       const res = _.map(row, function(o) {
-        return { id: o.id, state: 0};
+        return { id: o.id, state: 0 };
       });
       params = res;
     } else {
@@ -331,5 +382,6 @@ export default class extends Vue {
   private handleSubmit(value: boolean) {
     (this.$refs.vexTable as any).findList(this.paramsConfig);
     (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams);
+    this.dialogVisible = false;
   }
 }

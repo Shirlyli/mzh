@@ -203,12 +203,7 @@ export default class extends Vue {
   private handleInsert() {
     const { title, id } = this.nodeClickData;
     if (!id) {
-      this.$notify({
-        title: "失败",
-        message: "请选择科室后新增员工",
-        type: "error",
-        duration: 2000
-      });
+      this.$message.error("请选择科室后新增员工");
       return;
     }
     this.dialogVisible = true;
@@ -251,12 +246,7 @@ export default class extends Vue {
           );
         }
         this.dialogVisible = false;
-        this.$notify({
-          title: "成功",
-          message: "创建成功",
-          type: "success",
-          duration: 2000
-        });
+        this.$message.success("创建成功");
       }
     });
   }
@@ -275,12 +265,7 @@ export default class extends Vue {
           );
         }
         this.dialogVisible = false;
-        this.$notify({
-          title: "成功",
-          message: "更新成功",
-          type: "success",
-          duration: 2000
-        });
+        this.$message.success("更新成功");
       }
     });
   }
@@ -314,12 +299,7 @@ export default class extends Vue {
       (this.$refs.vexTable as any).findList(this.paramsConfig);
       (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams);
     }
-    this.$notify({
-      title: "成功",
-      message: "删除成功",
-      type: "success",
-      duration: 2000
-    });
+    this.$message.success("删除成功");
   }
 
   // 查看用户设置
@@ -360,19 +340,9 @@ export default class extends Vue {
     if (res.result) {
       (this.$refs.vexTable as any).findList(this.paramsConfig);
       (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams);
-      this.$notify({
-        title: "成功",
-        message: "绑定用户成功",
-        type: "success",
-        duration: 2000
-      });
+      this.$message.success("绑定用户成功");
     } else {
-      this.$notify({
-        title: "失败",
-        message: "绑定用户失败",
-        type: "error",
-        duration: 2000
-      });
+      this.$message.success("绑定用户失败");
     }
     this.personalDialogVisible = false;
   }
@@ -381,12 +351,7 @@ export default class extends Vue {
     this.loading = true;
     const res: any = await queryRolesByUserId({ user_id: row.userId });
     if (res.result) {
-      this.$notify({
-        title: "查询成功",
-        message: res.msg,
-        type: "success",
-        duration: 2000
-      });
+      this.$message.success(res.msg);
       this.bindRoleData = res.data;
       this.loading = false;
     }
@@ -401,12 +366,7 @@ export default class extends Vue {
         this.roleDialogVisible = true;
         this.queryRolesByUserIdData(row);
       } else {
-        this.$notify({
-          title: "提示",
-          message: "该员工未注册用户，不能绑定角色",
-          type: "success",
-          duration: 2000
-        });
+        this.$message.success("该员工未注册用户，不能绑定角色");
       }
   }
 
@@ -440,12 +400,7 @@ export default class extends Vue {
         roleId: row.id
       });
       if (res.result) {
-        this.$notify({
-          title: "成功",
-          message: "解绑成功",
-          type: "success",
-          duration: 2000
-        });
+        this.$message.success("解绑成功");
         this.queryRolesByUserIdData(this.clickEmployeeInfo);
       }
     }
