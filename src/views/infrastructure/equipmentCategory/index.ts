@@ -21,8 +21,11 @@ export default class extends Vue {
   private columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'cName', title: '设备名称', treeNode: true },
-    { field: 'id', title: '设备ID' },
+    { field: 'cName', title: '设备类别名称', treeNode: true },
+    { field: 'cHospCode', title: '医疗器械编码'},
+    { field: 'cFinancialCode', title: '财务编码'},
+    { field: 'flag', title: '是否启用'},
+    { field: 'cUnit', title: '单位'},
     { field: 'note', title: '备注' },
     {
       width: 160,
@@ -45,12 +48,15 @@ export default class extends Vue {
     pid: '',
     pName: '',
     cName: '',
-    note: ''
+    note: '',
+    cHospCode: '',
+    cFinancialCode: '',
+    xpath:''
   }; // 新增或编辑表单
 
   private rules = {
-    departmentName: [
-      { required: true, message: '请输入部门名称', trigger: 'change' }
+    cName: [
+      { required: true, message: '请输入设备类别名称', trigger: 'change' }
     ]
   }; // 表单校验
 
@@ -67,8 +73,8 @@ export default class extends Vue {
     }
   };
 
-  private nodeClickData: any = {}; // 点击科室数据
-  private url = 'tHospitalEquipmentCategoryInfo/queryTree'; // 左侧字典
+  private nodeClickData: any = {}; // 点击左侧树
+  private url = 'tHospitalEquipmentCategoryInfo/queryTree'; // 左侧设备类别
 
   // 新增科室
   private handleInsert() {
@@ -78,9 +84,12 @@ export default class extends Vue {
     this.equipmentCategoryData = {
       id: '',
       pid: id ?? '1001',
-      pName: '',
+      pName: title ?? "设备类别",
       cName: '',
-      note: ''
+      note: '',
+      cHospCode: '',
+      cFinancialCode: '',
+      xpath:'',
     }
   }
 
@@ -104,20 +113,21 @@ export default class extends Vue {
   private createData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { id, pid, pName, cName, note } = this.equipmentCategoryData
+        const { id, pid, pName, cName, note,cHospCode,cFinancialCode,xpath } = this.equipmentCategoryData
         const params = {
-          id,
-          pid,
-          cName,
+          id:"",
+          pid:pid,
+          cName:cName,
           cCode: null,
-          cHospCode: null,
-          cFinancialCode: null,
+          cHospCode: cHospCode,
+          cFinancialCode: cFinancialCode,
           dispindex: null,
           flag: null,
           ctime: null,
           note,
           isLeaf: null,
-          cLevel: null
+          cLevel: null,
+          xpath:xpath
         }
         const res: any = await updateEquipmentCategoryInfoData(params)
         if (res.result) {
@@ -137,20 +147,22 @@ export default class extends Vue {
   private updateData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { id, pid, pName, cName, note } = this.equipmentCategoryData
+        const { id, pid, pName, cName, note,cHospCode,cFinancialCode,xpath } = this.equipmentCategoryData
         const params = {
-          id,
-          pid,
-          cName,
+          id:id,
+          pid:pid,
+          pName:pName,
+          cName:cName,
           cCode: null,
-          cHospCode: null,
-          cFinancialCode: null,
+          cHospCode: cHospCode,
+          cFinancialCode: cFinancialCode,
           dispindex: null,
           flag: null,
           ctime: null,
           note,
           isLeaf: null,
-          cLevel: null
+          cLevel: null,
+          xpath:xpath
         }
         const res: any = await updateEquipmentCategoryInfoData(params)
         if (res.result) {
@@ -168,13 +180,16 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    const { cName, id, pid, note } = row
+    const { cName, id, pid,pName, note,cHospCode,cFinancialCode,xpath } = row
     this.equipmentCategoryData = {
       pid,
-      pName: '',
+      pName,
       cName,
       id,
-      note
+      note,
+      cHospCode: cHospCode,
+      cFinancialCode: cFinancialCode,
+      xpath:xpath
     }
     this.dialogStatus = 'update'
     this.dialogVisible = true

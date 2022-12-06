@@ -16,6 +16,7 @@ import { CREATE_FORM_LIST } from "./formColumns";
 })
 export default class extends Vue {
   private type = "submit"; // 审批类型-通过，终止
+  @Prop({default:'add'}) editType!:string
   @Prop({ default: false }) dialogVisible!: boolean;
   @Watch("dialogVisible")
   @Prop()

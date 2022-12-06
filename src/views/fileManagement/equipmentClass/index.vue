@@ -40,7 +40,7 @@
                          :dialogVisible="dialogVisible"
                          :equipmentCategoryData="equipmentCategoryData"
                          @emit-submit="handleSubmit"
-                         @emit-close-dialog="(dialogStatus = false)" />
+                         @emit-close-dialog="handleClose" />
   </div>
 </template>
 

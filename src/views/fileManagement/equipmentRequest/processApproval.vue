@@ -8,7 +8,7 @@
       <template slot="title">
         <span>流程审批</span>
         <!-- 操作按钮 -->
-        <div class="btnBox">
+        <div class="btnBox" v-if="editType !== 'historyTask'">
           <el-button @click="handleSubmit"
                      type="primary">
             {{'同意' }}

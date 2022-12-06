@@ -9,25 +9,19 @@
                    type="text"
                    @click="addEquipmentRequest">新增</el-button>
       </div>
-      <el-tabs v-model="activeName"
-               @tab-click="handleClick"
-               type="card">
-        <el-tab-pane label="待处理任务"
-                     name="toDoTask">
-          <keep-alive>
-            <VexTable v-if="activeName === 'toDoTask'"
-                      ref="vexTable"
-                      :formConfig="formConfig"
-                      :columns="columns"
-                      editColumns="['search','del','record']"
-                      hasNotSlotButton="true"
-                      @emit-handle-search="handleSearch"
-                      @emit-handle-remove="handleRemove"
-                      @emit-handle-record="handleRecord"
-                      :paramsConfig="paramsConfig" />
-          </keep-alive>
-        </el-tab-pane>
-        <el-tab-pane label="已处理任务"
+      <keep-alive>
+        <VexTable ref="vexTable"
+                  :formConfig="formConfig"
+                  :columns="columns"
+                  editColumns="['search','del','record']"
+                  hasNotSlotButton="true"
+                  @emit-handle-search="handleSearch"
+                  @emit-handle-remove="handleRemove"
+                  @emit-handle-record="handleRecord"
+                  :paramsConfig="paramsConfig" />
+      </keep-alive>
+      <!-- </el-tab-pane> -->
+      <!-- <el-tab-pane label="已处理任务"
                      name="dealTask">
           <keep-alive>
             <VexTable v-if="activeName === 'dealTask'"
@@ -38,8 +32,8 @@
                       @emit-handle-search="handleSearch"
                       :paramsConfig="paramsConfig" />
           </keep-alive>
-        </el-tab-pane>
-      </el-tabs>
+        </el-tab-pane> -->
+      <!-- </el-tabs> -->
     </el-card>
 
     <!-- 新增流程申请 -->
@@ -227,8 +221,8 @@
 
     <!-- 操作记录 -->
     <el-dialog title="操作记录"
-                width="60%"
-                top="30px"
+               width="80%"
+               top="30px"
                :visible="processRecordDialogVisible"
                @close="processRecordDialogVisible = false">
       <div class="contentBox">
@@ -239,8 +233,8 @@
                            label="节点名称"
                            width="180">
           </el-table-column>
-          <el-table-column prop="nodeCode"
-                           label="节点编码"
+          <el-table-column prop="operator"
+                           label="操作人"
                            width="180">
           </el-table-column>
           <el-table-column prop="auditStatus"
@@ -248,7 +242,7 @@
                            width="180">
           </el-table-column>
           <el-table-column prop="auditmind"
-                           label="审核原因">
+                           label="操作说明">
           </el-table-column>
           <el-table-column prop="operatorTime"
                            label="操作时间">

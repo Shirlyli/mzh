@@ -7,32 +7,35 @@ export interface EquipmentInfoTypes {
   /**
    * 设备基础信息
    */
-  tHospitalEquipment: THospitalEquipment;
+  equipmentVO: THospitalEquipment;
   /**
    * 设备折旧表
    */
-  thospitalEquipmentDepreciations?: ThospitalEquipmentDepreciation[];
+  equipmentDepreciations?: ThospitalEquipmentDepreciation[];
   /**
    * 设备保养
    */
-  thospitalEquipmentMaintainWithBLOBs?: ThospitalEquipmentMaintainWithBLOB[];
-  tHospitalEquipmentPurchases: THospitalEquipmentPurchase[];
+  equipmentMaintain?: ThospitalEquipmentMaintainWithBLOB[];
+  /**
+   * 设备采购
+   */
+  equipmentPurchases?: THospitalEquipmentPurchase[];
   /**
    * 设备资料
    */
-  thospitalEquipmentResources?: ThospitalEquipmentResource[];
+  equipmentResources?: ThospitalEquipmentResource[];
   /**
    * 设备仓库记录
    */
-  thospitalEquipmentStocks?: ThospitalEquipmentStock[];
+  equipmentStocks?: ThospitalEquipmentStock[];
   /**
    * 出入库
    */
-  thospitalEquipmentStores?: ThospitalEquipmentStore[];
+  equipmentStores?: ThospitalEquipmentStore[];
   /**
    * 设备巡检
    */
-  tmzhEquipmentInspectionWithBLOBs?: TmzhEquipmentInspectionWithBLOB[];
+  equipmentInspection?: TmzhEquipmentInspectionWithBLOB[];
 }
 
 /**
@@ -103,7 +106,7 @@ export interface THospitalEquipment {
    * 医院id
    */
   hospitalId: string;
-  id: string;
+  id?: string;
   /**
    * 设备唯一识别码
    */
@@ -207,7 +210,7 @@ export interface THospitalEquipment {
   /**
    * 删除  1：正常；0：删除
    */
-  state: number;
+  state?: number;
   /**
    * 设备单位
    */
@@ -221,7 +224,7 @@ export interface THospitalEquipment {
 export interface THospitalEquipmentPurchase {
   /**
    * 验收合格日期
-   */  acceptanceTime: string;
+   */ acceptanceTime: string;
   /**
    * 到货截止日期
    */

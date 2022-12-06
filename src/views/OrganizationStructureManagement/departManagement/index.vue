@@ -5,10 +5,7 @@
         <el-card>
           <div slot="header"
                class="clearfix">
-            <span>设备类别树</span>
-            <!-- <el-button style="float: right; padding: 3px 0"
-                       type="text"
-                       @click="addNewEquipmentClass()">新增类别</el-button> -->
+            <span>科室分类</span>
           </div>
           <Tree ref="vxeTree"
                 :url="url"
@@ -17,10 +14,10 @@
         </el-card>
       </template>
       <template #right>
-        <el-card class="card-wrapper card-wrapper-left">
+        <el-card>
           <div slot="header"
                class="clearfix">
-            <span>设备类别管理</span>
+            <span>科室查询</span>
           </div>
           <VexTable ref="vexTable"
                     :formConfig="formConfig"
@@ -34,52 +31,75 @@
       </template>
     </main-sub-layout>
 
-    <!-- 新增模态框 -->
+    <!--  -->
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
-               :visible.sync="dialogVisible">
+               :visible="dialogVisible"
+               @close="dialogVisible = false">
+      <!-- 主体区域 -->
       <el-form ref="dataForm"
                :rules="rules"
-               :model="equipmentCategoryData"
+               :model="departmentData"
                label-position="left"
                label-width="100px"
                style="width: 400px; margin-left:50px;">
-        <el-form-item :label="'父级类别Id'"
-                      prop="pid">
-          <el-input v-model="equipmentCategoryData.pid"
+        <el-form-item :label="'上级科室Id'"
+                      prop="parentId">
+          <el-input v-model="departmentData.parentId"
                     placeholder="" readonly="readonly"></el-input>
         </el-form-item>
-        <el-form-item :label="'父级类别名称'"
-                      prop="pName">
-          <el-input v-model="equipmentCategoryData.pName"
+        <el-form-item :label="'上级科室'"
+                      prop="parentId">
+          <el-input v-model="departmentData.parentName"
                     placeholder="请选择" readonly="readonly"></el-input>
         </el-form-item>
-        <el-form-item :label="'类别名称'"
-                      prop="cName">
-          <el-input v-model="equipmentCategoryData.cName"
-                    placeholder="请输入" />
+        <el-form-item :label="'科室名称'"
+                      prop="departmentName">
+          <el-input v-model="departmentData.departmentName"
+                    placeholder="请输入科室名称" />
         </el-form-item>
-        <el-form-item :label="'医疗器械编码'"
-                      prop="cHospCode">
-          <el-input v-model="equipmentCategoryData.cHospCode"
-                    placeholder="请选择" readonly="readonly"></el-input>
+        <el-form-item :label="'科室编码'"
+                      prop="departmentCode">
+          <el-input v-model="departmentData.departmentCode"
+                    placeholder="自动生成"  readonly="readonly"/>
         </el-form-item>
-        <el-form-item :label="'财务编码'"
-                      prop="cFinancialCode">
-          <el-input v-model="equipmentCategoryData.cFinancialCode"
-                    placeholder="请输入" />
+        <el-form-item :label="'科室座机'"
+                      prop="departmentMobile">
+          <el-input v-model="departmentData.departmentMobile"
+                    placeholder="请输入科室座机" />
+        </el-form-item>
+
+        <el-form-item :label="'是否启用'"
+                      prop="departmentStatus">
+          <el-input v-model="departmentData.departmentStatus"
+                    placeholder="请输入是否启用" />
+        </el-form-item>
+        <el-form-item :label="'所在医院'"
+                      prop="companyInfoId">
+          <el-input v-model="departmentData.companyInfoId"
+                    placeholder="请输入所在医院" />
+        </el-form-item>
+
+        <el-form-item :label="'所在楼栋楼层'"
+                      prop="departmentDicid">
+          <el-input v-model="departmentData.departmentDicid"
+                    placeholder="请输入所在楼栋楼层" />
         </el-form-item>
         <el-form-item :label="'层级代码'"
                       prop="xpath">
-          <el-input v-model="equipmentCategoryData.xpath"
+          <el-input v-model="departmentData.xpath"
                     placeholder="层级代码" readonly="readonly" />
         </el-form-item>
         <el-form-item :label="'备注'">
-          <el-input v-model="equipmentCategoryData.note"
+          <el-input v-model="departmentData.note"
                     :autosize="{minRows: 5, maxRows: 8}"
                     type="textarea"
-                    placeholder="请输入" />
+                    placeholder="请输入备注" />
         </el-form-item>
+
+
       </el-form>
+
+      <!-- 底部操作 -->
       <div slot="footer"
            class="dialog-footer">
         <el-button @click="dialogVisible = false">
@@ -96,3 +116,9 @@
 
 <script lang="ts" src="./index.ts">
 </script>
+
+<style lang="scss" scoped>
+  .tab-container {
+    margin: 30px;
+  }
+</style>

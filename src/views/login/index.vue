@@ -5,7 +5,7 @@
            alt="">
     </div>
     <div>
-      <p>酶之宏医疗器械经营管理系统</p>
+      <p>酶之宏医疗设备管理系统</p>
       <el-form ref="loginForm"
                :model="loginForm"
                class="login-form"

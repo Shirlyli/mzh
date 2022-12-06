@@ -41,12 +41,12 @@
               {{ $t('navbar.profile') }}
             </el-dropdown-item>
           </router-link>
-          <router-link to="/">
+          <router-link to="/WDGZT">
             <el-dropdown-item>
               {{ $t('navbar.dashboard') }}
             </el-dropdown-item>
           </router-link>
-          <a
+          <!-- <a
             target="_blank"
             href="https://github.com/armour/vue-typescript-admin-template/"
           >
@@ -59,7 +59,7 @@
             href="https://armour.github.io/vue-typescript-admin-docs/"
           >
             <el-dropdown-item>Docs</el-dropdown-item>
-          </a>
+          </a> -->
           <el-dropdown-item
             divided
             @click.native="logout"

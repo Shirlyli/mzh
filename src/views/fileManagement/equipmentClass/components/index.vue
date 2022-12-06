@@ -1,9 +1,9 @@
 <template>
   <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
-             :visible.sync="equipmentVisible"
+             :visible.sync="showDialogVisible"
              top="30px"
              width="80%"
-             @close="equipmentVisible=false">
+             @close="handleCloseDialog">
     <el-form ref="dataForm"
              :rules="rules"
              :model="defaultEquipmentInfoData"
@@ -18,19 +18,30 @@
                      :name="item.key">
           <keep-alive>
             <div>
-              <div v-for="(formItem,index) in allFormList[item.key]"
-                   :key="index">
-                <!-- <p style="font-size: 18px;">{{Object.keys(formItem)[0]}}</p> -->
-                <el-row :gutter="20">
-                  <el-col :span="8"
-                          :key="i">
+              <el-row :gutter="20">
+                <div v-for="(formItem,index) in allFormList[item.key]"
+                     :key="index">
+                  <el-col :span="8">
                     <el-form-item :label="formItem.label"
                                   prop="type">
-                      <el-input v-model="defaultEquipmentInfoData[item.key][formItem.key]" />
+                      <el-select v-model="defaultEquipmentInfoData[item.key][formItem.key]"
+                                 placeholder="请选择"
+                                 v-if="formItem.type === 'select'">
+                        <el-option :label="options.label"
+                                   :value="options.value"
+                                   v-for="options in formItem.options"
+                                   :key="options.label"></el-option>
+                      </el-select>
+                      <el-date-picker v-model="defaultEquipmentInfoData[item.key][formItem.key]"
+                                      placeholder="请选择时间"
+                                      value-format="yyyy-MM-dd"
+                                      v-else-if="formItem.type === 'date'"></el-date-picker>
+                      <el-input v-model="defaultEquipmentInfoData[item.key][formItem.key]"
+                                v-else="!formItem.type" />
                     </el-form-item>
                   </el-col>
-                </el-row>
-              </div>
+                </div>
+              </el-row>
             </div>
           </keep-alive>
         </el-tab-pane>
@@ -39,7 +50,7 @@
     </el-form>
     <div slot="footer"
          class="dialog-footer">
-      <el-button @click="(equipmentVisible=false)">
+      <el-button @click="handleCloseDialog">
         {{ $t('table.cancel') }}
       </el-button>
       <el-button type="primary"

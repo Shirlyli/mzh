@@ -18,8 +18,7 @@ export default class extends Vue {
   private formConfig = {
     data: {
       name: "",
-      sex: "",
-      time: ""
+      time:"",
     },
     items: [
       {
@@ -36,7 +35,9 @@ export default class extends Vue {
     { type: "seq", width: 60 },
     { type: "checkbox", width: 80 },
     { field: "name", title: " 科室名称", treeNode: true },
-    { field: "basicData", title: "创建时间" },
+    { field: "mobile", title: "座机", treeNode: true },
+    { field: "note", title: "描述", treeNode: true },
+    { field: "ctime", title: "创建时间" },
     {
       width: 160,
       title: "操作",
@@ -57,7 +58,14 @@ export default class extends Vue {
     parentId: "",
     parentName: "",
     departmentName: "",
-    departmentId: ""
+    departmentId: "",
+    departmentCode: "",
+    departmentMobile:"",
+    departmentStatus:"",
+    companyInfoId:"",
+    departmentDicid:"",
+    note:"",
+    xpath:"",
   }; // 新增或编辑表单
 
   private rules = {
@@ -91,7 +99,14 @@ export default class extends Vue {
       parentId: id ?? "001",
       parentName: title ?? "医疗科室",
       departmentName: "",
-      departmentId: ""
+      departmentId: "",
+      departmentCode:"",
+      departmentMobile:"",
+      departmentStatus:"1",
+      companyInfoId:"533B4D0A2BAABC-3800-493E-9B08-663D9BDE3230",
+      departmentDicid:"",
+      note:"",
+      xpath:"",
     };
   }
 
@@ -115,23 +130,24 @@ export default class extends Vue {
   private createData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { parentId, departmentName } = this.departmentData;
+        const { parentId, departmentName,departmentCode,departmentMobile,departmentStatus,companyInfoId,departmentDicid,note,xpath} = this.departmentData;
         const params = {
           id: "",
           pid: parentId,
           name: departmentName,
           dispindex: "",
-          dCode: null,
-          mobile: null,
+          dCode: departmentCode,
+          mobile: departmentMobile,
           phone: null,
-          status: 0,
-          companyInfoId: "",
+          status: departmentStatus,
+          companyInfoId: companyInfoId,
           flag: null,
           ctime: null,
           path: "",
-          dicId: "",
-          note: null,
-          isLeaf: ""
+          dicId: departmentDicid,
+          note: note,
+          isLeaf: "",
+          xpath:xpath
         };
         const res: any = await updateEquipmentData(params);
         if (res.result) {
@@ -142,12 +158,7 @@ export default class extends Vue {
           );
         }
         this.dialogVisible = false;
-        this.$notify({
-          title: "成功",
-          message: "创建成功",
-          type: "success",
-          duration: 2000
-        });
+        this.$message.success("创建成功")
       }
     });
   }
@@ -156,23 +167,25 @@ export default class extends Vue {
   private updateData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { parentId, departmentName, departmentId } = this.departmentData;
+        const { parentId,parentName, departmentName, departmentId,departmentCode,departmentMobile,departmentStatus,companyInfoId,departmentDicid,note,xpath } = this.departmentData;
         const params = {
           id: departmentId,
           pid: parentId,
+          pname:parentName,
           name: departmentName,
           dispindex: "",
-          dCode: null,
-          mobile: null,
+          dCode: departmentCode,
+          mobile: departmentMobile,
           phone: null,
-          status: 0,
-          companyInfoId: "",
+          status: 1,
+          companyInfoId: companyInfoId,
           flag: null,
           ctime: null,
           path: "",
-          dicId: "",
+          dicId: departmentDicid,
           note: null,
-          isLeaf: ""
+          isLeaf: "",
+          xpath:xpath
         };
         const res: any = await updateEquipmentData(params);
         if (res.result) {
@@ -183,24 +196,26 @@ export default class extends Vue {
           );
         }
         this.dialogVisible = false;
-        this.$notify({
-          title: "成功",
-          message: "更新成功",
-          type: "success",
-          duration: 2000
-        });
+        this.$message.success("更新成功")
       }
     });
   }
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    const { name, id, pid } = row;
+    const { name, id, pid,pname,dCode,mobile,status,companyInfoId,dicId,note,xpath } = row;
     this.departmentData = {
       parentId: pid,
-      parentName: pid,
+      parentName: pname,
       departmentName: name,
-      departmentId: id
+      departmentId: id,
+      departmentCode:dCode,
+      departmentMobile:mobile,
+      departmentStatus:status,
+      companyInfoId:companyInfoId,
+      departmentDicid:dicId,
+      note:note,
+      xpath:xpath
     };
     this.dialogStatus = "update";
     this.dialogVisible = true;
@@ -227,11 +242,6 @@ export default class extends Vue {
       (this.$refs.vexTable as any).findList(this.paramsConfig);
       (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams);
     }
-    this.$notify({
-      title: "成功",
-      message: "删除成功",
-      type: "success",
-      duration: 2000
-    });
+    this.$message.success("删除成功")
   }
 }

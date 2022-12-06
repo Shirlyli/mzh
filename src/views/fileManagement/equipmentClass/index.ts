@@ -81,100 +81,52 @@ export default class extends Vue {
   private equipmentCategoryData: EquipmentInfoTypes = {
     id: "",
     state: 1,
-    tHospitalEquipment: {
-      id: "",
-      state: 1,
+    equipmentVO: {
       name: "健康小屋",
       createtime: "2022-11-01T00:00:00.000+00:00",
       departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
       marking: "XH-ZZ-05A",
       brand: "新海健康",
       origin: "",
-      equipmentCategoryId: "",
+      equipmentCategoryId: '',
       activationTime: "2021-09-11T00:00:00.000+00:00",
-      guarantee: "2022-11-12",
+      guarantee: '0',
       hospitalId: "13",
       manufactorId: "0",
-      equipmentStates: "1",
-      idCode: "",
-      price: " 50000.0",
+      equipmentStates: '1',
+      idCode: '',
+      price: '50000.0',
       batchNumber: "MZH-20210009",
-      registrationCertificat: "",
-      productionName: "",
+      registrationCertificat: '',
+      productionName: '',
       productionTime: "",
       validity: "",
-      region: "",
-      purchaseTime: "",
-      isExordium: "1",
-      meterings: "0",
-      source: "",
-      isMetering: "0",
-      meteringTime: "",
-      meteringType: "",
-      isEmergency: "",
-      isFixedassets: "",
-      isSpecial: "",
-      fixedassetsType: "",
-      intakeDate: "",
-      financialNo: "",
-      equipmentLocation: "",
-      fixedAssetsNo: "",
-      recordNo: "",
-      unit: "",
-      equipmentPrincipal: "",
-      barCodeNo: "",
-      img: "",
-      scoringGuideUrl: "",
-      qrcode: "",
-      barCode: ""
+      region: '',
+      purchaseTime: '',
+      isExordium: '1',
+      meterings: '1',
+      source: '',
+      isMetering: '1',
+      meteringTime: '',
+      meteringType: '',
+      isEmergency: '',
+      isFixedassets: '',
+      isSpecial: '',
+      fixedassetsType: '',
+      intakeDate: '',
+      financialNo: '',
+      equipmentLocation: '',
+      fixedAssetsNo: '',
+      recordNo: '',
+      unit: '',
+      equipmentPrincipal: '',
+      barCodeNo: '',
+      img: '',
+      scoringGuideUrl: '',
+      qrcode: '',
+      barCode: ''
     },
-    tHospitalEquipmentPurchases: [
-      {
-        installTime:'',
-        id: "",
-        aogDeadlineTime: "",
-        aogTime: "",
-        argumentationTime: "",
-        biddingTime: "",
-        budget: "",
-        checkNote: "",
-        contractAmount: "",
-        contractDeadlineTime: "",
-        contractName: "",
-        contractNum: "",
-        equipmentId: "",
-        invitationType: "",
-        partyBPhone: "",
-        partyBUnit: "",
-        partyBUser: "",
-        projectNote: "",
-        purchaseNote: "",
-        acceptanceTime: "",
-        oneCheckTime: "",
-        twoCheckTime: "",
-        firstAmountTime: "",
-        endAmountTime: "",
-        purchaseTime: "",
-        purchaseType: "",
-        purchaseWay: "",
-        recordNum: "",
-        recordUser: "",
-        resource: "",
-        signingTime: "",
-        tHospitalEquipmentPayments: [
-          {
-            id: "",
-            amount: "",
-            paymentTime: "",
-            periods: "",
-            prepaymentTime: "",
-            purchaseId: "",
-            status: ""
-          }
-        ]
-      }
-    ],
-    thospitalEquipmentMaintainWithBLOBs: [
+    equipmentMaintain: [
       {
         id: "",
         equipmentId: "",
@@ -192,7 +144,7 @@ export default class extends Vue {
         description: "零件损坏，需要更换"
       }
     ],
-    thospitalEquipmentStores: [
+    equipmentStores: [
       {
         id: "",
         equipmentId: "",
@@ -220,7 +172,7 @@ export default class extends Vue {
         note: "出库"
       }
     ],
-    thospitalEquipmentResources: [
+    equipmentResources: [
       {
         id: "",
         equipmentId: "",
@@ -241,7 +193,7 @@ export default class extends Vue {
         instructionsName: "使用说明书名称"
       }
     ],
-    thospitalEquipmentStocks: [
+    equipmentStocks: [
       {
         id: "",
         equipmentId: "",
@@ -249,7 +201,7 @@ export default class extends Vue {
         boundNums: "8"
       }
     ],
-    thospitalEquipmentDepreciations: [
+    equipmentDepreciations: [
       {
         id: "",
         equipmentId: "",
@@ -260,7 +212,7 @@ export default class extends Vue {
         depreciationUser: "50B978FC6A069E-A0F3-4481-96C7-BD45AEC295EC"
       }
     ],
-    tmzhEquipmentInspectionWithBLOBs: [
+    equipmentInspection: [
       {
         id: "",
         equipmentId: "008C17837C8D11-D3B1-4191-928D-A72141D9632B",
@@ -306,7 +258,6 @@ export default class extends Vue {
     this.equipmentCategoryData = {
       ...this.equipmentCategoryData
     };
-    console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData);
   }
 
   // 接收树形组件点击节点数据
@@ -327,6 +278,7 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
+    console.log("🚀 ~ row", row)
     this.equipmentCategoryData = { ...row };
     console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData);
     this.dialogStatus = "update";
@@ -382,6 +334,10 @@ export default class extends Vue {
   private handleSubmit(value: boolean) {
     (this.$refs.vexTable as any).findList(this.paramsConfig);
     (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams);
+    this.dialogVisible = false;
+  }
+
+  private handleClose() {
     this.dialogVisible = false;
   }
 }
