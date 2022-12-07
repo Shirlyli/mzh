@@ -5,39 +5,30 @@ import { delProcessData, updateProcessData } from "@/api/basic";
 import { Form } from "element-ui";
 import { formatMIsAvailable } from "@/shared/utils";
 import MainSubLayout from "@/components/CollpaseFlex/index.vue";
+import Tree from "@/components/Tree/index.vue";
 @Component({
   name: "InlineEditTable",
   components: {
     VexTable,
-    MainSubLayout
+    MainSubLayout,
+    Tree
   }
 })
 export default class extends Vue {
+  // 左侧字典url
+  private url = "/hospitalProcess/queryAllProcessList";
   // 列表查询项-表单
   private formConfig = {
-    data: {
-      processName: "",
-      nodeName: "",
-      cteaterTime: ""
-    },
-    items: [
-      {
-        field: "processName",
-        title: "流程名称",
-        itemRender: { name: "$input", props: { placeholder: "请输入流程名称" } }
-      },
-      {
-        field: "nodeName",
-        title: "节点名称",
-        itemRender: { name: "$input", props: { placeholder: "请输入节点名称" } }
-      },
-      {
-        field: "cteaterTime",
-        title: "创建时间",
-        slots: { default: "create_time" }
-      },
-      { slots: { default: "operate_item" } }
-    ] // 表单项
+    data: {},
+    items: [] // 表单项
+  };
+
+  private rules = {};
+  // 树形图传参
+  private treeParams = {
+    page: "1",
+    limit: "10",
+    entity: {}
   };
 
   private getformatMIsAvailable = (data: any) => {
@@ -49,13 +40,14 @@ export default class extends Vue {
   };
 
   private formatMIsRoleType(data: any) {
-    return data.cellValue === "1"
+    return data.cellValue === "role"
       ? "角色"
-      : data.cellValue === "0"
+      : data.cellValue === "user"
       ? "用户"
       : "-";
   }
 
+  private nodeClickData: any = {};
   // 流程配置列表项
   private columns = [
     { type: "seq", width: 60 },
@@ -87,13 +79,9 @@ export default class extends Vue {
   ];
 
   private paramsConfig: any = {
-    url: "/hospitalProcess/query", // 根据表单查询项查询数据
+    url: "/hospitalProcess/queryProcessNodeListByProcessNode", // 根据表单查询项查询数据
     params: {
-      page: "1",
-      limit: "10",
-      entity: {
-        process_code: "pro_kssq"
-      }
+      processCode: "pro_kssq"
     }
   };
 
@@ -108,14 +96,43 @@ export default class extends Vue {
     roleTypeId: ""
   };
 
+  // 接收树形组件点击节点数据
+  private handleNodeClick(data: any) {
+    console.log("🚀 ~ data ~ 接收树形组件点击节点数据", data);
+    this.nodeClickData = data;
+    // 查询菜单及下级菜单 /api/common/dicInfo/querySelfAndPar
+    this.paramsConfig = {
+      url: "/hospitalProcess/queryProcessNodeListByProcessNode", // 根据表单查询项查询数据
+      params: {
+        processCode: data.processCode
+      }
+    };
+  }
+
   private dialogVisible = false; //模态框
   private dialogStatus = "create";
   created() {}
 
+  private clearForm() {
+    this.processData = {
+      processName: "",
+      processCode: "",
+      nodeName: "",
+      nodeNameCode: "",
+      nodeSort: "",
+      isDisable: "",
+      roleType: "",
+      roleTypeId: ""
+    };
+  }
   // 新增流程配置
   private handleInsert(row: any) {
-    console.log("🚀 ~ row", row);
-    const { processName, processCode } = row[0];
+    this.clearForm();
+    if (!this.nodeClickData.id) {
+      this.$message.error("请选择流程名称后新增");
+      return;
+    }
+    const { processName, processCode } = this.nodeClickData;
     this.dialogVisible = true;
     this.processData = {
       ...this.processData,
@@ -136,6 +153,7 @@ export default class extends Vue {
         this.dialogVisible = false;
         (this.$refs.dataForm as Form).resetFields();
         this.$message.success("新增流程配置成功");
+        this.clearForm();
       }
     });
   }
@@ -151,7 +169,7 @@ export default class extends Vue {
         this.dialogVisible = false;
         (this.$refs.dataForm as Form).resetFields();
         this.$message.success("修改流程配置成功");
-
+        this.clearForm();
       }
     });
   }

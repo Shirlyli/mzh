@@ -32,7 +32,6 @@ export default class extends Vue {
   @Prop({ default: false }) dialogVisible!: boolean;
   @Watch("dialogVisible")
   private OnchangeDialogVisible(value: any) {
-    console.log("🚀 ~ value", value);
     this.showDialogVisible = value;
   }
   private tabMapOptions = [
@@ -56,14 +55,12 @@ export default class extends Vue {
   @Prop() equipmentCategoryData!: any;
   @Watch("equipmentCategoryData")
   private onChangeEquipmentCategoryData(data: any) {
-    console.log("🚀 ~ data", data);
     this.defaultEquipmentInfoData = data;
   }
 
   private activeName = "equipmentVO"; // 当前tab页
   @Watch("activeName") // 监听tab页
   private onActiveNameChange(value: string) {
-    console.log("🚀 ~ value", value);
     console.log(this.defaultEquipmentInfoData);
     // switch (this.activeName) {
     //   case "equipmentVO":
@@ -129,21 +126,21 @@ export default class extends Vue {
           id,
           state
         } = this.equipmentCategoryData;
-        let params = [
-          {
-            equipmentDepreciations,
-            equipmentInspection,
-            equipmentMaintain,
-            equipmentPurchases,
-            equipmentResources,
-            equipmentStocks,
-            equipmentStores,
-            equipmentVO,
-            id,
-            state
-          }
-        ];
-        console.log("🚀 ~ this.defaultEquipmentInfoData", params);
+        const paramsConfig = {
+          equipmentDepreciations: [equipmentDepreciations],
+          equipmentInspection: [equipmentInspection],
+          equipmentMaintain: [equipmentMaintain],
+          equipmentPurchases: [equipmentPurchases],
+          equipmentResources: [equipmentResources],
+          equipmentStocks: [equipmentStocks],
+          equipmentStores: [equipmentStores],
+          equipmentVO,
+          id,
+          state
+        };
+        let params = [];
+        params.push(paramsConfig);
+        console.log("🚀 ~ this.params", params);
         const res: any = await updateEquipmentInfoData(params);
         if (res.code == 200) {
           this.emitSubmit(true);
@@ -169,23 +166,20 @@ export default class extends Vue {
           id,
           state
         } = this.equipmentCategoryData;
-        console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData)
-        const paramsCOnfig = {
-          equipmentDepreciations,
-          equipmentInspection,
-          equipmentMaintain,
-          equipmentPurchases,
-          equipmentResources,
-          equipmentStocks,
-          equipmentStores,
+        const paramsConfig = {
+          equipmentDepreciations: [equipmentDepreciations],
+          equipmentInspection: [equipmentInspection],
+          equipmentMaintain: [equipmentMaintain],
+          equipmentPurchases: [equipmentPurchases],
+          equipmentResources: [equipmentResources],
+          equipmentStocks: [equipmentStocks],
+          equipmentStores: [equipmentStores],
           equipmentVO,
           id,
           state
         };
-        
         let params = [];
-        params.push(paramsCOnfig)
-        console.log("🚀 ~ this.params", params);
+        params.push(paramsConfig);
         const res: any = await updateEquipmentInfoData(params);
         if (res.code == 200) {
           this.emitSubmit(true);

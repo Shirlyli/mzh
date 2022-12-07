@@ -34,7 +34,6 @@ export default class extends Vue {
   private nodeClickData: any = {}; // 点击左侧科室数据
   private url = "THospitalDepartmentInfo/queryTree"; // 左侧字典
 
-
   private formConfig = {
     data: {
       name: "",
@@ -53,17 +52,22 @@ export default class extends Vue {
       },
       { slots: { default: "operate_item" } }
     ] // 表单项
-  };//查询配置
+  }; //查询配置
   private columns = [
     { type: "seq", width: 60, fixed: "left" },
     { type: "checkbox", width: 60, fixed: "left" },
-    { field: "name", title: "设备名称", treeNode: true, width: 140 ,},
+    { field: "name", title: "设备名称", treeNode: true, width: 140 },
     // { field: "id", title: "设备ID", width: 100 },
     { field: "marking", title: "设备型号", width: 100 },
     { field: "brand", title: "设备品牌", width: 100 },
     { field: "num", title: "设备数量", width: 100 },
-    { field: "equipmentCategoryId", title: "设备类别", width: 100 },//formatter: this.getformatMIsAvailable
-    { field: "department", title: "科室名称", width: 100 ,slots:{default:'department'}},
+    { field: "equipmentCategoryId", title: "设备类别", width: 100 }, //formatter: this.getformatMIsAvailable
+    {
+      field: "department",
+      title: "科室名称",
+      width: 100,
+      slots: { default: "department" }
+    },
     // { field: "departmentId", title: "科室", width: 100 },
     { field: "reason", title: "用途说明", width: 100 },
     { field: "userId", title: "申请人", width: 100 },
@@ -79,72 +83,73 @@ export default class extends Vue {
       fixed: "right"
     }
   ]; // 列表配置项
-  private equipmentCategoryData: EquipmentInfoTypes = {
+  private equipmentCategoryData: any = {
     id: "",
     state: 1,
     equipmentVO: {
-      name: "健康小屋",
-      createtime: "2022-11-01T00:00:00.000+00:00",
+      name: "",
+      createtime: "",
       departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
-      marking: "XH-ZZ-05A",
-      brand: "新海健康",
+      marking: "",
+      brand: "",
       origin: "",
-      equipmentCategoryId: '',
+      equipmentCategoryId: "",
       activationTime: "2021-09-11T00:00:00.000+00:00",
-      guarantee: '0',
-      hospitalId: "13",
-      manufactorId: "0",
-      equipmentStates: '1',
-      idCode: '',
-      price: '50000.0',
-      batchNumber: "MZH-20210009",
-      registrationCertificat: '',
-      productionName: '',
+      guarantee: "",
+      hospitalId: "",
+      manufactorId: "",
+      equipmentStates: "",
+      idCode: "",
+      price: "",
+      batchNumber: "",
+      registrationCertificat: "",
+      productionName: "",
       productionTime: "",
       validity: "",
-      region: '',
-      purchaseTime: '',
-      isExordium: '1',
-      meterings: '1',
-      source: '',
-      isMetering: '1',
-      meteringTime: '',
-      meteringType: '',
-      isEmergency: '',
-      isFixedassets: '',
-      isSpecial: '',
-      fixedassetsType: '',
-      intakeDate: '',
-      financialNo: '',
-      equipmentLocation: '',
-      fixedAssetsNo: '',
-      recordNo: '',
-      unit: '',
-      equipmentPrincipal: '',
-      barCodeNo: '',
-      img: '',
-      scoringGuideUrl: '',
-      qrcode: '',
-      barCode: ''
+      region: "",
+      purchaseTime: "",
+      isExordium: "",
+      meterings: "",
+      source: "",
+      isMetering: "",
+      meteringTime: "",
+      meteringType: "",
+      isEmergency: "",
+      isFixedassets: "",
+      isSpecial: "",
+      fixedassetsType: "",
+      intakeDate: "",
+      financialNo: "",
+      equipmentLocation: "",
+      fixedAssetsNo: "",
+      recordNo: "",
+      unit: "",
+      equipmentPrincipal: "",
+      barCodeNo: "",
+      img: "",
+      scoringGuideUrl: "",
+      qrcode: "",
+      barCode: ""
     },
-    equipmentMaintain: [
-      {
-        id: "",
-        equipmentId: "",
-        lastMaintainTime: "2021-12-31T16:00:00.000+00:00",
-        nextMaintainTime: null,
-        cost: 580.0,
-        createtime: null,
-        companyInfoId: "14",
-        userId: "87",
-        warrantyPeriod: null,
-        facilitator: null,
-        facilitatorPhone: "facilitator_phone",
-        parts: "配件丢失",
-        img: null,
-        description: "零件损坏，需要更换"
-      }
-    ],
+    equipmentMaintain: {
+      id: "",
+      equipmentId: "",
+      lastMaintainTime: "2021-12-31T16:00:00.000+00:00",
+      nextMaintainTime: null,
+      cost: 580.0,
+      createtime: null,
+      companyInfoId: "14",
+      userId: "87",
+      warrantyPeriod: null,
+      facilitator: null,
+      facilitatorPhone: "facilitator_phone",
+      parts: "配件丢失",
+      img: null,
+      description: "零件损坏，需要更换"
+    },
+    // equipmentPurchases:{
+
+    // },
     equipmentStores: [
       {
         id: "",
@@ -173,101 +178,92 @@ export default class extends Vue {
         note: "出库"
       }
     ],
-    equipmentResources: [
-      {
-        id: "",
-        equipmentId: "",
-        maintainUrl:
-          "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
-        meteringUrl:
-          "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
-        technologyUrl:
-          "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
-        paymentUrl:
-          "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
-        instructionsUrl:
-          "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
-        maintainName: "保养说明书名称",
-        meteringName: "计量操作文档名称",
-        technologyName: "技术参数名称",
-        paymentName: "付款计划名称",
-        instructionsName: "使用说明书名称"
-      }
-    ],
-    equipmentStocks: [
-      {
-        id: "",
-        equipmentId: "",
-        departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
-        boundNums: "8"
-      }
-    ],
-    equipmentDepreciations: [
-      {
-        id: "",
-        equipmentId: "",
-        depreciationTime: "2023-12-31T16:00:00",
-        depreciationLimit: "10年",
-        depreciationAmount: "100000",
-        depreciationPeriods: "8",
-        depreciationUser: "50B978FC6A069E-A0F3-4481-96C7-BD45AEC295EC"
-      }
-    ],
-    equipmentInspection: [
-      {
-        id: "",
-        equipmentId: "008C17837C8D11-D3B1-4191-928D-A72141D9632B",
-        isPeriod: 1,
-        isAppearance: 0,
-        isParts: 0,
-        isFunction: 0,
-        inspectionTime: "2021-12-31T16:00:00.000+00:00",
-        createtime: null,
-        userId: "22",
-        appearance: "外观出现破损",
-        parts: "配件丢失",
-        function: "功能异常",
-        img:
-          "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
-        description: "设备出现大问题",
-        note: null
-      }
-    ]
+    equipmentResources: {
+      id: "",
+      equipmentId: "",
+      maintainUrl:
+        "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
+      meteringUrl:
+        "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
+      technologyUrl:
+        "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
+      paymentUrl:
+        "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
+      instructionsUrl:
+        "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
+      maintainName: "保养说明书名称",
+      meteringName: "计量操作文档名称",
+      technologyName: "技术参数名称",
+      paymentName: "付款计划名称",
+      instructionsName: "使用说明书名称"
+    },
+    equipmentStocks: {
+      id: "",
+      equipmentId: "",
+      departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
+      boundNums: "8"
+    },
+    equipmentDepreciations: {
+      id: "",
+      equipmentId: "",
+      depreciationTime: "2023-12-31T16:00:00",
+      depreciationLimit: "10年",
+      depreciationAmount: "100000",
+      depreciationPeriods: "8",
+      depreciationUser: "50B978FC6A069E-A0F3-4481-96C7-BD45AEC295EC"
+    },
+    equipmentInspection: {
+      id: "",
+      equipmentId: "008C17837C8D11-D3B1-4191-928D-A72141D9632B",
+      isPeriod: 1,
+      isAppearance: 0,
+      isParts: 0,
+      isFunction: 0,
+      inspectionTime: "2021-12-31T16:00:00.000+00:00",
+      createtime: null,
+      userId: "22",
+      appearance: "外观出现破损",
+      parts: "配件丢失",
+      function: "功能异常",
+      img:
+        "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
+      description: "设备出现大问题",
+      note: null
+    }
   }; // 设备新增或编辑表单
   private dialogVisible = false; // 新增模态框
   private dialogStatus = "create"; // 模态框新增或修改
   private paramsConfig: any = {
-    url: "equipment/getEquipmentInfo", 
+    url: "equipment/getEquipmentInfo",
     searchByDepartmentIdUrl: "equipment/getEquipmentInfoByDepartMentId", // 通过科室id查询数据
     params: {
       page: 1,
       limit: 10,
       entity: {}
     }
-  };// 根据表单查询项查询数据
+  }; // 根据表单查询项查询数据
 
-  private formatterValue(data:any){
-    console.log("🚀 ~ data", data)
-    
+  private formatterValue(data: any) {
+    console.log("🚀 ~ data", data);
   }
   // 新增设备
   private handleInsert() {
-    if(!this.nodeClickData.id){
-      Message.error('请选中科室后新增')
-      return 
+    if (!this.nodeClickData.id) {
+      Message.error("请选中科室后新增");
+      return;
     }
     this.dialogVisible = true;
     this.dialogStatus = "create";
-    const { id ,title} = this.nodeClickData;
+    const { id, title } = this.nodeClickData;
     console.log("🚀 ~ this.nodeClickData", this.nodeClickData);
     this.equipmentCategoryData = {
       ...this.equipmentCategoryData,
-      equipmentVO:{
+      equipmentVO: {
         ...this.equipmentCategoryData.equipmentVO,
-        departmentId:id
+        departmentId: id
       }
     };
-    console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData)
+    console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData);
   }
 
   // 接收树形组件点击节点数据
@@ -288,8 +284,41 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    console.log("🚀 ~ row", row)
-    this.equipmentCategoryData = { ...row };
+    const {
+      equipmentDepreciations,
+      equipmentInspection,
+      equipmentMaintain,
+      equipmentPurchases,
+      equipmentResources,
+      equipmentStocks,
+      equipmentStores,
+      equipmentVO,
+      id,
+      state
+    } = row;
+    console.log(
+      "🚀 ~触发编辑事件 row",
+      equipmentDepreciations,
+      equipmentInspection,
+      equipmentMaintain,
+      equipmentPurchases,
+      equipmentResources,
+      equipmentStocks,
+      equipmentStores,
+      equipmentVO
+    );
+    this.equipmentCategoryData = {
+      id,
+      state,
+      equipmentDepreciations:{...equipmentDepreciations[0],id},
+      equipmentInspection:{...equipmentInspection[0],id},
+      equipmentMaintain:{...equipmentMaintain[0],id},
+      equipmentPurchases:{...equipmentPurchases[0],id},
+      equipmentResources:{...equipmentResources[0],id},
+      equipmentStocks:{...equipmentStocks[0],id},
+      equipmentStores:{...equipmentStores[0],id},
+      equipmentVO
+    };
     console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData);
     this.dialogStatus = "update";
     this.dialogVisible = true;

@@ -432,3 +432,22 @@ export const saveRoleWithMenu = (data: { roleId: string; menuId: string }) =>
     method: "POST",
     data
   });
+
+/**
+ * 操作日志
+ * log/queryByCondition
+ * log/del
+ */
+export const queryOperationLogs = (data: { roleId: string }) =>
+  request({
+    url: "/log/queryByCondition",
+    method: "POST",
+    data
+  });
+
+export const delOperationLogs = (data: { roleId: string; menuId: string }) =>
+  request({
+    url: "/log/del",
+    method: "POST",
+    data
+  });

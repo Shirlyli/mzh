@@ -21,7 +21,8 @@ export interface IAppState {
 @Module({ dynamic: true, store, name: 'app' })
 class App extends VuexModule implements IAppState {
   public sidebar = {
-    opened: getSidebarStatus() !== 'closed',
+    // opened: getSidebarStatus() !== 'closed',
+    opened:true,
     withoutAnimation: false
   }
 

@@ -9,6 +9,7 @@
           </div>
           <Tree ref="vxeTree"
                 :url="url"
+                type="process"
                 :params="treeParams"
                 @emit-handle-click="handleNodeClick" />
         </el-card>
@@ -84,7 +85,7 @@
         </el-form-item>
         <el-form-item :label="'角色名称'"
                       prop="roleTypeId">
-          <el-input v-model="processData.roleType"
+          <el-input v-model="processData.roleTypeId"
                     placeholder="请输入" />
         </el-form-item>
       </el-form>

@@ -20,7 +20,7 @@
 <script lang="ts">
 import { getTreeData } from '@/api/equipment'
 import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
-
+import _ from 'lodash'
 @Component({
   name: 'Tree',
   components: {},
@@ -28,8 +28,9 @@ import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
 export default class extends Vue {
   @Prop({ default: String }) url!: string
   @Prop() params!: any
+  @Prop() type!: string
   public filterText = ''
-  public treeData = [] // 树形数据
+  public treeData: any[] = [] // 树形数据
   public treeLoading = false // loading是否
   public expandData: any = [] //默认展开数据集合
   created() {
@@ -42,14 +43,23 @@ export default class extends Vue {
     try {
       const res: any = await getTreeData(this.url, this.params)
       if (res?.code === 200) {
-        if (res.data[0] && res.data[0].children) {
+        if (this.type === 'process') {
+          this.treeData = _.compact(res.data).map((item: any) => {
+            return {
+              ...item,
+              id: item?.processCode,
+              title: item?.processName,
+              children: [],
+            }
+          })
+        } else if (res.data[0] && res.data[0].children) {
           res.data[0].children.forEach((element: any) => {
             this.expandData.push(element.id)
           })
+          this.$nextTick(() => {
+            this.treeData = res.data
+          })
         }
-        this.$nextTick(() => {
-          this.treeData = res.data
-        })
       }
     } catch (error) {
       this.treeData = []

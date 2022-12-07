@@ -106,7 +106,7 @@ export default class extends Vue {
     exportConfig: {},
     treeConfig: {
       transform: true,
-      rowField: this.type === 'process' ? 'processCode' : 'id',
+      rowField: 'id',
       // parentField: 'pid',
       // iconOpen: 'vxe-icon-square-minus-fill',
       // iconClose: 'vxe-icon-square-plus-fill',
@@ -117,7 +117,7 @@ export default class extends Vue {
       // 设置复选框支持分页勾选，需要设置 rowId 行数据主键
       reserve: true,
     },
-    formConfig: this.formConfig,
+    formConfig: this.formConfig?? {},
     columns: this.columns, // 列表项数据
   }
 
@@ -143,13 +143,11 @@ export default class extends Vue {
     try {
       const res: any = await getTableDataList(config.url, config.params)
       if ((res.result || res.code === 200) && res.data) {
-        if (this.type === 'process') {
-          this.tableData = res.data[0].processInfo
-        } else if (this.type === 'equipmentSearch') {
-          this.tableData = res.data.map((item:any)=>{
-            return {...item,...item.equipmentVO}
+        if (this.type === 'equipmentSearch') {
+          this.tableData = res.data.map((item: any) => {
+            return { ...item, ...item.equipmentVO }
           })
-          console.log("🚀 ~ this.tableData", this.tableData)
+          console.log('🚀 ~ this.tableData', this.tableData)
           this.tablePage.total = res.count
         } else {
           this.tableData = res.data
@@ -226,7 +224,7 @@ export default class extends Vue {
   }
 
   private insertEvent() {
-    if (this.type === 'process' && this.checkedList.length) {
+    if (this.type === 'process') {
       this.emitHandleInsert(this.checkedList)
     } else if (this.type !== 'process') {
       this.emitHandleInsert([])
