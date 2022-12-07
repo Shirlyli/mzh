@@ -27,13 +27,13 @@ import { updateEquipmentInfoData } from "@/api/equipment";
   name: "EquipmentFormDialog"
 })
 export default class extends Vue {
-  private showDialogVisible =false
+  private showDialogVisible = false;
   @Prop({ default: "create" }) dialogStatus!: string;
   @Prop({ default: false }) dialogVisible!: boolean;
   @Watch("dialogVisible")
-  private OnchangeDialogVisible(value:any){
-    console.log("🚀 ~ value", value)
-    this.showDialogVisible = value
+  private OnchangeDialogVisible(value: any) {
+    console.log("🚀 ~ value", value);
+    this.showDialogVisible = value;
   }
   private tabMapOptions = [
     { label: "设备基础信息", key: "equipmentVO" },
@@ -52,9 +52,14 @@ export default class extends Vue {
       { required: true, message: "请输入部门名称", trigger: "change" }
     ]
   }; // 表单校验
+  private defaultEquipmentInfoData: any = {}; // 默认新增模态框数据
   @Prop() equipmentCategoryData!: any;
-  private defaultEquipmentInfoData: EquipmentInfoTypes = this
-    .equipmentCategoryData; // 默认新增模态框数据
+  @Watch("equipmentCategoryData")
+  private onChangeEquipmentCategoryData(data: any) {
+    console.log("🚀 ~ data", data);
+    this.defaultEquipmentInfoData = data;
+  }
+
   private activeName = "equipmentVO"; // 当前tab页
   @Watch("activeName") // 监听tab页
   private onActiveNameChange(value: string) {
@@ -93,13 +98,13 @@ export default class extends Vue {
   created() {
     this.allFormList = {
       equipmentVO: equipmentVO,
-      equipmentPurchases:equipmentPurchases,
-      equipmentResources:equipmentResources,
-      equipmentMaintain:equipmentMaintain,
-      equipmentInspection:equipmentInspection,
-      equipmentStocks:equipmentStocks,
-      thospitalEquipmentStores:equipmentStores,
-      equipmentDepreciations:equipmentDepreciations
+      equipmentPurchases: equipmentPurchases,
+      equipmentResources: equipmentResources,
+      equipmentMaintain: equipmentMaintain,
+      equipmentInspection: equipmentInspection,
+      equipmentStocks: equipmentStocks,
+      thospitalEquipmentStores: equipmentStores,
+      equipmentDepreciations: equipmentDepreciations
     };
   }
 
@@ -112,13 +117,33 @@ export default class extends Vue {
     // console.log(this.allFormList);
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        let params = [];
-        params.push(this.equipmentCategoryData);
-        console.log(
-          "🚀 ~ this.defaultEquipmentInfoData",
-          this.equipmentCategoryData,
-          params
-        );
+        const {
+          equipmentDepreciations,
+          equipmentInspection,
+          equipmentMaintain,
+          equipmentPurchases,
+          equipmentResources,
+          equipmentStocks,
+          equipmentStores,
+          equipmentVO,
+          id,
+          state
+        } = this.equipmentCategoryData;
+        let params = [
+          {
+            equipmentDepreciations,
+            equipmentInspection,
+            equipmentMaintain,
+            equipmentPurchases,
+            equipmentResources,
+            equipmentStocks,
+            equipmentStores,
+            equipmentVO,
+            id,
+            state
+          }
+        ];
+        console.log("🚀 ~ this.defaultEquipmentInfoData", params);
         const res: any = await updateEquipmentInfoData(params);
         if (res.code == 200) {
           this.emitSubmit(true);
@@ -132,9 +157,35 @@ export default class extends Vue {
   private updateData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
+        const {
+          equipmentDepreciations,
+          equipmentInspection,
+          equipmentMaintain,
+          equipmentPurchases,
+          equipmentResources,
+          equipmentStocks,
+          equipmentStores,
+          equipmentVO,
+          id,
+          state
+        } = this.equipmentCategoryData;
+        console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData)
+        const paramsCOnfig = {
+          equipmentDepreciations,
+          equipmentInspection,
+          equipmentMaintain,
+          equipmentPurchases,
+          equipmentResources,
+          equipmentStocks,
+          equipmentStores,
+          equipmentVO,
+          id,
+          state
+        };
+        
         let params = [];
-        params.push(this.defaultEquipmentInfoData);
-        console.log("🚀 ~ this.defaultEquipmentInfoData", params);
+        params.push(paramsCOnfig)
+        console.log("🚀 ~ this.params", params);
         const res: any = await updateEquipmentInfoData(params);
         if (res.code == 200) {
           this.emitSubmit(true);

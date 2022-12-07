@@ -39,6 +39,7 @@ VXETable.renderer.add('runningState',{
     return h('span','222')
   }
 })
+
 Vue.prototype.$moment = moment;
 
 Vue.use(SvgIcon, {

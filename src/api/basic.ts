@@ -415,3 +415,20 @@ export const handleSupplierContractDel = (data: { ids: string } | {}) =>
 /**
  * 合同管理结束
  */
+
+/**
+ * 权限管理
+ */
+export const queryMenuTreeAndChoose = (data: { roleId: string }) =>
+  request({
+    url: "/auth/menuRole/queryMenuTreeAndChoose",
+    method: "POST",
+    data
+  });
+
+export const saveRoleWithMenu = (data: { roleId: string; menuId: string }) =>
+  request({
+    url: "/auth/menuRole/save",
+    method: "POST",
+    data
+  });

@@ -138,12 +138,12 @@ class Permission extends VuexModule implements IPermissionState {
   @Action
   public GenerateRoutes(roles: string[]) {
     return new Promise(resolve => {
-      // let accessedRoutes;
-      // if (roles.includes("admin")) {
-      //   accessedRoutes = asyncRoutes;
-      // } else {
-      //   accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
-      // }
+      let accessedRoutes;
+      if (roles.includes("admin")) {
+        accessedRoutes = asyncRoutes;
+      } else {
+        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
+      }
       // console.log("🚀 ~ asyncRoutes", asyncRoutes);
       // this.SET_ROUTES(accessedRoutes);
       // 【新加入】开始
@@ -162,7 +162,7 @@ class Permission extends VuexModule implements IPermissionState {
       //把data的数据拷贝到loadMenuData里面
       Object.assign(loadMenuData, data);
       //把asyncRoutes的数据拷贝到tempAsyncRoutes里面
-      const tempAsyncRoutes = Object.assign([]);
+      const tempAsyncRoutes = Object.assign([],accessedRoutes);
       // 最最重要的，把loadMenuData追加到tempAsyncRoutes后面
       generaMenu(tempAsyncRoutes, loadMenuData);
       //定义accessedRoutes

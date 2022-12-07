@@ -20,6 +20,9 @@
         <vxe-button @click="$refs.xGrid.exportData()">导出</vxe-button>
       </template>
 
+      <template #department="{row}">
+        <span>{{row.department?row.department.name :'-'}}</span>
+      </template>
       <!-- 表单查询项 -->
       <template #create_time="{data}">
         <el-date-picker v-model="data.createtime"
@@ -39,7 +42,6 @@
                     content="重置"
                     @click="resetFor"></vxe-button>
       </template>
-
       <!-- 表格操作 -->
       <template #operateHasSearch="{row}">
         <vxe-button content="查看"
@@ -92,7 +94,7 @@ export default class extends Vue {
   }
   @Prop({ default: false }) hasAssociate!: boolean //是否含有关联角色
   @Prop({ default: false }) hasNotSlotButton!: boolean //是否含有操作按钮
-  @Prop({ default: ['search', 'edit', 'del','record'] }) editColumns!: any
+  @Prop({ default: ['search', 'edit', 'del', 'record'] }) editColumns!: any
   @Prop() type!: string //表格类型
   private tablePage = { total: 0, currentPage: 1, pageSize: 10 }
   private loading = false
@@ -140,16 +142,22 @@ export default class extends Vue {
     this.checkedList = []
     try {
       const res: any = await getTableDataList(config.url, config.params)
-      if (this.type === 'process') {
-        this.tableData = res.data[0].processInfo
-      } else {
-        if ((res.result || res.code === 200) && res.data) {
-          this.tableData = res.data
+      if ((res.result || res.code === 200) && res.data) {
+        if (this.type === 'process') {
+          this.tableData = res.data[0].processInfo
+        } else if (this.type === 'equipmentSearch') {
+          this.tableData = res.data.map((item:any)=>{
+            return {...item,...item.equipmentVO}
+          })
+          console.log("🚀 ~ this.tableData", this.tableData)
           this.tablePage.total = res.count
         } else {
-          this.tableData = []
-          this.tablePage.total = 0
+          this.tableData = res.data
+          this.tablePage.total = res.count
         }
+      } else {
+        this.tableData = []
+        this.tablePage.total = 0
       }
     } catch (error) {
       console.log('🚀 ~ error', error)
@@ -237,7 +245,7 @@ export default class extends Vue {
 
   // 批量删除
   private async groupRemove() {
-    console.log("🚀 ~ this.checkedList", this.checkedList)
+    console.log('🚀 ~ this.checkedList', this.checkedList)
     if (!this.checkedList.length) {
       Message.error('请选择后进行操作！')
       return
@@ -285,7 +293,7 @@ export default class extends Vue {
   emitHandleRecord(value: any) {
     return value
   }
-  private handleRecord(row: any){
+  private handleRecord(row: any) {
     this.emitHandleRecord(row)
   }
 }

@@ -3,10 +3,11 @@ import MainSubLayout from "@/components/CollpaseFlex/index.vue";
 import Tree from "@/components/Tree/index.vue";
 import VexTable from "@/components/VexTable/index.vue";
 import { Form, Message } from "element-ui";
-import _ from "lodash";
+import _, { result } from "lodash";
 import {
   bindPersonalInfo,
   dealPersonalData,
+  delPersonalInfo,
   getPersonalInfo,
   getRoleTreeData,
   personalBindRole,
@@ -17,6 +18,7 @@ import {
 import Content from "./content.vue";
 import { VXETable } from "vxe-table";
 import ALL_OPTIONS from "@/shared/options";
+import { decode, encode, atob } from "js-base64";
 @Component({
   name: "Tab",
   components: {
@@ -125,12 +127,6 @@ export default class extends Vue {
     sex: ""
   }; // 新增或编辑表单
 
-  private rules = {
-    departmentName: [
-      { required: true, message: "请输入部门名称", trigger: "change" }
-    ]
-  }; // 表单校验
-
   private defaultProps = {
     children: "children",
     label: "title"
@@ -138,7 +134,6 @@ export default class extends Vue {
 
   private roleData = []; //角色数据
   private roleDialogVisible = false; //角色关联模态框显隐
-
   private dialogVisible = false; // 新增模态框
   private personalDialogVisible = false; //用户设置模态框
   private personalDialogType = "add"; //
@@ -160,10 +155,9 @@ export default class extends Vue {
     userName: "",
     employeeName: "",
     userPwd: "",
-    userSecondPwd: "",
     userEmpId: "",
     userStatus: "",
-    userType: "",
+    userType: "0",
     userUnlocktime: "",
     userMtime: "",
     userPmtime: "",
@@ -172,15 +166,24 @@ export default class extends Vue {
     token: "",
     dispindex: ""
   }; //用户设置数据
-
+  private personalEditTitle = "新增用户设置";
   private personalRules = {
-    departmentName: [
-      { required: true, message: "请输入部门名称", trigger: "change" }
+    userName: [{ required: true, message: "请输入登录名", trigger: "change" }],
+    userPwd: [{ required: true, message: "请输入密码", trigger: "change" }],
+    employeeName: [
+      { required: true, message: "请输入用户名", trigger: "change" }
     ]
   }; // 用户设置表单校验
   private loading = false; //角色绑定列表loading
   private bindRoleData = []; //用户已绑定角色
   private clickEmployeeInfo: any = {}; //当前点击员工数据
+  private empolyeeRules = {
+    userName: [{ required: true, message: "请输入登录名", trigger: "change" }],
+    userPwd: [{ required: true, message: "请输入密码", trigger: "change" }],
+    employeeName: [
+      { required: true, message: "请输入用户名", trigger: "change" }
+    ]
+  };
   created() {
     this.getRoleTreeData();
   }
@@ -199,8 +202,37 @@ export default class extends Vue {
     }
   }
 
+  private clearEmployeeForm() {
+    this.employeeData = {
+      id: "",
+      eName: "",
+      citizenNo: "",
+      birth: "",
+      nation: "",
+      phoneNo: "",
+      officeNo: "",
+      email: "",
+      education: "",
+      degree: "",
+      deptId: "",
+      deptName: "",
+      photoUri: "",
+      collage: "",
+      eNo: "",
+      eType: "",
+      eProf: "",
+      ePost: "",
+      ePostState: "",
+      note: "",
+      dispindex: "",
+      createtime: "",
+      sex: ""
+    };
+  }
+
   // 新增员工
   private handleInsert() {
+    this.clearEmployeeForm();
     const { title, id } = this.nodeClickData;
     if (!id) {
       this.$message.error("请选择科室后新增员工");
@@ -232,9 +264,17 @@ export default class extends Vue {
     };
   }
 
+  // 触发修改员工信息
+  private handleUpdate(row: any) {
+    console.log("🚀 ~ row", row);
+    this.employeeData = { ...row, deptName: this.nodeClickData.title };
+    this.dialogStatus = "update";
+    this.dialogVisible = true;
+  }
+
   // 新增员工
   private createData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.empolyeeForm as Form).validate(async valid => {
       if (valid) {
         const params = this.employeeData;
         const res: any = await updatePersonalData(params);
@@ -253,7 +293,7 @@ export default class extends Vue {
 
   // 修改员工信息
   private updateData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.empolyeeForm as Form).validate(async valid => {
       if (valid) {
         const params = this.employeeData;
         const res: any = await updatePersonalData(params);
@@ -266,18 +306,8 @@ export default class extends Vue {
         }
         this.dialogVisible = false;
         this.$message.success("更新成功");
+        this.clearEmployeeForm();
       }
-    });
-  }
-
-  // 触发编辑事件
-  private handleUpdate(row: any) {
-    const { cName, id, pid, note } = row;
-    this.employeeData = row;
-    this.dialogStatus = "update";
-    this.dialogVisible = true;
-    this.$nextTick(() => {
-      (this.$refs.dataForm as Form).clearValidate();
     });
   }
 
@@ -303,27 +333,51 @@ export default class extends Vue {
   }
 
   // 查看用户设置
-  private async handleSearchForDetail(row: any) {
-    console.log("🚀 ~ row", row);
-    this.personalDialogVisible = true;
-    if (!row) {
-      this.personalDialogType = "edit";
-    } else {
-      this.personalDialogType = "add";
-    }
-    const res: any = await getPersonalInfo({ empId: row.id });
+  private async handleSearchForDetail(data: any) {
+    const { rowData, type } = data;
+    console.log("🚀 ~ row", rowData);
+    const res: any = await getPersonalInfo({ empId: rowData.id });
     if (res.result && res.count === 1) {
       this.personalData = {
         ...res.data,
-        userEmpId: row.id,
-        employeeName: row.eName
+        userEmpId: rowData.id,
+        employeeName: rowData.eName
       };
     } else {
       this.personalData = {
         ...this.personalData,
-        userEmpId: row.id,
-        employeeName: row.eName
+        userEmpId: rowData.id,
+        employeeName: rowData.eName
       };
+    }
+    if (type == "bind") {
+      this.personalDialogVisible = true;
+      if (rowData) {
+        this.personalDialogType = "edit";
+        this.personalEditTitle = "修改用户设置";
+      } else {
+        this.personalDialogType = "add";
+        this.personalEditTitle = "新增用户设置";
+      }
+    } else {
+      this.delPersonal(res);
+    }
+  }
+
+  private async delPersonal(res: any) {
+    const type = await VXETable.modal.confirm("您确定要解绑改用户?");
+    if (type === "confirm" && res.result && res.count === 1) {
+      const isDelete:any = await delPersonalInfo({ ids: res.data.userId });
+      if(isDelete.code==200){
+        this.$message.success("解绑成功");
+        (this.$refs.vexTable as any).findList(this.paramsConfig);
+        (this.$refs.vxeTree as any).getTreeListData(
+          this.url,
+          this.treeParams
+        );
+      }else{
+        this.$message.success("解绑失败");
+      }
     }
   }
 
@@ -336,7 +390,10 @@ export default class extends Vue {
 
   // 保存用户设置
   private async savePersonalData() {
-    const res: any = await bindPersonalInfo(this.personalData);
+    console.log(this.personalData);
+    const res: any = await bindPersonalInfo({
+      ...this.personalData
+    });
     if (res.result) {
       (this.$refs.vexTable as any).findList(this.paramsConfig);
       (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams);
@@ -378,7 +435,7 @@ export default class extends Vue {
       roleId: data.id
     });
     if (res.result) {
-      Message.success('关联成功')
+      Message.success("关联成功");
       this.queryRolesByUserIdData(this.clickEmployeeInfo);
     }
   }

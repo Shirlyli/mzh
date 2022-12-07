@@ -1,20 +1,37 @@
 <template>
   <div>
-    <el-card>
-      <div slot="header"
-           class="clearfix">
-        <span>流程配置</span>
-      </div>
-      <VexTable ref="vexTable"
-                :formConfig="formConfig"
-                :columns="columns"
-                type="process"
-                editColumns="['edit','del']"
-                @emit-handle-insert="handleInsert"
-                @emit-handle-update="handleUpdate"
-                @emit-handle-remove="handleRemove"
-                :paramsConfig="paramsConfig" />
-    </el-card>
+    <main-sub-layout class="main-wrapper rule-config-page">
+      <template #left>
+        <el-card>
+          <div slot="header"
+               class="clearfix">
+            <span>流程名称</span>
+          </div>
+          <Tree ref="vxeTree"
+                :url="url"
+                :params="treeParams"
+                @emit-handle-click="handleNodeClick" />
+        </el-card>
+      </template>
+      <template #right>
+        <el-card>
+          <div slot="header"
+               class="clearfix">
+            <span>流程配置</span>
+          </div>
+          <VexTable ref="vexTable"
+                    :formConfig="formConfig"
+                    :columns="columns"
+                    type="process"
+                    editColumns="['edit','del']"
+                    @emit-handle-insert="handleInsert"
+                    @emit-handle-update="handleUpdate"
+                    @emit-handle-remove="handleRemove"
+                    :paramsConfig="paramsConfig" />
+        </el-card>
+      </template>
+    </main-sub-layout>
+
     <!-- 新增模态框 -->
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
                :visible="dialogVisible"
@@ -61,13 +78,13 @@
         <el-form-item :label="'角色类型'"
                       prop="roleType">
           <el-radio v-model="processData.roleType"
-                    label="role">role</el-radio>
+                    label="role">角色</el-radio>
           <el-radio v-model="processData.roleType"
-                    label="user">user</el-radio>
+                    label="user">用户</el-radio>
         </el-form-item>
-        <el-form-item :label="'角色类型Id'"
+        <el-form-item :label="'角色名称'"
                       prop="roleTypeId">
-          <el-input v-model="processData.roleTypeId"
+          <el-input v-model="processData.roleType"
                     placeholder="请输入" />
         </el-form-item>
       </el-form>

@@ -24,8 +24,6 @@ import ProcessApproval from "../equipmentRequest/processApproval.vue";
   }
 })
 export default class extends Vue {
-  created() {}
-
   // 列表查询项-表单
   private formConfig = {
     data: {
@@ -67,7 +65,7 @@ export default class extends Vue {
     // { field: "money", title: " 总金额 " },
     { field: "nextNodeState", title: " 状态 " },
     {
-      width: 100,
+      width: 160,
       title: "操作",
       slots: { default: "operateHasSearch" },
       showOverflow: true
@@ -249,7 +247,7 @@ export default class extends Vue {
           ...this.equipmentProcessData
         });
         if (res.result) {
-          (this.$refs.vexTable as any).findList(this.paramsConfig);
+          (this.$refs.vexTable as any).findList(this.doneFormConfig);
         }
         this.dialogVisible = false;
         (this.$refs.dataForm as Form).resetFields();
@@ -302,7 +300,7 @@ export default class extends Vue {
   private emitHandleSubmit(value: boolean) {
     this.approvalDialogVisible = false;
     if (value) {
-      (this.$refs.vexTable as any).findList(this.paramsConfig);
+      (this.$refs.vexTable as any).findList(this.doneFormConfig);
     }
   }
 
@@ -314,7 +312,7 @@ export default class extends Vue {
       ids: data.id
     });
     if (res.result) {
-      (this.$refs.vexTable as any).findList(this.paramsConfig);
+      (this.$refs.vexTable as any).findList(this.doneFormConfig);
       Message.info("删除流程成功");
     }
   }

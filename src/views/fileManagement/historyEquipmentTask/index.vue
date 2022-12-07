@@ -10,7 +10,7 @@
         <VexTable ref="vexDoneTable"
                   :formConfig="formConfig"
                   :columns="columns"
-                  editColumns="['search']"
+                  editColumns="['search','record']"
                   hasNotSlotButton="true"
                   @emit-handle-search="handleSearch"
                   :paramsConfig="doneFormConfig" />

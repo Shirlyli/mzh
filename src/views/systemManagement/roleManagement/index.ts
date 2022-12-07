@@ -81,15 +81,16 @@ export default class extends Vue {
     }
   }; // 树形图传参
   private rules = {
-    departmentName: [
-      { required: true, message: "请输入部门名称", trigger: "change" }
+    rName: [
+      { required: true, message: "请输入角色名称", trigger: "change" }
     ]
   }; // 表单校验
   private roleData = {
     id: "",
     rName: "",
+    note:'',
     pid: "",
-    pName: "",
+    rDesc: "",
     isLeaf: ""
   };
 
@@ -101,16 +102,29 @@ export default class extends Vue {
   // 新增表单显隐
   private dialogFormVisible = false;
 
-  // 新增科室
-  private handleInsert() {
-    this.dialogVisible = true;
-    const { id } = this.nodeClickData;
-    // (this.$refs.dataForm as Form).setFiledsValue
+  private clearForm(){
     this.roleData = {
-      ...this.roleData,
-      pid: id
+      id: "",
+      rName: "",
+      note:'',
+      pid: "",
+      rDesc: "",
+      isLeaf: ""
     };
   }
+
+  // 新增角色
+  private handleInsert() {
+    const { id } = this.nodeClickData;
+    if(!id){
+      this.$message.success('请选中角色后新增');
+      return 
+    }
+    this.clearForm()
+    this.dialogVisible = true;
+    this.roleData.pid = id
+  }
+
 
   // 接收树形组件点击节点数据
   private handleNodeClick(data: any) {
@@ -161,19 +175,17 @@ export default class extends Vue {
         }
         this.dialogVisible = false;
         this.$message.success("修改菜单成功");
+        this.clearForm()
       }
     });
   }
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    const { name, id, pid } = row;
+    console.log("🚀 ~ row", row)
     this.roleData = { ...this.roleData, ...row };
     this.dialogStatus = "update";
     this.dialogVisible = true;
-    this.$nextTick(() => {
-      (this.$refs.dataForm as Form).clearValidate();
-    });
   }
 
   // 删除菜单

@@ -3,7 +3,6 @@ import VueRouter, { RouteConfig } from "vue-router";
 /* Layout */
 import Layout from "@/layout/index.vue";
 /* Router modules */
-import businessRouter from "./modules/business";
 import beforeAsyncRoutes from "./modules/beforeAsyncRoutes";
 import chartsRouter from "./modules/charts";
 import componentsRouter from "./modules/components";
@@ -70,13 +69,13 @@ export const constantRoutes: RouteConfig[] = [
         }
       }
     ]
-  }
+  },
 ];
 
 export const asyncRoutes = [
-  ...businessRouter,
+  // ...businessRouter,
   // ...beforeAsyncRoutes,
-  // ...chartsRouter,
+  ...chartsRouter,
   // componentsRouter,
   // nestedRoutes
 ];

@@ -30,13 +30,14 @@
         </el-card>
       </template>
     </main-sub-layout>
-    <!-- 模态框区域 -->
+
+    <!-- 员工模态框区域 -->
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
                :visible="dialogVisible"
                @close="dialogVisible = false"
                width="80%">
-      <el-form ref="dataForm"
-               :rules="rules"
+      <el-form ref="empolyeeForm"
+               :rules="empolyeeRules"
                :model="employeeData"
                label-position="left"
                label-width="80px"
@@ -46,16 +47,32 @@
             <el-form-item :label="'用户名称'"
                           prop="eName">
               <el-input v-model="employeeData.eName"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item :label="'性别'"
+                          prop="sex">
+              <el-select v-model="employeeData.sex"
+                         placeholder="请选择">
+                <el-option label="男"
+                           value="1"></el-option>
+                <el-option label="女"
+                           value="2"></el-option>
+              </el-select>
+
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'身份证'"
                           prop="citizenNo">
               <el-input v-model="employeeData.citizenNo"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="20">
+
           <el-col :span="8">
             <el-form-item :label="'出生日期'"
                           prop="birth">
@@ -71,105 +88,110 @@
             <el-form-item :label="'国籍'"
                           prop="nation">
               <el-input v-model="employeeData.nation"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'手机号码'"
                           prop="phoneNo">
               <el-input v-model="employeeData.phoneNo"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="20">
+
           <el-col :span="8">
             <el-form-item :label="'办公号码'"
                           prop="officeNo">
               <el-input v-model="employeeData.officeNo"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'邮箱'"
                           prop="email">
               <el-input v-model="employeeData.email"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'学历'"
                           prop="education">
               <el-input v-model="employeeData.education"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="20">
+
           <el-col :span="8">
             <el-form-item :label="'学位'"
                           prop="degree">
               <el-input v-model="employeeData.degree"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'科室'"
                           prop="deptName">
               <el-input v-model="employeeData.deptName"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'图片来源'"
                           prop="photoUri">
               <el-input v-model="employeeData.photoUri"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="20">
+
           <el-col :span="8">
             <el-form-item :label="'大学'"
                           prop="collage">
               <el-input v-model="employeeData.collage"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'职业类型'"
                           prop="eType">
               <el-input v-model="employeeData.eType"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'专业'"
                           prop="eProf">
               <el-input v-model="employeeData.eProf"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item :label="'职位'"
                           prop="ePost">
               <el-input v-model="employeeData.ePost"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'在职状态'"
                           prop="ePostState">
               <el-input v-model="employeeData.ePostState"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item :label="'性别'"
-                          prop="sex">
-              <el-input v-model="employeeData.sex"
-                        placeholder="请选择"></el-input>
-            </el-form-item>
-          </el-col>
+
           <el-col :span="8">
             <el-form-item :label="'备注'"
                           prop="note">
               <el-input v-model="employeeData.note"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -191,11 +213,11 @@
     </el-dialog>
 
     <!-- 用户设置 -->
-    <el-dialog :title="'用户设置'"
+    <el-dialog :title="personalEditTitle"
                :visible="personalDialogVisible"
                @close="personalDialogVisible = false"
                width="80%">
-      <el-form ref="dataForm"
+      <el-form ref="personalForm"
                :rules="personalRules"
                :model="personalData"
                label-position="left"
@@ -223,46 +245,58 @@
                         placeholder="请选择"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <!-- <el-col :span="8">
             <el-form-item :label="'确认密码'"
                           prop="education">
               <el-input v-model="personalData.userSecondPwd"
                         placeholder="请选择"></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="8">
             <el-form-item :label="'用户状态'"
                           prop="degree">
-              <el-input v-model="personalData.userStatus"
-                        placeholder="请选择"></el-input>
+              <el-select v-model="personalData.userStatus"
+                         placeholder="请选择">
+                <el-option label="启用"
+                           value="1"></el-option>
+                <el-option label="未启用"
+                           value="2"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8" v-if="personalDialogType=== 'edit'">
+          <el-col :span="8"
+                  v-if="personalDialogType=== 'edit'">
             <el-form-item :label="'用户创建时间'"
                           prop="collage">
-              <el-input v-model="personalData.userCtime"
-                        placeholder="请选择"></el-input>
+              <el-date-picker v-model="personalData.userCtime"
+                              value-format="yyyy-MM-dd"
+                              placeholder="请选择"></el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="8" v-if="personalDialogType=== 'edit'">
+          <el-col :span="8"
+                  v-if="personalDialogType=== 'edit'">
             <el-form-item :label="'用户修改时间'"
                           prop="eType">
-              <el-input v-model="personalData.userLtime"
-                        placeholder="请选择"></el-input>
+              <el-date-picker v-model="personalData.userLtime"
+                              value-format="yyyy-MM-dd"
+                              placeholder="请选择"></el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="8" v-if="personalDialogType=== 'edit'">
+          <el-col :span="8"
+                  v-if="personalDialogType=== 'edit'">
             <el-form-item :label="'密码修改时间'"
                           prop="eProf">
-              <el-input v-model="personalData.userPmtime"
-                        placeholder="请选择"></el-input>
+              <el-date-picker v-model="personalData.userPmtime"
+                              value-format="yyyy-MM-dd"
+                              placeholder="请选择"></el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="8" v-if="personalDialogType=== 'edit'">
+          <el-col :span="8"
+                  v-if="personalDialogType=== 'edit'">
             <el-form-item :label="'用户解锁时间'"
                           prop="ePost">
-              <el-input v-model="personalData.userUnlocktime"
-                        placeholder="请选择"></el-input>
+              <el-date-picker v-model="personalData.userUnlocktime"
+                              placeholder="请选择"></el-date-picker>
             </el-form-item>
           </el-col>
           <!-- <el-col :span="8">
@@ -274,7 +308,6 @@
           </el-col> -->
         </el-row>
       </el-form>
-
       <!-- 底部操作 -->
       <div slot="footer"
            class="dialog-footer">
@@ -370,6 +403,9 @@
 </script>
 
 <style lang="scss" scoped>
+.el-date-editor {
+  width: 100%;
+}
 .tab-container {
   margin: 30px;
 }

@@ -12,7 +12,7 @@
     />
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <header-search class="right-menu-item" />
+        <!-- <header-search class="right-menu-item" /> -->
         <error-log class="errLog-container right-menu-item hover-effect" />
         <screenfull class="right-menu-item hover-effect" />
         <el-tooltip
@@ -22,7 +22,8 @@
         >
           <size-select class="right-menu-item hover-effect" />
         </el-tooltip>
-        <lang-select class="right-menu-item hover-effect" />
+        <!-- 语言切换 -->
+        <!-- <lang-select class="right-menu-item hover-effect" /> -->
       </template>
       <el-dropdown
         class="avatar-container right-menu-item hover-effect"
@@ -108,7 +109,9 @@ export default class extends Vue {
   }
 
   get avatar() {
-    return UserModule.avatar
+    const url = require('@/'+'assets/custom-theme/avator.jpeg')
+    // return UserModule.avatar
+    return url
   }
 
   private toggleSideBar() {

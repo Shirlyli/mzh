@@ -1,30 +1,46 @@
 <template>
   <div v-loading="loading">
     <div class="handleBox">
-      <el-row>
-        <vxe-button @click="searchPersonalDetail"
-                    icon="vxe-icon-user">绑定账号</vxe-button>
-        <vxe-button @click="searchPersonalDetail"
-                    icon="vxe-icon-user">删除账号绑定</vxe-button>
-        <vxe-button @click="resetPassword"
-                    icon="vxe-icon-user">密码重置</vxe-button>
-        <vxe-button @click="insertEmployee"
-                    status="primary"
-                    icon="vxe-icon-user">新增员工信息</vxe-button>
-        <vxe-button @click="updateEmployee"
-                    status="primary"
-                    icon="vxe-icon-user">修改员工信息</vxe-button>
-        <vxe-button @click="dealEmployeeInfo"
-                    status="warning"
-                    icon="vxe-icon-user">删除员工信息</vxe-button>
-       <!-- <vxe-button @click="searchRole"
-                    icon="vxe-icon-user">查看角色</vxe-button>-->
-        <vxe-button @click="associateRole"
-                    icon="vxe-icon-user">查看并关联角色</vxe-button>
-       <!-- <vxe-button @click="$refs.xGrid.exportData()"
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <vxe-button @click="searchPersonalDetail"
+                      status="primary"
+                      icon="vxe-icon-user">绑定账号</vxe-button>
+        </el-col>
+        <el-col :span="4">
+          <vxe-button @click="deletePersonalBind"
+                      status="danger"
+                      icon="vxe-icon-user">解除账号绑定</vxe-button>
+        </el-col>
+        <el-col :span="4">
+          <vxe-button @click="resetPassword"
+                      icon="vxe-icon-user">密码重置</vxe-button>
+        </el-col>
+        <el-col :span="4">
+          <vxe-button @click="insertEmployee"
+                      status="primary"
+                      icon="vxe-icon-user">新增员工信息</vxe-button>
+        </el-col>
+        <el-col :span="4">
+          <vxe-button @click="updateEmployee"
+                      status="warning"
+                      icon="vxe-icon-user">修改员工信息</vxe-button>
+        </el-col>
+        <el-col :span="4">
+          <vxe-button @click="dealEmployeeInfo"
+                      status="danger"
+                      icon="vxe-icon-user">删除员工信息</vxe-button>
+        </el-col>
+        <!-- <vxe-button @click="$refs.xGrid.exportData()"
                     icon="vxe-icon-user">导入</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()"
                     icon="vxe-icon-user">导出</vxe-button>-->
+      </el-row>
+      <el-row>
+        <el-col :span="6">
+          <vxe-button @click="associateRole"
+                      icon="vxe-icon-user">查看并关联角色</vxe-button>
+        </el-col>
       </el-row>
     </div>
     <!-- 员工主体区域 -->
@@ -49,6 +65,12 @@
 <script lang="ts" src="./content.ts"></script>
 
 <style scoped lang="scss">
+.el-row {
+  margin-bottom: 12px;
+}
+.vxe-button {
+  width: 100%;
+}
 .handleBox {
   margin-bottom: 12px;
 }

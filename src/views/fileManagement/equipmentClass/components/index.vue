@@ -8,7 +8,7 @@
              :rules="rules"
              :model="defaultEquipmentInfoData"
              label-position="left"
-             label-width="100px">
+             label-width="120px">
       <el-tabs v-model="activeName"
                style="margin-top:15px"
                type="border-card">

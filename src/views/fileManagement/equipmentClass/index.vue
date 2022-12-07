@@ -25,12 +25,13 @@
           <VexTable ref="vexTable"
                     :formConfig="formConfig"
                     :columns="columns"
-                    editColumns="['search','edit','del']"
+                    editColumns="['edit','del']"
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"
                     @emit-handle-search="handleSearchForDetail"
-                    :paramsConfig="paramsConfig" />
+                    :paramsConfig="paramsConfig"
+                    type="equipmentSearch" />
         </el-card>
       </template>
     </main-sub-layout>

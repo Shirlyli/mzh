@@ -47,9 +47,14 @@
           <el-input v-model="roleData.rName"
                     placeholder="请选择"></el-input>
         </el-form-item>
-        <el-form-item :label="'角色路径'"
+        <!-- <el-form-item :label="'角色路径'"
                       prop="mCode">
-          <el-input v-model="roleData.mUrl"
+          <el-input v-model="roleData.rDesc"
+                    placeholder="请输入" />
+        </el-form-item> -->
+        <el-form-item :label="'备注'"
+                      prop="mCode">
+          <el-input v-model="roleData.note"
                     placeholder="请输入" />
         </el-form-item>
       </el-form>

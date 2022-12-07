@@ -24,6 +24,17 @@ import { EquipmentInfoTypes } from "./formlist/interface.type";
   }
 })
 export default class extends Vue {
+  private treeParams = {
+    page: "1",
+    limit: "10",
+    entity: {
+      id: "F7BFB16412328A-3554-4755-BB10-057BA8A8A47E"
+    }
+  }; // 树形图传参
+  private nodeClickData: any = {}; // 点击左侧科室数据
+  private url = "THospitalDepartmentInfo/queryTree"; // 左侧字典
+
+
   private formConfig = {
     data: {
       name: "",
@@ -42,42 +53,32 @@ export default class extends Vue {
       },
       { slots: { default: "operate_item" } }
     ] // 表单项
-  };
-
+  };//查询配置
   private columns = [
     { type: "seq", width: 60, fixed: "left" },
     { type: "checkbox", width: 60, fixed: "left" },
-    { field: "name", title: "设备名称", treeNode: true, width: 140 },
-    { field: "id", title: "设备ID", width: 100 },
+    { field: "name", title: "设备名称", treeNode: true, width: 140 ,},
+    // { field: "id", title: "设备ID", width: 100 },
     { field: "marking", title: "设备型号", width: 100 },
     { field: "brand", title: "设备品牌", width: 100 },
     { field: "num", title: "设备数量", width: 100 },
-    { field: "equipmentCategoryId", title: "设备类别", width: 100 },
-    { field: "departmentId", title: "科室名称", width: 100 },
-    { field: "departmentName", title: "科室", width: 100 },
+    { field: "equipmentCategoryId", title: "设备类别", width: 100 },//formatter: this.getformatMIsAvailable
+    { field: "department", title: "科室名称", width: 100 ,slots:{default:'department'}},
+    // { field: "departmentId", title: "科室", width: 100 },
     { field: "reason", title: "用途说明", width: 100 },
     { field: "userId", title: "申请人", width: 100 },
-    { field: "companyInfoId", title: "所属医院", width: 100 },
-    { field: "purchaseId", title: "采购ID", width: 100 },
+    { field: "hospitalId", title: "所属医院", width: 100 },
+    // { field: "purchaseId", title: "采购ID", width: 100 },
     { field: "createtime", title: "创建时间", width: 100 },
     { field: "note", title: "备注", width: 100 },
     {
-      width: 250,
+      width: 160,
       title: "操作",
       slots: { default: "operateHasSearch" },
       showOverflow: true,
       fixed: "right"
     }
   ]; // 列表配置项
-
-  private treeParams = {
-    page: "1",
-    limit: "10",
-    entity: {
-      id: "F7BFB16412328A-3554-4755-BB10-057BA8A8A47E"
-    }
-  }; // 树形图传参
-
   private equipmentCategoryData: EquipmentInfoTypes = {
     id: "",
     state: 1,
@@ -232,32 +233,41 @@ export default class extends Vue {
         note: null
       }
     ]
-  }; // 新增或编辑表单
-
+  }; // 设备新增或编辑表单
   private dialogVisible = false; // 新增模态框
   private dialogStatus = "create"; // 模态框新增或修改
   private paramsConfig: any = {
-    url: "equipment/getEquipmentInfo", // 根据表单查询项查询数据
+    url: "equipment/getEquipmentInfo", 
     searchByDepartmentIdUrl: "equipment/getEquipmentInfoByDepartMentId", // 通过科室id查询数据
     params: {
       page: 1,
       limit: 10,
       entity: {}
     }
-  };
+  };// 根据表单查询项查询数据
 
-  private nodeClickData: any = {}; // 点击科室数据
-  private url = "THospitalDepartmentInfo/queryTree"; // 左侧字典
-
+  private formatterValue(data:any){
+    console.log("🚀 ~ data", data)
+    
+  }
   // 新增设备
   private handleInsert() {
+    if(!this.nodeClickData.id){
+      Message.error('请选中科室后新增')
+      return 
+    }
     this.dialogVisible = true;
     this.dialogStatus = "create";
-    const { id } = this.nodeClickData;
-    console.log("🚀 ~ this.nodeClickData", this.nodeClickData.id);
+    const { id ,title} = this.nodeClickData;
+    console.log("🚀 ~ this.nodeClickData", this.nodeClickData);
     this.equipmentCategoryData = {
-      ...this.equipmentCategoryData
+      ...this.equipmentCategoryData,
+      equipmentVO:{
+        ...this.equipmentCategoryData.equipmentVO,
+        departmentId:id
+      }
     };
+    console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData)
   }
 
   // 接收树形组件点击节点数据
@@ -283,9 +293,6 @@ export default class extends Vue {
     console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData);
     this.dialogStatus = "update";
     this.dialogVisible = true;
-    this.$nextTick(() => {
-      (this.$refs.dataForm as Form).clearValidate();
-    });
   }
 
   // 删除设备

@@ -20,7 +20,7 @@ export const equipmentVO = [
   { label: "设备数量", key: "num" },
   { label: "设备型号", key: "marking" },
   { label: "注册证号", key: "registrationCertificat" },
-  { label: "科室id", key: "departmentId" },
+  { label: "科室id", key: "departmentId" ,},//type:'select',options:ALL_OPTIONS.equipmentStates
   { label: "产品批号", key: "batchNumber" },
   {
     label: "设备状态",

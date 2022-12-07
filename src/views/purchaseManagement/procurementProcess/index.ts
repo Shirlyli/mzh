@@ -4,10 +4,12 @@ import _ from "lodash";
 import { delProcessData, updateProcessData } from "@/api/basic";
 import { Form } from "element-ui";
 import { formatMIsAvailable } from "@/shared/utils";
+import MainSubLayout from "@/components/CollpaseFlex/index.vue";
 @Component({
   name: "InlineEditTable",
   components: {
-    VexTable
+    VexTable,
+    MainSubLayout
   }
 })
 export default class extends Vue {

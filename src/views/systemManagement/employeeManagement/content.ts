@@ -69,25 +69,25 @@ export default class extends Vue {
 
   // 修改员工
   @Emit()
-  emitHandleUpdate() {
-    console.log("修改员工===");
+  emitHandleUpdate(rowData:any) {
+    return rowData;
   }
   private updateEmployee() {
-    this.emitHandleUpdate();
+    this.emitHandleUpdate(this.clickPersonalData);
   }
 
-  // 用户设置
+  // 绑定用户设置
   @Emit()
-  emitHandleSearch(rowData: any) {
+  emitHandleSearch(rowData: any,type:string) {
     console.log("~ 查看员工信息 ~ emitHandleSearch");
-    return rowData;
+    return {rowData,type};
   }
   private searchPersonalDetail() {
     if (!this.clickPersonalData.id) {
       Message.error("请选择员工后进行用户设置");
       return;
     }
-    this.emitHandleSearch(this.clickPersonalData);
+    this.emitHandleSearch(this.clickPersonalData,'bind');
   }
 
   // 删除员工信息
@@ -129,5 +129,10 @@ export default class extends Vue {
       return;
     }
     this.emitAssociateRole(this.clickPersonalData);
+  }
+
+  // 解除账号绑定
+  private deletePersonalBind(){
+    this.emitHandleSearch(this.clickPersonalData,'unbind');
   }
 }
