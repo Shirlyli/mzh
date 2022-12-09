@@ -36,7 +36,7 @@ export default class extends Vue {
   }
   private tabMapOptions = [
     { label: "设备基础信息", key: "equipmentVO" },
-    // { label: "设备采购信息", key: "equipmentPurchases" },
+    { label: "设备采购信息", key: "equipmentPurchases" },
     { label: "设备资料", key: "equipmentResources" },
     { label: "设备保养", key: "equipmentMaintain" },
     { label: "设备巡检", key: "equipmentInspection" },
@@ -100,7 +100,7 @@ export default class extends Vue {
       equipmentMaintain: equipmentMaintain,
       equipmentInspection: equipmentInspection,
       equipmentStocks: equipmentStocks,
-      thospitalEquipmentStores: equipmentStores,
+      equipmentStores: equipmentStores,
       equipmentDepreciations: equipmentDepreciations
     };
   }
@@ -127,13 +127,27 @@ export default class extends Vue {
           state
         } = this.equipmentCategoryData;
         const paramsConfig = {
-          equipmentDepreciations: [equipmentDepreciations],
-          equipmentInspection: [equipmentInspection],
-          equipmentMaintain: [equipmentMaintain],
-          equipmentPurchases: [equipmentPurchases],
-          equipmentResources: [equipmentResources],
-          equipmentStocks: [equipmentStocks],
-          equipmentStores: [equipmentStores],
+          equipmentDepreciations: Object.values(equipmentDepreciations).length
+            ? [equipmentDepreciations]
+            : [],
+          equipmentInspection: Object.values(equipmentInspection).length
+            ? [equipmentInspection]
+            : [],
+          equipmentMaintain: Object.values(equipmentMaintain).length
+            ? [equipmentMaintain]
+            : [],
+          equipmentPurchases: Object.values(equipmentPurchases).length
+            ? [equipmentPurchases]
+            : [],
+          equipmentResources: Object.values(equipmentResources).length
+            ? [equipmentResources]
+            : [],
+          equipmentStocks: Object.values(equipmentStocks).length
+            ? [equipmentStocks]
+            : [],
+          equipmentStores: Object.values(equipmentStores).length
+            ? [equipmentStores]
+            : [],
           equipmentVO,
           id,
           state
@@ -167,19 +181,34 @@ export default class extends Vue {
           state
         } = this.equipmentCategoryData;
         const paramsConfig = {
-          equipmentDepreciations: [equipmentDepreciations],
-          equipmentInspection: [equipmentInspection],
-          equipmentMaintain: [equipmentMaintain],
-          equipmentPurchases: [equipmentPurchases],
-          equipmentResources: [equipmentResources],
-          equipmentStocks: [equipmentStocks],
-          equipmentStores: [equipmentStores],
+          equipmentDepreciations: Object.values(equipmentDepreciations).length
+            ? [equipmentDepreciations]
+            : [],
+          equipmentInspection: Object.values(equipmentInspection).length
+            ? [equipmentInspection]
+            : [],
+          equipmentMaintain: Object.values(equipmentMaintain).length
+            ? [equipmentMaintain]
+            : [],
+          equipmentPurchases: Object.values(equipmentPurchases).length
+            ? [equipmentPurchases]
+            : [],
+          equipmentResources: Object.values(equipmentResources).length
+            ? [equipmentResources]
+            : [],
+          equipmentStocks: Object.values(equipmentStocks).length
+            ? [equipmentStocks]
+            : [],
+          equipmentStores: Object.values(equipmentStores).length
+            ? [equipmentStores]
+            : [],
           equipmentVO,
           id,
           state
         };
         let params = [];
         params.push(paramsConfig);
+        console.log("🚀 ~ paramsConfig", paramsConfig)
         const res: any = await updateEquipmentInfoData(params);
         if (res.code == 200) {
           this.emitSubmit(true);

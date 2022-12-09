@@ -11,15 +11,24 @@
 
       <!-- 自定义工具栏 -->
       <template #toolbar_buttons>
-        <vxe-button @click="insertEvent">新增</vxe-button>
+        <vxe-button @click="insertEvent"
+                    v-if="toolbarBtns.includes('add')"
+                    status="primary">新增</vxe-button>
         <vxe-button @click="groupRemove"
+                    v-if="toolbarBtns.includes('delete')"
                     status="warning">批量删除</vxe-button>
         <vxe-button @click="associateRole"
                     v-if="hasAssociate">关联角色</vxe-button>
-        <vxe-button @click="$refs.xGrid.exportData()">导入</vxe-button>
-        <vxe-button @click="$refs.xGrid.exportData()">导出</vxe-button>
+        <vxe-button @click="$refs.xGrid.exportData()"
+                    v-if="toolbarBtns.includes('import')">导入</vxe-button>
+        <vxe-button @click="$refs.xGrid.exportData()"
+                    v-if="toolbarBtns.includes('export')">导出</vxe-button>
       </template>
 
+      <template #add_button>
+        <vxe-button @click="insertEvent"
+                    status="primary">生成申请单</vxe-button>
+      </template>
       <template #department="{row}">
         <span>{{row.department?row.department.name :'-'}}</span>
       </template>
@@ -85,6 +94,7 @@ import { Message } from 'element-ui'
   components: {},
 })
 export default class extends Vue {
+  @Prop({ default: ['add', 'import', 'delete', 'export'] }) toolbarBtns!: any
   @Prop({ default: {} }) formConfig!: any
   @Prop({ default: [] }) columns!: []
   @Prop() paramsConfig!: any
@@ -93,7 +103,7 @@ export default class extends Vue {
     this.findList(newdata)
   }
   @Prop({ default: false }) hasAssociate!: boolean //是否含有关联角色
-  @Prop({ default: false }) hasNotSlotButton!: boolean //是否含有操作按钮
+  @Prop({ default: '' }) hasNotSlotButton!: any //是否含有操作按钮
   @Prop({ default: ['search', 'edit', 'del', 'record'] }) editColumns!: any
   @Prop() type!: string //表格类型
   private tablePage = { total: 0, currentPage: 1, pageSize: 10 }
@@ -117,18 +127,23 @@ export default class extends Vue {
       // 设置复选框支持分页勾选，需要设置 rowId 行数据主键
       reserve: true,
     },
-    formConfig: this.formConfig?? {},
+    formConfig: this.formConfig ?? {},
     columns: this.columns, // 列表项数据
   }
 
   // 自定义工具栏
   private tableToolbar = {
     perfect: true,
-    refresh: true,
+    // refresh: true,
     zoom: true,
     custom: true,
     slots: {
-      buttons: this.hasNotSlotButton ? '' : 'toolbar_buttons',
+      buttons:
+        this.hasNotSlotButton === 'add'
+          ? 'add_button'
+          : this.hasNotSlotButton
+          ? ''
+          : 'toolbar_buttons',
     },
   }
 

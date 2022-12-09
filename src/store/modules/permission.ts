@@ -106,6 +106,27 @@ export function generaMenu(routes: any, data: any) {
                   }
                 ]
           };
+          o.children.forEach((u: any) => {
+            const menu4 = {
+              path: `${u.path}`,
+              component: (resolve: any) =>
+                require([`@/views${u.component}/index.vue`], resolve),
+              name: u.name,
+              meta: u.meta,
+              children: u.children.length
+                ? []
+                : [
+                    {
+                      path: `${u.path}`,
+                      component: (resolve: any) =>
+                        require([`@/views${u.component}/index.vue`], resolve),
+                      name: u.name,
+                      meta: u.meta
+                    }
+                  ]
+            };
+            menu3.children.push(menu4);
+          });
           menu2.children.push(menu3);
         });
         //加入到主目录的children中去

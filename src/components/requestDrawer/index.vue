@@ -1,36 +1,12 @@
 <template>
   <div>
-    <!-- 列表区域 -->
-    <el-card>
-      <div slot="header"
-           class="clearfix">
-        <span>科室申请</span>
-        <!-- <el-button style="float: right; padding: 3px 0"
-                   type="text"
-                   @click="addEquipmentRequest">新增</el-button> -->
-      </div>
-      <keep-alive>
-        <VexTable ref="vexTable"
-                  :formConfig="formConfig"
-                  :columns="columns"
-                  editColumns="['search','del','record']"
-                  hasNotSlotButton="add"
-                  @emit-handle-insert="handleInsert"
-                  @emit-handle-search="handleSearch"
-                  @emit-handle-remove="handleRemove"
-                  @emit-handle-record="handleRecord"
-                  :paramsConfig="paramsConfig" />
-      </keep-alive>
-    </el-card>
-
-    <!-- 新增流程申请 -->
     <el-drawer title="发起申请"
-               :visible.sync="dialogVisible"
+               :visible.sync="visible"
                size="60%"
-               @close="dialogVisible = false">
+               @close="handleClose">
       <el-form ref="dataForm"
-               :rules="rules"
-               :model="equipmentProcessData"
+               :rules="{}"
+               :model="{}"
                label-position="left"
                label-width="120px"
                style="margin-left:20px;">
@@ -40,7 +16,7 @@
           <el-divider direction="vertical"></el-divider>
           <span>基本信息</span>
         </div>
-        <el-row :gutter="20">
+        <!-- <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="'项目名称'"
                           prop="projectName">
@@ -120,14 +96,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="12"></el-col>
-        </el-row>
+        </el-row> -->
 
         <!-- 设备明细 -->
         <div class="dividerBox">
           <el-divider direction="vertical"></el-divider>
           <span>设备明细</span>
         </div>
-        <el-row :gutter="20">
+        <!-- <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="'申请设备明细'"
                           prop="applyDetailId">
@@ -180,94 +156,68 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
       </el-form>
       <div class="demo-drawer__footer">
-        <el-button @click="dialogVisible = false" size="large">
+        <el-button @click="handleClose"
+                   size="large">
           {{ $t('table.cancel') }}
         </el-button>
-        <el-button type="primary" size="large"
-                   @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="primary"
+                   size="large"
+                   @click="createData()">
           {{ $t('table.confirm') }}
         </el-button>
       </div>
 
     </el-drawer>
-
-    <!-- 流程审批 -->
-    <ProcessApproval :dialogVisible="approvalDialogVisible"
-                     :processData="clickProcessData"
-                     @emit-handle-submit="emitHandleSubmit"
-                     v-show="approvalDialogVisible" />
-
-    <!-- 操作记录 -->
-    <el-dialog title="操作记录"
-               width="80%"
-               top="30px"
-               :visible="processRecordDialogVisible"
-               @close="processRecordDialogVisible = false">
-      <div class="contentBox">
-        <el-table :data="processRecordListData"
-                  style="width: 100%"
-                  border>
-          <el-table-column prop="nodeName"
-                           label="节点名称"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="operator"
-                           label="操作人"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="auditStatus"
-                           label="审核状态"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="auditmind"
-                           label="操作说明">
-          </el-table-column>
-          <el-table-column prop="operatorTime"
-                           label="操作时间">
-          </el-table-column>
-        </el-table>
-
-      </div>
-    </el-dialog>
   </div>
-
 </template>
 
-<script lang="ts" src="./index.ts">
+<script lang="ts">
+import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator'
+@Component({
+  name: 'RequestDrawer',
+  components: {},
+})
+export default class extends Vue {
+  @Prop() dialogVisible!: boolean
+  private visible = false
+  @Watch('dialogVisible')
+  private onChangeVisible(value: boolean) {
+    console.log('🚀 ~ value', value)
+    this.visible = value
+  }
+  @Prop({default:{}}) requestForm!: any
+  @Watch('requestForm')
+
+  @Prop({default:{}}) processModal!: any
+  @Watch('processModal')
+  // 新增流程申请
+  private createData() {
+    // console.log("🚀 ~ this.equipmentProcessData", this.equipmentProcessData);
+    // (this.$refs.dataForm as Form).validate(async valid => {
+    //   if (valid) {
+    //     const res: any = await queryHospitalProcessBusinessSave({
+    //       ...this.equipmentProcessData
+    //     });
+    //     if (res.result) {
+    //       (this.$refs.vexTable as any).findList(this.paramsConfig);
+    //     }
+    //     this.dialogVisible = false;
+    //     (this.$refs.dataForm as Form).resetFields();
+    //     Message.success("创建成功");
+    //   }
+    // });
+  }
+
+  @Emit()
+  emitClose() {
+    return true
+  }
+  private handleClose() {
+    console.log(this.requestForm,this.processModal)
+    this.emitClose()
+  }
+}
 </script>
-
-<style lang="scss" scoped>
-.el-select {
-  width: 100%;
-}
-.dividerBox {
-  margin: 12px 0 24px 0;
-  font-size: 18px;
-  .el-divider--vertical {
-    background-color: blue;
-    width: 6px;
-  }
-}
-.edit-input {
-  padding-right: 100px;
-}
-
-.cancel-btn {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-}
-
-.demo-drawer__footer {
-  display: flex;
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  .el-button{
-
-  }
-}
-</style>

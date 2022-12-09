@@ -89,12 +89,12 @@ export default class extends Vue {
     equipmentVO: {
       name: "",
       createtime: "",
-      departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
+      departmentId: "",
       marking: "",
       brand: "",
       origin: "",
       equipmentCategoryId: "",
-      activationTime: "2021-09-11T00:00:00.000+00:00",
+      activationTime: "",
       guarantee: "",
       hospitalId: "",
       manufactorId: "",
@@ -132,102 +132,121 @@ export default class extends Vue {
       barCode: ""
     },
     equipmentMaintain: {
-      id: "",
-      equipmentId: "",
-      lastMaintainTime: "2021-12-31T16:00:00.000+00:00",
+      lastMaintainTime: "",
       nextMaintainTime: null,
-      cost: 580.0,
+      cost: "",
       createtime: null,
-      companyInfoId: "14",
-      userId: "87",
+      companyInfoId: "",
+      userId: "",
       warrantyPeriod: null,
       facilitator: null,
-      facilitatorPhone: "facilitator_phone",
-      parts: "配件丢失",
+      facilitatorPhone: "",
+      parts: "",
       img: null,
-      description: "零件损坏，需要更换"
+      description: ""
     },
-    // equipmentPurchases:{
-
-    // },
-    equipmentStores: [
-      {
-        id: "",
-        equipmentId: "",
-        departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
-        boundTime: "2021-12-31T16:00:00",
-        boundType: "入库",
-        bounder: "50B978FC6A069E-A0F3-4481-96C7-BD45AEC295EC",
-        receivePerson: "",
-        boundNums: "10",
-        beforeBoundNum: "0",
-        afterBoundNum: "10",
-        note: "入库"
-      },
-      {
-        id: "",
-        equipmentId: "",
-        departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
-        boundTime: "2022-12-31T16:00:00",
-        boundType: "出库",
-        bounder: "C076245F7D308A-CAD4-49E8-BAB6-987544490306",
-        receivePerson: "E1D6AB19EF6720-B4EA-46DF-BE10-96F03712FB65",
-        boundNums: "2",
-        beforeBoundNum: "10",
-        afterBoundNum: "8",
-        note: "出库"
-      }
-    ],
+    equipmentPurchases: {
+      installTime: "",
+      aogDeadlineTime: "",
+      aogTime: "",
+      argumentationTime: "",
+      biddingTime: "",
+      budget: "",
+      checkNote: "",
+      contractAmount: "",
+      contractDeadlineTime: "",
+      contractName: "",
+      contractNum: "",
+      invitationType: "",
+      partyBPhone: "",
+      partyBUnit: "",
+      partyBUser: "",
+      projectNote: "",
+      purchaseNote: "",
+      acceptanceTime: "",
+      oneCheckTime: "",
+      twoCheckTime: "",
+      firstAmountTime: "",
+      endAmountTime: "",
+      purchaseTime: "",
+      purchaseType: "",
+      purchaseWay: "",
+      recordNum: "",
+      recordUser: "",
+      resource: "",
+      signingTime: "",
+      tHospitalEquipmentPayments: [
+        {
+          id: "",
+          amount: "",
+          paymentTime: "",
+          periods: "",
+          prepaymentTime: "",
+          purchaseId: "",
+          status: ""
+        }
+      ]
+    },
+    equipmentStores: {
+      departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
+      boundTime: "2021-12-31T16:00:00",
+      boundType: "入库",
+      bounder: "50B978FC6A069E-A0F3-4481-96C7-BD45AEC295EC",
+      receivePerson: "",
+      boundNums: "10",
+      beforeBoundNum: "0",
+      afterBoundNum: "10",
+      note: "入库"
+    },
+    // {
+    //   id: "",
+    //   equipmentId: "",
+    //   departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
+    //   boundTime: "2022-12-31T16:00:00",
+    //   boundType: "出库",
+    //   bounder: "C076245F7D308A-CAD4-49E8-BAB6-987544490306",
+    //   receivePerson: "E1D6AB19EF6720-B4EA-46DF-BE10-96F03712FB65",
+    //   boundNums: "2",
+    //   beforeBoundNum: "10",
+    //   afterBoundNum: "8",
+    //   note: "出库"
+    // }
     equipmentResources: {
-      id: "",
-      equipmentId: "",
-      maintainUrl:
-        "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
-      meteringUrl:
-        "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
-      technologyUrl:
-        "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
-      paymentUrl:
-        "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
-      instructionsUrl:
-        "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
-      maintainName: "保养说明书名称",
-      meteringName: "计量操作文档名称",
-      technologyName: "技术参数名称",
-      paymentName: "付款计划名称",
-      instructionsName: "使用说明书名称"
+      maintainUrl: "",
+      meteringUrl: "",
+      technologyUrl: "",
+      paymentUrl: "",
+      instructionsUrl: "",
+      maintainName: "",
+      meteringName: "",
+      technologyName: "",
+      paymentName: "",
+      instructionsName: ""
     },
     equipmentStocks: {
-      id: "",
-      equipmentId: "",
-      departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
-      boundNums: "8"
+      departmentId: "",
+      boundNums: ""
     },
     equipmentDepreciations: {
-      id: "",
-      equipmentId: "",
-      depreciationTime: "2023-12-31T16:00:00",
-      depreciationLimit: "10年",
-      depreciationAmount: "100000",
-      depreciationPeriods: "8",
-      depreciationUser: "50B978FC6A069E-A0F3-4481-96C7-BD45AEC295EC"
+      depreciationTime: "",
+      depreciationLimit: "",
+      depreciationAmount: "",
+      depreciationPeriods: "",
+      depreciationUser: ""
     },
     equipmentInspection: {
-      id: "",
-      equipmentId: "008C17837C8D11-D3B1-4191-928D-A72141D9632B",
-      isPeriod: 1,
-      isAppearance: 0,
-      isParts: 0,
-      isFunction: 0,
-      inspectionTime: "2021-12-31T16:00:00.000+00:00",
+      isPeriod: "",
+      isAppearance: "",
+      isParts: "",
+      isFunction: "",
+      inspectionTime: "",
       createtime: null,
       userId: "22",
-      appearance: "外观出现破损",
-      parts: "配件丢失",
-      function: "功能异常",
-      img:
-        "https://xinyuanzhicheng.oss-cn-hangzhou.aliyuncs.com/thirdParty/image/equipment/210827/163004838383815.jpg",
-      description: "设备出现大问题",
+      appearance: "",
+      parts: "",
+      function: "",
+      img: "",
+      description: "",
       note: null
     }
   }; // 设备新增或编辑表单
@@ -296,27 +315,16 @@ export default class extends Vue {
       id,
       state
     } = row;
-    console.log(
-      "🚀 ~触发编辑事件 row",
-      equipmentDepreciations,
-      equipmentInspection,
-      equipmentMaintain,
-      equipmentPurchases,
-      equipmentResources,
-      equipmentStocks,
-      equipmentStores,
-      equipmentVO
-    );
     this.equipmentCategoryData = {
       id,
       state,
-      equipmentDepreciations:{...equipmentDepreciations[0],id},
-      equipmentInspection:{...equipmentInspection[0],id},
-      equipmentMaintain:{...equipmentMaintain[0],id},
-      equipmentPurchases:{...equipmentPurchases[0],id},
-      equipmentResources:{...equipmentResources[0],id},
-      equipmentStocks:{...equipmentStocks[0],id},
-      equipmentStores:{...equipmentStores[0],id},
+      equipmentDepreciations: { ...equipmentDepreciations[0] },
+      equipmentInspection: { ...equipmentInspection[0] },
+      equipmentMaintain: { ...equipmentMaintain[0] },
+      equipmentPurchases: { ...equipmentPurchases[0] },
+      equipmentResources: { ...equipmentResources[0] },
+      equipmentStocks: { ...equipmentStocks[0] },
+      equipmentStores: { ...equipmentStores[0] },
       equipmentVO
     };
     console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData);
@@ -366,14 +374,187 @@ export default class extends Vue {
     }
   }
 
-  //新增设备确认事件
+  private clearForm() {
+    this.equipmentCategoryData = {
+      id: "",
+      state: 1,
+      equipmentVO: {
+        name: "",
+        createtime: "",
+        departmentId: "",
+        marking: "",
+        brand: "",
+        origin: "",
+        equipmentCategoryId: "",
+        activationTime: "",
+        guarantee: "",
+        hospitalId: "",
+        manufactorId: "",
+        equipmentStates: "",
+        idCode: "",
+        price: "",
+        batchNumber: "",
+        registrationCertificat: "",
+        productionName: "",
+        productionTime: "",
+        validity: "",
+        region: "",
+        purchaseTime: "",
+        isExordium: "",
+        meterings: "",
+        source: "",
+        isMetering: "",
+        meteringTime: "",
+        meteringType: "",
+        isEmergency: "",
+        isFixedassets: "",
+        isSpecial: "",
+        fixedassetsType: "",
+        intakeDate: "",
+        financialNo: "",
+        equipmentLocation: "",
+        fixedAssetsNo: "",
+        recordNo: "",
+        unit: "",
+        equipmentPrincipal: "",
+        barCodeNo: "",
+        img: "",
+        scoringGuideUrl: "",
+        qrcode: "",
+        barCode: ""
+      },
+      equipmentMaintain: {
+        lastMaintainTime: "",
+        nextMaintainTime: null,
+        cost: "",
+        createtime: null,
+        companyInfoId: "",
+        userId: "",
+        warrantyPeriod: null,
+        facilitator: null,
+        facilitatorPhone: "",
+        parts: "",
+        img: null,
+        description: ""
+      },
+      equipmentPurchases: {
+        installTime: "",
+        aogDeadlineTime: "",
+        aogTime: "",
+        argumentationTime: "",
+        biddingTime: "",
+        budget: "",
+        checkNote: "",
+        contractAmount: "",
+        contractDeadlineTime: "",
+        contractName: "",
+        contractNum: "",
+        invitationType: "",
+        partyBPhone: "",
+        partyBUnit: "",
+        partyBUser: "",
+        projectNote: "",
+        purchaseNote: "",
+        acceptanceTime: "",
+        oneCheckTime: "",
+        twoCheckTime: "",
+        firstAmountTime: "",
+        endAmountTime: "",
+        purchaseTime: "",
+        purchaseType: "",
+        purchaseWay: "",
+        recordNum: "",
+        recordUser: "",
+        resource: "",
+        signingTime: "",
+        tHospitalEquipmentPayments: [
+          {
+            id: "",
+            amount: "",
+            paymentTime: "",
+            periods: "",
+            prepaymentTime: "",
+            purchaseId: "",
+            status: ""
+          }
+        ]
+      },
+      equipmentStores: [
+        // {
+        //   departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
+        //   boundTime: "2021-12-31T16:00:00",
+        //   boundType: "入库",
+        //   bounder: "50B978FC6A069E-A0F3-4481-96C7-BD45AEC295EC",
+        //   receivePerson: "",
+        //   boundNums: "10",
+        //   beforeBoundNum: "0",
+        //   afterBoundNum: "10",
+        //   note: "入库"
+        // },
+        // {
+        //   id: "",
+        //   equipmentId: "",
+        //   departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
+        //   boundTime: "2022-12-31T16:00:00",
+        //   boundType: "出库",
+        //   bounder: "C076245F7D308A-CAD4-49E8-BAB6-987544490306",
+        //   receivePerson: "E1D6AB19EF6720-B4EA-46DF-BE10-96F03712FB65",
+        //   boundNums: "2",
+        //   beforeBoundNum: "10",
+        //   afterBoundNum: "8",
+        //   note: "出库"
+        // }
+      ],
+      equipmentResources: {
+        maintainUrl: "",
+        meteringUrl: "",
+        technologyUrl: "",
+        paymentUrl: "",
+        instructionsUrl: "",
+        maintainName: "",
+        meteringName: "",
+        technologyName: "",
+        paymentName: "",
+        instructionsName: ""
+      },
+      equipmentStocks: {
+        departmentId: "",
+        boundNums: ""
+      },
+      equipmentDepreciations: {
+        depreciationTime: "",
+        depreciationLimit: "",
+        depreciationAmount: "",
+        depreciationPeriods: "",
+        depreciationUser: ""
+      },
+      equipmentInspection: {
+        isPeriod: "",
+        isAppearance: "",
+        isParts: "",
+        isFunction: "",
+        inspectionTime: "",
+        createtime: null,
+        userId: "22",
+        appearance: "",
+        parts: "",
+        function: "",
+        img: "",
+        description: "",
+        note: null
+      }
+    };
+  }
+  //新增或编辑确认事件
   private handleSubmit(value: boolean) {
     (this.$refs.vexTable as any).findList(this.paramsConfig);
     (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams);
     this.dialogVisible = false;
+    this.clearForm();
   }
 
   private handleClose() {
     this.dialogVisible = false;
+    this.clearForm();
   }
 }

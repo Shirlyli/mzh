@@ -4,31 +4,37 @@
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>已审批</span>
+        <span>转科申请</span>
       </div>
       <keep-alive>
-        <VexTable ref="vexDoneTable"
+        <VexTable ref="vexTable"
                   :formConfig="formConfig"
                   :columns="columns"
-                  editColumns="['search','record']"
-                  hasNotSlotButton="true"
+                  editColumns="['search','del','record']"
+                  hasNotSlotButton="add"
+                  @emit-handle-insert="handleInsert"
                   @emit-handle-search="handleSearch"
+                  @emit-handle-remove="handleRemove"
                   @emit-handle-record="handleRecord"
-                  :paramsConfig="doneFormConfig" />
+                  :paramsConfig="paramsConfig" />
       </keep-alive>
-
     </el-card>
 
+    <!-- 新增流程申请 -->
+    <RequestDrawer :dialogVisible="requestDialogVisible"
+                   :requestForm="requestForm"
+                   :processModal="processModal"
+                   @emit-close="handleClose" />
+
     <!-- 流程审批 -->
-    <ProcessApproval :dialogVisible="approvalDialogVisible"
+    <!-- <ProcessApproval :dialogVisible="approvalDialogVisible"
                      :processData="clickProcessData"
                      @emit-handle-submit="emitHandleSubmit"
-                     v-show="approvalDialogVisible"
-                     editType="historyTask" />
+                     v-show="approvalDialogVisible" /> -->
 
     <!-- 操作记录 -->
     <el-dialog title="操作记录"
-               width="60%"
+               width="80%"
                top="30px"
                :visible="processRecordDialogVisible"
                @close="processRecordDialogVisible = false">
@@ -87,9 +93,12 @@
   top: 10px;
 }
 
-.editBox {
-  .el-form-item__content {
-    text-align: right;
+.demo-drawer__footer {
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  .el-button {
   }
 }
 </style>

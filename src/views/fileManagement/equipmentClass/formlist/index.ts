@@ -189,7 +189,7 @@ export const equipmentResources = [
   { label: "使用说明书名称", key: "instructionsName" },
   { label: "使用说明书url", key: "instructionsUrl" },
   { label: "保养说明书名称", key: "maintainName" },
-  { label: "保养说明书url", key: "maintainUrl" },
+  { label: "保养说明书url", key: "maintainUrl" },//maintainUrl
   { label: "计量操作文档名称", key: "meteringName" },
   { label: "计量操作文档url", key: "meteringUrl" },
   { label: "设备ID", key: "equipmentId" },
@@ -204,7 +204,7 @@ export const equipmentResources = [
  */
 export const equipmentStocks = [
   { label: "库存量", key: "boundNums" },
-  { label: "仓库id（组织机构id）", key: "departmentId" },
+  { label: "仓库id", key: "departmentId" },
   { label: "设备ID", key: "equipmentId" }
 ];
 
@@ -218,7 +218,7 @@ export const equipmentStores = [
   { label: "出入库数量", key: "boundNums" },
   { label: "出入库时间", key: "boundTime" },
   { label: "出入库类型", key: "boundType" },
-  { label: "仓库id（组织机构id）", key: "departmentId" },
+  { label: "仓库id", key: "departmentId" },
   { label: "设备ID", key: "equipmentId" },
   { label: "备注", key: "note" },
   { label: "领用人", key: "receivePerson" }
@@ -229,7 +229,7 @@ export const equipmentStores = [
  */
 export const equipmentInspection = [
   { label: "外观描述", key: "appearance" },
-  { label: "仓库id（组织机构id）", key: "departmentId" },
+  { label: "仓库id", key: "departmentId" },
   { label: "设备ID", key: "equipmentId" },
   { label: "添加日期", key: "createtime", type: "date" },
   { label: "巡检描述", key: "description" },
@@ -245,49 +245,4 @@ export const equipmentInspection = [
   { label: "巡检人", key: "userId" }
 ];
 
-// equipmentPurchases: [
-//   {
-//     installTime: "",
-//     id: "",
-//     aogDeadlineTime: "",
-//     aogTime: "",
-//     argumentationTime: "",
-//     biddingTime: "",
-//     budget: "",
-//     checkNote: "",
-//     contractAmount: "",
-//     contractDeadlineTime: "",
-//     contractName: "",
-//     contractNum: "",
-//     equipmentId: "",
-//     invitationType: "",
-//     partyBPhone: "",
-//     partyBUnit: "",
-//     partyBUser: "",
-//     projectNote: "",
-//     purchaseNote: "",
-//     acceptanceTime: "",
-//     oneCheckTime: "",
-//     twoCheckTime: "",
-//     firstAmountTime: "",
-//     endAmountTime: "",
-//     purchaseTime: "",
-//     purchaseType: "",
-//     purchaseWay: "",
-//     recordNum: "",
-//     recordUser: "",
-//     resource: "",
-//     signingTime: "",
-//     tHospitalEquipmentPayments: [
-//       {
-//         id: "",
-//         amount: "",
-//         paymentTime: "",
-//         periods: "",
-//         prepaymentTime: "",
-//         purchaseId: "",
-//         status: ""
-//       }
-//     ]
-//   }
-// ],
+

@@ -8,7 +8,7 @@
              :rules="rules"
              :model="defaultEquipmentInfoData"
              label-position="left"
-             label-width="120px">
+             label-width="140px">
       <el-tabs v-model="activeName"
                style="margin-top:15px"
                type="border-card">
@@ -62,5 +62,12 @@
 
 </template>
 
-<script lang="ts" src="./index.ts">
+<script lang="ts" src="./index.ts" >
+
 </script>
+
+<style lang="scss" scoped>
+.el-select{
+  width:100%
+}
+</style>

@@ -188,7 +188,6 @@ export default class extends Vue {
   // 新增菜单
   // 新增
   private handleInsert() {
-    debugger;
     this.resetForm();
     this.dialogVisible = true;
     this.dialogStatus = "create";
@@ -285,7 +284,6 @@ export default class extends Vue {
 
   // 接收关联角色事件
   private handleAssociateRoleRow(data: any) {
-    debugger;
     console.log("🚀 ~ data", data);
     this.checkedMenuList = [];
     this.isAssociateDialogVisible = true;

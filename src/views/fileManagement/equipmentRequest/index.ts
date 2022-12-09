@@ -100,7 +100,7 @@ export default class extends Vue {
 
   // 新增流程表单form
   private equipmentProcessData = {
-    processName:"",
+    processName: "",
     projectName: "", //* 项目名称 /
     purchaseType: "", // 购置类别 /
     applyDept: "", // 申请科室 /
@@ -125,7 +125,7 @@ export default class extends Vue {
     yzspPerson: "", //院长审批人
     yzspTime: "", //院长审批时间
     yzspReason: "" //院长审批结论
-  } //新增申请表单数据
+  }; //新增申请表单数据
 
   private formItems = [
     {
@@ -159,7 +159,10 @@ export default class extends Vue {
   private clickProcessData: any = {}; //当前操作流程节点信息
   private processRecordListData = []; //操作记录
   private processRecordDialogVisible = false; //操作记录显隐
-  private rules = {};
+  private rules = {
+    nextNodeExecutor: [{ require: true, trigger: "change", message: "请选择" }],
+    processName:[{ require: true, trigger: "change", message: "请选择" }],
+  };
   /**
    * 获取科室数据 queryDepartmentInfoTree
    * 获取节点信息 queryProcessCodeAndBhResData
@@ -248,8 +251,7 @@ export default class extends Vue {
   // 新增流程配置
   private handleInsert(row: any) {
     console.log("🚀 ~ row", row);
-    const { processName, processCode } = row[0];
-    // this.dialogVisible = true;
+    this.addEquipmentRequest();
   }
 
   // 新增流程申请
@@ -276,9 +278,9 @@ export default class extends Vue {
     this.dialogVisible = true;
   }
 
-  private handleClick(value:any) {
-    console.log("🚀 ~ value", value.name)
-    this.activeName = value.name
+  private handleClick(value: any) {
+    console.log("🚀 ~ value", value.name);
+    this.activeName = value.name;
     // (this.$refs.vexDoneTable as any).findList(this.paramsConfig);
   }
 
@@ -300,7 +302,7 @@ export default class extends Vue {
       } 个文件，共选择了 ${files.length + fileList.length} 个文件`
     );
   }
-  
+
   private beforeRemove(file: any, fileList: any) {
     return this.$confirm(`确定移除 ${file.name}？`);
   }

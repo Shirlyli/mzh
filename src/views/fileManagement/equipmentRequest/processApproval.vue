@@ -21,10 +21,10 @@
                      @click="handleEnd">
             {{ '终止' }}
           </el-button>
-          <el-button type="error"
+          <!-- <el-button type="error"
                      @click="handleEnd">
             {{ '转审' }}
-          </el-button>
+          </el-button> -->
         </div>
       </template>
 

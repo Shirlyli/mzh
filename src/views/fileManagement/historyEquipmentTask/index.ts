@@ -65,7 +65,7 @@ export default class extends Vue {
     // { field: "money", title: " 总金额 " },
     { field: "nextNodeState", title: " 状态 " },
     {
-      width: 160,
+      width: 200,
       title: "操作",
       slots: { default: "operateHasSearch" },
       showOverflow: true
@@ -83,35 +83,6 @@ export default class extends Vue {
       nextNodeState: "已归档"
     }
   };
-
-  // 新增流程表单form
-  private equipmentProcessData = {
-    processName:"",
-    projectName: "", //* 项目名称 /
-    purchaseType: "", // 购置类别 /
-    applyDept: "", // 申请科室 /
-    applyPerson: "", // 申请人 /
-    applyModle: "", // 申请方式 /
-    applyReson: "", // 申请理由 /
-    applyDetailId: "", // 申请设备明细id /
-    enclosureId: "", // 附件id /
-    applyTime: "", // 申请时间 /
-    processCode: "pro_kssp", // 流程code /
-    currentNodeName: "", // 当前节点名称 /
-    currentNodeCode: "", // 当前节点code /
-    nextNodeName: "", // 下一节点名称 /
-    nextNodeCode: "", // 下一节点code /
-    nextNodeExecutor: "", // 下一节点执行人 */
-    auditStatus: "", //审核状态(审核通过,审核不通过，回退,作废)
-    auditReason: "", //审核结论
-    delState: "", //是否删除(是|否)
-    ksspPerson: "", //科室审批人
-    ksspTime: "", //科室审批时间
-    ksspReason: "", //科室审批结论
-    yzspPerson: "", //院长审批人
-    yzspTime: "", //院长审批时间
-    yzspReason: "" //院长审批结论
-  } //新增申请表单数据
 
   private formItems = [
     {
@@ -159,11 +130,7 @@ export default class extends Vue {
     });
     if (nextCodeData.code == "200") {
       const { nodeName, nodeNameCode, roleTypeId } = nextCodeData.data;
-      this.equipmentProcessData = {
-        ...this.equipmentProcessData,
-        nextNodeName: nodeName,
-        nextNodeCode: nodeNameCode
-      };
+
     }
   }
 
@@ -193,7 +160,7 @@ export default class extends Vue {
       page: "1",
       limit: "10",
       entity: {
-        departmentId: this.equipmentProcessData.applyDept
+        departmentId: ''
       }
     });
     if (res.code == 200) {
@@ -215,14 +182,7 @@ export default class extends Vue {
         nodeName,
         nodeNameCode,
         nodeSort
-      } = currentCodeData.data;
-      this.equipmentProcessData = {
-        ...this.equipmentProcessData,
-        processCode,
-        processName,
-        currentNodeName: nodeName,
-        currentNodeCode: nodeNameCode
-      };
+      } = currentCodeData.data
       this.queryProcessCodeAndBhResData(nodeSort);
       this.queryUserListProcessCode(nodeSort);
     }
@@ -230,37 +190,6 @@ export default class extends Vue {
 
   private dialogVisible = false; //模态框
   private dialogStatus = "create";
-
-  // 新增流程配置
-  private handleInsert(row: any) {
-    console.log("🚀 ~ row", row);
-    const { processName, processCode } = row[0];
-    // this.dialogVisible = true;
-  }
-
-  // 新增流程申请
-  private createData() {
-    console.log("🚀 ~ this.equipmentProcessData", this.equipmentProcessData);
-    (this.$refs.dataForm as Form).validate(async valid => {
-      if (valid) {
-        const res: any = await queryHospitalProcessBusinessSave({
-          ...this.equipmentProcessData
-        });
-        if (res.result) {
-          (this.$refs.vexTable as any).findList(this.doneFormConfig);
-        }
-        this.dialogVisible = false;
-        (this.$refs.dataForm as Form).resetFields();
-        Message.success("创建成功");
-      }
-    });
-  }
-
-  // 新增科室申请
-  private addEquipmentRequest() {
-    this.queryCodeDataFirst();
-    this.dialogVisible = true;
-  }
 
   private handleClick(value:any) {
     console.log("🚀 ~ value", value.name)
@@ -305,17 +234,6 @@ export default class extends Vue {
   }
 
   private changeApplyDept() {}
-
-  // 删除事件
-  private async handleRemove(data: any) {
-    const res: any = await delHospitalProcessBusiness({
-      ids: data.id
-    });
-    if (res.result) {
-      (this.$refs.vexTable as any).findList(this.doneFormConfig);
-      Message.info("删除流程成功");
-    }
-  }
 
   // 获取流程操作记录 queryProcessRecordList
   private async queryProcessRecordListData(data: any) {
