@@ -16,93 +16,31 @@
           <el-divider direction="vertical"></el-divider>
           <span>基本信息</span>
         </div>
-        <!-- <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item :label="'项目名称'"
-                          prop="projectName">
-              <el-input v-model="equipmentProcessData.projectName"
-                        placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item :label="'购置类别'"
-                          prop="purchaseType">
-              <el-select v-model="equipmentProcessData.purchaseType"
-                         placeholder="请选择">
-                <el-option key="新增"
-                           label="新增"
-                           value="新增">
-                </el-option>
-                <el-option key="复购"
-                           label="复购"
-                           value="复购">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item :label="'申请科室'"
-                          prop="applyDept">
-              <el-select v-model="equipmentProcessData.applyDept"
-                         placeholder="请选择"
-                         @change="changeApplyDept">
-                <el-option v-for="item in applyDeptData"
-                           :key="item.id"
-                           :label="item.title"
-                           :value="item.id">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item :label="'申请方式'"
-                          prop="applyModle">
-              <el-select v-model="equipmentProcessData.applyModle"
-                         placeholder="请选择">
-                <el-option key="zcsq"
-                           label="正常申请"
-                           value="zcsq">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item :label="'申请理由'"
-                          prop="applyReson">
-              <el-input v-model="equipmentProcessData.applyReson"
-                        placeholder="请输入" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item :label="'流程民称'"
-                          prop="processCode">
-              <el-input v-model="equipmentProcessData.processName"
-                        placeholder="请输入"
-                        disabled />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item :label="'当前节点名称'"
-                          prop="currentNodeName">
-              <el-input v-model="equipmentProcessData.currentNodeName"
-                        placeholder="请输入"
-                        disabled />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12"></el-col>
-        </el-row> -->
+        <el-row>
+          <el-col :span="12"
+                  v-for="(item,index) in requestForm.billMain"
+                  :key="index">
+            <el-form-item :label="item.title"
+                          prop="applyDetailId">
 
+            </el-form-item>
+          </el-col>
+        </el-row>
         <!-- 设备明细 -->
         <div class="dividerBox">
           <el-divider direction="vertical"></el-divider>
           <span>设备明细</span>
         </div>
+        <el-row>
+          <el-col :span="12"
+                  v-for="(item,index) in requestForm.billEquipmentList"
+                  :key="index">
+            <el-form-item :label="item.title"
+                          prop="applyDetailId">
+
+            </el-form-item>
+          </el-col>
+        </el-row>
         <!-- <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="'申请设备明细'"
@@ -157,7 +95,23 @@
             </el-form-item>
           </el-col>
         </el-row> -->
+        <!-- 设备明细 -->
+        <div class="dividerBox">
+          <el-divider direction="vertical"></el-divider>
+          <span>审批清单</span>
+        </div>
+        <el-row>
+          <el-col :span="12"
+                  v-for="(item,index) in requestForm.billApproveList"
+                  :key="index">
+            <el-form-item :label="item.title"
+                          prop="applyDetailId">
+
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
+
       <div class="demo-drawer__footer">
         <el-button @click="handleClose"
                    size="large">
@@ -188,35 +142,20 @@ export default class extends Vue {
     console.log('🚀 ~ value', value)
     this.visible = value
   }
-  @Prop({default:{}}) requestForm!: any
+  @Prop({ default: {} }) requestForm!: any
   @Watch('requestForm')
-
-  @Prop({default:{}}) processModal!: any
+  @Prop({ default: {} })
+  processModal!: any
   @Watch('processModal')
   // 新增流程申请
-  private createData() {
-    // console.log("🚀 ~ this.equipmentProcessData", this.equipmentProcessData);
-    // (this.$refs.dataForm as Form).validate(async valid => {
-    //   if (valid) {
-    //     const res: any = await queryHospitalProcessBusinessSave({
-    //       ...this.equipmentProcessData
-    //     });
-    //     if (res.result) {
-    //       (this.$refs.vexTable as any).findList(this.paramsConfig);
-    //     }
-    //     this.dialogVisible = false;
-    //     (this.$refs.dataForm as Form).resetFields();
-    //     Message.success("创建成功");
-    //   }
-    // });
-  }
+  private createData() {}
 
   @Emit()
   emitClose() {
     return true
   }
   private handleClose() {
-    console.log(this.requestForm,this.processModal)
+    console.log(this.requestForm, this.processModal)
     this.emitClose()
   }
 }

@@ -1,10 +1,11 @@
-import { Component, Vue } from "vue-property-decorator";
+import {Component, Vue} from "vue-property-decorator";
 import MainSubLayout from "@/components/CollpaseFlex/index.vue";
 import Tree from "@/components/Tree/index.vue";
 import VexTable from "@/components/VexTable/index.vue";
-import { Form } from "element-ui";
-import { dealEquipmentData, updateEquipmentData } from "@/api/equipment";
+import {Form} from "element-ui";
+import {dealEquipmentData, updateEquipmentData} from "@/api/equipment";
 import _ from "lodash";
+import ALL_OPTIONS from "@/shared/options";
 // import { TreeData } from "@/mock/tree";
 @Component({
   name: "Tab",
@@ -18,30 +19,30 @@ export default class extends Vue {
   private formConfig = {
     data: {
       name: "",
-      time:"",
+      time: "",
     },
     items: [
       {
         field: "name",
         title: "科室名称",
-        itemRender: { name: "$input", props: { placeholder: "请输入科室名称" } }
+        itemRender: {name: "$input", props: {placeholder: "请输入科室名称"}}
       },
-      { field: "time", title: "创建时间", slots: { default: "create_time" } },
-      { slots: { default: "operate_item" } }
+      {field: "time", title: "创建时间", slots: {default: "create_time"}},
+      {slots: {default: "operate_item"}}
     ] // 表单项
   };
 
   private columns = [
-    { type: "seq", width: 60 },
-    { type: "checkbox", width: 80 },
-    { field: "name", title: " 科室名称", treeNode: true },
-    { field: "mobile", title: "座机", treeNode: true },
-    { field: "note", title: "描述", treeNode: true },
-    { field: "ctime", title: "创建时间" },
+    {type: "seq", width: 60},
+    {type: "checkbox", width: 80},
+    {field: "name", title: " 科室名称", treeNode: true},
+    {field: "mobile", title: "座机", treeNode: true},
+    {field: "note", title: "描述", treeNode: true},
+    {field: "ctime", title: "创建时间"},
     {
       width: 160,
       title: "操作",
-      slots: { default: "operateHasSearch" },
+      slots: {default: "operateHasSearch"},
       showOverflow: true
     }
   ];
@@ -60,17 +61,18 @@ export default class extends Vue {
     departmentName: "",
     departmentId: "",
     departmentCode: "",
-    departmentMobile:"",
-    departmentStatus:"",
-    companyInfoId:"",
-    departmentDicid:"",
-    note:"",
-    xpath:"",
+    departmentMobile: "",
+    departmentStatus: "",
+    companyInfoId: "",
+    departmentDicid: "",
+    note: "",
+    xpath: "",
+    companyInfoName: "",
   }; // 新增或编辑表单
 
   private rules = {
     departmentName: [
-      { required: true, message: "请输入部门名称", trigger: "change" }
+      {required: true, message: "请输入部门名称", trigger: "change"}
     ]
   }; // 表单校验
 
@@ -93,20 +95,21 @@ export default class extends Vue {
   // 新增科室
   private handleInsert() {
     this.dialogVisible = true;
-    const { title, id } = this.nodeClickData;
+    const {title, id} = this.nodeClickData;
     // (this.$refs.dataForm as Form).setFiledsValue
     this.departmentData = {
       parentId: id ?? "001",
       parentName: title ?? "医疗科室",
       departmentName: "",
       departmentId: "",
-      departmentCode:"",
-      departmentMobile:"",
-      departmentStatus:"1",
-      companyInfoId:"533B4D0A2BAABC-3800-493E-9B08-663D9BDE3230",
-      departmentDicid:"",
-      note:"",
-      xpath:"",
+      departmentCode: "",
+      departmentMobile: "",
+      departmentStatus: "1",
+      companyInfoId: ALL_OPTIONS.hospital.id,
+      departmentDicid: "",
+      note: "",
+      xpath: "",
+      companyInfoName: ALL_OPTIONS.hospital.name,
     };
   }
 
@@ -130,7 +133,7 @@ export default class extends Vue {
   private createData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { parentId, departmentName,departmentCode,departmentMobile,departmentStatus,companyInfoId,departmentDicid,note,xpath} = this.departmentData;
+        const {parentId, departmentName, departmentCode, departmentMobile, departmentStatus, companyInfoId, departmentDicid, note, xpath} = this.departmentData;
         const params = {
           id: "",
           pid: parentId,
@@ -147,7 +150,8 @@ export default class extends Vue {
           dicId: departmentDicid,
           note: note,
           isLeaf: "",
-          xpath:xpath
+          xpath: xpath,
+          companyInfoName: ALL_OPTIONS.hospital.name,
         };
         const res: any = await updateEquipmentData(params);
         if (res.result) {
@@ -167,11 +171,11 @@ export default class extends Vue {
   private updateData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { parentId,parentName, departmentName, departmentId,departmentCode,departmentMobile,departmentStatus,companyInfoId,departmentDicid,note,xpath } = this.departmentData;
+        const {parentId, parentName, departmentName, departmentId, departmentCode, departmentMobile, departmentStatus, companyInfoId, departmentDicid, note, xpath} = this.departmentData;
         const params = {
           id: departmentId,
           pid: parentId,
-          pname:parentName,
+          pname: parentName,
           name: departmentName,
           dispindex: "",
           dCode: departmentCode,
@@ -185,7 +189,8 @@ export default class extends Vue {
           dicId: departmentDicid,
           note: null,
           isLeaf: "",
-          xpath:xpath
+          xpath: xpath,
+          companyInfoName: ALL_OPTIONS.hospital.name,
         };
         const res: any = await updateEquipmentData(params);
         if (res.result) {
@@ -203,19 +208,20 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    const { name, id, pid,pname,dCode,mobile,status,companyInfoId,dicId,note,xpath } = row;
+    const {name, id, pid, pname, dCode, mobile, status, companyInfoId, dicId, note, xpath} = row;
     this.departmentData = {
       parentId: pid,
       parentName: pname,
       departmentName: name,
       departmentId: id,
-      departmentCode:dCode,
-      departmentMobile:mobile,
-      departmentStatus:status,
-      companyInfoId:companyInfoId,
-      departmentDicid:dicId,
-      note:note,
-      xpath:xpath
+      departmentCode: dCode,
+      departmentMobile: mobile,
+      departmentStatus: status,
+      companyInfoId: companyInfoId,
+      departmentDicid: dicId,
+      note: note,
+      xpath: xpath,
+      companyInfoName: ALL_OPTIONS.hospital.name,
     };
     this.dialogStatus = "update";
     this.dialogVisible = true;

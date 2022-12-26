@@ -5,6 +5,7 @@ import VexTable from '@/components/VexTable/index.vue'
 import { Form } from 'element-ui'
 import { dealCommonData, updateCommonData } from '@/api/basic'
 import _ from 'lodash'
+import {debug} from "webpack";
 @Component({
   name: 'Tab',
   components: {
@@ -18,8 +19,9 @@ export default class extends Vue {
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'dicName', title: '字典值', treeNode: true },
-    { field: 'dicCode', title: '字典排序' },
-    { field: 'dicType', title: '字典备注' },
+    { field: 'dicCode', title: '字典编码' },
+    { field: 'dispindex', title: '字典排序' },
+    { field: 'dicType', title: '字典类型' },
     { field: 'flag', title: '状态' },
     {
       width: 160,
@@ -38,15 +40,23 @@ export default class extends Vue {
   }; // 树形图传参
 
   private commonData = {
-    parentId: '',
-    parentName: '',
-    departmentName: '',
-    departmentId: ''
+    id:'',
+    pid: '',
+    pName: '',
+    dicName: '',
+    xpath: '',
+    dicType: '',
+    dicCode: '',
+    flag: '',
+    note: '',
   }; // 新增或编辑表单
 
   private rules = {
-    departmentName: [
-      { required: true, message: '请输入部门名称', trigger: 'change' }
+    dicName: [
+      { required: true, message: '请输入字典名称', trigger: 'change' }
+    ],
+    dicCode: [
+      { required: true, message: '请输入字典编码，且唯一', trigger: 'change' }
     ]
   }; // 表单校验
 
@@ -66,16 +76,21 @@ export default class extends Vue {
   private nodeClickData: any = {}; // 点击科室数据
   private url = '/common/dicInfo/queryTree'; // 左侧字典
 
-  // 新增科室
+  // 新增字典
   private handleInsert() {
     this.dialogVisible = true
     const { title, id } = this.nodeClickData
     // (this.$refs.dataForm as Form).setFiledsValue
     this.commonData = {
-      parentId: id ?? '001',
-      parentName: title ?? '字典管理',
-      departmentName: '',
-      departmentId: ''
+      id: '',
+      pid: id ?? '001',
+      pName: title ?? '字典管理',
+      dicName: '',
+      xpath:'',
+      dicType: '',
+      dicCode: '',
+      flag: '1',
+      note: '',
     }
   }
 
@@ -95,21 +110,23 @@ export default class extends Vue {
     }
   }
 
-  // 新增科室
+  // 新增字典
   private createData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { parentId, departmentName } = this.commonData
+        const { pid, dicName, pName,xpath} = this.commonData
         const params = {
           id: '',
           dicType: '',
           dicCode: '',
-          dicName: departmentName,
-          pid: parentId,
-          flag: '',
+          dicName: dicName,
+          pid: pid,
+          pName: pName,
+          flag: 1,
           ctime: '',
           note: '',
-          isLeaf: 1
+          isLeaf: 1,
+          xpath:xpath,
         }
         const res: any = await updateCommonData(params)
         if (res.result) {
@@ -125,21 +142,24 @@ export default class extends Vue {
     })
   }
 
-  // 修改科室
+  // 修改字典
   private updateData() {
+    debugger;
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { parentId, departmentName, departmentId } = this.commonData
+        const { id,pid, dicName, pName,xpath,dicType,dicCode,flag } = this.commonData
         const params = {
-          id: departmentId,
-          dicType: '',
-          dicCode: '',
-          dicName: departmentName,
-          pid: parentId,
-          flag: '',
+          id: id,
+          dicType: dicType,
+          dicCode: dicCode,
+          dicName: dicName,
+          pName:pName,
+          pid: pid,
+          flag: flag,
           ctime: '',
           note: '',
-          isLeaf: 1
+          isLeaf: '',
+          xpath:xpath
         }
         const res: any = await updateCommonData(params)
         if (res.result) {
@@ -157,12 +177,17 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    const { name, id, pid } = row
+    const { dicName,pName, id, pid,xpath,dicType,dicCode,flag,note } = row
     this.commonData = {
-      parentId: pid,
-      parentName: pid,
-      departmentName: name,
-      departmentId: id
+      id,
+      pid,
+      pName,
+      dicName: dicName,
+      xpath,
+      dicType,
+      dicCode,
+      flag,
+      note,
     }
     this.dialogStatus = 'update'
     this.dialogVisible = true

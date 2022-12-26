@@ -73,9 +73,15 @@
           <el-input v-model="departmentData.departmentStatus"
                     placeholder="请输入是否启用" />
         </el-form-item>
-        <el-form-item :label="'所在医院'"
-                      prop="companyInfoId">
+        <el-form-item :label="'所在医院ID'"
+                      prop="companyInfoId" style="display: none;">
           <el-input v-model="departmentData.companyInfoId"
+                    placeholder="请输入所在医院" />
+        </el-form-item>
+
+        <el-form-item :label="'所在医院'"
+                      prop="companyInfoName" >
+          <el-input v-model="departmentData.companyInfoName"
                     placeholder="请输入所在医院" />
         </el-form-item>
 
@@ -87,7 +93,7 @@
         <el-form-item :label="'层级代码'"
                       prop="xpath">
           <el-input v-model="departmentData.xpath"
-                    placeholder="层级代码" readonly="readonly" />
+                    placeholder="自动生成" readonly="readonly" />
         </el-form-item>
         <el-form-item :label="'备注'">
           <el-input v-model="departmentData.note"

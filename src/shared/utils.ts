@@ -1,3 +1,4 @@
+
 export const formatMIsAvailable = {
   "1": "启用",
   "0": "不启用"

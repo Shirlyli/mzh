@@ -101,7 +101,7 @@ export default class extends Vue {
   private hLevelList = []; // 字典表
 
   // 获取医院等级
-  private async getCommonTreeData() {
+ /* private async getCommonTreeData() {
     const params = {
       page: 1,
       limit: 10,
@@ -114,7 +114,25 @@ export default class extends Vue {
     if (res.result) {
       this.hLevelList = res.data;
     }
+  }*/
+
+  /**
+   *dicType:字典表类型id
+   */
+  private async getCommonTreeData() {
+    const params = {
+      type: "DIC",
+      dicType:"58CC52594FA7C8-1A54-4DC6-9854-FD8BB128B194"
+    };
+    const res: any = await getTableDataList(
+      "common/dicInfo/queryPullDown",
+      params
+    );
+    if (res.result) {
+      this.hLevelList = res.data;
+    }
   }
+
 
   // 新增科室
   private handleInsert() {

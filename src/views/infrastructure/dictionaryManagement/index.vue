@@ -17,7 +17,7 @@
         <el-card>
           <div slot="header"
                class="clearfix">
-            <span>字典</span>
+            <span>字典列表</span>
           </div>
           <VexTable ref="vexTable"
                     :formConfig="formConfig"
@@ -42,14 +42,45 @@
                label-position="left"
                label-width="100px"
                style="width: 400px; margin-left:50px;">
-        <el-form-item :label="'上级字典'"
-                      prop="parentId">
-          <el-input v-model="commonData.parentName"
-                    placeholder="请选择"></el-input>
+        <el-form-item :label="'上级字典ID'"
+                      prop="pid">
+          <el-input v-model="commonData.pid"
+                    placeholder="自动生成" disabled="disabled"></el-input>
+        </el-form-item>
+        <el-form-item :label="'上级字典名称'"
+                      prop="pName">
+          <el-input v-model="commonData.pName"
+                    placeholder="自动生成" disabled="disabled"></el-input>
+        </el-form-item>
+        <el-form-item :label="'字典类型'"
+                      prop="dicType">
+          <el-input v-model="commonData.dicType"
+                    placeholder="自动生成" disabled="disabled"/>
         </el-form-item>
         <el-form-item :label="'字典名称'"
-                      prop="departmentName">
-          <el-input v-model="commonData.departmentName"
+                      prop="dicName">
+          <el-input v-model="commonData.dicName"
+                    placeholder="请输入" />
+        </el-form-item>
+        <el-form-item :label="'字典编码'"
+                      prop="dicCode">
+          <el-input v-model="commonData.dicCode"
+                    placeholder="可输入拼音简称" />
+        </el-form-item>
+        <el-form-item :label="'是否启用'"
+                      prop="flag">
+          <el-input v-model="commonData.flag"
+                    placeholder="是否启用" />
+        </el-form-item>
+        <el-form-item :label="'层级关系'"
+                      prop="xpath">
+          <el-input v-model="commonData.xpath"
+                    placeholder="自动生成" disabled="disabled"/>
+        </el-form-item>
+        <el-form-item :label="'备注'">
+          <el-input v-model="commonData.note"
+                    :autosize="{minRows: 5, maxRows: 8}"
+                    type="textarea"
                     placeholder="请输入" />
         </el-form-item>
       </el-form>

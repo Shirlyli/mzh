@@ -1,4 +1,9 @@
 const ALL_OPTIONS = {
+  //医院配置
+  hospital: {
+    id: '3A8F0344E6AC24-2F51-4154-B02B-B1CBA28B4F85',
+    name: '武汉市人民医院'
+  },
   // 重要程度
   IMPORTANT: [
     { label: "重要", value: "重要" },

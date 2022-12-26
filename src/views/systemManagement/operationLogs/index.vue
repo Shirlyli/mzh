@@ -104,11 +104,11 @@ export default class extends Vue {
         ids: row.id,
       }
     }
-    const res: any = await delOperationLogs(params)
+   /* const res: any = await delOperationLogs(params)
     if (res.result) {
       ;(this.$refs.vexTable as any).findList(this.paramsConfig)
     }
-    this.$message.success('删除成功')
+    this.$message.success('删除成功')*/
   }
 }
 </script>

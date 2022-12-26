@@ -40,9 +40,9 @@
                      transfer
                      placeholder="请选择">
             <el-option v-for="item in hLevelList"
-                       :key="item.dicCode"
-                       :value="item.dicCode"
-                       :label="item.dicName">
+                       :key="item.title"
+                       :value="item.code"
+                       :label="item.title">
               </el-option>
           </el-select>
         </el-form-item>
@@ -56,11 +56,14 @@
           <el-input v-model="hospitalData.hPhone"
                     placeholder="请选择"></el-input>
         </el-form-item>
-        <el-form-item :label="'备注'"
+        <el-form-item :label="'描述'"
                       prop="note">
           <el-input v-model="hospitalData.note"
-                    placeholder="请选择"></el-input>
+                    :autosize="{minRows: 5, maxRows: 8}"
+                    type="textarea"
+                    placeholder="请输入描述" />
         </el-form-item>
+
       </el-form>
 
       <!-- 底部操作 -->
