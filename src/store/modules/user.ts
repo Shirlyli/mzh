@@ -12,7 +12,7 @@ import { PermissionModule } from "./permission";
 import { TagsViewModule } from "./tags-view";
 import store from "@/store";
 import { queryLeftMenuData } from "@/api/basic";
-import {Base64} from 'js-base64'
+import { Base64 } from "js-base64";
 export interface IUserState {
   token: string;
   name: string;
@@ -22,6 +22,7 @@ export interface IUserState {
   email: string;
   loginForm: object;
   menu: any;
+  userData: any;
 }
 
 @Module({ dynamic: true, store, name: "user" })
@@ -34,6 +35,7 @@ class User extends VuexModule implements IUserState {
   public email = "";
   public loginForm = {};
   public menu = [];
+  public userData = {};
   @Mutation
   private SET_TOKEN(token: string) {
     this.token = token;
@@ -74,22 +76,27 @@ class User extends VuexModule implements IUserState {
     this.menu = menu;
   }
 
+  @Mutation
+  private SET_USER_DATA(userData: any) {
+    this.userData = userData;
+  }
+
   @Action
   public async Login(userInfo: any) {
     this.SET_LOGIN_FORM(userInfo);
     let { userName, userPwd } = userInfo;
     userName = userName.trim();
-    const { data } = await login({ userName, userPwd });
-    console.log("🚀 ~ data", data);
-    setToken(data.token);
-    this.SET_TOKEN(data.token);
+    const res: any = await login({ userName, userPwd });
+    if (res.code) {
+      setToken(res.data.token);
+      this.SET_TOKEN(res.data.token);
+    }
   }
 
   @Action
   public async GetMenu() {
     const { data } = await queryLeftMenuData({});
-    console.log("🚀 ~ data", data);
-    this.SET_MENU(data)
+    this.SET_MENU(data);
   }
 
   @Action
@@ -106,11 +113,11 @@ class User extends VuexModule implements IUserState {
     }
     const state = JSON.parse(sessionStorage.getItem("state") || "0");
     const res = await getUserInfo(this.loginForm);
-    console.log("🚀 ~ GetUserInfo ~ res", res);
     if (!res.data) {
       throw Error("Verification failed, please Login again.");
     }
     const { roles, userName } = res.data;
+    this.SET_USER_DATA(res.data);
     // roles must be a non-empty array
     // if (!roles || roles.length <= 0) {
     //   throw Error('GetUserInfo: roles must be a non-null array!')

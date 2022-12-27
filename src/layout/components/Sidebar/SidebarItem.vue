@@ -1,53 +1,35 @@
 <template>
-  <div
-    v-if="!item.meta || !item.meta.hidden"
-    :class="[isCollapse ? 'simple-mode' : 'full-mode', {'first-level': isFirstLevel}]"
-  >
+  <div v-if="!item.meta || !item.meta.hidden"
+       :class="[isCollapse ? 'simple-mode' : 'full-mode', {'first-level': isFirstLevel}]">
     <template v-if="!alwaysShowRootMenu && theOnlyOneChild && !theOnlyOneChild.children">
-      <sidebar-item-link
-        v-if="theOnlyOneChild.meta"
-        :to="resolvePath(theOnlyOneChild.path)"
-      >
-        <el-menu-item
-          :index="resolvePath(theOnlyOneChild.path)"
-          :class="{'submenu-title-noDropdown': isFirstLevel}"
-        >
-          <svg-icon
-            v-if="theOnlyOneChild.meta.icon"
-            :name="theOnlyOneChild.meta.icon"
-          />
-          <span
-            v-if="theOnlyOneChild.meta.title"
-            slot="title"
-          >{{  theOnlyOneChild.meta.title }}</span>
+      <sidebar-item-link v-if="theOnlyOneChild.meta"
+                         :to="resolvePath(theOnlyOneChild.path)">
+        <el-menu-item :index="resolvePath(theOnlyOneChild.path)"
+                      :class="{'submenu-title-noDropdown': isFirstLevel}">
+          <svg-icon v-if="theOnlyOneChild.meta.icon"
+                    :name="theOnlyOneChild.meta.icon" />
+          <span v-if="theOnlyOneChild.meta.title"
+                slot="title">{{  theOnlyOneChild.meta.title }}</span>
         </el-menu-item>
       </sidebar-item-link>
     </template>
-    <el-submenu
-      v-else
-      :index="resolvePath(item.path)"
-      popper-append-to-body
-    >
+    <el-submenu v-else
+                :index="resolvePath(item.path)"
+                popper-append-to-body>
       <template slot="title">
-        <svg-icon
-          v-if="item.meta && item.meta.icon"
-          :name="item.meta.icon"
-        />
-        <span
-          v-if="item.meta && item.meta.title"
-          slot="title"
-        >{{ item.meta.title}}</span>
+        <svg-icon v-if="item.meta && item.meta.icon"
+                  :name="item.meta.icon" />
+        <span v-if="item.meta && item.meta.title"
+              slot="title">{{ item.meta.title}}</span>
       </template>
       <template v-if="item.children">
-        <sidebar-item
-          v-for="child in item.children"
-          :key="child.path"
-          :item="child"
-          :is-collapse="isCollapse"
-          :is-first-level="false"
-          :base-path="resolvePath(child.path)"
-          class="nest-menu"
-        />
+        <sidebar-item v-for="child in item.children"
+                      :key="child.path"
+                      :item="child"
+                      :is-collapse="isCollapse"
+                      :is-first-level="false"
+                      :base-path="resolvePath(child.path)"
+                      class="nest-menu" />
       </template>
     </el-submenu>
   </div>
@@ -65,8 +47,8 @@ import SidebarItemLink from './SidebarItemLink.vue'
   // See https://medium.com/haiiro-io/element-component-name-with-vue-class-component-f3b435656561 for detail
   name: 'SidebarItem',
   components: {
-    SidebarItemLink
-  }
+    SidebarItemLink,
+  },
 })
 export default class extends Vue {
   @Prop({ required: true }) private item!: RouteConfig
@@ -128,14 +110,26 @@ export default class extends Vue {
   color: $subMenuActiveText !important;
 }
 
+.el-submenu__title i {
+  color: #fff;
+}
+
 .full-mode {
-  .nest-menu .el-submenu>.el-submenu__title,
-  .el-submenu .el-menu-item {
+  .el-menu-item {
     min-width: $sideBarWidth !important;
-    background-color: $subMenuBg !important;
+    // background-color: $subMenuBg !important;
 
     &:hover {
-      background-color: $subMenuHover !important;
+      // background-color: $subMenuHover !important;
+    }
+  }
+
+  .nest-menu .el-submenu > .el-submenu__title {
+    min-width: $sideBarWidth !important;
+    // background-color: $nextMenuBg !important;
+
+    &:hover {
+      // background-color: $subMenuHover !important;
     }
   }
 }
@@ -154,14 +148,14 @@ export default class extends Vue {
     .el-submenu {
       overflow: hidden;
 
-      &>.el-submenu__title {
+      & > .el-submenu__title {
         padding: 0px !important;
 
         .el-submenu__icon-arrow {
           display: none;
         }
 
-        &>span {
+        & > span {
           visibility: hidden;
         }
       }

@@ -6,8 +6,10 @@ import {
   getUserListProcessCode,
   queryDepartmentInfoTree,
   delHospitalProcessBusiness,
-  queryProcessRecordList
+  queryProcessRecordList,
+  handleSaveRollDepartment
 } from "@/api/basic";
+import { BusinessViewModule } from "@/store/modules/business";
 import { Form, Message } from "element-ui";
 import { getEquipmentInfoByDepartmentId } from "@/api/equipment";
 // import ProcessApproval from "./processApproval.vue";
@@ -17,6 +19,8 @@ import {
   Equipment_Detail_Form_List,
   Approval_Form_list
 } from "./formColumns";
+import { UserModule } from "@/store/modules/user";
+
 @Component({
   name: "InlineEditTable",
   components: {
@@ -26,6 +30,19 @@ import {
   }
 })
 export default class extends Vue {
+  async created() {
+    await BusinessViewModule.GET_DEPARTMENT_DATA();
+  }
+
+  mounted() {
+    Basic_Form_List.forEach((item: any) => {
+      if (item.slot === "department") {
+        item.data = BusinessViewModule.departmentData.map((dept: any) => {
+          return { label: dept.title, value: dept.id };
+        });
+      }
+    });
+  }
   /**********************************
    * 列表相关
    *********************************/
@@ -109,10 +126,44 @@ export default class extends Vue {
    * 流程申请相关
    *****************/
   private requestDialogVisible = false; //模态框
+  // 申请form表单配置文件
   private requestForm = {
     billMain: Basic_Form_List,
     billEquipmentList: Equipment_Detail_Form_List,
     billApproveList: Approval_Form_list
+  };
+  // 申请接口传惨params
+  private requestParams = {
+    id: "",
+    status: "0",
+    billCode: "",
+    billMain: {
+      id: "",
+      userId: UserModule.userData?.userId,
+      userName: UserModule.userData?.userName,
+      createTime: "",
+      rollOutDepartment: "",
+      rollInDepartment: "",
+      equipmentLocation: "",
+      rollOutTime: "",
+      cause: "",
+      status: "",
+      billCode: ""
+    },
+    billEquipmentList: {
+      id: "",
+      billId: "",
+      equipmentId: ""
+    },
+    billApproveList: {
+      id: "",
+      approveUser: UserModule.userData?.userId,
+      approveUserName: UserModule.userData?.userName,
+      approveTime: "",
+      approveOpinion: "",
+      approveStatus: "",
+      billId: ""
+    }
   };
   private processModal = {
     id: "",
@@ -154,13 +205,32 @@ export default class extends Vue {
     processName: [{ require: true, trigger: "change", message: "请选择" }]
   };
 
-  // 新增流程配置
+  /*******************************
+   * 新增流程配置
+   ******************************/
   private handleInsert(row: any) {
     this.requestDialogVisible = true;
   }
 
-  private handleClose(){
-    this.requestDialogVisible = false
+  private handleClose() {
+    this.requestDialogVisible = false;
+  }
+
+  private async handleCreateRequest(params: any) {
+    const billEquipmentList: any = [];
+    billEquipmentList.push(params.billEquipmentList);
+    const billApproveList: any = [];
+    billApproveList.push(params.billApproveList);
+    const sendParams = [];
+    sendParams.push({
+      ...params,
+      billEquipmentList,
+      billApproveList
+    })
+    const res: any = await handleSaveRollDepartment(sendParams);
+    if (res.code == 200) {
+      this.$message.success("发起申请成功");
+    }
   }
 
   /*****************************

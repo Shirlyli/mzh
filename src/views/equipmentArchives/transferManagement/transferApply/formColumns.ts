@@ -1,33 +1,37 @@
+import { UserModule } from "@/store/modules/user";
 export const Basic_Form_List = [
   {
-    field: "userId",
+    field: "userName",
     title: "申请人",
     span: 12,
-    type: "input"
+    type: "input",
+    data: UserModule.userData
   },
   {
     field: "createTime",
     title: "申请日期",
     span: 12,
-    type: "input"
+    type: "date"
   },
   {
     field: "rollOutDepartment",
     title: "转出科室",
     span: 12,
-    type: "select"
+    type: "select",
+    slot: "department"
   },
   {
     field: "rollInDepartment",
     title: "转入科室",
     span: 12,
-    type: "select"
+    type: "select",
+    slot: "department"
   },
   {
     field: "equipmentLocation",
     title: "新存放地点",
     span: 12,
-    type: "date"
+    type: "input"
   },
   {
     field: "rollOutTime",
@@ -48,45 +52,64 @@ export const Equipment_Detail_Form_List = [
     field: "name",
     title: "设备名称",
     span: 12,
-    slots: { default: "applyDetailId" }
+    type: "select",
+    data: [
+      { label: "同意", value: "1" },
+      { label: "驳回", value: "0" }
+    ]
   },
   {
     field: "processCode",
     title: "规则型号",
-    span: 12
+    span: 12,
+    type: "input"
   },
   {
     field: "brand",
     title: "设备品牌",
-    span: 12
+    span: 12,
+    type: "input"
   }
 ];
 
 export const Approval_Form_list = [
   {
-    field: "approveUser",
+    field: "approveUserName",
     title: "审批人",
-    span: 12
+    span: 12,
+    type: "input"
   },
   {
     field: "approveTime",
     title: "审批时间",
-    span: 12
+    span: 12,
+    type: "date"
   },
   {
     field: "approveOpinion",
     title: "审批意见",
-    span: 12
+    span: 12,
+    type: "input"
   },
   {
     field: "approveStatus",
     title: "审批状态",
-    span: 12
+    span: 12,
+    type: "select",
+    data: [
+      { label: "同意", value: "1" },
+      { label: "驳回", value: "0" }
+    ]
   },
   {
     field: "approveTier",
     title: "审批层级",
-    span: 12
+    span: 12,
+    type: "select",
+    data: [
+      { label: "同意", value: "1" },
+      { label: "驳回", value: "0" }
+    ]
   }
 ];
 

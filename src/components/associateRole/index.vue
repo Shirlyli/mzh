@@ -138,7 +138,6 @@ export default class extends Vue {
 
   // 获取已绑定角色树数据
   private async getBindRoleTreeData(data: any) {
-    console.log('🚀 ~ data', data)
     const res: any = await queryRolesByMenuId({ menu_id: data[0].id })
     if (res.code === 200) {
       this.bindRoleData = res.data
@@ -147,7 +146,6 @@ export default class extends Vue {
 
   // 角色树点击事件
   private async handleRoleNodeClick(data: any) {
-    console.log('🚀 ~ data ~ handleRoleNodeClick', data,this.checkedMenuList)
     const res: any = await onMenuIdBindRole({
       menuId: this.checkedMenuList[0].id,
       roleId: data.id,
@@ -160,7 +158,6 @@ export default class extends Vue {
 
   // 角色删除事件
   private async handleDelete(row: any) {
-    console.log('🚀 ~ row ~角色删除事件', row)
     const res: any = await onMenuIdUnBindRole({
       menuId: this.checkedMenuList[0].id,
       roleId: row.id,

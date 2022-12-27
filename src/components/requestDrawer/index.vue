@@ -6,23 +6,39 @@
                @close="handleClose">
       <el-form ref="dataForm"
                :rules="{}"
-               :model="{}"
+               :model="requestParams"
                label-position="left"
-               label-width="120px"
-               style="margin-left:20px;">
+               label-width="100px"
+               style="margin-left:0;">
 
         <!-- 基本信息 -->
         <div class="dividerBox">
           <el-divider direction="vertical"></el-divider>
           <span>基本信息</span>
         </div>
-        <el-row>
+        <el-row :gutter="20">
           <el-col :span="12"
                   v-for="(item,index) in requestForm.billMain"
                   :key="index">
             <el-form-item :label="item.title"
                           prop="applyDetailId">
-
+              <el-input v-model="requestParams.billMain[item.field]"
+                        placeholder="请输入"
+                        v-if="item.type === 'input'" />
+              <el-select v-model="requestParams.billMain[item.field]"
+                         v-if="item.type === 'select'"
+                         placeholder="请选择">
+                <el-option :label="optionValue.label"
+                           :value="optionValue.value"
+                           v-for="optionValue in item.data"
+                           :key="optionValue.label"></el-option>
+              </el-select>
+              <el-date-picker v-model="requestParams.billMain[item.field]"
+                              v-if="item.type === 'date'"
+                              type="date"
+                              placeholder="选择日期"
+                              value-format="yyyy-MM-dd">
+              </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -31,82 +47,60 @@
           <el-divider direction="vertical"></el-divider>
           <span>设备明细</span>
         </div>
-        <el-row>
+        <el-row :gutter="20">
           <el-col :span="12"
                   v-for="(item,index) in requestForm.billEquipmentList"
                   :key="index">
             <el-form-item :label="item.title"
                           prop="applyDetailId">
-
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!-- <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item :label="'申请设备明细'"
-                          prop="applyDetailId">
-              <el-select v-model="equipmentProcessData.applyDetailId"
-                         placeholder="请选择">
-                <el-option v-for="item in applyDetailData"
-                           :key="item.id"
-                           :label="item.name"
-                           :value="item.id">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item :label="'附件'"
-                          prop="enclosureId">
-              <el-upload class="upload-demo"
-                         action="https://jsonplaceholder.typicode.com/posts/"
-                         :on-preview="handlePreview"
-                         :on-remove="handleRemoveField"
-                         :before-remove="beforeRemove"
-                         multiple
-                         :limit="3"
-                         :on-exceed="handleExceed"
-                         :file-list="fileList">
-                <el-button size="small"
-                           type="primary">点击上传</el-button>
-              </el-upload>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item :label="'下一节点名称'"
-                          prop="nextNodeName">
-              <el-input v-model="equipmentProcessData.nextNodeName"
+              <el-input v-model="requestParams.billEquipmentList[item.field]"
                         placeholder="请输入"
-                        disabled />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item :label="'下一节点执行人 '"
-                          prop="nextNodeExecutor">
-              <el-select v-model="equipmentProcessData.nextNodeExecutor"
+                        v-if="item.type === 'input'" />
+              <el-select v-model="requestParams.billEquipmentList[item.field]"
+                         v-if="item.type === 'select'"
                          placeholder="请选择">
-                <el-option :label="item.user_name"
-                           :value="item.user_id"
-                           v-for="(item) in nextNodeExecutorData"
-                           :key="item.user_id"></el-option>
+                <el-option :label="optionValue.label"
+                           :value="optionValue.value"
+                           v-for="optionValue in item.data"
+                           :key="optionValue.label"></el-option>
               </el-select>
+              <el-date-picker v-model="requestParams.billEquipmentList[item.field]"
+                              v-if="item.type === 'date'"
+                              type="date"
+                              placeholder="选择日期"
+                              value-format="yyyy-MM-dd">
+              </el-date-picker>
             </el-form-item>
           </el-col>
-        </el-row> -->
+        </el-row>
         <!-- 设备明细 -->
         <div class="dividerBox">
           <el-divider direction="vertical"></el-divider>
           <span>审批清单</span>
         </div>
-        <el-row>
+        <el-row :gutter="20">
           <el-col :span="12"
                   v-for="(item,index) in requestForm.billApproveList"
                   :key="index">
             <el-form-item :label="item.title"
                           prop="applyDetailId">
-
+              <el-input v-model="requestParams.billApproveList[item.field]"
+                        placeholder="请输入"
+                        v-if="item.type === 'input'" />
+              <el-select v-model="requestParams.billApproveList[item.field]"
+                         v-if="item.type === 'select'"
+                         placeholder="请选择">
+                <el-option :label="optionValue.label"
+                           :value="optionValue.value"
+                           v-for="optionValue in item.data"
+                           :key="optionValue.label"></el-option>
+              </el-select>
+              <el-date-picker v-model="requestParams.billApproveList[item.field]"
+                              v-if="item.type === 'date'"
+                              type="date"
+                              placeholder="选择日期"
+                              value-format="yyyy-MM-dd">
+              </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -139,24 +133,62 @@ export default class extends Vue {
   private visible = false
   @Watch('dialogVisible')
   private onChangeVisible(value: boolean) {
-    console.log('🚀 ~ value', value)
     this.visible = value
   }
   @Prop({ default: {} }) requestForm!: any
-  @Watch('requestForm')
+  @Prop({ default: {} }) requestParams!: any
   @Prop({ default: {} })
   processModal!: any
   @Watch('processModal')
-  // 新增流程申请
-  private createData() {}
+  /**
+   * 新增流程申请
+   */
+  @Emit()
+  emitSubmitCreateRequest(params:any) {
+    return params
+  }
+  private createData() {
+    this.emitSubmitCreateRequest(this.requestParams)
+  }
 
   @Emit()
   emitClose() {
     return true
   }
   private handleClose() {
-    console.log(this.requestForm, this.processModal)
     this.emitClose()
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.el-select {
+  width: 100%;
+}
+.dividerBox {
+  margin: 12px 0 24px 0;
+  font-size: 18px;
+  .el-divider--vertical {
+    background-color: blue;
+    width: 6px;
+  }
+}
+.edit-input {
+  padding-right: 100px;
+}
+
+.cancel-btn {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+
+.demo-drawer__footer {
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  .el-button {
+  }
+}
+</style>

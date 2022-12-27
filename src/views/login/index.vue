@@ -194,7 +194,6 @@ export default class extends Vue {
         let { userName, userPwd } = this.loginForm
         await UserModule.Login({ userPwd: encode(userPwd), userName })
         await UserModule.GetMenu()
-        console.log(UserModule.menu)
         this.$router
           .push({
             path: (UserModule.menu as any)[0]?.path,

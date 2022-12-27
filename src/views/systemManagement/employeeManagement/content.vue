@@ -106,7 +106,7 @@
   background-color: rgba(245, 239, 239, 0.567);
 }
 .clickContentItem {
-  background-color: #1890ff;
+  background-color: #13ce66;
   .eName,
   .citizenNo {
     color: #fff;

@@ -75,7 +75,7 @@ export const constantRoutes: RouteConfig[] = [
 export const asyncRoutes = [
   // ...businessRouter,
   // ...beforeAsyncRoutes,
-  ...chartsRouter,
+  // ...chartsRouter,
   // componentsRouter,
   // nestedRoutes
 ];

@@ -116,7 +116,6 @@ export default class ProTable extends Vue {
   // 重置
   private handleReset = async (formName: string) => {
     await (this.$refs[formName] as any).resetFields();
-    console.log("🚀 ~ this.$refs", this.$refs);
   };
 
   private handleModifyStatus(row: any, status: string) {

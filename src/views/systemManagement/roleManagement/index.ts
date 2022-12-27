@@ -182,7 +182,6 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    console.log("🚀 ~ row", row)
     this.roleData = { ...this.roleData, ...row };
     this.dialogStatus = "update";
     this.dialogVisible = true;

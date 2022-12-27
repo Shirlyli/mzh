@@ -277,14 +277,12 @@ export default class extends Vue {
 
   // 接收关联角色事件
   private handleAssociateRole(data: any) {
-    console.log("🚀 ~ data", data);
     this.isAssociateDialogVisible = true;
     this.checkedMenuList = data;
   }
 
   // 接收关联角色事件
   private handleAssociateRoleRow(data: any) {
-    console.log("🚀 ~ data", data);
     this.checkedMenuList = [];
     this.isAssociateDialogVisible = true;
     this.checkedMenuList.push(data);

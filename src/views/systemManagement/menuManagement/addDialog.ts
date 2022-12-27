@@ -1,37 +1,25 @@
-import { defaultArticleData } from '@/api/articles'
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { defaultArticleData } from "@/api/articles";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 @Component({
-  name: 'AddDialog',
+  name: "AddDialog",
   components: {}
 })
 export default class extends Vue {
   @Prop({ default: false, type: Boolean }) dialogFormVisible!: boolean;
   private diaDialogFormVisible = this.dialogFormVisible;
-  @Watch('diaDialogFormVisible')
-  private ondialogFormVisibleChange() {
-    console.log(
-      '🚀 ~ this.dialogFormVisible',
-      this.dialogFormVisible,
-      this.diaDialogFormVisible
-    )
-  }
+  @Watch("diaDialogFormVisible")
+  private ondialogFormVisibleChange() {}
 
-  mounted() {
-    console.log('🚀 ~ this.dialogFormVisible', this.dialogFormVisible)
-  }
-
-  @Prop({ default: 'create' }) dialogStatus!: string;
-  @Watch('dialogStatus', { immediate: true, deep: true })
-  private ondialogStatusChange() {
-    console.log('🚀 ~ this.dialogStatus', this.dialogStatus)
-  }
+  @Prop({ default: "create" }) dialogStatus!: string;
+  @Watch("dialogStatus", { immediate: true, deep: true })
+  private ondialogStatusChange() {}
 
   private rules = {
-    type: [{ required: true, message: 'type is required', trigger: 'change' }],
+    type: [{ required: true, message: "type is required", trigger: "change" }],
     timestamp: [
-      { required: true, message: 'timestamp is required', trigger: 'change' }
+      { required: true, message: "timestamp is required", trigger: "change" }
     ],
-    title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+    title: [{ required: true, message: "title is required", trigger: "blur" }]
   };
 
   private tempArticleData = defaultArticleData; // 默认新增模态框数据

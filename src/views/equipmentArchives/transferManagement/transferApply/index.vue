@@ -24,8 +24,10 @@
     <!-- 新增流程申请 -->
     <RequestDrawer :dialogVisible="requestDialogVisible"
                    :requestForm="requestForm"
+                   :requestParams="requestParams"
                    :processModal="processModal"
-                   @emit-close="handleClose" />
+                   @emit-close="handleClose" 
+                   @emit-submit-create-request="handleCreateRequest" />
 
     <!-- 流程审批 -->
     <!-- <ProcessApproval :dialogVisible="approvalDialogVisible"

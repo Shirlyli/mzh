@@ -4,16 +4,17 @@
     :class="{'collapse': collapse}"
   >
     <transition name="sidebarLogoFade">
+      <!-- TODO: logo -->
       <router-link
         v-if="collapse"
         key="collapse"
         class="sidebar-logo-link"
         to="/"
       >
-        <img
+        <!-- <img
           src="favicon.ico"
           class="sidebar-logo"
-        >
+        > -->
       </router-link>
       <router-link
         v-else
@@ -21,10 +22,10 @@
         class="sidebar-logo-link"
         to="/"
       >
-        <img
+        <!-- <img
           src="favicon.ico"
           class="sidebar-logo"
-        >
+        > -->
         <h1 class="sidebar-title">
           {{ title }}
         </h1>
@@ -62,7 +63,7 @@ export default class extends Vue {
   width: 100%;
   height: 50px;
   line-height: 50px;
-  background: #0953bb;
+  background: $menuTitleBg;
   text-align: center;
   overflow: hidden;
 

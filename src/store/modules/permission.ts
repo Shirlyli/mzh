@@ -41,7 +41,6 @@ export interface IPermissionState {
 }
 
 export function generaMenu(routes: any, data: any) {
-  console.log("🚀 ~ generaMenu ~ data", data);
   //data挨个遍历
   data.forEach((item: any) => {
     //path不为空的话，就新建一个对象，装数据
@@ -168,10 +167,8 @@ class Permission extends VuexModule implements IPermissionState {
       // console.log("🚀 ~ asyncRoutes", asyncRoutes);
       // this.SET_ROUTES(accessedRoutes);
       // 【新加入】开始
-      console.log(UserModule.menu);
       const loadMenuData: any = [];
       // queryLeftMenuData({}).then((response: any) => {
-      // console.log("🚀 ~ response", response);
       let data;
       //我的code为100200为正常
       // if (response.code !== 200) {
@@ -191,7 +188,6 @@ class Permission extends VuexModule implements IPermissionState {
       // 把 tempAsyncRoutes 的值给 accessedRoutes ，并输出
       // eslint-disable-next-line prefer-const
       newaccessedRoutes = tempAsyncRoutes || [];
-      console.log("🚀 ~ newaccessedRoutes", newaccessedRoutes);
       //下面这些就是加载目录了
       this.SET_ROUTES(newaccessedRoutes);
       resolve(newaccessedRoutes);

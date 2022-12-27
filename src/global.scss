@@ -54,7 +54,7 @@
 
 // 展开收起按钮样式
 .expandBtn {
-    color: #1890ff;
+    color: #42b983;
     margin-left: 10px;
     cursor: pointer;
 }
@@ -66,4 +66,8 @@
 .el-drawer__body {
     padding: 0 24px;
     overflow-y: scroll;
+}
+
+.el-date-editor.el-input {
+    width: 100%
 }

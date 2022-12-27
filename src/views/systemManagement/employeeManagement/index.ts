@@ -244,7 +244,6 @@ export default class extends Vue {
       deptName: title,
       deptId: id ?? "001"
     };
-    console.log("🚀 ~ nodeClickData", this.nodeClickData);
   }
 
   // 接收树形组件点击节点数据
@@ -266,7 +265,6 @@ export default class extends Vue {
 
   // 触发修改员工信息
   private handleUpdate(row: any) {
-    console.log("🚀 ~ row", row);
     this.employeeData = { ...row, deptName: this.nodeClickData.title };
     this.dialogStatus = "update";
     this.dialogVisible = true;
@@ -335,7 +333,6 @@ export default class extends Vue {
   // 查看用户设置
   private async handleSearchForDetail(data: any) {
     const { rowData, type } = data;
-    console.log("🚀 ~ row", rowData);
     const res: any = await getPersonalInfo({ empId: rowData.id });
     if (res.result && res.count === 1) {
       this.personalData = {
@@ -383,14 +380,12 @@ export default class extends Vue {
 
   // 点击员工详情展示用户操作页面
   private async handleLoginDialog(row: any) {
-    console.log("🚀 ~ row ~点击员工详情展示用户操作页面", row);
     // this.personalDialogVisible = true;
     // const res = await getPersonalInfo({ empId: row.id });
   }
 
   // 保存用户设置
   private async savePersonalData() {
-    console.log(this.personalData);
     const res: any = await bindPersonalInfo({
       ...this.personalData
     });
@@ -417,7 +412,6 @@ export default class extends Vue {
   // 绑定角色信息
   private async handleAssociateRole(row: any) {
     this.clickEmployeeInfo = row;
-    console.log("🚀 ~ row ~ 绑定角色信息", row);
     if (this.nodeClickData)
       if (row.userId) {
         this.roleDialogVisible = true;
@@ -429,7 +423,6 @@ export default class extends Vue {
 
   // 角色树点击事件
   private async handleRoleNodeClick(data: any) {
-    console.log("🚀 ~ data ~ handleRoleNodeClick", data);
     const res: any = await personalBindRole({
       userId: this.clickEmployeeInfo.userId,
       roleId: data.id
@@ -442,13 +435,13 @@ export default class extends Vue {
 
   // 关联角色确认保存事件
   private saveRelationRoleData() {
-    console.log((this.$refs.roleTree as any).getCheckedNodes());
-    console.log((this.$refs.roleTree as any).getCheckedKeys());
+    // console.log((this.$refs.roleTree as any).getCheckedNodes());
+    // console.log((this.$refs.roleTree as any).getCheckedKeys());
   }
 
   // 角色删除事件
   private async handleDelete(row: any) {
-    console.log("🚀 ~ row ~角色删除事件", row);
+    // console.log("🚀 ~ row ~角色删除事件", row);
     const type = await VXETable.modal.confirm("您确定要删除该数据?");
     const $table = this.$refs.xTable;
     if (type === "confirm") {

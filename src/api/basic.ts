@@ -260,6 +260,12 @@ export const getUserListProcessCode = (data: any) =>
 // 通过科室id查询转科申请  /rollDepartment/getRollDepartmentById
 
 // 保存转科申请 /rollDepartment/saveRollDepartment
+export const handleSaveRollDepartment = (data: any) =>
+  request({
+    url: "/rollDepartment/saveRollDepartment",
+    method: "POST",
+    data
+  });
 
 // 获取节点信息 /hospitalProcess/getProcessNodeInfoByProcessCodeAndBh
 export const getProcessNodeInfoByProcessCodeAndBh = (data: any) =>

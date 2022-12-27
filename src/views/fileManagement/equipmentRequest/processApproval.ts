@@ -16,15 +16,13 @@ import { CREATE_FORM_LIST } from "./formColumns";
 })
 export default class extends Vue {
   private type = "submit"; // 审批类型-通过，终止
-  @Prop({default:'add'}) editType!:string
+  @Prop({ default: "add" }) editType!: string;
   @Prop({ default: false }) dialogVisible!: boolean;
   @Watch("dialogVisible")
   @Prop()
   processData!: any; //流程数据
   @Watch("processData")
-  private onChangeProcessData(data: any) {
-    console.log("🚀 ~ data", data);
-  }
+  private onChangeProcessData(data: any) {}
   private nextDialogVisible = false;
   private title = "流程审批";
   private basicInfo = CREATE_FORM_LIST; //基本信息
@@ -54,12 +52,10 @@ export default class extends Vue {
 
   // 获取当前节点信息，并根据当前节点信息获取下一节点信息数据
   private async queryCurrentCodeAndBhResData(nodeNameCode: any, type: string) {
-    console.log("🚀 ~ nodeNameCode", nodeNameCode);
     const nextCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
       processCode: "pro_kssq",
       nodeNameCode
     });
-    console.log("🚀 ~ nextCodeData", nextCodeData);
     if (nextCodeData.code == "200" && type === "submit") {
       this.equipmentProcessData.currentNodeCode =
         nextCodeData.data.nodeNameCode;
@@ -128,7 +124,6 @@ export default class extends Vue {
    */
   private async handleSubmitProcess() {
     const { id } = this.processData;
-    console.log("🚀 ~ this.equipmentProcessData", this.equipmentProcessData);
     if (this.type === "submit") {
       (this.$refs.dataForm as Form).validate(async valid => {
         this.nextDialogVisible = false;
@@ -139,7 +134,6 @@ export default class extends Vue {
             operator: "操作人",
             auditStatus: "审核通过" //审核状态(审核通过,审核不通过，回退,作废)
           };
-          console.log("🚀 ~ params", params);
           const res: any = await queryHospitalProcessBusinessUpdate(params);
           if (res.result) {
             this.nextDialogVisible = false;
@@ -159,7 +153,6 @@ export default class extends Vue {
             id,
             auditStatus: "作废" //审核状态(审核通过,审核不通过，回退,作废)
           };
-          console.log("🚀 ~ params", params);
           const res: any = await queryHospitalProcessBusinessUpdate(params);
           if (res.result) {
             this.nextDialogVisible = false;
@@ -179,7 +172,6 @@ export default class extends Vue {
             id,
             auditStatus: "回退" //审核状态(审核通过,审核不通过，回退,作废)
           };
-          console.log("🚀 ~ params", params);
           const res: any = await queryHospitalProcessBusinessUpdate(params);
           if (res.result) {
             this.nextDialogVisible = false;
@@ -222,14 +214,12 @@ export default class extends Vue {
       }
     });
     const nextNodeCode = this.processData.nextNodeCode;
-    console.log("🚀 ~ this.processData", this.processData);
     if (res.code === 200) {
       this.allProcessList = res.data[0].processInfo;
       const dept = _.find(res.data[0].processInfo, [
         "nodeNameCode",
         nextNodeCode
       ]);
-      console.log("🚀 ~ dept", dept);
       this.nextNodeExecutorData = res.data[0].processInfo.slice(
         0,
         dept.nodeSort - 1
@@ -240,8 +230,10 @@ export default class extends Vue {
       }
       this.equipmentProcessData.nextNodeCode = this.nextNodeExecutorData?.[0].nodeNameCode;
       this.equipmentProcessData.nextNodeName = this.nextNodeExecutorData?.[0].nodeName;
-      this.queryUserListProcessCode(this.nextNodeExecutorData?.[0].nodeSort, "back");
-      console.log("🚀 ~ this.nextNodeExecutorData ", this.nextNodeExecutorData);
+      this.queryUserListProcessCode(
+        this.nextNodeExecutorData?.[0].nodeSort,
+        "back"
+      );
       this.type = "back";
       this.title = "回退流程";
       this.nextDialogVisible = true;

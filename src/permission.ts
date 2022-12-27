@@ -24,7 +24,7 @@ const getPageTitle = (key: string) => {
 router.beforeEach(async (to: Route, _: Route, next: any) => {
   NProgress.start();
   const state = JSON.parse(sessionStorage.getItem("state") || "0");
-  // console.log("🚀 ~ to.path", to);
+  console.log("🚀 ~ state", state,'UserModule',UserModule,'to',to)
   if (UserModule.token) {
     if (to.path === "/login") {
       // If is logged in, redirect to the home page
@@ -32,7 +32,9 @@ router.beforeEach(async (to: Route, _: Route, next: any) => {
       NProgress.done();
     } else {
       if (UserModule.roles.length === 0) {
+        console.log('111')
         try {
+
           // Note: roles must be a object array! such as: ['admin'] or ['developer', 'editor']
           await UserModule.GetUserInfo();
           const roles = UserModule.roles;
@@ -46,13 +48,15 @@ router.beforeEach(async (to: Route, _: Route, next: any) => {
           // Set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true });
         } catch (err) {
+          console.log('222')
           // Remove token and redirect to login page
           UserModule.ResetToken();
-          Message({ type: "error", message: err || "Has Error" });
+          (Message as any)({ type: "error", message: err || "Has Error" });
           next(`/login?redirect=${to.path}`);
           NProgress.done();
         }
       } else {
+        console.log('333')
         next();
       }
     }

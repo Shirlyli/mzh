@@ -152,7 +152,6 @@ export default class extends Vue {
 
   // 获取列表数据
   private async findList(config: any) {
-    console.log('🚀 ~ config', config)
     this.loading = true
     this.checkedList = []
     try {
@@ -162,7 +161,6 @@ export default class extends Vue {
           this.tableData = res.data.map((item: any) => {
             return { ...item, ...item.equipmentVO }
           })
-          console.log('🚀 ~ this.tableData', this.tableData)
           this.tablePage.total = res.count
         } else {
           this.tableData = res.data
@@ -182,7 +180,6 @@ export default class extends Vue {
 
   // 查询
   private searchFor() {
-    console.log('🚀 ~ formConfig', this.formConfig.data)
     this.paramsConfig.params.entity = {
       ...this.paramsConfig.params.entity,
       ...this.formConfig.data,
@@ -234,7 +231,6 @@ export default class extends Vue {
   // 新增
   @Emit()
   emitHandleInsert(rowData: any) {
-    console.log('🚀 ~ emitHandleInsert', rowData)
     return rowData
   }
 
@@ -258,7 +254,6 @@ export default class extends Vue {
 
   // 批量删除
   private async groupRemove() {
-    console.log('🚀 ~ this.checkedList', this.checkedList)
     if (!this.checkedList.length) {
       Message.error('请选择后进行操作！')
       return
@@ -277,7 +272,6 @@ export default class extends Vue {
   // 查看
   @Emit()
   emitHandleSearch(rowData: any) {
-    console.log('emitHandleSearch')
     return rowData
   }
 

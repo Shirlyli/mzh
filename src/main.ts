@@ -34,8 +34,6 @@ Vue.use(ElementUI, {
 VXETable.renderer.add('runningState',{
   renderDefault(h,cellRender,params){
     const {row,column} = params
-    console.log("🚀 ~ column", column)
-    console.log("🚀 ~ row", row)
     return h('span','222')
   }
 })

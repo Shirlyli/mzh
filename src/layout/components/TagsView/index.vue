@@ -205,9 +205,7 @@ export default class extends Vue {
   }
 
   private toLastView(visitedViews: ITagView[], view: ITagView) {
-    console.log("🚀 ~ view", view)
     const latestView = visitedViews.slice(-1)[0]
-    console.log("🚀 ~ latestView", latestView)
     if (latestView !== undefined && latestView.fullPath !== undefined) {
       this.$router.push(latestView.fullPath).catch(err => {
         console.warn(err)
@@ -220,7 +218,6 @@ export default class extends Vue {
           console.warn(err)
         })
       } else {
-        console.log("🚀 ~ view", view)
         this.$router.push((UserModule.menu as any)[0]?.path).catch(err => {
           console.warn(err)
         })

@@ -262,9 +262,7 @@ export default class extends Vue {
     }
   }; // 根据表单查询项查询数据
 
-  private formatterValue(data: any) {
-    console.log("🚀 ~ data", data);
-  }
+  private formatterValue(data: any) {}
   // 新增设备
   private handleInsert() {
     if (!this.nodeClickData.id) {
@@ -274,7 +272,6 @@ export default class extends Vue {
     this.dialogVisible = true;
     this.dialogStatus = "create";
     const { id, title } = this.nodeClickData;
-    console.log("🚀 ~ this.nodeClickData", this.nodeClickData);
     this.equipmentCategoryData = {
       ...this.equipmentCategoryData,
       equipmentVO: {
@@ -282,7 +279,6 @@ export default class extends Vue {
         departmentId: id
       }
     };
-    console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData);
   }
 
   // 接收树形组件点击节点数据
@@ -327,14 +323,12 @@ export default class extends Vue {
       equipmentStores: { ...equipmentStores[0] },
       equipmentVO
     };
-    console.log("🚀 ~ this.equipmentCategoryData", this.equipmentCategoryData);
     this.dialogStatus = "update";
     this.dialogVisible = true;
   }
 
   // 删除设备
   private async handleRemove(row: any) {
-    console.log("🚀 ~ row", row);
     let params = [];
     if (Array.isArray(row)) {
       const res = _.map(row, function(o) {
@@ -359,7 +353,6 @@ export default class extends Vue {
   private async handleSearchForDetail(row: any) {
     this.dialogVisible = true;
     this.dialogStatus = "update";
-    console.log("🚀 ~ row11", row);
     const res:
       | RESULT_DATA_TYPE
       | any = await searchEquipmentCategoryInfoDetailsData({

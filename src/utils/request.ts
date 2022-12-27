@@ -47,8 +47,9 @@ service.interceptors.response.use(
           UserModule.ResetToken();
           location.reload(); // To prevent bugs from vue-router
         });
-      } else if(res.code === 203) { //校核提示 203
-         return Promise.reject(new Error(res.msg || "Error"));
+      } else {
+        //校核提示 203
+        return Promise.resolve(new Error(res.msg || "Error"));
       }
       return Promise.reject(new Error(res.msg || "Error"));
     } else {
