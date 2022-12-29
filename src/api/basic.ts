@@ -486,3 +486,15 @@ export const delOperationLogs = (data: { roleId: string; menuId: string }) =>
     method: "POST",
     data
   });
+
+/**************************
+ * 根据科室获取设备 getEquipmentData
+ * @param data
+ *************************/
+
+export const getEquipmentData = (data: any) =>
+  request({
+    url: "/equipment/getEquipmentInfo",
+    method: "POST",
+    data
+  });

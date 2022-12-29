@@ -61,13 +61,13 @@ const ALL_OPTIONS = {
   ],
   // 计量检查
   isMetering: [
-    { label: "未检查", value: 1 },
-    { label: "已检查", value: 2 }
+    { label: "未检查", value: 0 },
+    { label: "已检查", value: 1 }
   ],
   // 是否计量单位
   meterings: [
-    { label: "不是计量设备", value: 1 },
-    { label: "是计量设备", value: 2 }
+    { label: "不是计量设备", value: 0 },
+    { label: "是计量设备", value: 1}
   ],
   // 国别
   region: [
@@ -84,7 +84,13 @@ const ALL_OPTIONS = {
   state: [
     { label: "正常", value: 1 },
     { label: "删除", value: 2 }
-  ]
+  ],
+  // 流程状态
+  APPROVE_STATUS: [
+    { label: "终止", value: 1 },
+    { label: "待审批", value: 2 },
+    { label: "退回", value: 3 }
+  ],
 };
 
 export default ALL_OPTIONS;

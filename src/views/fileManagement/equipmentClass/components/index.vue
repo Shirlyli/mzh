@@ -26,18 +26,40 @@
                                   prop="type">
                       <el-select v-model="defaultEquipmentInfoData[item.key][formItem.key]"
                                  placeholder="请选择"
+                                 v-if="formItem.type === 'treeSelect'">
+                        <el-tree node-key="id"
+                                 :data="formItem.options"
+                                 :props="{
+                                  children: 'children',
+                                  label: 'title',
+                                 }"
+                                 class="add_tree"
+                                 :expand-on-click-node="false"
+                                 :check-on-click-node="true">
+                          <span class="custom-tree-node"
+                                slot-scope="{ node, data }">
+                            <el-option style="padding: 0"
+                                       :label="data.title"
+                                       :value="data.id"></el-option>
+                          </span>
+                        </el-tree>
+                      </el-select>
+                      <el-select v-model="defaultEquipmentInfoData[item.key][formItem.key]"
+                                 placeholder="请选择"
                                  v-if="formItem.type === 'select'">
                         <el-option :label="options.label"
                                    :value="options.value"
                                    v-for="options in formItem.options"
                                    :key="options.label"></el-option>
                       </el-select>
+
                       <el-date-picker v-model="defaultEquipmentInfoData[item.key][formItem.key]"
                                       placeholder="请选择时间"
                                       value-format="yyyy-MM-dd"
                                       v-else-if="formItem.type === 'date'"></el-date-picker>
                       <el-input v-model="defaultEquipmentInfoData[item.key][formItem.key]"
-                                v-else="!formItem.type" />
+                                v-if="!formItem.type"
+                                :placeholder="`请输入${formItem.label}`" />
                     </el-form-item>
                   </el-col>
                 </div>
@@ -63,11 +85,10 @@
 </template>
 
 <script lang="ts" src="./index.ts" >
-
 </script>
 
 <style lang="scss" scoped>
-.el-select{
-  width:100%
+.el-select {
+  width: 100%;
 }
 </style>

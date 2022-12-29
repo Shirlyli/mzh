@@ -20,6 +20,8 @@ import {
   Approval_Form_list
 } from "./formColumns";
 import { UserModule } from "@/store/modules/user";
+import ALL_OPTIONS from "@/shared/options";
+import { FormatApproveStatusColumns } from "@/utils/functions";
 
 @Component({
   name: "InlineEditTable",
@@ -58,17 +60,25 @@ export default class extends Vue {
       {
         field: "approveStatus",
         title: "任务名称",
-        itemRender: { name: "$input", props: { placeholder: "请输入审批状态" } }
+        itemRender: { name: "$input", props: { placeholder: "请输入任务名称" } }
       },
       {
         field: "rollOutDepartment",
         title: "制单科室",
-        itemRender: { name: "$input", props: { placeholder: "请输入申请科室" } }
+        itemRender: {
+          name: "$select",
+          props: { placeholder: "请选择" },
+          options: BusinessViewModule.departmentData
+        }
       },
       {
         field: "rollOutDepartment",
         title: "盘点状态",
-        itemRender: { name: "$input", props: { placeholder: "请输入申请科室" } }
+        itemRender: {
+          name: "$select",
+          props: { placeholder: "请选择" },
+          options: ALL_OPTIONS.APPROVE_STATUS
+        }
       },
       {
         field: "cteaterTime",
@@ -89,7 +99,11 @@ export default class extends Vue {
     { field: "createTime", title: "申请日期" },
     { field: "departmentId", title: "制单科室 " },
     { field: "equipmentCategory", title: "盘点范围" },
-    { field: "approveStatus", title: "盘点状态 " },
+    {
+      field: "approveStatus",
+      title: "盘点状态 ",
+      formatter: (data: any) => FormatApproveStatusColumns(data)
+    },
     {
       width: 250,
       title: "操作",

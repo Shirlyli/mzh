@@ -54,8 +54,9 @@ export default class extends Vue {
         field: "lImportant",
         title: "重要程度",
         itemRender: {
-          name: "$input",
-          props: { placeholder: "请输入重要程度" }
+          name: "$select",
+          props: { placeholder: "请选择" },
+          options: ALL_OPTIONS.IMPORTANT
         },
         resetValue: ""
       },

@@ -9,20 +9,10 @@ import {
   equipmentInspection,
   equipmentVO
 } from "../formlist/index";
-// import {
-//   THospitalEquipment,
-//   equipmentPurchases,
-//   THospitalEquipmentPayment,
-//   equipmentDepreciations,
-//   equipmentMaintain,
-//   equipmentResources,
-//   equipmentStocks,
-//   equipmentStores,
-//   TmzhEquipmentInspectionWithBLOBs
-// } from "../formlist/interface.type";
 import { EquipmentInfoTypes } from "../formlist/interface.type";
 import { Form, Message } from "element-ui";
 import { updateEquipmentInfoData } from "@/api/equipment";
+import { BusinessViewModule } from "@/store/modules/business";
 @Component({
   name: "EquipmentFormDialog"
 })
@@ -92,7 +82,7 @@ export default class extends Vue {
     // }
   }
 
-  created() {
+  async created() {
     this.allFormList = {
       equipmentVO: equipmentVO,
       equipmentPurchases: equipmentPurchases,
@@ -208,7 +198,7 @@ export default class extends Vue {
         };
         let params = [];
         params.push(paramsConfig);
-        console.log("🚀 ~ paramsConfig", paramsConfig)
+        console.log("🚀 ~ paramsConfig", paramsConfig);
         const res: any = await updateEquipmentInfoData(params);
         if (res.code == 200) {
           this.emitSubmit(true);
@@ -224,6 +214,7 @@ export default class extends Vue {
     return false;
   }
   private handleCloseDialog() {
+    console.log(BusinessViewModule.equipmentData)
     this.emitCloseDialog();
   }
 }

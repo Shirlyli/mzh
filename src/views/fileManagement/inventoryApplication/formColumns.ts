@@ -1,3 +1,4 @@
+import ALL_OPTIONS from "@/shared/options";
 import { UserModule } from "@/store/modules/user";
 export const Basic_Form_List = [
   {
@@ -80,10 +81,7 @@ export const Approval_Form_list = [
     title: "审批状态",
     span: 12,
     type: "select",
-    data: [
-      { label: "同意", value: "1" },
-      { label: "驳回", value: "0" }
-    ]
+    data: ALL_OPTIONS.APPROVE_STATUS
   },
   {
     field: "approveTier",

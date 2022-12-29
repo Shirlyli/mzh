@@ -1,15 +1,5 @@
 import ALL_OPTIONS from "@/shared/options";
-import {
-  THospitalEquipment,
-  THospitalEquipmentPurchase,
-  THospitalEquipmentPayment,
-  ThospitalEquipmentDepreciation,
-  ThospitalEquipmentMaintainWithBLOB,
-  ThospitalEquipmentResource,
-  ThospitalEquipmentStock,
-  ThospitalEquipmentStore,
-  TmzhEquipmentInspectionWithBLOB
-} from "./interface.type";
+import { BusinessViewModule } from "@/store/modules/business";
 /**
  * 设备基础信息
  */
@@ -20,7 +10,12 @@ export const equipmentVO = [
   { label: "设备数量", key: "num" },
   { label: "设备型号", key: "marking" },
   { label: "注册证号", key: "registrationCertificat" },
-  { label: "科室id", key: "departmentId" ,},//type:'select',options:ALL_OPTIONS.equipmentStates
+  {
+    label: "科室",
+    key: "departmentId",
+    type: "treeSelect",
+    options: BusinessViewModule.departmentData
+  },
   { label: "产品批号", key: "batchNumber" },
   {
     label: "设备状态",
@@ -174,7 +169,12 @@ export const equipmentMaintain = [
   { label: "维保服务商", key: "facilitator" },
   { label: "维保服务商联系方式", key: "facilitatorPhone" },
   { label: "附件图片", key: "img" },
-  { label: "设备ID", key: "equipmentId" },
+  {
+    label: "设备",
+    key: "equipmentId",
+    type: "select",
+    options: BusinessViewModule.equipmentData
+  },
   { label: "上次保养时间", key: "lastMaintainTime", type: "date" },
   { label: "下次保养时间", key: "nextMaintainTime", type: "date" },
   { label: "耗材", key: "parts" },
@@ -189,7 +189,7 @@ export const equipmentResources = [
   { label: "使用说明书名称", key: "instructionsName" },
   { label: "使用说明书url", key: "instructionsUrl" },
   { label: "保养说明书名称", key: "maintainName" },
-  { label: "保养说明书url", key: "maintainUrl" },//maintainUrl
+  { label: "保养说明书url", key: "maintainUrl" }, //maintainUrl
   { label: "计量操作文档名称", key: "meteringName" },
   { label: "计量操作文档url", key: "meteringUrl" },
   { label: "设备ID", key: "equipmentId" },
@@ -244,5 +244,3 @@ export const equipmentInspection = [
   { label: "配件描述", key: "parts" },
   { label: "巡检人", key: "userId" }
 ];
-
-

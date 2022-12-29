@@ -14,6 +14,7 @@ import _ from "lodash";
 import { RESULT_DATA_TYPE } from "@/utils/index.type";
 import { AxiosResponse } from "axios";
 import { EquipmentInfoTypes } from "./formlist/interface.type";
+import { BusinessViewModule } from "@/store/modules/business";
 @Component({
   name: "EquipmentCategory",
   components: {
@@ -298,7 +299,9 @@ export default class extends Vue {
   }
 
   // 触发编辑事件
-  private handleUpdate(row: any) {
+  private async handleUpdate(row: any) {
+    console.log("🚀 ~ row", row);
+
     const {
       equipmentDepreciations,
       equipmentInspection,
@@ -323,8 +326,10 @@ export default class extends Vue {
       equipmentStores: { ...equipmentStores[0] },
       equipmentVO
     };
+
     this.dialogStatus = "update";
     this.dialogVisible = true;
+    await BusinessViewModule.GET_EQUIPMENT_DATA(row.equipmentVO?.departmentId,1,10)
   }
 
   // 删除设备

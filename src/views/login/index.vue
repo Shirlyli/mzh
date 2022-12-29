@@ -109,6 +109,7 @@ import { isValidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect/index.vue'
 import SocialSign from './components/SocialSignin.vue'
 import { encode } from 'js-base64'
+import { BusinessViewModule } from '@/store/modules/business'
 
 @Component({
   name: 'Login',
@@ -194,6 +195,7 @@ export default class extends Vue {
         let { userName, userPwd } = this.loginForm
         await UserModule.Login({ userPwd: encode(userPwd), userName })
         await UserModule.GetMenu()
+        await BusinessViewModule.GET_DEPARTMENT_DATA();
         this.$router
           .push({
             path: (UserModule.menu as any)[0]?.path,
