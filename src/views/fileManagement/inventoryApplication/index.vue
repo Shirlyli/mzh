@@ -4,7 +4,7 @@
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>转科申请</span>
+        <span>盘点申请</span>
       </div>
       <keep-alive>
         <VexTable ref="vexTable"

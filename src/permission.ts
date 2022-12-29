@@ -24,7 +24,7 @@ const getPageTitle = (key: string) => {
 router.beforeEach(async (to: Route, _: Route, next: any) => {
   NProgress.start();
   const state = JSON.parse(sessionStorage.getItem("state") || "0");
-  console.log("🚀 ~ state", state,'UserModule',UserModule,'to',to)
+  // console.log("🚀 ~ state", state,'UserModule',UserModule,'to',to)
   if (UserModule.token) {
     if (to.path === "/login") {
       // If is logged in, redirect to the home page

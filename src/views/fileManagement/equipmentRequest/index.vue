@@ -5,9 +5,6 @@
       <div slot="header"
            class="clearfix">
         <span>科室申请</span>
-        <!-- <el-button style="float: right; padding: 3px 0"
-                   type="text"
-                   @click="addEquipmentRequest">新增</el-button> -->
       </div>
       <keep-alive>
         <VexTable ref="vexTable"
@@ -134,9 +131,9 @@
               <el-select v-model="equipmentProcessData.applyDetailId"
                          placeholder="请选择">
                 <el-option v-for="item in applyDetailData"
-                           :key="item.id"
-                           :label="item.name"
-                           :value="item.id">
+                           :key="item.value"
+                           :label="item.label"
+                           :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -183,10 +180,12 @@
         </el-row>
       </el-form>
       <div class="demo-drawer__footer">
-        <el-button @click="dialogVisible = false" size="large">
+        <el-button @click="dialogVisible = false"
+                   size="large">
           {{ $t('table.cancel') }}
         </el-button>
-        <el-button type="primary" size="large"
+        <el-button type="primary"
+                   size="large"
                    @click="dialogStatus==='create'?createData():updateData()">
           {{ $t('table.confirm') }}
         </el-button>
@@ -194,11 +193,19 @@
 
     </el-drawer>
 
+    <!-- <RequestDrawer :dialogVisible="requestDialogVisible"
+                   :requestForm="requestForm"
+                   :requestParams="requestParams"
+                   :processModal="processModal"
+                   @emit-close="handleClose"
+                   @emit-submit-create-request="handleCreateRequest" /> -->
+
     <!-- 流程审批 -->
     <ProcessApproval :dialogVisible="approvalDialogVisible"
                      :processData="clickProcessData"
                      @emit-handle-submit="emitHandleSubmit"
-                     v-show="approvalDialogVisible" />
+                     v-show="approvalDialogVisible"
+                     :basicFormList="basicFormList" />
 
     <!-- 操作记录 -->
     <el-dialog title="操作记录"
@@ -266,8 +273,7 @@
   position: absolute;
   bottom: 10px;
   right: 10px;
-  .el-button{
-
+  .el-button {
   }
 }
 </style>

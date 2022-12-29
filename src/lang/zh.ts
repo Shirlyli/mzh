@@ -48,7 +48,7 @@ export default {
     maintainSettings: '保养设置',
     checkingSet: '巡检设置',
     meteringTestingSetup: '计量检测设置',
-    inventorySettings: '盘点设置',
+    inventorySettings: '设置',
     infrastructure: '基础数据管理', //= ====1
     personalData: '个人资料',
     APPMenu: 'APP菜单',

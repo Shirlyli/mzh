@@ -7,10 +7,10 @@ import {
   queryDepartmentInfoTree,
   delHospitalProcessBusiness,
   queryProcessRecordList,
-  handleSaveRollDepartment
+  handleSaveCheckApply
 } from "@/api/basic";
 import { BusinessViewModule } from "@/store/modules/business";
-import { Form, Message } from "element-ui";
+import { Message } from "element-ui";
 import { getEquipmentInfoByDepartmentId } from "@/api/equipment";
 import ProcessApproval from "@/components/processApproval/index.vue";
 import RequestDrawer from "@/components/requestDrawer/index.vue";
@@ -57,12 +57,17 @@ export default class extends Vue {
     items: [
       {
         field: "approveStatus",
-        title: "审批状态",
+        title: "任务名称",
         itemRender: { name: "$input", props: { placeholder: "请输入审批状态" } }
       },
       {
         field: "rollOutDepartment",
-        title: "申请科室",
+        title: "制单科室",
+        itemRender: { name: "$input", props: { placeholder: "请输入申请科室" } }
+      },
+      {
+        field: "rollOutDepartment",
+        title: "盘点状态",
         itemRender: { name: "$input", props: { placeholder: "请输入申请科室" } }
       },
       {
@@ -78,14 +83,13 @@ export default class extends Vue {
   private columns = [
     { type: "seq", width: 60 },
     { type: "checkbox", width: 60 },
-    { field: "billCode", title: "转科单号", width: 150 },
-    { field: "rollOutDepartment", title: "申请科室" },
+    { field: "billCode", title: "盘点单号", width: 150 },
+    { field: "checkDepartment", title: "任务名称" },
     { field: "userId", title: "申请人" },
     { field: "createTime", title: "申请日期" },
-    { field: "rollInDepartment", title: " 转入科室 " },
-    { field: "rollOutTime", title: " 转科日期" },
-    { field: "cause", title: " 转科原因 " },
-    { field: "approveStatus", title: " 审批状态 " },
+    { field: "departmentId", title: "制单科室 " },
+    { field: "equipmentCategory", title: "盘点范围" },
+    { field: "approveStatus", title: "盘点状态 " },
     {
       width: 250,
       title: "操作",
@@ -96,7 +100,7 @@ export default class extends Vue {
 
   // 列表传参
   private paramsConfig: any = {
-    url: "/rollDepartment/getRollDepartmentInfo", // 根据表单查询项查询数据
+    url: "/checkApply/getCheckApplyInfo", // 根据表单查询项查询数据
     params: {
       page: "1",
       limit: "20",
@@ -233,7 +237,7 @@ export default class extends Vue {
       billEquipmentList,
       billApproveList
     });
-    const res: any = await handleSaveRollDepartment(sendParams);
+    const res: any = await handleSaveCheckApply(sendParams);
     if (res.code == 200) {
       this.$message.success("发起申请成功");
       this.requestDialogVisible = false;

@@ -6,6 +6,8 @@
           <div slot="header"
                class="clearfix">
             <span>流程名称</span>
+            <i class="el-icon-plus addBtn"
+               style="float: right" @click="addProcess"></i>
           </div>
           <Tree ref="vxeTree"
                 :url="url"
@@ -110,6 +112,13 @@
 </script>
 
 <style lang="scss" scoped>
+.addBtn {
+  border: 1px solid #ccc;
+  padding: 3px;
+  &:hover{
+    cursor: pointer;
+  }
+}
 .edit-input {
   padding-right: 100px;
 }

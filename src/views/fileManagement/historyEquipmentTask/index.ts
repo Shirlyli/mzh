@@ -15,7 +15,7 @@ import { Form, Message } from "element-ui";
 import { CREATE_FORM_LIST } from "../equipmentRequest/formColumns";
 import { getEquipmentInfoByDepartmentId } from "@/api/equipment";
 import moment from "moment";
-import ProcessApproval from "../equipmentRequest/processApproval.vue";
+import ProcessApproval from "@/components/processApproval/index.vue";
 @Component({
   name: "InlineEditTable",
   components: {
@@ -74,7 +74,7 @@ export default class extends Vue {
 
   // 已处理列表传参
   private doneFormConfig = {
-    url: "/hospitalProcessBusiness/queryProcessList", // 根据表单查询项查询数据
+    url: "/kssq/queryProcessList", // 根据表单查询项查询数据
     params: {
       page: "1",
       limit: "20",
@@ -215,7 +215,7 @@ export default class extends Vue {
       } 个文件，共选择了 ${files.length + fileList.length} 个文件`
     );
   }
-  
+
   private beforeRemove(file: any, fileList: any) {
     return this.$confirm(`确定移除 ${file.name}？`);
   }

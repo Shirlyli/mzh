@@ -1,6 +1,11 @@
 import request from "@/utils/request";
 
-// 获取字典左侧树形数据
+/**************************
+ * 获取字典左侧树形数据
+ * @param url
+ * @param data
+ * @returns
+ *************************/
 export const getTreeData = (url: any, data: any) =>
   request({
     url,
@@ -8,12 +13,11 @@ export const getTreeData = (url: any, data: any) =>
     data
   });
 
-/**
+/*********************************************
  * 字典管理start
  * @param data
  * @returns
- */
-// 获取下级字典数据
+ ********************************************/
 export const getTableDataList = (data: any) =>
   request({
     url: "common/dicInfo/saver",
@@ -21,7 +25,11 @@ export const getTableDataList = (data: any) =>
     data
   });
 
-// 修改字典数据
+/*************************
+ * 修改字典数据
+ * @param data
+ * @returns
+ ************************/
 export const updateCommonData = (data: any) =>
   request({
     url: "/common/dicInfo/save",
@@ -29,7 +37,11 @@ export const updateCommonData = (data: any) =>
     data
   });
 
-// 删除字典
+/*************************
+ * 删除字典
+ * @param data
+ * @returns
+ ************************/
 export const dealCommonData = (data: any) =>
   request({
     url: "/common/dicInfo/del",
@@ -37,13 +49,13 @@ export const dealCommonData = (data: any) =>
     data
   });
 
-/**
+/*************************
  * 字典管理end
- */
+ ************************/
 
-/**
+/*************************
  * 员工管理start
- */
+ ************************/
 // 修改员工信息
 export const updatePersonalData = (data: any) =>
   request({
@@ -60,13 +72,13 @@ export const dealPersonalData = (data: any) =>
     data
   });
 
-/**
+/*************************
  * 员工管理end
- */
+ ************************/
 
-/**
+/*************************
  * 用户管理start
- */
+ ************************/
 // 获取用户信息根据员工id
 export const getPersonalInfo = (data: any) =>
   request({
@@ -76,7 +88,6 @@ export const getPersonalInfo = (data: any) =>
   });
 
 // 新增用户账号信息 --修改
-// /auth/user/bindAccount
 export const bindPersonalInfo = (data: any) =>
   request({
     url: "/auth/user/bindAccount",
@@ -85,7 +96,6 @@ export const bindPersonalInfo = (data: any) =>
   });
 
 // 删除用户账号信息
-// /auth/user/del
 export const delPersonalInfo = (data: any) =>
   request({
     url: "/auth/user/del",
@@ -100,7 +110,7 @@ export const getRoleTreeData = () =>
     method: "POST"
   });
 
-// 用户关联角色 /auth/userRole/bindRole
+// 用户关联角色
 export const personalBindRole = (data: { userId: string; roleId: string }) =>
   request({
     url: "/auth/userRole/bindRole",
@@ -108,7 +118,7 @@ export const personalBindRole = (data: { userId: string; roleId: string }) =>
     data
   });
 
-// 查看用户已关联绑定角色 /auth/role/queryRolesByUserId
+// 查看用户已关联绑定角色
 export const queryRolesByUserId = (data: { user_id: string }) =>
   request({
     url: "/auth/role/queryRolesByUserId",
@@ -116,32 +126,28 @@ export const queryRolesByUserId = (data: { user_id: string }) =>
     data
   });
 
-// 解绑用户关联角色 /auth/userRole/unbindRole
+// 解绑用户关联角色
 export const personalUnbindRole = (data: { userId: string; roleId: string }) =>
   request({
     url: "/auth/userRole/unbindRole",
     method: "POST",
     data
   });
-/**
+/*************************
  * 用户管理end
- */
+ ************************/
 
-/**
+/*************************
  * 菜单管理start
- */
-// 获取菜单树   /auth/menu/queryTree
+ ************************/
+// 获取菜单树
 export const queryMenuTree = () =>
   request({
     url: "/auth/menu/queryTree",
     method: "POST"
   });
 
-// 新增菜单  /auth/menu/save
-/**
- * @param data
- * @returns
- */
+// 新增菜单
 export const saveMenuInfo = (data: any) =>
   request({
     url: "/auth/menu/save",
@@ -149,7 +155,7 @@ export const saveMenuInfo = (data: any) =>
     data
   });
 
-// 菜单树删除 /auth/menu/del {ids:string}
+// 菜单树删除
 export const delMenuInfo = (data: any) =>
   request({
     url: "/auth/menu/del",
@@ -157,7 +163,7 @@ export const delMenuInfo = (data: any) =>
     data
   });
 
-// 菜单树点击  /auth/menu/queryByCondition
+// 菜单树点击
 export const queryByCondition = (data: {
   page: string;
   limit: string;
@@ -202,13 +208,13 @@ export const delRoleInfo = (data: any) =>
     method: "POST",
     data
   });
-/**
+/*************************
  * 菜单管理end
- */
+ ************************/
 
-/**
+/*************************
  * 角色管理start
- */
+ ************************/
 // 角色修改
 export const saveRoleInfo = (data: any) =>
   request({
@@ -216,13 +222,13 @@ export const saveRoleInfo = (data: any) =>
     method: "POST",
     data
   });
-/**
+/*************************
  * 角色管理end
- */
+ ************************/
 
-/***
+/**************************
  *  流程相关start
- */
+ ************************/
 // 获取流程配置列表
 export const queryProcessData = (data: any) =>
   request({
@@ -255,7 +261,13 @@ export const getUserListProcessCode = (data: any) =>
     data
   });
 
-// 转科申请查询  /rollDepartment/getRollDepartmentInfo
+// 转科申请查询
+export const getRollDepartmentInfo = (data: any) =>
+  request({
+    url: "/rollDepartment/getRollDepartmentInfo",
+    method: "POST",
+    data
+  });
 
 // 通过科室id查询转科申请  /rollDepartment/getRollDepartmentById
 
@@ -263,6 +275,18 @@ export const getUserListProcessCode = (data: any) =>
 export const handleSaveRollDepartment = (data: any) =>
   request({
     url: "/rollDepartment/saveRollDepartment",
+    method: "POST",
+    data
+  });
+
+/*************************
+ * 盘点申请保存
+ * @param data
+ * @returns
+ ************************/
+export const handleSaveCheckApply = (data: any) =>
+  request({
+    url: "/checkApply/saveCheckApply",
     method: "POST",
     data
   });
@@ -283,42 +307,45 @@ export const queryProcessRecordList = (data: any) =>
     data
   });
 
-// 发起科室申请流程 /hospitalProcessBusiness/save
+// 发起科室申请流程 /kssq/save
 export const queryHospitalProcessBusinessSave = (data: any) =>
   request({
-    url: "/hospitalProcessBusiness/save",
+    url: "/kssq/save",
     method: "POST",
     data
   });
 
-// 审批流程 hospitalProcessBusiness/update
+// 审批流程 kssq/update
 export const queryHospitalProcessBusinessUpdate = (data: any) =>
   request({
-    url: "/hospitalProcessBusiness/update",
+    url: "/kssq/update",
     method: "POST",
     data
   });
 
-// 获取流程列表 /hospitalProcessBusiness/queryProcessList
+// 获取流程列表 /kssq/queryProcessList
 export const queryProcessList = (data: any) =>
   request({
-    url: "/hospitalProcessBusiness/queryProcessList",
+    url: "/kssq/queryProcessList",
     method: "POST",
     data
   });
 
-// 删除业务流程 /hospitalProcessBusiness/del
+// 删除业务流程 /kssq/del
 export const delHospitalProcessBusiness = (data: any) =>
   request({
-    url: "/hospitalProcessBusiness/del",
+    url: "/kssq/del",
     method: "POST",
     data
   });
 
-/***
+/**************************
  *  流程相关end
- */
+ ************************/
 
+/*************************
+ * 科室相关start
+ ************************/
 // 获取科室数据 THospitalDepartmentInfo/queryTree
 export const queryDepartmentInfoTree = (data: any) =>
   request({
@@ -327,9 +354,13 @@ export const queryDepartmentInfoTree = (data: any) =>
     data
   });
 
-/**
+/*************************
+ * 科室相关end
+ ************************/
+
+/*************************
  *厂商管理start
- */
+ ************************/
 // 供应商查询 /api/supplier/queryByCondition
 export const queryByConditionSupplier = (data: any) =>
   request({
@@ -353,14 +384,14 @@ export const handleSupplierDel = (data: any) =>
     method: "POST",
     data
   });
-/**
+/*************************
  *厂商管理end
- */
+ ************************/
 
-/**
+/*************************
  * 获取左侧菜单栏数据
  * @param data
- */
+ ************************/
 export const queryLeftMenuData = (data: any) =>
   request({
     url: "/mainPage/leftMenuTree",
@@ -368,9 +399,9 @@ export const queryLeftMenuData = (data: any) =>
     data
   });
 
-/**
+/*************************
  * 厂商联系人开始
- */
+ ************************/
 export const handleLinkmanAdd = (data: any) =>
   request({
     url: "/supplierLinkman/insert",
@@ -391,13 +422,13 @@ export const handleLinkmanDel = (data: { ids: string } | {}) =>
     method: "POST",
     data
   });
-/**
+/*************************
  * 厂商联系人结束
- */
+ ************************/
 
-/**
+/*************************
  * 合同管理开始
- */
+ ************************/
 export const handleSupplierContractAdd = (data: any) =>
   request({
     url: "/supplierContract/insert",
@@ -418,13 +449,13 @@ export const handleSupplierContractDel = (data: { ids: string } | {}) =>
     method: "POST",
     data
   });
-/**
+/*************************
  * 合同管理结束
- */
+ ************************/
 
-/**
+/*************************
  * 权限管理
- */
+ ************************/
 export const queryMenuTreeAndChoose = (data: { roleId: string }) =>
   request({
     url: "/auth/menuRole/queryMenuTreeAndChoose",
@@ -439,11 +470,9 @@ export const saveRoleWithMenu = (data: { roleId: string; menuId: string }) =>
     data
   });
 
-/**
+/*************************
  * 操作日志
- * log/queryByCondition
- * log/del
- */
+ ************************/
 export const queryOperationLogs = (data: { roleId: string }) =>
   request({
     url: "/log/queryByCondition",

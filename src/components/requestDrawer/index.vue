@@ -18,7 +18,7 @@
         </div>
         <el-row :gutter="20">
           <el-col :span="12"
-                  v-for="(item,index) in requestForm.billMain"
+                  v-for="(item,index) in watchRequestForm.billMain"
                   :key="index">
             <el-form-item :label="item.title"
                           prop="applyDetailId">
@@ -49,7 +49,7 @@
         </div>
         <el-row :gutter="20">
           <el-col :span="12"
-                  v-for="(item,index) in requestForm.billEquipmentList"
+                  v-for="(item,index) in watchRequestForm.billEquipmentList"
                   :key="index">
             <el-form-item :label="item.title"
                           prop="applyDetailId">
@@ -80,7 +80,7 @@
         </div>
         <el-row :gutter="20">
           <el-col :span="12"
-                  v-for="(item,index) in requestForm.billApproveList"
+                  v-for="(item,index) in watchRequestForm.billApproveList"
                   :key="index">
             <el-form-item :label="item.title"
                           prop="applyDetailId">
@@ -123,6 +123,7 @@
 </template>
 
 <script lang="ts">
+import { getEquipmentInfoByDepartmentId } from '@/api/equipment'
 import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator'
 @Component({
   name: 'RequestDrawer',
@@ -135,16 +136,70 @@ export default class extends Vue {
   private onChangeVisible(value: boolean) {
     this.visible = value
   }
+  /**********************
+   * form表单
+   *********************/
   @Prop({ default: {} }) requestForm!: any
+  private watchRequestForm: any = {}
+  @Watch('requestForm', { immediate: true })
+  private onChangeRequestForm(formValue: any) {
+    this.watchRequestForm = formValue
+  }
+  /**********************
+   * 保存接口传惨
+   *********************/
   @Prop({ default: {} }) requestParams!: any
+  /**************
+   * 监听科室变化
+   *************/
+  @Watch('requestParams.billMain.rollOutDepartment', { immediate: true })
+  private async onChangeRequestParams(formValue: any) {
+    const res: any = await getEquipmentInfoByDepartmentId({
+      page: '1',
+      limit: '10',
+      entity: {
+        departmentId: formValue,
+      },
+    })
+    if (res.code == 200) {
+      this.watchRequestForm.billEquipmentList.forEach((item: any) => {
+        if (item.slot === 'equipment') {
+          item.data = res.data.map((equip: any) => {
+            return {
+              equipmentVO: equip.equipmentVO,
+              label: equip.equipmentVO.name,
+              value: equip.equipmentVO.id,
+            }
+          })
+        }
+      })
+      this.$forceUpdate()
+    }
+  }
+  /****************************
+   * 监听设备名称变化
+   ***************************/
+  @Watch('requestParams.billEquipmentList.equipmentId', { immediate: true })
+  private onChangeEquipmentId(equipmentId: any) {
+    const filterData = this.watchRequestForm.billEquipmentList.filter(
+      (item: any) => item.field === 'equipmentId'
+    )
+    const equipmentData = filterData[0]?.data?.filter((item: any) => {
+      return item.value == equipmentId
+    })
+    Object.assign(
+      this.requestParams.billEquipmentList,
+      equipmentData[0].equipmentVO
+    )
+  }
   @Prop({ default: {} })
   processModal!: any
   @Watch('processModal')
-  /**
+  /***************
    * 新增流程申请
-   */
+   **************/
   @Emit()
-  emitSubmitCreateRequest(params:any) {
+  emitSubmitCreateRequest(params: any) {
     return params
   }
   private createData() {

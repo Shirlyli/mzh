@@ -205,4 +205,11 @@ export default class extends Vue {
     (this.$refs.dataForm as Form).resetFields();
     this.$message.success("删除流程配置成功");
   }
+
+  /**
+   * 新增流程配置
+   */
+  private addProcess(){
+
+  }
 }

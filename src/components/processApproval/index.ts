@@ -9,23 +9,25 @@ import {
 import { Form, Message } from "element-ui";
 import _ from "lodash";
 import { Component, Vue, Watch, Prop, Emit } from "vue-property-decorator";
-import { CREATE_FORM_LIST } from "./formColumns";
+import { Basic_Form_List } from "./formColumns";
 @Component({
   name: "ProcessApproval",
   components: {}
 })
 export default class extends Vue {
-  private type = "submit"; // 审批类型-通过，终止
+
   @Prop({ default: "add" }) editType!: string;
   @Prop({ default: false }) dialogVisible!: boolean;
-  @Watch("dialogVisible")
-  @Prop()
-  processData!: any; //流程数据
-  @Watch("processData")
-  private onChangeProcessData(data: any) {}
+  @Prop() processData!: any; //流程数据
+  @Prop({}) basicFormList!: any; //流程表单配置数据columns
+  created() {}
+  mounted() {
+    console.log(this.basicFormList);
+  }
+  private type = "submit"; // 审批类型-通过，终止
   private nextDialogVisible = false;
   private title = "流程审批";
-  private basicInfo = CREATE_FORM_LIST; //基本信息
+  private basicInfo = Basic_Form_List; //基本信息
   private equipmentProcessData = {
     currentNodeName: "", //当前节点name
     currentNodeCode: "", //当前节点code
@@ -35,22 +37,24 @@ export default class extends Vue {
     auditStatus: "", //审核状态(审核通过,审核不通过，回退,作废)
     auditReason: "", //审核结论
     delState: "", //是否删除(是|否)
-    ksspPerson: "", //科室审批人
+   /* ksspPerson: "", //科室审批人
     ksspTime: "", //科室审批时间
     ksspReason: "", //科室审批结论
     yzspPerson: "", //院长审批人
     yzspTime: "", //院长审批时间
-    yzspReason: "" //院长审批结论
+    yzspReason: "" //院长审批结论*/
   };
   private rules = {};
   private nextNodeNameData: any = {}; //下一节点名称
   private nextNodeExecutorData: any = {}; //下一节点处理人
   private nodeExecutorData: any = []; //当前节点处理人
   private allProcessList: any = []; //所有流程节点
-  created() {}
-  mounted() {}
 
-  // 获取当前节点信息，并根据当前节点信息获取下一节点信息数据
+  /**************************************************
+   * 获取当前节点信息，并根据当前节点信息获取下一节点信息数据
+   * @param nodeNameCode
+   * @param type
+   **************************************************/
   private async queryCurrentCodeAndBhResData(nodeNameCode: any, type: string) {
     const nextCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
       processCode: "pro_kssq",
@@ -76,9 +80,9 @@ export default class extends Vue {
       Message.error("获取节点信息失败，请重试");
     }
   }
-  /**
+  /****************************************************
    * 获取下一节点
-   */
+   ***************************************************/
   private async queryNextCodeAndBhResData(nodeSort: any) {
     const nextCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
       processCode: "pro_kssq",
@@ -91,9 +95,9 @@ export default class extends Vue {
     }
   }
 
-  /**
+  /****************************************************
    * 获取权限处理人
-   */
+   ***************************************************/
   private async queryUserListProcessCode(nodeSort: number, type?: string) {
     const executorData: any = await getUserListProcessCode({
       processCode: "pro_kssq",
@@ -119,9 +123,9 @@ export default class extends Vue {
     return value;
   }
 
-  /**
+  /****************************************************
    * 确认流程处理 /api/hospitalProcess/getProcessNodeInfoByProcessCodeAndBh
-   */
+   ***************************************************/
   private async handleSubmitProcess() {
     const { id } = this.processData;
     if (this.type === "submit") {
@@ -195,16 +199,16 @@ export default class extends Vue {
     this.emitHandleSubmit(false);
   }
 
-  /**
+  /****************************************************
    * 流程审批退回
-   */
+   ***************************************************/
   private handleBack() {
     const flag = this.queryAllProcess();
   }
 
-  /**
+  /****************************************************
    * 获取所有流程节点,并过滤出回退节点数据
-   */
+   ***************************************************/
   private async queryAllProcess() {
     const res: any = await queryProcessData({
       page: "1",
@@ -240,18 +244,18 @@ export default class extends Vue {
     }
   }
 
-  /**
+  /****************************************************
    * 退回时选中退回节点，获取节点对应处理人
-   */
+   ***************************************************/
   private handleNodeChange(value: number) {
     const nodeSort = _.find(this.allProcessList, ["nodeNameCode", value])
       .nodeSort;
     this.queryUserListProcessCode(nodeSort - 1, "back");
   }
 
-  /**
+  /****************************************************
    * 终止流程
-   */
+   ***************************************************/
   private handleEnd() {
     this.queryCurrentCodeAndBhResData(this.processData.nextNodeCode, "end");
   }

@@ -1,6 +1,12 @@
 import { UserModule } from "@/store/modules/user";
 export const Basic_Form_List = [
   {
+    field: "checkDepartment",
+    title: "任务名称",
+    span: 12,
+    type: "input",
+  },
+  {
     field: "userName",
     title: "申请人",
     span: 12,
@@ -14,37 +20,18 @@ export const Basic_Form_List = [
     type: "date"
   },
   {
-    field: "rollOutDepartment",
-    title: "转出科室",
+    field: "departmentId",
+    title: "申请科室",
     span: 12,
     type: "select",
     slot: "department"
   },
   {
-    field: "rollInDepartment",
-    title: "转入科室",
-    span: 12,
-    type: "select",
-    slot: "department"
-  },
-  {
-    field: "equipmentLocation",
-    title: "新存放地点",
+    field: "equipmentCategory",
+    title: "盘点范围",
     span: 12,
     type: "input"
   },
-  {
-    field: "rollOutTime",
-    title: "计划转科日期",
-    span: 12,
-    type: "date"
-  },
-  {
-    field: "cause",
-    title: "转科原因",
-    span: 12,
-    type: "input"
-  }
 ];
 
 export const Equipment_Detail_Form_List = [

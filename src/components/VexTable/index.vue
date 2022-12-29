@@ -156,16 +156,23 @@ export default class extends Vue {
     this.checkedList = []
     try {
       const res: any = await getTableDataList(config.url, config.params)
+      
       if ((res.result || res.code === 200) && res.data) {
         if (this.type === 'equipmentSearch') {
           this.tableData = res.data.map((item: any) => {
             return { ...item, ...item.equipmentVO }
           })
           this.tablePage.total = res.count
+        } else if (this.type == 'transferApply') {
+          this.tableData = res.data.map((item: any) => {
+            return { ...item, ...item.billMain,...item.billApproveList[0] }
+          })
+          this.tablePage.total = res.count
         } else {
           this.tableData = res.data
           this.tablePage.total = res.count
         }
+        console.log('🚀 ~ res', this.tableData)
       } else {
         this.tableData = []
         this.tablePage.total = 0

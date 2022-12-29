@@ -36,7 +36,7 @@
       <div class="contentBox">
         <el-row :gutter="20">
           <el-col :span="12"
-                  v-for="(item,index) in basicInfo"
+                  v-for="(item,index) in basicFormList"
                   :key="index">
             <div class="basicBox">
               <span class="title">{{item.title}}:</span>
@@ -52,29 +52,24 @@
         <span>设备明细</span>
       </div>
       <div class="contentBox">
-        <el-table :data="[]"
+        <el-table :data="processData.billEquipmentList"
                   style="width: 100%"
                   border>
-          <el-table-column prop="nodeName"
+          <el-table-column prop="name"
                            label="设备名称"
                            width="180">
           </el-table-column>
-          <el-table-column prop="auditStatus"
-                           label="单位"
+          <el-table-column prop="marking"
+                           label="设备编号"
                            width="180">
           </el-table-column>
-          <el-table-column prop="auditmind"
+          <el-table-column prop="num"
                            label="数量">
           </el-table-column>
-          <el-table-column prop="nextOperator"
-                           label="单价">
+          <el-table-column prop="marking"
+                           label="规则型号">
           </el-table-column>
-          <el-table-column prop="operator"
-                           label="是否进口">
-          </el-table-column>
-          <el-table-column prop="operatorTime"
-                           label="操作时间">
-          </el-table-column>
+   
         </el-table>
 
       </div>
@@ -209,7 +204,7 @@
   </div>
 </template>
 
-<script lang="ts" src="./processApproval.ts">
+<script lang="ts" src="./index.ts">
 </script>
 
 <style lang="scss" scoped>

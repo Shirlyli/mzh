@@ -2,30 +2,31 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import VexTable from "@/components/VexTable/index.vue";
 import _ from "lodash";
 import {
-  delProcessData,
   getProcessNodeInfoByProcessCodeAndBh,
   getUserListProcessCode,
   queryDepartmentInfoTree,
-  updateProcessData,
   queryHospitalProcessBusinessSave,
   delHospitalProcessBusiness,
   queryProcessRecordList
 } from "@/api/basic";
 import { Form, Message } from "element-ui";
-import { CREATE_FORM_LIST } from "./formColumns";
+import { Basic_Form_List } from "./formColumns";
 import { getEquipmentInfoByDepartmentId } from "@/api/equipment";
 import moment from "moment";
-import ProcessApproval from "./processApproval.vue";
+import ProcessApproval from "@/components/processApproval/index.vue";
+import RequestDrawer from "@/components/requestDrawer/index.vue";
 @Component({
   name: "InlineEditTable",
   components: {
     VexTable,
-    ProcessApproval
+    ProcessApproval,
+    RequestDrawer
   }
 })
 export default class extends Vue {
   created() {}
 
+  private basicFormList = Basic_Form_List;
   // 列表查询项-表单
   private formConfig = {
     data: {
@@ -63,8 +64,6 @@ export default class extends Vue {
     { field: "purchaseType", title: "购置类别" },
     { field: "purchaseType", title: " 采购类型 " },
     { field: "nextNodeName", title: " 当前节点" },
-    // { field: "count", title: " 数量 " },
-    // { field: "money", title: " 总金额 " },
     { field: "nextNodeState", title: " 状态 " },
     {
       width: 250,
@@ -76,7 +75,7 @@ export default class extends Vue {
 
   // 待处理列表传参
   private paramsConfig: any = {
-    url: "/hospitalProcessBusiness/queryProcessList", // 根据表单查询项查询数据
+    url: "/kssq/queryProcessList", // 根据表单查询项查询数据
     params: {
       page: "1",
       limit: "20",
@@ -88,7 +87,7 @@ export default class extends Vue {
 
   // 已处理列表传参
   private doneFormConfig = {
-    url: "/hospitalProcessBusiness/queryProcessList", // 根据表单查询项查询数据
+    url: "/kssq/queryProcessList", // 根据表单查询项查询数据
     params: {
       page: "1",
       limit: "20",
@@ -131,7 +130,7 @@ export default class extends Vue {
     {
       title: "左侧",
       span: 24,
-      children: CREATE_FORM_LIST
+      children: Basic_Form_List
     },
     {
       align: "center",
@@ -149,11 +148,12 @@ export default class extends Vue {
     }
   ];
 
+  private requestDialogVisible = false; //申请单模态框
   private applyDeptData = []; //科室
   private nextNodeExecutorData = []; //下一节点执行人
   private applyDetailData = []; //设备列表
   private activeName = "toDoTask"; //当前tab页
-  private createFormList = CREATE_FORM_LIST;
+  private createFormList = Basic_Form_List;
   private fileList = []; //附件信息
   private approvalDialogVisible = false; //审批节点抽屉显隐
   private clickProcessData: any = {}; //当前操作流程节点信息
@@ -161,7 +161,7 @@ export default class extends Vue {
   private processRecordDialogVisible = false; //操作记录显隐
   private rules = {
     nextNodeExecutor: [{ require: true, trigger: "change", message: "请选择" }],
-    processName:[{ require: true, trigger: "change", message: "请选择" }],
+    processName: [{ require: true, trigger: "change", message: "请选择" }]
   };
   /**
    * 获取科室数据 queryDepartmentInfoTree
@@ -214,7 +214,10 @@ export default class extends Vue {
       }
     });
     if (res.code == 200) {
-      this.applyDetailData = res.data;
+      console.log("🚀 ~ 设备数据", res);
+      this.applyDetailData = res.data.map((item: any) => {
+        return { label: item.equipmentVO.name, value: item.equipmentVO.id };
+      });
     }
   }
 
