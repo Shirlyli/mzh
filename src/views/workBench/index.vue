@@ -22,7 +22,6 @@ export default class extends Vue {
 
   get roles() {
     return UserModule.roles
-    
   }
 
   created() {

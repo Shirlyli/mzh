@@ -23,7 +23,7 @@
     </el-card>
 
     <!-- 新增流程申请 -->
-    <RequestDrawer :dialogVisible="requestDialogVisible"
+    <processRequest :dialogVisible="requestDialogVisible"
                    :requestForm="requestForm"
                    :requestParams="requestParams"
                    :processModal="processModal"

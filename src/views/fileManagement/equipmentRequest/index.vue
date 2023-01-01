@@ -186,14 +186,14 @@
         </el-button>
         <el-button type="primary"
                    size="large"
-                   @click="dialogStatus==='create'?createData():updateData()">
+                   @click="createData()">
           {{ $t('table.confirm') }}
         </el-button>
       </div>
 
     </el-drawer>
 
-    <!-- <RequestDrawer :dialogVisible="requestDialogVisible"
+    <!-- <processRequest :dialogVisible="requestDialogVisible"
                    :requestForm="requestForm"
                    :requestParams="requestParams"
                    :processModal="processModal"

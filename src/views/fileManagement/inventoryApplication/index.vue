@@ -23,12 +23,12 @@
     </el-card>
 
     <!-- 新增流程申请 -->
-    <RequestDrawer :dialogVisible="requestDialogVisible"
+    <!-- <processRequest :dialogVisible="requestDialogVisible"
                    :requestForm="requestForm"
                    :requestParams="requestParams"
                    :processModal="processModal"
                    @emit-close="handleClose"
-                   @emit-submit-create-request="handleCreateRequest" />
+                   @emit-submit-create-request="handleCreateRequest" /> -->
 
     <!-- 流程审批 -->
     <ProcessApproval v-show="approvalDialogVisible"
@@ -103,7 +103,6 @@
   position: absolute;
   bottom: 10px;
   right: 10px;
-  .el-button {
-  }
+
 }
 </style>

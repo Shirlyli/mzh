@@ -1,4 +1,4 @@
-import { Component, Vue, Watch, Prop, Emit } from "vue-property-decorator";
+import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator'
 import {
   equipmentPurchases,
   equipmentDepreciations,
@@ -8,50 +8,52 @@ import {
   equipmentStores,
   equipmentInspection,
   equipmentVO
-} from "../formlist/index";
-import { EquipmentInfoTypes } from "../formlist/interface.type";
-import { Form, Message } from "element-ui";
-import { updateEquipmentInfoData } from "@/api/equipment";
-import { BusinessViewModule } from "@/store/modules/business";
+} from '../formlist/index'
+import { EquipmentInfoTypes } from '../formlist/interface.type'
+import { Form, Message } from 'element-ui'
+import { updateEquipmentInfoData } from '@/api/equipment'
+import { BusinessViewModule } from '@/store/modules/business'
 @Component({
-  name: "EquipmentFormDialog"
+  name: 'EquipmentFormDialog'
 })
 export default class extends Vue {
   private showDialogVisible = false;
-  @Prop({ default: "create" }) dialogStatus!: string;
+  @Prop({ default: 'create' }) dialogStatus!: string;
   @Prop({ default: false }) dialogVisible!: boolean;
-  @Watch("dialogVisible")
+  @Watch('dialogVisible')
   private OnchangeDialogVisible(value: any) {
-    this.showDialogVisible = value;
+    this.showDialogVisible = value
   }
+
   private tabMapOptions = [
-    { label: "设备基础信息", key: "equipmentVO" },
-    { label: "设备采购信息", key: "equipmentPurchases" },
-    { label: "设备资料", key: "equipmentResources" },
-    { label: "设备保养", key: "equipmentMaintain" },
-    { label: "设备巡检", key: "equipmentInspection" },
-    { label: "仓库记录", key: "equipmentStocks" },
-    { label: "出入库记录", key: "equipmentStores" },
-    { label: "设备折旧", key: "equipmentDepreciations" }
+    { label: '设备基础信息', key: 'equipmentVO' },
+    { label: '设备采购信息', key: 'equipmentPurchases' },
+    { label: '设备资料', key: 'equipmentResources' },
+    { label: '设备保养', key: 'equipmentMaintain' },
+    { label: '设备巡检', key: 'equipmentInspection' },
+    { label: '仓库记录', key: 'equipmentStocks' },
+    { label: '出入库记录', key: 'equipmentStores' },
+    { label: '设备折旧', key: 'equipmentDepreciations' }
   ]; // tab栏
 
   private allFormList: any = {}; // 表单项
   private rules = {
     departmentName: [
-      { required: true, message: "请输入部门名称", trigger: "change" }
+      { required: true, message: '请输入部门名称', trigger: 'change' }
     ]
   }; // 表单校验
+
   private defaultEquipmentInfoData: any = {}; // 默认新增模态框数据
   @Prop() equipmentCategoryData!: any;
-  @Watch("equipmentCategoryData")
+  @Watch('equipmentCategoryData')
   private onChangeEquipmentCategoryData(data: any) {
-    this.defaultEquipmentInfoData = data;
+    this.defaultEquipmentInfoData = data
   }
 
-  private activeName = "equipmentVO"; // 当前tab页
-  @Watch("activeName") // 监听tab页
+  private activeName = 'equipmentVO'; // 当前tab页
+  @Watch('activeName') // 监听tab页
   private onActiveNameChange(value: string) {
-    console.log(this.defaultEquipmentInfoData);
+    console.log(this.defaultEquipmentInfoData)
     // switch (this.activeName) {
     //   case "equipmentVO":
     //     this.allFormList[this.activeName] = equipmentVO;
@@ -92,14 +94,15 @@ export default class extends Vue {
       equipmentStocks: equipmentStocks,
       equipmentStores: equipmentStores,
       equipmentDepreciations: equipmentDepreciations
-    };
+    }
   }
 
   // 新增设备
   @Emit()
   emitSubmit(value: boolean) {
-    return value;
+    return value
   }
+
   private createData() {
     // console.log(this.allFormList);
     (this.$refs.dataForm as Form).validate(async valid => {
@@ -115,7 +118,7 @@ export default class extends Vue {
           equipmentVO,
           id,
           state
-        } = this.equipmentCategoryData;
+        } = this.equipmentCategoryData
         const paramsConfig = {
           equipmentDepreciations: Object.values(equipmentDepreciations).length
             ? [equipmentDepreciations]
@@ -141,16 +144,16 @@ export default class extends Vue {
           equipmentVO,
           id,
           state
-        };
-        let params = [];
-        params.push(paramsConfig);
-        const res: any = await updateEquipmentInfoData(params);
-        if (res.code == 200) {
-          this.emitSubmit(true);
         }
-        Message.success("创建成功");
+        const params = []
+        params.push(paramsConfig)
+        const res: any = await updateEquipmentInfoData(params)
+        if (res.code === 200) {
+          this.emitSubmit(true)
+        }
+        Message.success('创建成功')
       }
-    });
+    })
   }
 
   // 修改科室
@@ -168,7 +171,7 @@ export default class extends Vue {
           equipmentVO,
           id,
           state
-        } = this.equipmentCategoryData;
+        } = this.equipmentCategoryData
         const paramsConfig = {
           equipmentDepreciations: Object.values(equipmentDepreciations).length
             ? [equipmentDepreciations]
@@ -194,24 +197,25 @@ export default class extends Vue {
           equipmentVO,
           id,
           state
-        };
-        let params = [];
-        params.push(paramsConfig);
-        const res: any = await updateEquipmentInfoData(params);
-        if (res.code == 200) {
-          this.emitSubmit(true);
         }
-        Message.success("修改成功");
+        const params = []
+        params.push(paramsConfig)
+        const res: any = await updateEquipmentInfoData(params)
+        if (res.code === 200) {
+          this.emitSubmit(true)
+        }
+        Message.success('修改成功')
       }
-    });
+    })
   }
 
   // 关闭模态框
   @Emit()
   emitCloseDialog() {
-    return false;
+    return false
   }
+
   private handleCloseDialog() {
-    this.emitCloseDialog();
+    this.emitCloseDialog()
   }
 }

@@ -28,17 +28,15 @@ import { delOperationLogs } from '@/api/basic'
   components: {
     MainSubLayout,
     Tree,
-    VexTable,
-  },
+    VexTable
+  }
 })
 export default class extends Vue {
-  created() {}
-
-  private formConfig = {
+  public formConfig = {
     data: {
       lOptModual: '',
       lMethod: '',
-      lOptAct: '',
+      lOptAct: ''
     },
     items: [
       {
@@ -46,26 +44,27 @@ export default class extends Vue {
         title: '模块名',
         itemRender: {
           name: '$input',
-          props: { placeholder: '请输入医院名称' },
-        },
+          props: { placeholder: '请输入医院名称' }
+        }
       },
       {
         field: 'lMethod',
         title: '请求方法',
         itemRender: {
           name: '$input',
-          props: { placeholder: '请输入医院名称' },
-        },
+          props: { placeholder: '请输入医院名称' }
+        }
       },
       {
         field: 'lOptAct',
         title: '操作动作',
-        slots: { default: 'create_time' },
+        slots: { default: 'create_time' }
       },
-      { slots: { default: 'operate_item' } },
-    ], // 表单项  }
+      { slots: { default: 'operate_item' } }
+    ] // 表单项  }
   }
-  private columns = [
+
+  public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'lOperatorName', title: '用户名', width: 80 },
@@ -78,37 +77,37 @@ export default class extends Vue {
       width: 180,
       title: '操作',
       slots: { default: 'operateHasSearch' },
-      showOverflow: true,
-    },
+      showOverflow: true
+    }
   ]
 
-  private paramsConfig = {
+  public paramsConfig = {
     url: 'log/queryByCondition',
     params: {
       page: 1,
       limit: 10,
-      entity: {},
-    },
+      entity: {}
+    }
   }
 
   // 删除操作记录
-  private async handleRemove(row: any) {
+  public async handleRemove(row: any) {
     let params = {}
     if (Array.isArray(row)) {
       const res = _.map(row, 'id')
       params = {
-        ids: res.join(','),
+        ids: res.join(',')
       }
     } else {
       params = {
-        ids: row.id,
+        ids: row.id
       }
     }
-   /* const res: any = await delOperationLogs(params)
+    /* const res: any = await delOperationLogs(params)
     if (res.result) {
       ;(this.$refs.vexTable as any).findList(this.paramsConfig)
     }
-    this.$message.success('删除成功')*/
+    this.$message.success('删除成功') */
   }
 }
 </script>

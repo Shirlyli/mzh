@@ -372,7 +372,7 @@
                 <vxe-column title="操作"
                             width="100"
                             show-overflow>
-                  <template #default="{ row }">
+                  <template #default="{row}">
                     <vxe-button type="text"
                                 status="danger"
                                 icon="vxe-icon-delete"

@@ -1,18 +1,18 @@
-import { Component, Vue } from "vue-property-decorator";
-import MainSubLayout from "@/components/CollpaseFlex/index.vue";
-import Tree from "@/components/Tree/index.vue";
-import VexTable from "@/components/VexTable/index.vue";
-import { Form } from "element-ui";
+import { Component, Vue } from 'vue-property-decorator'
+import MainSubLayout from '@/components/CollpaseFlex/index.vue'
+import Tree from '@/components/Tree/index.vue'
+import VexTable from '@/components/VexTable/index.vue'
+import { Form } from 'element-ui'
 import {
   delSupplierData,
   getTableDataList,
   updateSupplierData
-} from "@/api/equipment";
-import { FormItemTypes, SupplierFormTypes } from "./type";
-import _ from "lodash";
-import ALL_OPTIONS from "@/shared/options";
+} from '@/api/equipment'
+import { FormItemTypes, SupplierFormTypes } from './type'
+import _ from 'lodash'
+import ALL_OPTIONS from '@/shared/options'
 @Component({
-  name: "Tab",
+  name: 'Tab',
   components: {
     MainSubLayout,
     Tree,
@@ -20,93 +20,91 @@ import ALL_OPTIONS from "@/shared/options";
   }
 })
 export default class extends Vue {
-  created() {}
-
-  private formConfig: { data: SupplierFormTypes; items: FormItemTypes[] } = {
+  private formConfig: { data: SupplierFormTypes, items: FormItemTypes[] } = {
     data: {
-      domicile: "",
-      id: "",
-      name: "",
-      nameAbbreviation: "",
-      runningState: "",
-      taxId: "",
-      suppliesType: ""
+      domicile: '',
+      id: '',
+      name: '',
+      nameAbbreviation: '',
+      runningState: '',
+      taxId: '',
+      suppliesType: ''
     },
     items: [
       {
-        field: "name",
-        title: "厂商名称",
+        field: 'name',
+        title: '厂商名称',
         itemRender: {
-          name: "$input",
-          props: { placeholder: "请输入厂商名称" }
+          name: '$input',
+          props: { placeholder: '请输入厂商名称' }
         },
-        resetValue: ""
+        resetValue: ''
       },
       {
-        field: "nameAbbreviation",
-        title: "简称",
-        itemRender: { name: "$input", props: { placeholder: "请输入简称" } },
-        resetValue: ""
+        field: 'nameAbbreviation',
+        title: '简称',
+        itemRender: { name: '$input', props: { placeholder: '请输入简称' } },
+        resetValue: ''
       },
       {
-        field: "taxId",
-        title: "纳税识别号",
+        field: 'taxId',
+        title: '纳税识别号',
         itemRender: {
-          name: "$input",
-          props: { placeholder: "请输入纳税识别号" }
+          name: '$input',
+          props: { placeholder: '请输入纳税识别号' }
         },
-        resetValue: ""
+        resetValue: ''
       },
       {
-        field: "suppliesType",
-        title: "厂商类型",
+        field: 'suppliesType',
+        title: '厂商类型',
         itemRender: {
-          name: "$select",
-          props: { placeholder: "请选择" },
+          name: '$select',
+          props: { placeholder: '请选择' },
           options: ALL_OPTIONS.suppliesType
         },
-        resetValue: ""
+        resetValue: ''
       },
       {
-        field: "runningState",
-        title: "运营状态",
+        field: 'runningState',
+        title: '运营状态',
         itemRender: {
-          name: "$select",
-          props: { placeholder: "请选择" },
+          name: '$select',
+          props: { placeholder: '请选择' },
           options: ALL_OPTIONS.runningState
         },
-        resetValue: ""
+        resetValue: ''
       },
       {
-        field: "domicile",
-        title: "注册地",
-        itemRender: { name: "$input", props: { placeholder: "请输入注册地" } },
-        resetValue: ""
+        field: 'domicile',
+        title: '注册地',
+        itemRender: { name: '$input', props: { placeholder: '请输入注册地' } },
+        resetValue: ''
       },
-      { slots: { default: "operate_item" } }
+      { slots: { default: 'operate_item' } }
     ] // 表单项
   };
 
   private columns = [
-    { type: "seq", width: 60 },
-    { type: "checkbox", width: 60 },
-    { field: "name", title: "厂商名称" },
-    { field: "nameAbbreviation", title: "简称" },
-    { field: "taxId", title: "纳税识别号" },
-    { field: "suppliesType", title: "厂商类型" },
+    { type: 'seq', width: 60 },
+    { type: 'checkbox', width: 60 },
+    { field: 'name', title: '厂商名称' },
+    { field: 'nameAbbreviation', title: '简称' },
+    { field: 'taxId', title: '纳税识别号' },
+    { field: 'suppliesType', title: '厂商类型' },
     {
-      field: "runningState",
-      title: "运营状态"
+      field: 'runningState',
+      title: '运营状态'
     },
-    { field: "assetsPro", title: " 资产性质" },
-    { field: "domicile", title: " 注册地" },
-    { field: "legalPerson", title: "法人" },
-    { field: "phoneNo", title: "座机" },
-    { field: "dispindex", title: " 排序" },
+    { field: 'assetsPro', title: ' 资产性质' },
+    { field: 'domicile', title: ' 注册地' },
+    { field: 'legalPerson', title: '法人' },
+    { field: 'phoneNo', title: '座机' },
+    { field: 'dispindex', title: ' 排序' },
     {
       width: 160,
-      title: "操作",
-      slots: { default: "operateHasSearch" },
+      title: '操作',
+      slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
   ];
@@ -115,23 +113,23 @@ export default class extends Vue {
   private suppliesTypeOptions = ALL_OPTIONS.MENU_TYPES;
 
   private supplierData = {
-    name: "",
-    nameAbbreviation: "",
-    suppliesType: "",
-    assetsPro: "",
-    phoneNo: "",
-    note: "",
-    id: ""
+    name: '',
+    nameAbbreviation: '',
+    suppliesType: '',
+    assetsPro: '',
+    phoneNo: '',
+    note: '',
+    id: ''
   }; // 新增或编辑表单
 
   private rules = {
-    name: [{ required: true, message: "请输入厂商名称", trigger: "change" }]
+    name: [{ required: true, message: '请输入厂商名称', trigger: 'change' }]
   }; // 表单校验
 
   private dialogVisible = false; // 新增过模态框
-  private dialogStatus = "create";
+  private dialogStatus = 'create';
   private paramsConfig = {
-    url: "/supplier/queryByCondition",
+    url: '/supplier/queryByCondition',
     params: {
       page: 1,
       limit: 10,
@@ -145,27 +143,27 @@ export default class extends Vue {
 
   // 新增供应商
   private handleInsert() {
-    this.dialogStatus = "create";
+    this.dialogStatus = 'create'
     this.dialogVisible = true;
-    (this.$refs.dataForm as Form).resetFields();
+    (this.$refs.dataForm as Form).resetFields()
   }
 
   private handleReset() {
-    (this.$refs.dataForm as Form).resetFields();
+    (this.$refs.dataForm as Form).resetFields()
   }
 
   // 模态框关闭事件
   private handleDialogClose() {
-    this.dialogVisible = false;
+    this.dialogVisible = false
     this.supplierData = {
-      name: "",
-      nameAbbreviation: "",
-      suppliesType: "",
-      assetsPro: "",
-      phoneNo: "",
-      note: "",
-      id: ""
-    };
+      name: '',
+      nameAbbreviation: '',
+      suppliesType: '',
+      assetsPro: '',
+      phoneNo: '',
+      note: '',
+      id: ''
+    }
   }
 
   // 新增供应商
@@ -179,24 +177,24 @@ export default class extends Vue {
           assetsPro,
           phoneNo,
           note
-        } = this.supplierData;
+        } = this.supplierData
         const params = {
-          id: "",
+          id: '',
           name,
           nameAbbreviation,
           suppliesType,
           assetsPro,
           phoneNo,
           note
-        };
-        const res: any = await updateSupplierData(params);
-        if (res.result) {
-          (this.$refs.vexTable as any).findList(this.paramsConfig);
         }
-        this.dialogVisible = false;
-        this.$message.success("创建成功");
+        const res: any = await updateSupplierData(params)
+        if (res.result) {
+          (this.$refs.vexTable as any).findList(this.paramsConfig)
+        }
+        this.dialogVisible = false
+        this.$message.success('创建成功')
       }
-    });
+    })
   }
 
   // 修改供应商
@@ -211,7 +209,7 @@ export default class extends Vue {
           assetsPro,
           phoneNo,
           note
-        } = this.supplierData;
+        } = this.supplierData
         const params = {
           id,
           name,
@@ -220,15 +218,15 @@ export default class extends Vue {
           assetsPro,
           phoneNo,
           note
-        };
-        const res: any = await updateSupplierData(params);
-        if (res.result) {
-          (this.$refs.vexTable as any).findList(this.paramsConfig);
         }
-        this.dialogVisible = false;
-        this.$message.success("更新成功");
+        const res: any = await updateSupplierData(params)
+        if (res.result) {
+          (this.$refs.vexTable as any).findList(this.paramsConfig)
+        }
+        this.dialogVisible = false
+        this.$message.success('更新成功')
       }
-    });
+    })
   }
 
   // 触发编辑事件
@@ -241,7 +239,7 @@ export default class extends Vue {
       assetsPro,
       phoneNo,
       note
-    } = row;
+    } = row
     this.supplierData = {
       id,
       name,
@@ -250,31 +248,31 @@ export default class extends Vue {
       assetsPro,
       phoneNo,
       note
-    };
-    this.dialogStatus = "update";
-    this.dialogVisible = true;
+    }
+    this.dialogStatus = 'update'
+    this.dialogVisible = true
     this.$nextTick(() => {
-      (this.$refs.dataForm as Form).clearValidate();
-    });
+      (this.$refs.dataForm as Form).clearValidate()
+    })
   }
 
   // 删除供应商
   private async handleRemove(row: any) {
-    let params = {};
+    let params = {}
     if (Array.isArray(row)) {
-      const res = _.map(row, "id");
+      const res = _.map(row, 'id')
       params = {
-        ids: res.join(",")
-      };
+        ids: res.join(',')
+      }
     } else {
       params = {
         ids: row.id
-      };
+      }
     }
-    const res: any = await delSupplierData(params);
+    const res: any = await delSupplierData(params)
     if (res.result) {
-      (this.$refs.vexTable as any).findList(this.paramsConfig);
+      (this.$refs.vexTable as any).findList(this.paramsConfig)
     }
-    this.$message.success("删除成功");
+    this.$message.success('删除成功')
   }
 }

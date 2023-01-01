@@ -5,7 +5,7 @@ import VexTable from '@/components/VexTable/index.vue'
 import { Form } from 'element-ui'
 import { dealCommonData, updateCommonData } from '@/api/basic'
 import _ from 'lodash'
-import {debug} from "webpack";
+import { debug } from 'webpack'
 @Component({
   name: 'Tab',
   components: {
@@ -40,7 +40,7 @@ export default class extends Vue {
   }; // 树形图传参
 
   private commonData = {
-    id:'',
+    id: '',
     pid: '',
     pName: '',
     dicName: '',
@@ -48,7 +48,7 @@ export default class extends Vue {
     dicType: '',
     dicCode: '',
     flag: '',
-    note: '',
+    note: ''
   }; // 新增或编辑表单
 
   private rules = {
@@ -86,11 +86,11 @@ export default class extends Vue {
       pid: id ?? '001',
       pName: title ?? '字典管理',
       dicName: '',
-      xpath:'',
+      xpath: '',
       dicType: '',
       dicCode: '',
       flag: '1',
-      note: '',
+      note: ''
     }
   }
 
@@ -114,7 +114,7 @@ export default class extends Vue {
   private createData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { pid, dicName, pName,xpath} = this.commonData
+        const { pid, dicName, pName, xpath } = this.commonData
         const params = {
           id: '',
           dicType: '',
@@ -126,7 +126,7 @@ export default class extends Vue {
           ctime: '',
           note: '',
           isLeaf: 1,
-          xpath:xpath,
+          xpath: xpath
         }
         const res: any = await updateCommonData(params)
         if (res.result) {
@@ -137,7 +137,7 @@ export default class extends Vue {
           )
         }
         this.dialogVisible = false
-        this.$message.success("创建成功");
+        this.$message.success('创建成功')
       }
     })
   }
@@ -147,19 +147,19 @@ export default class extends Vue {
     debugger;
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { id,pid, dicName, pName,xpath,dicType,dicCode,flag } = this.commonData
+        const { id, pid, dicName, pName, xpath, dicType, dicCode, flag } = this.commonData
         const params = {
           id: id,
           dicType: dicType,
           dicCode: dicCode,
           dicName: dicName,
-          pName:pName,
+          pName: pName,
           pid: pid,
           flag: flag,
           ctime: '',
           note: '',
           isLeaf: '',
-          xpath:xpath
+          xpath: xpath
         }
         const res: any = await updateCommonData(params)
         if (res.result) {
@@ -170,14 +170,14 @@ export default class extends Vue {
           )
         }
         this.dialogVisible = false
-        this.$message.success("更新成功");
+        this.$message.success('更新成功')
       }
     })
   }
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    const { dicName,pName, id, pid,xpath,dicType,dicCode,flag,note } = row
+    const { dicName, pName, id, pid, xpath, dicType, dicCode, flag, note } = row
     this.commonData = {
       id,
       pid,
@@ -187,7 +187,7 @@ export default class extends Vue {
       dicType,
       dicCode,
       flag,
-      note,
+      note
     }
     this.dialogStatus = 'update'
     this.dialogVisible = true
@@ -214,6 +214,6 @@ export default class extends Vue {
       (this.$refs.vexTable as any).findList(this.paramsConfig);
       (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams)
     }
-    this.$message.success("删除成功");
+    this.$message.success('删除成功')
   }
 }

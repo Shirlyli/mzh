@@ -115,8 +115,8 @@ import { BusinessViewModule } from '@/store/modules/business'
   name: 'Login',
   components: {
     LangSelect,
-    SocialSign,
-  },
+    SocialSign
+  }
 })
 export default class extends Vue {
   private validateUsername = (rule: any, value: string, callback: Function) => {
@@ -137,12 +137,12 @@ export default class extends Vue {
 
   private loginForm = {
     userName: 'admin',
-    userPwd: '123456',
+    userPwd: '123456'
   }
 
   private loginRules = {
     username: [{ validator: this.validateUsername, trigger: 'blur' }],
-    password: [{ validator: this.validatePassword, trigger: 'blur' }],
+    password: [{ validator: this.validatePassword, trigger: 'blur' }]
   }
 
   private passwordType = 'password'
@@ -165,9 +165,9 @@ export default class extends Vue {
 
   mounted() {
     if (this.loginForm.userName === '') {
-      ;(this.$refs.username as Input).focus()
+      (this.$refs.username as Input).focus()
     } else if (this.loginForm.userPwd === '') {
-      ;(this.$refs.password as Input).focus()
+      (this.$refs.password as Input).focus()
     }
   }
 
@@ -184,22 +184,22 @@ export default class extends Vue {
       this.passwordType = 'password'
     }
     this.$nextTick(() => {
-      ;(this.$refs.password as Input).focus()
+      (this.$refs.password as Input).focus()
     })
   }
 
   private handleLogin() {
-    ;(this.$refs.loginForm as ElForm).validate(async (valid: boolean) => {
+    (this.$refs.loginForm as ElForm).validate(async(valid: boolean) => {
       if (valid) {
         this.loading = true
-        let { userName, userPwd } = this.loginForm
+        const { userName, userPwd } = this.loginForm
         await UserModule.Login({ userPwd: encode(userPwd), userName })
         await UserModule.GetMenu()
-        await BusinessViewModule.GET_DEPARTMENT_DATA();
+        await BusinessViewModule.GET_DEPARTMENT_DATA()
         this.$router
           .push({
             path: (UserModule.menu as any)[0]?.path,
-            query: this.otherQuery,
+            query: this.otherQuery
           })
           .catch((err) => {
             console.warn(err)

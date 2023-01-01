@@ -312,7 +312,7 @@ import {
   getPageviews,
   createArticle,
   updateArticle,
-  defaultArticleData,
+  defaultArticleData
 } from '@/api/articles'
 import { IArticleData } from '@/api/types'
 import { exportJson2Excel } from '@/utils/excel'
@@ -323,7 +323,7 @@ const calendarTypeOptions = [
   { key: 'CN', displayName: 'China' },
   { key: 'US', displayName: 'USA' },
   { key: 'JP', displayName: 'Japan' },
-  { key: 'EU', displayName: 'Eurozone' },
+  { key: 'EU', displayName: 'Eurozone' }
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
@@ -338,7 +338,7 @@ const calendarTypeKeyValue = calendarTypeOptions.reduce(
 @Component({
   name: 'ComplexTable',
   components: {
-    Pagination,
+    Pagination
   },
   // data() {
   //   return {
@@ -351,8 +351,8 @@ const calendarTypeKeyValue = calendarTypeOptions.reduce(
   filters: {
     typeFilter: (type: string) => {
       return calendarTypeKeyValue[type]
-    },
-  },
+    }
+  }
 })
 export default class extends Vue {
   private tableKey = 0
@@ -365,18 +365,19 @@ export default class extends Vue {
     importance: undefined,
     title: undefined,
     type: undefined,
-    sort: '+id',
+    sort: '+id'
   }
+
   public formInline = {
     user: '',
-    region: '',
+    region: ''
   }
 
   private importanceOptions = [1, 2, 3]
   private calendarTypeOptions = calendarTypeOptions
   private sortOptions = [
     { label: 'ID Ascending', key: '+id' },
-    { label: 'ID Descending', key: '-id' },
+    { label: 'ID Descending', key: '-id' }
   ]
 
   private statusOptions = ['published', 'draft', 'deleted']
@@ -385,7 +386,7 @@ export default class extends Vue {
   private dialogStatus = ''
   private textMap = {
     update: 'Edit',
-    create: 'Create',
+    create: 'Create'
   }
 
   private dialogPageviewsVisible = false
@@ -393,9 +394,9 @@ export default class extends Vue {
   private rules = {
     type: [{ required: true, message: 'type is required', trigger: 'change' }],
     timestamp: [
-      { required: true, message: 'timestamp is required', trigger: 'change' },
+      { required: true, message: 'timestamp is required', trigger: 'change' }
     ],
-    title: [{ required: true, message: 'title is required', trigger: 'blur' }],
+    title: [{ required: true, message: 'title is required', trigger: 'blur' }]
   }
 
   private downloadLoading = false
@@ -424,7 +425,7 @@ export default class extends Vue {
   private handleModifyStatus(row: any, status: string) {
     this.$message({
       message: '操作成功',
-      type: 'success',
+      type: 'success'
     })
     row.status = status
   }
@@ -459,12 +460,12 @@ export default class extends Vue {
     this.dialogStatus = 'create'
     this.dialogFormVisible = true
     this.$nextTick(() => {
-      ;(this.$refs.dataForm as Form).clearValidate()
+      (this.$refs.dataForm as Form).clearValidate()
     })
   }
 
   private createData() {
-    ;(this.$refs.dataForm as Form).validate(async (valid) => {
+    (this.$refs.dataForm as Form).validate(async(valid) => {
       if (valid) {
         const articleData = this.tempArticleData
         articleData.id = Math.round(Math.random() * 100) + 1024 // mock a id
@@ -473,7 +474,7 @@ export default class extends Vue {
         data.article.timestamp = Date.parse(data.article.timestamp)
         this.list.unshift(data.article)
         this.dialogFormVisible = false
-        this.$message.success("创建成功");
+        this.$message.success('创建成功')
       }
     })
   }
@@ -484,12 +485,12 @@ export default class extends Vue {
     this.dialogStatus = 'update'
     this.dialogFormVisible = true
     this.$nextTick(() => {
-      ;(this.$refs.dataForm as Form).clearValidate()
+      (this.$refs.dataForm as Form).clearValidate()
     })
   }
 
   private updateData() {
-    ;(this.$refs.dataForm as Form).validate(async (valid) => {
+    (this.$refs.dataForm as Form).validate(async(valid) => {
       if (valid) {
         const tempData = Object.assign({}, this.tempArticleData)
         tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
@@ -497,7 +498,7 @@ export default class extends Vue {
         const index = this.list.findIndex((v) => v.id === data.article.id)
         this.list.splice(index, 1, data.article)
         this.dialogFormVisible = false
-        this.$message.success("更新成功");
+        this.$message.success('更新成功')
       }
     })
   }
@@ -507,7 +508,7 @@ export default class extends Vue {
       title: 'Success',
       message: 'Delete Successfully',
       type: 'success',
-      duration: 2000,
+      duration: 2000
     })
     this.list.splice(index, 1)
   }

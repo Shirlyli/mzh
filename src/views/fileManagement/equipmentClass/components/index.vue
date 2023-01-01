@@ -31,13 +31,13 @@
                                  :data="formItem.options"
                                  :props="{
                                   children: 'children',
-                                  label: 'title',
+                                  label: 'title'
                                  }"
                                  class="add_tree"
                                  :expand-on-click-node="false"
                                  :check-on-click-node="true">
                           <span class="custom-tree-node"
-                                slot-scope="{ node, data }">
+                                slot-scope="{node, data}">
                             <el-option style="padding: 0"
                                        :label="data.title"
                                        :value="data.id"></el-option>
