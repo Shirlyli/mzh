@@ -47,7 +47,6 @@ export default class extends Vue {
   private showPersonalLoginDialog(item: any) {
     console.log("🚀 ~ item ~ 展示用户设置区域", item);
     this.clickPersonalData = item;
-    console.log("🚀 ~ this.clickPersonalData", this.clickPersonalData);
     const newPersonalData = _.map(this.employeeData, function(o: any) {
       if (o.id === item.id) {
         return { ...o, isClick: true };
@@ -96,7 +95,6 @@ export default class extends Vue {
     return rowData;
   }
   private dealEmployeeInfo() {
-    console.log("🚀 ~ this.clickPersonalData", this.clickPersonalData);
     if (!this.clickPersonalData.id) {
       Message.error("请选择员工后删除");
       return;
@@ -123,7 +121,6 @@ export default class extends Vue {
     return rowData;
   }
   private associateRole() {
-    console.log("🚀 ~ this.clickPersonalData", this.clickPersonalData);
     if (!this.clickPersonalData.id) {
       Message.error("请选择员工后关联角色");
       return;

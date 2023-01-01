@@ -172,7 +172,6 @@ export default class extends Vue {
           this.tableData = res.data
           this.tablePage.total = res.count
         }
-        console.log('🚀 ~ res', this.tableData)
       } else {
         this.tableData = []
         this.tablePage.total = 0

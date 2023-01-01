@@ -6,28 +6,42 @@ import {
   queryProcessData,
   queryProcessRecordList
 } from "@/api/basic";
+import { ITagView, TagsViewModule } from "@/store/modules/tags-view";
+import { UserModule } from "@/store/modules/user";
 import { Form, Message } from "element-ui";
 import _ from "lodash";
 import { Component, Vue, Watch, Prop, Emit } from "vue-property-decorator";
-import { Basic_Form_List } from "./formColumns";
 @Component({
   name: "ProcessApproval",
   components: {}
 })
 export default class extends Vue {
-
-  @Prop({ default: "add" }) editType!: string;
-  @Prop({ default: false }) dialogVisible!: boolean;
-  @Prop() processData!: any; //流程数据
-  @Prop({}) basicFormList!: any; //流程表单配置数据columns
+  private processData = JSON.parse(
+    sessionStorage.getItem("ClickProcessData") ?? "0"
+  ); //流程数据
+  private basicFormList = JSON.parse(
+    sessionStorage.getItem("BasicFormList") ?? "0"
+  ); //流程表单配置数据columns
   created() {}
-  mounted() {
-    console.log(this.basicFormList);
+  private submitVisible = false; // 同意
+  private backVisible = false; //退回
+  @Watch("backVisible")
+  private onBackVisible(value: any) {
+    console.log("🚀 ~ value", value);
+    if (value) {
+      this.handleBack();
+    }
+  }
+  private endVisible = false; //终止
+  @Watch("endVisible")
+  private onEndVisible(value: any) {
+    console.log("🚀 ~ value", value);
+    if (value) {
+      this.handleEnd();
+    }
   }
   private type = "submit"; // 审批类型-通过，终止
-  private nextDialogVisible = false;
   private title = "流程审批";
-  private basicInfo = Basic_Form_List; //基本信息
   private equipmentProcessData = {
     currentNodeName: "", //当前节点name
     currentNodeCode: "", //当前节点code
@@ -36,8 +50,8 @@ export default class extends Vue {
     nextNodeExecutor: "", //下一节点执行人
     auditStatus: "", //审核状态(审核通过,审核不通过，回退,作废)
     auditReason: "", //审核结论
-    delState: "", //是否删除(是|否)
-   /* ksspPerson: "", //科室审批人
+    delState: "" //是否删除(是|否)
+    /* ksspPerson: "", //科室审批人
     ksspTime: "", //科室审批时间
     ksspReason: "", //科室审批结论
     yzspPerson: "", //院长审批人
@@ -66,14 +80,12 @@ export default class extends Vue {
       this.equipmentProcessData.currentNodeName = nextCodeData.data.nodeName;
       this.queryUserListProcessCode(nextCodeData.data.nodeSort);
       this.queryNextCodeAndBhResData(nextCodeData.data.nodeSort);
-      this.nextDialogVisible = true;
       this.title = "审批同意";
       this.type = "submit";
     } else if (nextCodeData.code == "200" && type === "end") {
       this.equipmentProcessData.currentNodeCode =
         nextCodeData.data.nodeNameCode;
       this.equipmentProcessData.currentNodeName = nextCodeData.data.nodeName;
-      this.nextDialogVisible = true;
       this.type = "end";
       this.title = "终止流程";
     } else {
@@ -112,25 +124,23 @@ export default class extends Vue {
     }
   }
 
-  // 审核通过点击事件
+  // 审核同意点击事件
   private handleSubmit() {
-    this.queryCurrentCodeAndBhResData(this.processData.nextNodeCode, "submit");
+    const { nextNodeCode } = this.$route.query;
+    this.queryCurrentCodeAndBhResData(nextNodeCode, "submit");
   }
 
-  //
-  @Emit()
-  emitHandleSubmit(value: boolean) {
-    return value;
+  mounted() {
+    this.handleSubmit();
   }
 
   /****************************************************
    * 确认流程处理 /api/hospitalProcess/getProcessNodeInfoByProcessCodeAndBh
    ***************************************************/
   private async handleSubmitProcess() {
-    const { id } = this.processData;
+    const { nextNodeCode, id } = this.$route.query;
     if (this.type === "submit") {
       (this.$refs.dataForm as Form).validate(async valid => {
-        this.nextDialogVisible = false;
         if (valid) {
           const params = {
             ...this.equipmentProcessData,
@@ -140,17 +150,13 @@ export default class extends Vue {
           };
           const res: any = await queryHospitalProcessBusinessUpdate(params);
           if (res.result) {
-            this.nextDialogVisible = false;
-            this.emitHandleSubmit(true);
           }
-          this.dialogVisible = false;
           (this.$refs.dataForm as Form).resetFields();
           Message.success("审批成功");
         }
       });
     } else if (this.type === "end") {
       (this.$refs.dataForm as Form).validate(async valid => {
-        this.nextDialogVisible = false;
         if (valid) {
           const params = {
             ...this.equipmentProcessData,
@@ -159,17 +165,14 @@ export default class extends Vue {
           };
           const res: any = await queryHospitalProcessBusinessUpdate(params);
           if (res.result) {
-            this.nextDialogVisible = false;
-            this.emitHandleSubmit(true);
           }
-          this.dialogVisible = false;
+
           (this.$refs.dataForm as Form).resetFields();
           Message.success("终止成功");
         }
       });
     } else if (this.type === "back") {
       (this.$refs.dataForm as Form).validate(async valid => {
-        this.nextDialogVisible = false;
         if (valid) {
           const params = {
             ...this.equipmentProcessData,
@@ -178,32 +181,55 @@ export default class extends Vue {
           };
           const res: any = await queryHospitalProcessBusinessUpdate(params);
           if (res.result) {
-            this.nextDialogVisible = false;
-            this.emitHandleSubmit(true);
           }
-          this.dialogVisible = false;
           (this.$refs.dataForm as Form).resetFields();
           Message.success("退回成功");
         }
       });
     }
+    this.closeSelectedTag({
+      path: "/processApproval/index"
+    });
   }
 
-  // 审批通过框
-  private handleCancelProcess() {
-    this.nextDialogVisible = false;
+  /**
+   * 删除当前选中项
+   * @param view
+   */
+  private closeSelectedTag(view: ITagView) {
+    console.log("🚀 ~ view", view);
+    TagsViewModule.delView(view);
+    this.toLastView(TagsViewModule.visitedViews, view);
   }
 
-  // 关闭审批流程抽屉事件
-  private handleCancelApproval() {
-    this.emitHandleSubmit(false);
+  private toLastView(visitedViews: ITagView[], view: ITagView) {
+    const latestView = visitedViews.slice(-1)[0];
+    if (latestView !== undefined && latestView.fullPath !== undefined) {
+      this.$router.push(latestView.fullPath).catch(err => {
+        console.warn(err);
+      });
+    } else {
+      // Default redirect to the home page if there is no tags-view, adjust it if you want
+      if (view.name === "Dashboard") {
+        // to reload home page
+        this.$router
+          .replace({ path: "/redirect" + view.fullPath })
+          .catch(err => {
+            console.warn(err);
+          });
+      } else {
+        this.$router.push((UserModule.menu as any)[0]?.path).catch(err => {
+          console.warn(err);
+        });
+      }
+    }
   }
 
   /****************************************************
    * 流程审批退回
    ***************************************************/
   private handleBack() {
-    const flag = this.queryAllProcess();
+    this.queryAllProcess();
   }
 
   /****************************************************
@@ -211,15 +237,11 @@ export default class extends Vue {
    ***************************************************/
   private async queryAllProcess() {
     const res: any = await queryProcessData({
-      page: "1",
-      limit: "10",
-      entity: {
-        process_code: "pro_kssq"
-      }
+      processCode: "pro_kssq"
     });
-    const nextNodeCode = this.processData.nextNodeCode;
+    const { nextNodeCode, id } = this.$route.query;
     if (res.code === 200) {
-      this.allProcessList = res.data[0].processInfo;
+      this.allProcessList = res.data;
       const dept = _.find(res.data[0].processInfo, [
         "nodeNameCode",
         nextNodeCode
@@ -240,7 +262,6 @@ export default class extends Vue {
       );
       this.type = "back";
       this.title = "回退流程";
-      this.nextDialogVisible = true;
     }
   }
 
@@ -257,6 +278,8 @@ export default class extends Vue {
    * 终止流程
    ***************************************************/
   private handleEnd() {
-    this.queryCurrentCodeAndBhResData(this.processData.nextNodeCode, "end");
+    this.type = "end";
+    const { nextNodeCode, id } = this.$route.query;
+    this.queryCurrentCodeAndBhResData(nextNodeCode, "end");
   }
 }

@@ -146,7 +146,6 @@ export default class extends Vue {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
         const params = this.personalData;
-        console.log("🚀 ~ this.personalData", this.personalData);
         const res: any = await updatePersonalData(params);
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig);

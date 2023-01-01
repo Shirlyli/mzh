@@ -24,8 +24,6 @@ import RequestDrawer from "@/components/requestDrawer/index.vue";
   }
 })
 export default class extends Vue {
-  created() {}
-
   private basicFormList = Basic_Form_List;
   // 列表查询项-表单
   private formConfig = {
@@ -85,18 +83,6 @@ export default class extends Vue {
     }
   };
 
-  // 已处理列表传参
-  private doneFormConfig = {
-    url: "/kssq/queryProcessList", // 根据表单查询项查询数据
-    params: {
-      page: "1",
-      limit: "20",
-      nextNodeExecutor: "3C5775C862C396-346D-46F9-89EC-164A3BF087F2",
-      processCode: "pro_kssq",
-      nextNodeState: "已归档"
-    }
-  };
-
   // 新增流程表单form
   private equipmentProcessData = {
     processName: "",
@@ -124,29 +110,7 @@ export default class extends Vue {
     yzspPerson: "", //院长审批人
     yzspTime: "", //院长审批时间
     yzspReason: "" //院长审批结论
-  }; //新增申请表单数据
-
-  private formItems = [
-    {
-      title: "左侧",
-      span: 24,
-      children: Basic_Form_List
-    },
-    {
-      align: "center",
-      span: 24,
-      itemRender: {
-        name: "$buttons",
-        children: [
-          {
-            props: { type: "submit", content: "确认", status: "primary" }
-          },
-          { props: { type: "reset", content: "重置" } },
-          { props: { type: "reset", content: "取消" } }
-        ]
-      }
-    }
-  ];
+  }; 
 
   private requestDialogVisible = false; //申请单模态框
   private applyDeptData = []; //科室
@@ -163,12 +127,13 @@ export default class extends Vue {
     nextNodeExecutor: [{ require: true, trigger: "change", message: "请选择" }],
     processName: [{ require: true, trigger: "change", message: "请选择" }]
   };
-  /**
+
+  /**********************************************
    * 获取科室数据 queryDepartmentInfoTree
    * 获取节点信息 queryProcessCodeAndBhResData
    * 获取人员权限列表 getUserListProcessCode
    * 获取设备明细数据 queryEquipmentData
-   */
+   ***********************************************/
   private async queryProcessCodeAndBhResData(nodeSort: any) {
     const nextCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
       processCode: "pro_kssq",
@@ -184,7 +149,9 @@ export default class extends Vue {
     }
   }
 
-  // 获取科室数据
+  /**
+   * 获取科室数据
+   */
   private async queryDeptData() {
     const res: any = await queryDepartmentInfoTree({});
     if (res.code == "200" && res.data) {
@@ -192,7 +159,10 @@ export default class extends Vue {
     }
   }
 
-  // 获取节点人员权限列表
+  /**
+   * 获取节点人员权限列表
+   * @param nodeSort 
+   */
   private async queryUserListProcessCode(nodeSort: number) {
     const nextNodeExecutorData: any = await getUserListProcessCode({
       processCode: "pro_kssq",
@@ -203,7 +173,9 @@ export default class extends Vue {
     }
   }
 
-  // 根据科室类别获取设备
+  /**
+   * 根据科室类别获取设备
+   */
   @Watch("equipmentProcessData.applyDept", { immediate: true })
   private async queryEquipmentData() {
     const res: any = await getEquipmentInfoByDepartmentId({
@@ -221,7 +193,9 @@ export default class extends Vue {
     }
   }
 
-  // 获取节点信息
+  /**
+   * 获取节点信息
+   */
   private async queryCodeDataFirst() {
     this.queryDeptData();
     const currentCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
@@ -248,18 +222,24 @@ export default class extends Vue {
     }
   }
 
+  /**
+   * 新增流程申请单
+   */
   private dialogVisible = false; //模态框
   private dialogStatus = "create";
 
-  // 新增流程配置
+  /**
+   * 新增流程配置
+   * @param row 
+   */
   private handleInsert(row: any) {
-    console.log("🚀 ~ row", row);
     this.addEquipmentRequest();
   }
 
-  // 新增流程申请
+  /**
+   * 新增流程申请
+   */
   private createData() {
-    console.log("🚀 ~ this.equipmentProcessData", this.equipmentProcessData);
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
         const res: any = await queryHospitalProcessBusinessSave({
@@ -275,16 +255,12 @@ export default class extends Vue {
     });
   }
 
-  // 新增科室申请
+  /**
+   * 新增科室申请
+   */
   private addEquipmentRequest() {
     this.queryCodeDataFirst();
     this.dialogVisible = true;
-  }
-
-  private handleClick(value: any) {
-    console.log("🚀 ~ value", value.name);
-    this.activeName = value.name;
-    // (this.$refs.vexDoneTable as any).findList(this.paramsConfig);
   }
 
   /**
@@ -310,10 +286,24 @@ export default class extends Vue {
     return this.$confirm(`确定移除 ${file.name}？`);
   }
 
-  //  点击查看按钮事件
+  /**
+   * 点击查看按钮事件
+   * @param row 
+   */
   private handleSearch(row: any) {
-    this.approvalDialogVisible = true;
+    const { id, nextNodeCode } = row;
     this.clickProcessData = row;
+    console.log("🚀 ~ this.clickProcessData", this.clickProcessData)
+    sessionStorage.setItem(
+      "ClickProcessData",
+      JSON.stringify(this.clickProcessData)
+    );
+    sessionStorage.setItem("BasicFormList", JSON.stringify(this.basicFormList));
+    this.$router
+      .push({ path: "/processApproval", query: { nextNodeCode, id } })
+      .catch(err => {
+        console.warn(err);
+      });
   }
 
   private emitHandleSubmit(value: boolean) {
@@ -325,7 +315,9 @@ export default class extends Vue {
 
   private changeApplyDept() {}
 
-  // 删除事件
+  /**
+   * 删除事件
+   */
   private async handleRemove(data: any) {
     const res: any = await delHospitalProcessBusiness({
       ids: data.id
@@ -336,7 +328,10 @@ export default class extends Vue {
     }
   }
 
-  // 获取流程操作记录 queryProcessRecordList
+  /**
+   * 获取流程操作记录
+   * @param data 
+   */ 
   private async queryProcessRecordListData(data: any) {
     const res: any = await queryProcessRecordList({
       businessId: data.id
@@ -346,7 +341,10 @@ export default class extends Vue {
     }
   }
 
-  // 操作记录
+  /**
+   * 操作记录
+   * @param data 
+   */
   private handleRecord(data: any) {
     this.processRecordDialogVisible = true;
     this.queryProcessRecordListData(data);

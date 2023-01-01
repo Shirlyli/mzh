@@ -300,7 +300,6 @@ export default class extends Vue {
 
   // 触发编辑事件
   private async handleUpdate(row: any) {
-    console.log("🚀 ~ row", row);
 
     const {
       equipmentDepreciations,

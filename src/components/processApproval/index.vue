@@ -1,32 +1,124 @@
 <template>
   <div class="approvalBox">
-    <el-drawer title="流程审批"
-               :visible.sync="dialogVisible"
-               size="70%"
-               @close="handleCancelApproval">
-
-      <template slot="title">
+    <el-card>
+      <div slot="header"
+           class="clearfix">
         <span>流程审批</span>
         <!-- 操作按钮 -->
-        <div class="btnBox" v-if="editType !== 'historyTask'">
-          <el-button @click="handleSubmit"
-                     type="primary">
-            {{'同意' }}
-          </el-button>
-          <el-button type="error"
-                     @click="handleBack">
-            {{ '回退' }}
-          </el-button>
-          <el-button type="error"
-                     @click="handleEnd">
-            {{ '终止' }}
-          </el-button>
-          <!-- <el-button type="error"
-                     @click="handleEnd">
-            {{ '转审' }}
-          </el-button> -->
+        <div class="btnBox">
+          <el-form ref="dataForm"
+                   :rules="rules"
+                   :model="equipmentProcessData"
+                   label-position="left"
+                   style="margin-left:20px;">
+            <!-- 同意 -->
+            <el-popover placement="top"
+                        width="300"
+                        class="popover"
+                        v-model="submitVisible">
+              <el-form-item :label="'下一节点名称'"
+                            label-width="120px"
+                            prop="nextNodeName">
+                <el-input v-model="equipmentProcessData.nextNodeName"
+                          disabled></el-input>
+              </el-form-item>
+              <el-form-item :label="'审批人'"
+                            label-width="120px"
+                            prop="nextNodeExecutor">
+                <el-select v-model="equipmentProcessData.nextNodeExecutor"
+                           placeholder="请选择">
+                  <el-option :label="item.user_name"
+                             :value="item.user_id"
+                             v-for="(item) in nextNodeExecutorData"
+                             :key="item.user_id"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item :label="'意见 '"
+                            label-width="120px"
+                            prop="auditReason">
+                <el-input v-model="equipmentProcessData.auditReason"></el-input>
+              </el-form-item>
+              <div style="text-align: right; margin: 0">
+                <el-button size="mini"
+                           type="text"
+                           @click="submitVisible = false">取消</el-button>
+                <el-button @click="handleSubmitProcess"
+                           type="primary">
+                  {{'确定' }}
+                </el-button>
+              </div>
+              <el-button slot="reference"
+                         type="primary">同意</el-button>
+
+            </el-popover>
+
+            <!-- 回退 -->
+            <el-popover placement="top"
+                        width="260"
+                        class="popover"
+                        v-model="backVisible">
+              <el-form-item :label="'节点名称'"
+                            label-width="80px"
+                            prop="nextNodeCode">
+                <el-select v-model="equipmentProcessData.nextNodeCode"
+                           placeholder="请选择"
+                           @change="handleNodeChange">
+                  <el-option :label="item.nodeName"
+                             :value="item.nodeNameCode"
+                             v-for="(item) in nextNodeExecutorData"
+                             :key="item.nodeName"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item :label="'审批人'"
+                            label-width="80px"
+                            prop="nextNodeExecutor">
+                <el-select v-model="equipmentProcessData.nextNodeExecutor"
+                           placeholder="请选择">
+                  <el-option :label="item.user_name"
+                             :value="item.user_id"
+                             v-for="(item) in nodeExecutorData"
+                             :key="item.user_id"></el-option>
+                </el-select>
+              </el-form-item>
+              <div style="text-align: right; margin: 0">
+                <el-button size="mini"
+                           type="text"
+                           @click="backVisible = false">取消</el-button>
+                <el-button @click="handleSubmitProcess"
+                           type="primary">
+                  {{'确定' }}
+                </el-button>
+              </div>
+              <el-button slot="reference"
+                         type="warning">回退</el-button>
+            </el-popover>
+
+            <!-- 终止 -->
+            <el-popover placement="top"
+                        width="200"
+                        class="popover"
+                        v-model="endVisible">
+              <el-form-item :label="'意见 '"
+                            label-width="50px"
+                            prop="auditReason">
+                <el-input v-model="equipmentProcessData.auditReason"></el-input>
+              </el-form-item>
+              <div style="text-align: right; margin: 0">
+                <el-button size="mini"
+                           type="text"
+                           @click="endVisible = false">取消</el-button>
+                <el-button @click="handleSubmitProcess"
+                           type="primary">
+                  {{'确定' }}
+                </el-button>
+              </div>
+              <el-button slot="reference"
+                         type="danger">终止</el-button>
+            </el-popover>
+
+          </el-form>
         </div>
-      </template>
+      </div>
 
       <!-- 基本信息 -->
       <div class="dividerBox">
@@ -35,7 +127,7 @@
       </div>
       <div class="contentBox">
         <el-row :gutter="20">
-          <el-col :span="12"
+          <el-col :span="8"
                   v-for="(item,index) in basicFormList"
                   :key="index">
             <div class="basicBox">
@@ -63,18 +155,20 @@
                            label="设备编号"
                            width="180">
           </el-table-column>
-          <el-table-column prop="num"
-                           label="数量">
+          <el-table-column prop="price"
+                           label="价格">
           </el-table-column>
           <el-table-column prop="marking"
                            label="规则型号">
           </el-table-column>
-   
+          <el-table-column prop="brand"
+                           label="设备厂家">
+          </el-table-column>
         </el-table>
-
       </div>
+
       <!-- 附件信息 -->
-      <div class="dividerBox">
+      <!-- <div class="dividerBox">
         <el-divider direction="vertical"></el-divider>
         <span>附件信息</span>
       </div>
@@ -97,110 +191,9 @@
                            label="操作">
           </el-table-column>
         </el-table>
-      </div>
-
-      <!-- 审批节点 -->
-      <!-- <div class="dividerBox">
-        <el-divider direction="vertical"></el-divider>
-        <span>科室审批</span>
       </div> -->
-      <!-- <div>
-        <el-form ref="dataForm"
-                 :rules="rules"
-                 :model="equipmentProcessData"
-                 label-position="left"
-                 label-width="60px"
-                 style="margin-left:20px;">
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item :label="'询价'"
-                            prop="nextNodeName">
-                <el-input :value="equipmentProcessData.nodeName"></el-input>
+    </el-card>
 
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item :label="'询价人'"
-                            prop="nextNodeExecutor">
-                <el-input :value="equipmentProcessData.nodeName"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </div> -->
-    </el-drawer>
-
-    <!-- 提交审批流程模态框  -->
-    <el-dialog :title="title"
-               :visible.sync="nextDialogVisible"
-               width="30%">
-      <el-form ref="dataForm"
-               :rules="rules"
-               :model="equipmentProcessData"
-               label-position="left"
-               label-width="120px"
-               style="margin-left:20px;">
-        <!-- 同意 -->
-        <div v-if="type=='submit'">
-          <el-form-item :label="'下一节点名称'"
-                        prop="nextNodeName">
-            <el-input v-model="equipmentProcessData.nextNodeName"
-                      disabled></el-input>
-          </el-form-item>
-          <el-form-item :label="'审批人'"
-                        prop="nextNodeExecutor">
-            <el-select v-model="equipmentProcessData.nextNodeExecutor"
-                       placeholder="请选择">
-              <el-option :label="item.user_name"
-                         :value="item.user_id"
-                         v-for="(item) in nextNodeExecutorData"
-                         :key="item.user_id"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="'意见 '"
-                        prop="auditReason">
-            <el-input v-model="equipmentProcessData.auditReason"></el-input>
-          </el-form-item>
-        </div>
-        <!-- 退回 -->
-        <div v-else-if="type === 'back'">
-          <el-form-item :label="'节点名称'"
-                        prop="nextNodeCode">
-            <el-select v-model="equipmentProcessData.nextNodeCode"
-                       placeholder="请选择"
-                       @change="handleNodeChange">
-              <el-option :label="item.nodeName"
-                         :value="item.nodeNameCode"
-                         v-for="(item) in nextNodeExecutorData"
-                         :key="item.nodeName"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="'审批人'"
-                        prop="nextNodeExecutor">
-            <el-select v-model="equipmentProcessData.nextNodeExecutor"
-                       placeholder="请选择">
-              <el-option :label="item.user_name"
-                         :value="item.user_id"
-                         v-for="(item) in nodeExecutorData"
-                         :key="item.user_id"></el-option>
-            </el-select>
-          </el-form-item>
-        </div>
-        <!-- 终止 -->
-        <div v-else-if="type=='end'">
-          <el-form-item :label="'意见 '"
-                        prop="auditReason">
-            <el-input v-model="equipmentProcessData.auditReason"></el-input>
-          </el-form-item>
-        </div>
-      </el-form>
-      <span slot="footer"
-            class="dialog-footer">
-        <el-button @click="handleCancelProcess">取 消</el-button>
-        <el-button type="primary"
-                   @click="handleSubmitProcess">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
@@ -208,6 +201,8 @@
 </script>
 
 <style lang="scss" scoped>
+.approvalBox {
+}
 .dividerBox {
   margin: 12px 0 24px 0;
   font-size: 18px;
@@ -215,6 +210,9 @@
     background-color: blue;
     width: 6px;
   }
+}
+.el-drawer__body {
+  position: relative;
 }
 .basicBox {
   display: flex;
@@ -236,7 +234,12 @@
   padding-left: 18px;
 }
 .btnBox {
-  // margin-top: 12px;
   float: right;
+  // position: absolute;
+  // right: 20px;
+  // bottom: 10px;
+}
+.popover {
+  margin-left: 24px;
 }
 </style>

@@ -229,10 +229,10 @@ export const saveRoleInfo = (data: any) =>
 /**************************
  *  流程相关start
  ************************/
-// 获取流程配置列表
+// 根据流程编码获取所有流程节点
 export const queryProcessData = (data: any) =>
   request({
-    url: "/hospitalProcess/query",
+    url: "/hospitalProcess/queryProcessNodeListByProcessNode",
     method: "POST",
     data
   });

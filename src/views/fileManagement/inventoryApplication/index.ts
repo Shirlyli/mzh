@@ -124,15 +124,23 @@ export default class extends Vue {
 
   //  点击查看按钮事件
   private handleSearch(row: any) {
-    console.log("🚀 ~ row", row);
-    this.approvalDialogVisible = true;
+    const { id, nextNodeCode } = row;
     this.clickProcessData = row;
     this.clickProcessData.billEquipmentList = this.clickProcessData.billEquipmentList.map(
       (item: any) => {
         return { ...item, ...item.equipment };
       }
     );
-    console.log("🚀 ~ this.clickProcessData", this.clickProcessData);
+    sessionStorage.setItem(
+      "ClickProcessData",
+      JSON.stringify(this.clickProcessData)
+    );
+    sessionStorage.setItem("BasicFormList", JSON.stringify(this.basicFormList));
+    this.$router
+      .push({ path: "/processApproval", query: { nextNodeCode, id } })
+      .catch(err => {
+        console.warn(err);
+      });
   }
 
   // 删除事件

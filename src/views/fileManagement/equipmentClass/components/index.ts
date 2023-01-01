@@ -144,7 +144,6 @@ export default class extends Vue {
         };
         let params = [];
         params.push(paramsConfig);
-        console.log("🚀 ~ this.params", params);
         const res: any = await updateEquipmentInfoData(params);
         if (res.code == 200) {
           this.emitSubmit(true);
@@ -198,7 +197,6 @@ export default class extends Vue {
         };
         let params = [];
         params.push(paramsConfig);
-        console.log("🚀 ~ paramsConfig", paramsConfig);
         const res: any = await updateEquipmentInfoData(params);
         if (res.code == 200) {
           this.emitSubmit(true);
@@ -214,7 +212,6 @@ export default class extends Vue {
     return false;
   }
   private handleCloseDialog() {
-    console.log(BusinessViewModule.equipmentData)
     this.emitCloseDialog();
   }
 }

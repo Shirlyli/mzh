@@ -106,7 +106,6 @@ export default class extends Vue {
 
   //  点击查看按钮事件
   private handleSearch(row: any) {
-    console.log("🚀 ~ row", row);
     this.approvalDialogVisible = true;
     this.clickProcessData = row;
     this.clickProcessData.billEquipmentList = this.clickProcessData.billEquipmentList.map(

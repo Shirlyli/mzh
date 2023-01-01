@@ -70,6 +70,26 @@ export const constantRoutes: RouteConfig[] = [
       }
     ]
   },
+  {
+    path: "/processApproval",
+    meta: { hidden: true },
+    component: Layout,
+    redirect: "/processApproval/index",
+    children: [
+      {
+        path: "index",
+        component: () =>
+          import(
+            /* webpackChunkName: "401" */ "@/components/processApproval/index.vue"
+          ),
+        name: "流程审批",
+        meta: {
+          title: "流程审批",
+          icon: "user",
+        }
+      }
+    ]
+  }
 ];
 
 export const asyncRoutes = [

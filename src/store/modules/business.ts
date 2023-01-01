@@ -48,12 +48,10 @@ class BusinessView extends VuexModule implements BusinessState {
       limit,
       entity: { departmentId }
     });
-    console.log("🚀 ~ res", res)
     const newRes = res.data.map((dept: any) => {
       return { ...dept, label: dept.name, value: dept.id,...dept.equipmentVO };
     });
     res.code == 200 && this.SET_EQUIPMENT_DATA(newRes);
-    console.log("🚀 ~ newRes", newRes)
   }
 }
 
