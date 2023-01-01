@@ -1,6 +1,5 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
-import _ from 'lodash'
 import {
   getProcessNodeInfoByProcessCodeAndBh,
   getUserListProcessCode,
@@ -10,7 +9,7 @@ import {
   handleSaveRollDepartment
 } from '@/api/basic'
 import { BusinessViewModule } from '@/store/modules/business'
-import { Form, Message } from 'element-ui'
+import { Message } from 'element-ui'
 import { getEquipmentInfoByDepartmentId } from '@/api/equipment'
 import ProcessApproval from '@/components/processApproval/index.vue'
 import processRequest from '@/components/processRequest/index.vue'
@@ -215,6 +214,7 @@ export default class extends Vue {
    * 新增流程配置
    ******************************/
   private handleInsert(row: any) {
+    console.log('🚀 ~ row', row)
     this.requestDialogVisible = true
   }
 
@@ -289,7 +289,7 @@ export default class extends Vue {
       nodeSort: nodeSort + 1
     })
     if (nextCodeData.code === 200) {
-      const { nodeName, nodeNameCode, roleTypeId } = nextCodeData.data
+      // const { nodeName, nodeNameCode, roleTypeId } = nextCodeData.data
       // this.equipmentProcessData = {
       //   ...this.equipmentProcessData,
       //   nextNodeName: nodeName,

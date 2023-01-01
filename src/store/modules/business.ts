@@ -4,37 +4,37 @@ import {
   Mutation,
   Action,
   getModule
-} from "vuex-module-decorators";
-import { Route } from "vue-router";
-import store from "@/store";
-import { getEquipmentData, queryDepartmentInfoTree } from "@/api/basic";
+} from 'vuex-module-decorators'
+// import { Route } from 'vue-router'
+import store from '@/store'
+import { getEquipmentData, queryDepartmentInfoTree } from '@/api/basic'
 export interface BusinessState {
-  departmentData: any;
+  departmentData: any
   equipmentData:any
 }
 
-@Module({ dynamic: true, store, name: "businessView" })
+@Module({ dynamic: true, store, name: 'businessView' })
 class BusinessView extends VuexModule implements BusinessState {
-  public departmentData: any = []; //科室数据
-  public equipmentData: any = []; //设备数据
+  public departmentData: any = []; // 科室数据
+  public equipmentData: any = []; // 设备数据
 
   @Mutation
   private SET_DEPARTMENT_DATA(view: any) {
-    this.departmentData = view;
+    this.departmentData = view
   }
 
   @Mutation
   private SET_EQUIPMENT_DATA(view: any) {
-    this.equipmentData = view;
+    this.equipmentData = view
   }
 
   @Action
   public async GET_DEPARTMENT_DATA() {
-    const res: any = await queryDepartmentInfoTree({});
+    const res: any = await queryDepartmentInfoTree({})
     const newRes = res.data?.[0]?.children?.map((dept: any) => {
-      return { ...dept, label: dept.title, value: dept.id };
-    });
-    res.code == 200 && this.SET_DEPARTMENT_DATA(newRes);
+      return { ...dept, label: dept.title, value: dept.id }
+    })
+    res.code === 200 && this.SET_DEPARTMENT_DATA(newRes)
   }
 
   @Action
@@ -47,12 +47,12 @@ class BusinessView extends VuexModule implements BusinessState {
       page,
       limit,
       entity: { departmentId }
-    });
+    })
     const newRes = res.data.map((dept: any) => {
-      return { ...dept, label: dept.name, value: dept.id,...dept.equipmentVO };
-    });
-    res.code == 200 && this.SET_EQUIPMENT_DATA(newRes);
+      return { ...dept, label: dept.name, value: dept.id, ...dept.equipmentVO }
+    })
+    res.code === 200 && this.SET_EQUIPMENT_DATA(newRes)
   }
 }
 
-export const BusinessViewModule = getModule(BusinessView);
+export const BusinessViewModule = getModule(BusinessView)

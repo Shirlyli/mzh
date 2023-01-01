@@ -9,10 +9,10 @@ import {
   equipmentInspection,
   equipmentVO
 } from '../formlist/index'
-import { EquipmentInfoTypes } from '../formlist/interface.type'
+// import { EquipmentInfoTypes } from '../formlist/interface.type'
 import { Form, Message } from 'element-ui'
 import { updateEquipmentInfoData } from '@/api/equipment'
-import { BusinessViewModule } from '@/store/modules/business'
+// import { BusinessViewModule } from '@/store/modules/business'
 @Component({
   name: 'EquipmentFormDialog'
 })
@@ -53,6 +53,7 @@ export default class extends Vue {
   private activeName = 'equipmentVO'; // 当前tab页
   @Watch('activeName') // 监听tab页
   private onActiveNameChange(value: string) {
+    console.log('🚀 ~ value', value)
     console.log(this.defaultEquipmentInfoData)
     // switch (this.activeName) {
     //   case "equipmentVO":

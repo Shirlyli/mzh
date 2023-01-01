@@ -1,19 +1,16 @@
 import { Component, Vue } from 'vue-property-decorator'
 import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
-import { Form, Message } from 'element-ui'
+import { Message } from 'element-ui'
 import VexTable from '@/components/VexTable/index.vue'
 import {
-  dealEquipmentCategoryInfoData,
   searchEquipmentCategoryInfoDetailsData,
-  updateEquipmentCategoryInfoData,
   updateEquipmentInfoData
 } from '@/api/equipment'
 import EquipmentFormDialog from './components/index.vue'
 import _ from 'lodash'
 import { RESULT_DATA_TYPE } from '@/utils/index.type'
-import { AxiosResponse } from 'axios'
-import { EquipmentInfoTypes } from './formlist/interface.type'
+// import { EquipmentInfoTypes } from './formlist/interface.type'
 import { BusinessViewModule } from '@/store/modules/business'
 @Component({
   name: 'EquipmentCategory',
@@ -276,7 +273,7 @@ export default class extends Vue {
     }
     this.dialogVisible = true
     this.dialogStatus = 'create'
-    const { id, title } = this.nodeClickData
+    const { id } = this.nodeClickData
     this.equipmentCategoryData = {
       ...this.equipmentCategoryData,
       equipmentVO: {
@@ -548,6 +545,7 @@ export default class extends Vue {
 
   // 新增或编辑确认事件
   private handleSubmit(value: boolean) {
+    console.log('🚀 ~ value', value);
     (this.$refs.vexTable as any).findList(this.paramsConfig);
     (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams)
     this.dialogVisible = false

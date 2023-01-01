@@ -34,12 +34,10 @@ import variables from '@/styles/_variables.scss'
   name: 'SideBar',
   components: {
     SidebarItem,
-    SidebarLogo,
-  },
+    SidebarLogo
+  }
 })
 export default class extends Vue {
-  mounted() {
-  }
   get sidebar() {
     return AppModule.sidebar
   }

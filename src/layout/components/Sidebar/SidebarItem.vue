@@ -47,8 +47,8 @@ import SidebarItemLink from './SidebarItemLink.vue'
   // See https://medium.com/haiiro-io/element-component-name-with-vue-class-component-f3b435656561 for detail
   name: 'SidebarItem',
   components: {
-    SidebarItemLink,
-  },
+    SidebarItemLink
+  }
 })
 export default class extends Vue {
   @Prop({ required: true }) private item!: RouteConfig

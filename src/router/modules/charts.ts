@@ -1,5 +1,5 @@
-import { RouteConfig } from "vue-router";
-import Layout from "@/layout/index.vue";
+import { RouteConfig } from 'vue-router'
+import Layout from '@/layout/index.vue'
 
 const chartsRouter: RouteConfig[] = [
   // {
@@ -51,22 +51,22 @@ const chartsRouter: RouteConfig[] = [
   //   ]
   // },
   {
-    path: "/icon",
+    path: '/icon',
     component: Layout,
     children: [
       {
-        path: "index",
+        path: 'index',
         component: () =>
-          import(/* webpackChunkName: "icons" */ "@/views/icons/index.vue"),
-        name: "Icons",
+          import(/* webpackChunkName: "icons" */ '@/views/icons/index.vue'),
+        name: 'Icons',
         meta: {
-          title: "icons",
-          icon: "icon",
+          title: 'icons',
+          icon: 'icon',
           noCache: true
         }
       }
     ]
-  },
-];
+  }
+]
 
-export default chartsRouter;
+export default chartsRouter

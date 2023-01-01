@@ -48,7 +48,7 @@
                 <vxe-column title="操作"
                             width="100"
                             show-overflow>
-                  <template #default="{ row }">
+                  <template #default="{row}">
                     <el-popconfirm title="您确定要解绑该角色"
                                    @confirm="handleDelete(row)">
                       <vxe-button type="text"
@@ -81,55 +81,54 @@
 
 <script lang="ts">
 import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
-import VXETable from 'vxe-table'
-import _ from 'lodash'
 import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 
 import {
   getRoleTreeData,
   onMenuIdBindRole,
   onMenuIdUnBindRole,
-  queryRolesByMenuId,
+  queryRolesByMenuId
 } from '@/api/basic'
 import { Message } from 'element-ui'
 
 @Component({
   name: 'AssociateRole',
   components: {
-    MainSubLayout,
-  },
+    MainSubLayout
+  }
 })
 export default class extends Vue {
   @Prop({ default: false }) roleDialogVisible!: boolean
   @Prop() checkedMenuList!: any
 
   @Watch('checkedMenuList', { immediate: true, deep: true })
-  private onParamsConfigChange(newdata: any) {
+  public onParamsConfigChange(newdata: any) {
     if (newdata.length) {
       this.getBindRoleTreeData(newdata)
     }
   }
 
-  private roleData = [] //角色数据
-  private defaultProps = {
+  public roleData = [] // 角色数据
+  public defaultProps = {
     children: 'children',
-    label: 'title',
-  } //角色树配置
-  private loading = false //角色绑定列表loading
-  private bindRoleData = [] //用户已绑定角色
+    label: 'title'
+  } // 角色树配置
+
+  public loading = false // 角色绑定列表loading
+  public bindRoleData = [] // 用户已绑定角色
 
   created() {
     this.getRoleTreeData()
   }
 
   // 获取角色树数据
-  private async getRoleTreeData() {
+  public async getRoleTreeData() {
     const res: any = await getRoleTreeData()
     if (res.code === 200) {
       const newRoleData = res.data[0].children.map((item: any) => {
         return {
           ...item,
-          disabled: true,
+          disabled: true
         }
       })
       this.roleData = newRoleData
@@ -137,18 +136,18 @@ export default class extends Vue {
   }
 
   // 获取已绑定角色树数据
-  private async getBindRoleTreeData(data: any) {
-    const res: any = await queryRolesByMenuId({ menu_id: data[0].id })
+  public async getBindRoleTreeData(data: any) {
+    const res: any = await queryRolesByMenuId({ menuId: data[0].id })
     if (res.code === 200) {
       this.bindRoleData = res.data
     }
   }
 
   // 角色树点击事件
-  private async handleRoleNodeClick(data: any) {
+  public async handleRoleNodeClick(data: any) {
     const res: any = await onMenuIdBindRole({
       menuId: this.checkedMenuList[0].id,
-      roleId: data.id,
+      roleId: data.id
     })
     if (res.result) {
       Message.success('关联成功')
@@ -157,13 +156,13 @@ export default class extends Vue {
   }
 
   // 角色删除事件
-  private async handleDelete(row: any) {
+  public async handleDelete(row: any) {
     const res: any = await onMenuIdUnBindRole({
       menuId: this.checkedMenuList[0].id,
-      roleId: row.id,
+      roleId: row.id
     })
     if (res.result) {
-      this.$message.success("解绑成功");
+      this.$message.success('解绑成功')
       this.getBindRoleTreeData(this.checkedMenuList)
     }
   }
@@ -173,8 +172,12 @@ export default class extends Vue {
     return rowData
   }
 
-  private closeDialogVisible() {
+  public closeDialogVisible() {
     this.emitCloseAssociateDialog(false)
+  }
+
+  public cellDBLClickEvent() {
+    console.log('cellDBLClickEvent')
   }
 }
 </script>

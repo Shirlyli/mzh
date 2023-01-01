@@ -19,10 +19,10 @@
                     status="warning">批量删除</vxe-button>
         <vxe-button @click="associateRole"
                     v-if="hasAssociate">关联角色</vxe-button>
-        <vxe-button @click="$refs.xGrid.exportData()"
+        <!-- <vxe-button @click="$refs.xGrid.exportData()"
                     v-if="toolbarBtns.includes('import')">导入</vxe-button>
         <vxe-button @click="$refs.xGrid.exportData()"
-                    v-if="toolbarBtns.includes('export')">导出</vxe-button>
+                    v-if="toolbarBtns.includes('export')">导出</vxe-button> -->
       </template>
 
       <template #add_button>
@@ -82,16 +82,15 @@
     </vxe-grid>
   </div>
 </template>
-  
-  <script lang="ts">
+
+<script lang="ts">
 import { getTableDataList } from '@/api/equipment'
 import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
 import VXETable from 'vxe-table'
-import _ from 'lodash'
 import { Message } from 'element-ui'
 @Component({
   name: 'VexTable',
-  components: {},
+  components: {}
 })
 export default class extends Vue {
   @Prop({ default: ['add', 'import', 'delete', 'export'] }) toolbarBtns!: any
@@ -99,24 +98,25 @@ export default class extends Vue {
   @Prop({ default: [] }) columns!: []
   @Prop() paramsConfig!: any
   @Watch('paramsConfig', { immediate: true, deep: true })
-  private onParamsConfigChange(newdata: any) {
+  public onParamsConfigChange(newdata: any) {
     this.findList(newdata)
   }
-  @Prop({ default: false }) hasAssociate!: boolean //是否含有关联角色
-  @Prop({ default: '' }) hasNotSlotButton!: any //是否含有操作按钮
+
+  @Prop({ default: false }) hasAssociate!: boolean // 是否含有关联角色
+  @Prop({ default: '' }) hasNotSlotButton!: any // 是否含有操作按钮
   @Prop({ default: ['search', 'edit', 'del', 'record'] }) editColumns!: any
-  @Prop() type!: string //表格类型
-  private tablePage = { total: 0, currentPage: 1, pageSize: 10 }
-  private loading = false
-  private tableData = []
-  private gridOptions: any = {
+  @Prop() type!: string // 表格类型
+  public tablePage = { total: 0, currentPage: 1, pageSize: 10 }
+  public loading = false
+  public tableData = []
+  public gridOptions: any = {
     border: true,
     showOverflow: true,
     height: 'auto',
     exportConfig: {},
     treeConfig: {
       transform: true,
-      rowField: 'id',
+      rowField: 'id'
       // parentField: 'pid',
       // iconOpen: 'vxe-icon-square-minus-fill',
       // iconClose: 'vxe-icon-square-plus-fill',
@@ -125,14 +125,14 @@ export default class extends Vue {
     checkboxConfig: {
       // labelField: 'id',
       // 设置复选框支持分页勾选，需要设置 rowId 行数据主键
-      reserve: true,
+      reserve: true
     },
     formConfig: this.formConfig ?? {},
-    columns: this.columns, // 列表项数据
+    columns: this.columns // 列表项数据
   }
 
   // 自定义工具栏
-  private tableToolbar = {
+  public tableToolbar = {
     perfect: true,
     // refresh: true,
     zoom: true,
@@ -142,30 +142,29 @@ export default class extends Vue {
         this.hasNotSlotButton === 'add'
           ? 'add_button'
           : this.hasNotSlotButton
-          ? ''
-          : 'toolbar_buttons',
-    },
+            ? ''
+            : 'toolbar_buttons'
+    }
   }
 
-  private checkedList = [] // 已选列
-  created() {}
+  public checkedList = [] // 已选列
 
   // 获取列表数据
-  private async findList(config: any) {
+  public async findList(config: any) {
     this.loading = true
     this.checkedList = []
     try {
       const res: any = await getTableDataList(config.url, config.params)
-      
+
       if ((res.result || res.code === 200) && res.data) {
         if (this.type === 'equipmentSearch') {
           this.tableData = res.data.map((item: any) => {
             return { ...item, ...item.equipmentVO }
           })
           this.tablePage.total = res.count
-        } else if (this.type == 'transferApply') {
+        } else if (this.type === 'transferApply') {
           this.tableData = res.data.map((item: any) => {
-            return { ...item, ...item.billMain,...item.billApproveList[0] }
+            return { ...item, ...item.billMain, ...item.billApproveList[0] }
           })
           this.tablePage.total = res.count
         } else {
@@ -185,16 +184,16 @@ export default class extends Vue {
   }
 
   // 查询
-  private searchFor() {
+  public searchFor() {
     this.paramsConfig.params.entity = {
       ...this.paramsConfig.params.entity,
-      ...this.formConfig.data,
+      ...this.formConfig.data
     }
     this.findList(this.paramsConfig)
   }
 
   // 重置并查询
-  private resetFor() {
+  public resetFor() {
     this.formConfig.data = {}
     this.paramsConfig.params.entity = {}
   }
@@ -205,18 +204,18 @@ export default class extends Vue {
     return rowData
   }
 
-  private editRowEvent = (row: any) => {
+  public editRowEvent = (row: any) => {
     this.emitHandleUpdate(row)
   }
 
   // 保存
-  private saveRowEvent = () => {
+  public saveRowEvent = () => {
     const $grid: any = (this.$refs as any).xGrid
     ;($grid as any).clearActived().then(() => {
       this.gridOptions.loading = true
       setTimeout(() => {
         this.gridOptions.loading = false
-        //VXETable.modal.message({ content: '保存成功！', status: 'success' })
+        // VXETable.modal.message({ content: '保存成功！', status: 'success' })
       }, 300)
     })
   }
@@ -227,7 +226,7 @@ export default class extends Vue {
     return rowData
   }
 
-  private removeRowEvent = async (row: any) => {
+  public removeRowEvent = async(row: any) => {
     const type = await VXETable.modal.confirm('您确定要删除该数据?')
     if (type === 'confirm') {
       this.emitHandleRemove(row)
@@ -240,7 +239,7 @@ export default class extends Vue {
     return rowData
   }
 
-  private insertEvent() {
+  public insertEvent() {
     if (this.type === 'process') {
       this.emitHandleInsert(this.checkedList)
     } else if (this.type !== 'process') {
@@ -251,7 +250,7 @@ export default class extends Vue {
   }
 
   // 分页切换事件
-  private handlePageChange(pageconfig: any) {
+  public handlePageChange(pageconfig: any) {
     this.tablePage.currentPage = pageconfig.currentPage
     this.tablePage.pageSize = pageconfig.pageSize
     this.paramsConfig.params.page = pageconfig.currentPage
@@ -259,7 +258,7 @@ export default class extends Vue {
   }
 
   // 批量删除
-  private async groupRemove() {
+  public async groupRemove() {
     if (!this.checkedList.length) {
       Message.error('请选择后进行操作！')
       return
@@ -271,7 +270,7 @@ export default class extends Vue {
   }
 
   // 手动勾选并且值发生改变时触发的事件
-  private handleChange(checked: any) {
+  public handleChange(checked: any) {
     this.checkedList = checked.records
   }
 
@@ -281,7 +280,7 @@ export default class extends Vue {
     return rowData
   }
 
-  private searchForDetails(row: any) {
+  public searchForDetails(row: any) {
     this.emitHandleSearch(row)
   }
 
@@ -290,7 +289,8 @@ export default class extends Vue {
   emitAssociateRole(value: any) {
     return value
   }
-  private associateRole() {
+
+  public associateRole() {
     if (!this.checkedList.length) {
       Message.error('请选择菜单后进行操作！')
       return
@@ -306,9 +306,9 @@ export default class extends Vue {
   emitHandleRecord(value: any) {
     return value
   }
-  private handleRecord(row: any) {
+
+  public handleRecord(row: any) {
     this.emitHandleRecord(row)
   }
 }
 </script>
-  

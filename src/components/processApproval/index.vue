@@ -201,8 +201,6 @@
 </script>
 
 <style lang="scss" scoped>
-.approvalBox {
-}
 .dividerBox {
   margin: 12px 0 24px 0;
   font-size: 18px;

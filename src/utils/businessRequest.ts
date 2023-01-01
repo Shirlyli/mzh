@@ -15,7 +15,7 @@ service.interceptors.request.use(
     // Add X-Access-Token header to every request, you can add other custom headers here
     if (UserModule.token) {
       // config.headers['X-Access-Token'] = UserModule.token
-      config.headers['token'] = UserModule.token
+      config.headers.token = UserModule.token
     }
     return config
   },

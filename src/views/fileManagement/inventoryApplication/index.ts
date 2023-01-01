@@ -5,8 +5,7 @@ import {
   getUserListProcessCode,
   queryDepartmentInfoTree,
   delHospitalProcessBusiness,
-  queryProcessRecordList,
-  handleSaveCheckApply
+  queryProcessRecordList
 } from '@/api/basic'
 import { BusinessViewModule } from '@/store/modules/business'
 import { Message } from 'element-ui'

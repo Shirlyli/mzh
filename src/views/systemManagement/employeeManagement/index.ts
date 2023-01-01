@@ -1,9 +1,9 @@
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
 import VexTable from '@/components/VexTable/index.vue'
 import { Form, Message } from 'element-ui'
-import _, { result } from 'lodash'
+import _ from 'lodash'
 import {
   bindPersonalInfo,
   dealPersonalData,
@@ -18,7 +18,6 @@ import {
 import Content from './content.vue'
 import { VXETable } from 'vxe-table'
 import ALL_OPTIONS from '@/shared/options'
-import { decode, encode, atob } from 'js-base64'
 @Component({
   name: 'Tab',
   components: {
@@ -384,6 +383,7 @@ export default class extends Vue {
 
   // 点击员工详情展示用户操作页面
   private async handleLoginDialog(row: any) {
+    console.log('🚀 ~ row', row)
     // this.personalDialogVisible = true;
     // const res = await getPersonalInfo({ empId: row.id });
   }
@@ -405,7 +405,7 @@ export default class extends Vue {
 
   private async queryRolesByUserIdData(row: any) {
     this.loading = true
-    const res: any = await queryRolesByUserId({ user_id: row.userId })
+    const res: any = await queryRolesByUserId({ userId: row.userId })
     if (res.result) {
       this.$message.success(res.msg)
       this.bindRoleData = res.data
@@ -448,7 +448,6 @@ export default class extends Vue {
   private async handleDelete(row: any) {
     // console.log("🚀 ~ row ~角色删除事件", row);
     const type = await VXETable.modal.confirm('您确定要删除该数据?')
-    const $table = this.$refs.xTable
     if (type === 'confirm') {
       const res: any = await personalUnbindRole({
         userId: this.clickEmployeeInfo.userId,

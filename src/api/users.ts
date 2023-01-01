@@ -10,7 +10,7 @@ export const getUsers = (params: any) =>
 export const getUserInfo = (data: any) =>
   request({
     // url: '/users/info',
-    url:'/login/weblogin',
+    url: '/login/weblogin',
     method: 'post',
     data
   })
@@ -37,7 +37,7 @@ export const deleteUser = (username: string) =>
 export const login = (data: any) =>
   request({
     // url: '/users/login',
-    url:'/login/weblogin',
+    url: '/login/weblogin',
     method: 'post',
     data
   })

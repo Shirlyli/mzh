@@ -1,6 +1,5 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
-import _ from 'lodash'
 import {
   getProcessNodeInfoByProcessCodeAndBh,
   getUserListProcessCode,
@@ -12,7 +11,6 @@ import {
 import { Form, Message } from 'element-ui'
 import { BasicFormList } from './formColumns'
 import { getEquipmentInfoByDepartmentId } from '@/api/equipment'
-import moment from 'moment'
 import ProcessApproval from '@/components/processApproval/index.vue'
 import processRequest from '@/components/processRequest/index.vue'
 @Component({
@@ -140,7 +138,7 @@ export default class extends Vue {
       nodeSort: nodeSort + 1
     })
     if (nextCodeData.code === 200) {
-      const { nodeName, nodeNameCode, roleTypeId } = nextCodeData.data
+      const { nodeName, nodeNameCode } = nextCodeData.data
       this.equipmentProcessData = {
         ...this.equipmentProcessData,
         nextNodeName: nodeName,
@@ -233,6 +231,7 @@ export default class extends Vue {
    * @param row
    */
   public handleInsert(row: any) {
+    console.log('🚀 ~ row', row)
     this.addEquipmentRequest()
   }
 
@@ -283,6 +282,7 @@ export default class extends Vue {
   }
 
   public beforeRemove(file: any, fileList: any) {
+    console.log('🚀 ~ fileList', fileList)
     return this.$confirm(`确定移除 ${file.name}？`)
   }
 

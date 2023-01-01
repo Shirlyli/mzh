@@ -85,16 +85,16 @@ export const searchEquipmentCategoryInfoDetailsData = (data: any) =>
     data
   })
 
-  // 修改设备数据 -新增或修改
-  export const updateEquipmentInfoData = (data: any) =>
+// 修改设备数据 -新增或修改
+export const updateEquipmentInfoData = (data: any) =>
   request({
     url: 'equipment/saveEquipment',
     method: 'POST',
     data
   })
 
-  // 根据科室类别获取设备 equipment/getEquipmentInfo
-  export const getEquipmentInfoByDepartmentId = (data: any) =>
+// 根据科室类别获取设备 equipment/getEquipmentInfo
+export const getEquipmentInfoByDepartmentId = (data: any) =>
   request({
     url: 'equipment/getEquipmentInfo',
     method: 'POST',
@@ -116,7 +116,6 @@ export const delSupplierData = (data: any) =>
     method: 'POST',
     data
   })
-
 
 // 新增厂商联系人数据 /api/hospitalInfo/insert
 export const insertSupplierLinkmanData = (data: any) =>
@@ -141,4 +140,3 @@ export const delSupplierLinkmanData = (data: any) =>
     method: 'POST',
     data
   })
-

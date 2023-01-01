@@ -3,7 +3,7 @@ import { getEquipmentInfoByDepartmentId } from '@/api/equipment'
 import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
 import { EquipmentDetailFormList } from '@/views/equipmentArchives/transferManagement/transferApply/formColumns'
-import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator'
+import { Component, Vue, Watch, Emit } from 'vue-property-decorator'
 @Component({
   name: 'processRequest',
   components: {}

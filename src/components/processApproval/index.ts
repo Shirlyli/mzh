@@ -8,7 +8,7 @@ import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
 import { Form, Message } from 'element-ui'
 import _ from 'lodash'
-import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 @Component({
   name: 'ProcessApproval',
   components: {}
