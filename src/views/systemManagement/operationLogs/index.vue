@@ -23,6 +23,7 @@ import Tree from '@/components/Tree/index.vue'
 import VexTable from '@/components/VexTable/index.vue'
 import _ from 'lodash'
 import { delOperationLogs } from '@/api/basic'
+import moment from 'moment'
 @Component({
   name: 'Tab',
   components: {
@@ -72,7 +73,7 @@ export default class extends Vue {
     { field: 'lUri', title: ' Url' },
     { field: 'lIp', title: ' IP' },
     { field: 'lMethod', title: '请求方法' },
-    { field: 'createTime', title: '创建时间' },
+    { field: 'createTime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     {
       width: 180,
       title: '操作',

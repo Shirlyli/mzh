@@ -9,7 +9,11 @@ import { Component, Vue, Watch, Emit } from 'vue-property-decorator'
   components: {}
 })
 export default class extends Vue {
+  /********************************************
+   * 待新增的设备params
+   *******************************************/
   private addEquipment = EquipmentDetailFormList;
+
   /**********************
    * form表单
    *********************/
@@ -17,15 +21,8 @@ export default class extends Vue {
     sessionStorage.getItem('RequestForm') ?? '0'
   );
 
-  // @Prop({ default: {} }) requestForm!: any
-  // public watchRequestForm: any = {}
-  // @Watch('requestForm', { immediate: true })
-  // public onChangeRequestForm(formValue: any) {
-  //   this.watchRequestForm = formValue
-  // }
-
   /**********************
-   * 保存接口传惨
+   * 保存接口params
    *********************/
   public requestParams: any = JSON.parse(
     sessionStorage.getItem('RequestParams') ?? '0'
@@ -35,63 +32,49 @@ export default class extends Vue {
    * 监听科室变化
    *************/
   @Watch('requestParams.billMain.departmentName', { immediate: true })
+  @Watch('requestParams.billMain.applyDept', { immediate: true })
   public async onChangeRequestParams(formValue: any) {
     console.log('🚀 ~ 监听科室变化', formValue)
-    const res: any = await getEquipmentInfoByDepartmentId({
-      page: '1',
-      limit: '10',
-      entity: {
-        departmentId: formValue
-      }
-    })
-    if (res.code === 200) {
-      this.watchRequestForm.billEquipmentList.forEach((item: any) => {
-        item.forEach((i: any) => {
-          if (i.slot === 'equipment') {
-            i.data = res.data.map((equip: any) => {
-              return {
-                equipmentVO: equip.equipmentVO,
-                label: equip.equipmentVO.name,
-                value: equip.equipmentVO.id
-              }
-            })
-          }
-        })
+    if (formValue) {
+      const res: any = await getEquipmentInfoByDepartmentId({
+        page: '1',
+        limit: '10',
+        entity: {
+          departmentId: formValue
+        }
       })
-      this.$forceUpdate()
+      if (res.code === 200) {
+        this.watchRequestForm.billEquipmentList.forEach((item: any) => {
+          item.forEach((i: any) => {
+            if (i.slot === 'equipment') {
+              i.data = res.data.map((equip: any) => {
+                return {
+                  equipmentVO: equip.equipmentVO,
+                  label: equip.equipmentVO.name,
+                  value: equip.equipmentVO.id
+                }
+              })
+            }
+          })
+        })
+        this.$forceUpdate()
+      }
     }
   }
 
   /****************************
-   * 监听设备名称变化
+   * 监听设备变化
    ***************************/
-  @Watch('requestParams.billEquipmentList', { immediate: true })
+  @Watch('requestParams.billEquipmentList', { immediate: true, deep: true })
   public onChangeEquipmentId(equipmentId: any) {
-    console.log('🚀 ~ 监听设备名称变化', equipmentId)
-    console.log('==this.watchRequestForm', this.watchRequestForm)
-    // const filterData = this.watchRequestForm.billEquipmentList.filter(
-    //   (item: any) => item.field === 'equipmentId'
-    // )
-    // const equipmentData = filterData[0]?.data?.filter((item: any) => {
-    //   return String(item.value) === String(equipmentId)
-    // })
-    // Object.assign(
-    //   this.requestParams.billEquipmentList,
-    //   equipmentData[0].equipmentVO,
-    //   { id: '' }
-    // )
+    console.log('🚀 ~ 监听设备名称变化', equipmentId, '🚀 ~ form表单数据', this.watchRequestForm)
+    console.log('🚀 ~ params传参数据', this.requestParams)
   }
 
-  /***************
+  /*******************************************
    * 新增流程申请
-   **************/
-  @Emit()
-  emitSubmitCreateRequest(params: any) {
-    return params
-  }
-
-  public async createData() {
-    // this.emitSubmitCreateRequest(this.requestParams)
+   ******************************************/
+  public async createProcess() {
     const params = this.requestParams
     const billApproveList: any = []
     billApproveList.push(params.billApproveList)
@@ -100,24 +83,30 @@ export default class extends Vue {
       ...params,
       billMain: {
         ...params.billMain,
-        departmentId: params.billMain.departmentName
+        departmentId: params.billMain.departmentName || params.billMain.applyDept
       },
       billEquipmentList: params.billEquipmentList,
       billApproveList
     })
     console.log('🚀 ~ sendParams', sendParams)
     const res: any = await handleSaveCheckApply(sendParams)
+    //  const res: any = await queryHospitalProcessBusinessSave({
+    //   ...this.equipmentProcessData
+    // }) 科室申请
     if (res.code === 200) {
       this.$message.success('发起申请成功')
-      // (this.$refs.vexTable as any).findList(this.paramsConfig)
       this.closeSelectedTag({ path: '/processRequest/index' })
     }
   }
 
-  /**
-   * 删除当前选中项
+  public cancelProcess() {
+    this.closeSelectedTag({ path: '/processRequest/index' })
+  }
+
+  /******************************
+   * 完成申请后关闭当前tag页
    * @param view
-   */
+   *****************************/
   private closeSelectedTag(view: ITagView) {
     console.log('🚀 ~ view', view)
     TagsViewModule.delView(view)
@@ -192,6 +181,11 @@ export default class extends Vue {
     this.$forceUpdate() // 强制刷新，解决页面不会重新渲染的问题
   }
 
+  /***************************************
+   * 移除当前设备行
+   * @param label
+   * @param index
+   **************************************/
   public removeKey(label: any, index: number) {
     console.log('🚀 ~ label', label)
     this.$confirm('此操作将永该, 是否继续?', '提示', {
@@ -220,10 +214,5 @@ export default class extends Vue {
         //   message: "已取消删除"
         // });
       })
-  }
-
-  // 删除行
-  public removeRow(index: number) {
-    this.watchRequestForm.billEquipmentList.splice(index, 1)
   }
 }

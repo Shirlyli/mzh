@@ -119,56 +119,61 @@
           </el-form>
         </div>
       </div>
+      <el-form ref="approvalForm"
+               :rules="{}"
+               :model="requestParams"
+               label-position="left"
+               label-width="80px"
+               style="margin-left:0;">
+        <!-- 基本信息 -->
+        <div class="dividerBox">
+          <el-divider direction="vertical"></el-divider>
+          <span>基本信息</span>
+        </div>
+        <div class="contentBox">
+          <el-row :gutter="20">
+            <el-col :span="8"
+                    v-for="(item,index) in watchRequestForm.billMain"
+                    :key="index">
+              <div class="basicBox">
+                <span class="title">{{item.title}}:</span>
+                <span class="value">{{processData[item.field]?processData[item.field]:'-'}}</span>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
 
-      <!-- 基本信息 -->
-      <div class="dividerBox">
-        <el-divider direction="vertical"></el-divider>
-        <span>基本信息</span>
-      </div>
-      <div class="contentBox">
-        <el-row :gutter="20">
-          <el-col :span="8"
-                  v-for="(item,index) in basicFormList"
-                  :key="index">
-            <div class="basicBox">
-              <span class="title">{{item.title}}:</span>
-              <span class="value">{{processData[item.field]?processData[item.field]:'-'}}</span>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
+        <!-- 设备明细 -->
+        <div class="dividerBox">
+          <el-divider direction="vertical"></el-divider>
+          <span>设备明细</span>
+        </div>
+        <div class="contentBox">
+          <el-table :data="processData.billEquipmentList"
+                    style="width: 100%"
+                    border>
+            <el-table-column prop="name"
+                             label="设备名称"
+                             width="180">
+            </el-table-column>
+            <el-table-column prop="marking"
+                             label="设备编号"
+                             width="180">
+            </el-table-column>
+            <el-table-column prop="price"
+                             label="价格">
+            </el-table-column>
+            <el-table-column prop="marking"
+                             label="规则型号">
+            </el-table-column>
+            <el-table-column prop="brand"
+                             label="设备厂家">
+            </el-table-column>
+          </el-table>
+        </div>
 
-      <!-- 设备明细 -->
-      <div class="dividerBox">
-        <el-divider direction="vertical"></el-divider>
-        <span>设备明细</span>
-      </div>
-      <div class="contentBox">
-        <el-table :data="processData.billEquipmentList"
-                  style="width: 100%"
-                  border>
-          <el-table-column prop="name"
-                           label="设备名称"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="marking"
-                           label="设备编号"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="price"
-                           label="价格">
-          </el-table-column>
-          <el-table-column prop="marking"
-                           label="规则型号">
-          </el-table-column>
-          <el-table-column prop="brand"
-                           label="设备厂家">
-          </el-table-column>
-        </el-table>
-      </div>
-
-      <!-- 附件信息 -->
-      <!-- <div class="dividerBox">
+        <!-- 附件信息 -->
+        <!-- <div class="dividerBox">
         <el-divider direction="vertical"></el-divider>
         <span>附件信息</span>
       </div>
@@ -192,6 +197,40 @@
           </el-table-column>
         </el-table>
       </div> -->
+
+        <!-- 审批清单 -->
+
+        <div class="dividerBox">
+          <el-divider direction="vertical"></el-divider>
+          <span>审批清单</span>
+        </div>
+        <el-row :gutter="20">
+          <el-col :span="6"
+                  v-for="(item,index) in watchRequestForm.billApproveList"
+                  :key="index">
+            <el-form-item :label="item.title"
+                          prop="applyDetailId">
+              <el-input v-model="requestParams.billApproveList[item.field]"
+                        :placeholder="`请输入${item.title}`"
+                        v-if="item.type === 'input'" />
+              <el-select v-model="requestParams.billApproveList[item.field]"
+                         v-if="item.type === 'select'"
+                         placeholder="请选择">
+                <el-option :label="optionValue.label"
+                           :value="optionValue.value"
+                           v-for="optionValue in item.data"
+                           :key="optionValue.label"></el-option>
+              </el-select>
+              <el-date-picker v-model="requestParams.billApproveList[item.field]"
+                              v-if="item.type === 'date'"
+                              type="date"
+                              placeholder="选择日期"
+                              value-format="yyyy-MM-DD">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
     </el-card>
 
   </div>
@@ -238,6 +277,11 @@
   // bottom: 10px;
 }
 .popover {
-  margin-left: 24px;
+  margin-left: 12px;
+}
+
+.el-card__body {
+  overflow-y: scroll;
+  height: 100%;
 }
 </style>

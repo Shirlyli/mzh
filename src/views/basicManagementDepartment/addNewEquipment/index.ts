@@ -5,6 +5,7 @@ import VexTable from '@/components/VexTable/index.vue'
 import { Form } from 'element-ui'
 import { dealEquipmentData, updateEquipmentData } from '@/api/equipment'
 import _ from 'lodash'
+import moment from 'moment'
 // import { TreeData } from "@/mock/tree";
 @Component({
   name: 'Tab',
@@ -36,7 +37,7 @@ export default class extends Vue {
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 80 },
     { field: 'name', title: ' 科室名称', treeNode: true },
-    { field: 'basicData', title: '创建时间' },
+    { field: 'basicData', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     {
       width: 160,
       title: '操作',

@@ -84,11 +84,11 @@
           <el-input v-model="menuData.pName"
                     placeholder="请输入"/>
         </el-form-item>
-        <el-form-item :label="'父级菜单ID'"
+        <!-- <el-form-item :label="'父级菜单ID'"
                       prop="pid">
           <el-input v-model="menuData.pid"
           />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item :label="'是否启用'"
                       prop="mIsavailable">
           <el-radio-group v-model="menuData.mIsavailable">

@@ -6,6 +6,7 @@ import { Form } from 'element-ui'
 import { dealEquipmentData, updateEquipmentData } from '@/api/equipment'
 import _ from 'lodash'
 import ALL_OPTIONS from '@/shared/options'
+import moment from 'moment'
 // import { TreeData } from "@/mock/tree";
 @Component({
   name: 'Tab',
@@ -38,7 +39,7 @@ export default class extends Vue {
     { field: 'name', title: ' 科室名称', treeNode: true },
     { field: 'mobile', title: '座机', treeNode: true },
     { field: 'note', title: '描述', treeNode: true },
-    { field: 'ctime', title: '创建时间' },
+    { field: 'ctime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     {
       width: 160,
       title: '操作',

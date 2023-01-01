@@ -9,6 +9,7 @@ import {
   updateHospitalData
 } from '@/api/equipment'
 import _ from 'lodash'
+import moment from 'moment'
 // import { TreeData } from "@/mock/tree";
 @Component({
   name: 'Tab',
@@ -52,7 +53,7 @@ export default class extends Vue {
     { field: 'hType', title: ' 医院类型' },
     { field: 'hPhone', title: ' 电话' },
     { field: 'note', title: ' 备注' },
-    { field: 'createtime', title: '创建时间' },
+    { field: 'createtime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     { field: 'createrId', title: '创建人' },
     {
       width: 180,

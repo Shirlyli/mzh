@@ -6,6 +6,7 @@ import { Form } from 'element-ui'
 import { formatMIsAvailable } from '@/shared/utils'
 import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
+import moment from 'moment'
 @Component({
   name: 'InlineEditTable',
   components: {
@@ -69,7 +70,7 @@ export default class extends Vue {
     },
     // { field: "roleTypeId", title: " 角色类型id " },
     { field: 'cteator', title: '创建人' },
-    { field: 'cteaterTime', title: '创建时间' },
+    { field: 'cteaterTime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     {
       width: 160,
       title: '操作',

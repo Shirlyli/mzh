@@ -6,6 +6,7 @@ import VexTable from '@/components/VexTable/index.vue'
 import { Form } from 'element-ui'
 import { delRoleInfo, saveRoleInfo } from '@/api/basic'
 import _ from 'lodash'
+import moment from 'moment'
 @Component({
   name: 'Tab',
   components: {
@@ -50,7 +51,7 @@ export default class extends Vue {
     { field: 'rName', title: '名称', treeNode: true },
     { field: 'rDesc', title: '角色路径' },
     { field: 'note', title: '备注' },
-    { field: 'rCtime', title: '创建时间' },
+    { field: 'rCtime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     {
       width: 160,
       title: '操作',

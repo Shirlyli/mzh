@@ -20,6 +20,7 @@ import {
 import { UserModule } from '@/store/modules/user'
 import ALL_OPTIONS from '@/shared/options'
 import { FormatApproveStatusColumns } from '@/utils/functions'
+import moment from 'moment'
 
 @Component({
   name: 'InlineEditTable',
@@ -86,14 +87,16 @@ export default class extends Vue {
     ] // 表单项
   };
 
-  // 流程配置列表项
+  /*************************************
+   * 列表项
+   ************************************/
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'billCode', title: '盘点单号', width: 150 },
     { field: 'checkDepartment', title: '任务名称' },
     { field: 'userId', title: '申请人' },
-    { field: 'createTime', title: '申请日期' },
+    { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     { field: 'departmentId', title: '制单科室 ' },
     { field: 'equipmentCategory', title: '盘点范围' },
     {
@@ -109,7 +112,9 @@ export default class extends Vue {
     }
   ];
 
-  // 列表传参
+  /*************************************
+   * 列表传参
+   ************************************/
   public paramsConfig: any = {
     url: '/checkApply/getCheckApplyInfo', // 根据表单查询项查询数据
     params: {
@@ -119,7 +124,12 @@ export default class extends Vue {
     }
   };
 
-  //  点击查看按钮事件
+  public clickProcessData: any = {}; // 当前操作流程节点信息
+
+  /*************************************
+   * 点击查看按钮事件-跳转审批页面
+   * @param row
+   ************************************/
   public handleSearch(row: any) {
     const { id, nextNodeCode } = row
     this.clickProcessData = row
@@ -133,15 +143,23 @@ export default class extends Vue {
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
     )
-    sessionStorage.setItem('BasicFormList', JSON.stringify(this.basicFormList))
+    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
+    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+
     this.$router
-      .push({ path: '/processApproval', query: { nextNodeCode, id } })
+      .push({
+        path: '/processApproval',
+        query: { nextNodeCode, id, type: '盘点' }
+      })
       .catch(err => {
         console.warn(err)
       })
   }
 
-  // 删除事件
+  /*************************************
+   * 删除事件
+   * @param data
+   ************************************/
   public async handleRemove(data: any) {
     const res: any = await delHospitalProcessBusiness({
       ids: data.id
@@ -155,7 +173,6 @@ export default class extends Vue {
   /****************
    * 流程申请相关
    *****************/
-  public requestDialogVisible = false; // 模态框
   // 申请form表单配置文件
   public requestForm = {
     billMain: BasicFormList,
@@ -181,11 +198,13 @@ export default class extends Vue {
       status: '',
       billCode: ''
     },
-    billEquipmentList: [{
-      id: '',
-      billId: '',
-      equipmentId: ''
-    }],
+    billEquipmentList: [
+      {
+        id: '',
+        billId: '',
+        equipmentId: ''
+      }
+    ],
     billApproveList: {
       id: '',
       approveUser: UserModule.userData?.userId,
@@ -197,60 +216,17 @@ export default class extends Vue {
     }
   };
 
-  public rules = {
-    nextNodeExecutor: [{ require: true, trigger: 'change', message: '请选择' }],
-    approveStatus: [{ require: true, trigger: 'change', message: '请选择' }]
-  };
-
   /*******************************
    * 新增流程配置
    ******************************/
   public handleInsert() {
-    // this.requestDialogVisible = true
-    sessionStorage.setItem(
-      'RequestForm',
-      JSON.stringify(this.requestForm)
-    )
-    console.log('🚀 ~ this.requestForm', this.requestForm, this.requestParams)
-
+    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
-      .push({ path: '/processRequest', query: { } })
+      .push({ path: '/processRequest', query: { type: '盘点' } })
       .catch(err => {
         console.warn(err)
       })
-  }
-
-  public handleClose() {
-    this.requestDialogVisible = false
-  }
-
-  /*****************************
-   * 发起流程申请单
-   * @param params
-   ****************************/
-  public async handleCreateRequest(params: any) {
-    const billEquipmentList: any = []
-    billEquipmentList.push(params.billEquipmentList)
-    const billApproveList: any = []
-    billApproveList.push(params.billApproveList)
-    const sendParams = []
-    sendParams.push({
-      ...params,
-      billMain: {
-        ...params.billMain,
-        departmentId: params.billMain.departmentName
-      },
-      billEquipmentList,
-      billApproveList
-    })
-    console.log('🚀 ~ sendParams', sendParams)
-    // const res: any = await handleSaveCheckApply(sendParams)
-    // if (res.code === 200) {
-    //   this.$message.success('发起申请成功')
-    //   this.requestDialogVisible = false;
-    //   (this.$refs.vexTable as any).findList(this.paramsConfig)
-    // }
   }
 
   /*****************************
@@ -271,74 +247,6 @@ export default class extends Vue {
     })
     if (res.result) {
       this.processRecordListData = res.data
-    }
-  }
-
-  /************************************
-   * 流程审批相关
-   *************************************/
-  public applyDeptData = []; // 科室
-  public nextNodeExecutorData = []; // 下一节点执行人
-  public applyDetailData = []; // 设备列表
-  public approvalDialogVisible = false; // 审批节点抽屉显隐
-  public clickProcessData: any = {}; // 当前操作流程节点信息
-  public emitHandleSubmit(value: boolean) {
-    this.approvalDialogVisible = false
-    if (value) {
-      (this.$refs.vexTable as any).findList(this.paramsConfig)
-    }
-  }
-
-  /**************************************************
-   * 获取科室数据 queryDepartmentInfoTree
-   * 获取节点信息 queryProcessCodeAndBhResData
-   * 获取人员权限列表 getUserListProcessCode
-   * 获取设备明细数据 queryEquipmentData
-   *************************************************/
-  public async queryProcessCodeAndBhResData(nodeSort: any) {
-    const nextCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
-      processCode: 'pro_kssq',
-      nodeSort: nodeSort + 1
-    })
-    if (nextCodeData.code === 200) {
-      // const { nodeName, nodeNameCode, roleTypeId } = nextCodeData.data
-      // this.equipmentProcessData = {
-      //   ...this.equipmentProcessData,
-      //   nextNodeName: nodeName,
-      //   nextNodeCode: nodeNameCode
-      // };
-    }
-  }
-
-  // 获取科室数据
-  private async queryDeptData() {
-    const res: any = await queryDepartmentInfoTree({})
-    if (res.code === 200 && res.data) {
-      this.applyDeptData = res.data[0].children
-    }
-  }
-
-  // 获取节点人员权限列表
-  private async queryUserListProcessCode(nodeSort: number) {
-    const nextNodeExecutorData: any = await getUserListProcessCode({
-      processCode: 'pro_kssq',
-      nodeSort: nodeSort + 1
-    })
-    if (nextNodeExecutorData.code === 200) {
-      this.nextNodeExecutorData = nextNodeExecutorData.data
-    }
-  }
-
-  // 根据科室类别获取设备
-  @Watch('equipmentProcessData.applyDept', { immediate: true })
-  private async queryEquipmentData() {
-    const res: any = await getEquipmentInfoByDepartmentId({
-      page: '1',
-      limit: '10',
-      entity: {}
-    })
-    if (res.code === 200) {
-      this.applyDetailData = res.data
     }
   }
 }

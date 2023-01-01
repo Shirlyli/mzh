@@ -1,39 +1,108 @@
+import ALL_OPTIONS from '@/shared/options'
+import { UserModule } from '@/store/modules/user'
+
 export const BasicFormList = [
   {
     field: 'projectName',
     title: '项目名称',
     span: 12,
-    itemRender: { name: '$input', props: { placeholder: '请输入名称' } }
+    type: 'input'
   },
   {
     field: 'purchaseType',
     title: '购置类别',
     span: 12,
-    itemRender: { name: '$input', props: { placeholder: '请输入购置类别' } }
+    type: 'input'
   },
   {
     field: 'applyDept',
     title: '申请科室',
     span: 12,
-    slots: { default: 'applyDept' }
+    type: 'select',
+    slot: 'department'
   },
   {
     field: 'applyPerson',
     title: '申请人',
     span: 12,
-    slots: { default: 'applyPerson' }
+    type: 'input',
+    data: UserModule.userData
   },
   {
     field: 'applyModle',
     title: '申请方式',
     span: 12,
-    itemRender: { name: '$input', props: { placeholder: '请输入申请方式' } }
+    type: 'input'
   },
   {
     field: 'applyReson',
     title: '申请理由',
     span: 12,
-    itemRender: { name: '$input', props: { placeholder: '请输入申请理由' } }
+    type: 'input'
+  }
+]
+
+// eslint-disable-next-line camelcase
+export const EquipmentDetailFormList = [
+  [
+    {
+      field: 'equipmentId',
+      title: '设备名称',
+      span: 12,
+      type: 'select',
+      slot: 'equipment'
+    },
+    {
+      field: 'barCode',
+      title: '规则型号',
+      span: 12,
+      type: 'input'
+    },
+    {
+      field: 'brand',
+      title: '设备品牌',
+      span: 12,
+      type: 'input'
+    }
+  ]
+]
+
+// eslint-disable-next-line camelcase
+export const ApprovalFormlist = [
+  {
+    field: 'approveUserName',
+    title: '审批人',
+    span: 12,
+    type: 'input'
+  },
+  {
+    field: 'approveTime',
+    title: '审批时间',
+    span: 12,
+    type: 'date'
+  },
+  {
+    field: 'approveOpinion',
+    title: '审批意见',
+    span: 12,
+    type: 'input'
+  },
+  {
+    field: 'approveStatus',
+    title: '审批状态',
+    span: 12,
+    type: 'select',
+    data: ALL_OPTIONS.APPROVE_STATUS
+  },
+  {
+    field: 'approveTier',
+    title: '审批层级',
+    span: 12,
+    type: 'select',
+    data: [
+      { label: '同意', value: '1' },
+      { label: '驳回', value: '0' }
+    ]
   }
 ]
 

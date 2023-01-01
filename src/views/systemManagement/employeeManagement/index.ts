@@ -18,6 +18,7 @@ import {
 import Content from './content.vue'
 import { VXETable } from 'vxe-table'
 import ALL_OPTIONS from '@/shared/options'
+import moment from 'moment'
 @Component({
   name: 'Tab',
   components: {
@@ -81,7 +82,7 @@ export default class extends Vue {
     { field: 'ePostState', title: '在职状态', width: 120 },
     { field: 'note', title: '备注', width: 120 },
     { field: 'dispindex', title: '排序', width: 120 },
-    { field: 'createtime', title: '创建时间', width: 120 },
+    { field: 'createtime', title: '创建时间', width: 120, formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     { field: 'sex', title: '性别', width: 120 },
     {
       width: 160,

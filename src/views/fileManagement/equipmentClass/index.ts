@@ -12,6 +12,7 @@ import _ from 'lodash'
 import { RESULT_DATA_TYPE } from '@/utils/index.type'
 // import { EquipmentInfoTypes } from './formlist/interface.type'
 import { BusinessViewModule } from '@/store/modules/business'
+import moment from 'moment'
 @Component({
   name: 'EquipmentCategory',
   components: {
@@ -73,7 +74,7 @@ export default class extends Vue {
     { field: 'userId', title: '申请人', width: 100 },
     { field: 'hospitalId', title: '所属医院', width: 100 },
     // { field: "purchaseId", title: "采购ID", width: 100 },
-    { field: 'createtime', title: '创建时间', width: 100 },
+    { field: 'createtime', title: '创建时间', width: 100, formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     { field: 'note', title: '备注', width: 100 },
     {
       width: 160,

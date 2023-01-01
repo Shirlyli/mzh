@@ -18,9 +18,13 @@ export default class extends Vue {
     sessionStorage.getItem('ClickProcessData') ?? '0'
   ); // 流程数据
 
-  public basicFormList = JSON.parse(
-    sessionStorage.getItem('BasicFormList') ?? '0'
+  public watchRequestForm = JSON.parse(
+    sessionStorage.getItem('RequestForm') ?? '0'
   ); // 流程表单配置数据columns
+
+  public requestParams: any = JSON.parse(
+    sessionStorage.getItem('RequestParams') ?? '0'
+  );
 
   public submitVisible = false; // 同意
   public backVisible = false; // 退回
@@ -285,5 +289,29 @@ export default class extends Vue {
     this.type = 'end'
     const { nextNodeCode } = this.$route.query
     this.queryCurrentCodeAndBhResData(nextNodeCode, 'end')
+  }
+
+  /**************************
+   * 附件上传
+   *************************/
+  public handleRemoveField(file: any, fileList: any) {
+    console.log(file, fileList)
+  }
+
+  public handlePreview(file: any) {
+    console.log(file)
+  }
+
+  public handleExceed(files: any, fileList: any) {
+    this.$message.warning(
+      `当前限制选择 3 个文件，本次选择了 ${
+        files.length
+      } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+    )
+  }
+
+  public beforeRemove(file: any, fileList: any) {
+    console.log('🚀 ~ fileList', fileList)
+    return this.$confirm(`确定移除 ${file.name}？`)
   }
 }

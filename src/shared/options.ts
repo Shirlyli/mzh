@@ -24,15 +24,15 @@ const ALL_OPTIONS = {
   // 菜单类型
   MENU_TYPES: [
     {
-      value: 1,
+      value: '1',
       label: '目录'
     },
     {
-      value: 2,
+      value: '2',
       label: '菜单'
     },
     {
-      value: 3,
+      value: '3',
       label: '按钮'
     }
   ],

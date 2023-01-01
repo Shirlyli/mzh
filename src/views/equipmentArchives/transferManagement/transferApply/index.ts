@@ -19,6 +19,7 @@ import {
   ApprovalFormlist
 } from './formColumns'
 import { UserModule } from '@/store/modules/user'
+import moment from 'moment'
 
 @Component({
   name: 'InlineEditTable',
@@ -79,9 +80,9 @@ export default class extends Vue {
     { field: 'billCode', title: '转科单号', width: 150 },
     { field: 'rollOutDepartment', title: '申请科室' },
     { field: 'userId', title: '申请人' },
-    { field: 'createTime', title: '申请日期' },
+    { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     { field: 'rollInDepartment', title: ' 转入科室 ' },
-    { field: 'rollOutTime', title: ' 转科日期' },
+    { field: 'rollOutTime', title: ' 转科日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     { field: 'cause', title: ' 转科原因 ' },
     { field: 'approveStatus', title: ' 审批状态 ' },
     {

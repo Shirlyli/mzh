@@ -1,16 +1,17 @@
 <template>
-  <div>
+  <div class="processRequest">
     <el-card>
       <div slot="header"
            class="clearfix">
         <span>流程申请</span>
         <div class="demo-drawer__footer">
-          <el-button size="large">
+          <el-button size="mini"
+                     @click="cancelProcess()">
             {{ $t('table.cancel') }}
           </el-button>
           <el-button type="primary"
-                     size="large"
-                     @click="createData()">
+                     size="mini"
+                     @click="createProcess()">
             {{ $t('table.confirm') }}
           </el-button>
         </div>
@@ -34,7 +35,7 @@
             <el-form-item :label="item.title"
                           prop="applyDetailId">
               <el-input v-model="requestParams.billMain[item.field]"
-                        placeholder="请输入"
+                        :placeholder="`请输入${item.title}`"
                         v-if="item.type === 'input'" />
               <el-select v-model="requestParams.billMain[item.field]"
                          v-if="item.type === 'select'"
@@ -57,7 +58,9 @@
         <!-- 设备明细 -->
         <div class="dividerBox">
           <el-divider direction="vertical"></el-divider>
-          <span>设备明细 <el-button @click="addNewEquipment">新增设备</el-button></span>
+          <span>设备明细 <el-button @click="addNewEquipment"
+                       size="mini"
+                       class="addBtn">+ 新增设备</el-button></span>
 
         </div>
         <el-row :gutter="24"
@@ -72,7 +75,7 @@
                 <el-form-item :label="equi.title"
                               prop="applyDetailId">
                   <el-input v-model="requestParams.billEquipmentList[index][equi.field]"
-                            placeholder="请输入"
+                            :placeholder="`请输入${equi.title}`"
                             v-if="equi.type === 'input'" />
                   <el-select v-model="requestParams.billEquipmentList[index][equi.field]"
                              v-if="equi.type === 'select'"
@@ -116,7 +119,7 @@
             <el-form-item :label="item.title"
                           prop="applyDetailId">
               <el-input v-model="requestParams.billApproveList[item.field]"
-                        placeholder="请输入"
+                        :placeholder="`请输入${item.title}`"
                         v-if="item.type === 'input'" />
               <el-select v-model="requestParams.billApproveList[item.field]"
                          v-if="item.type === 'select'"
@@ -147,6 +150,13 @@
 <style lang="scss" scoped>
 .el-select {
   width: 100%;
+}
+
+.el-card {
+  .el-card__body {
+    overflow-y: scroll;
+    height: 100%;
+  }
 }
 .dividerBox {
   margin: 12px 0 24px 0;
@@ -181,5 +191,9 @@
   .el-form-item {
     margin-bottom: 0pt;
   }
+}
+
+.addBtn {
+  float: right;
 }
 </style>

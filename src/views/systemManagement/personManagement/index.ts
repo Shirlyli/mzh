@@ -5,6 +5,7 @@ import VexTable from '@/components/VexTable/index.vue'
 import { Form } from 'element-ui'
 import _ from 'lodash'
 import { dealPersonalData, updatePersonalData } from '@/api/basic'
+import moment from 'moment'
 @Component({
   name: 'Tab',
   components: {
@@ -44,7 +45,7 @@ export default class extends Vue {
     { field: 'userStatus', title: '激活状态', width: 120 },
     { field: 'nation', title: '所属科室', width: 120 },
     { field: 'phoneNo', title: '所属角色', width: 120 },
-    { field: 'userCtime', title: '用户创建时间', width: 120 },
+    { field: 'userCtime', title: '用户创建时间', width: 120, formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     { field: 'userCtime', title: '修改时间', width: 120 },
     { field: 'userCtime', title: '密码修改时间', width: 120 },
     { field: 'userCtime', title: '解锁时间', width: 120 },

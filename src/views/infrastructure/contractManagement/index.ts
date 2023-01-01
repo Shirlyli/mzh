@@ -15,6 +15,7 @@ import {
   handleSupplierContractDel,
   handleSupplierContractUpdate
 } from '@/api/basic'
+import moment from 'moment'
 @Component({
   name: 'Tab',
   components: {
@@ -67,14 +68,14 @@ export default class extends Vue {
     { type: 'checkbox', width: 60 },
     { field: 'cName', title: '合同名称' },
     { field: 'cCode', title: '合同编码' },
-    { field: 'cSignDate', title: '签订日期' },
+    { field: 'cSignDate', title: '签订日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     { field: 'cEffective', title: '有效期限' },
     {
       field: 'cDefend',
       title: '经办人'
     },
     { field: 'cTotal', title: ' 合同总金额' },
-    { field: 'ctime', title: ' 创建时间' },
+    { field: 'ctime', title: ' 创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     { field: 'supplierId', title: '厂商ID' },
     { field: 'cAttahUrl', title: '附件' },
     { field: 'note', title: ' 排序' },

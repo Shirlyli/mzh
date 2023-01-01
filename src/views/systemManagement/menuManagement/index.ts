@@ -7,6 +7,8 @@ import { delMenuInfo, saveMenuInfo } from '@/api/basic'
 import _ from 'lodash'
 import AssociateRole from '@/components/associateRole/index.vue'
 import ALL_OPTIONS from '@/shared/options'
+import { FormatMIsavailable, FormatMType } from '@/utils/functions'
+import moment from 'moment'
 
 @Component({
   name: 'Tab',
@@ -60,17 +62,17 @@ export default class extends Vue {
     { type: 'checkbox', width: 60 },
     { field: 'mName', title: '名称', treeNode: true },
     { field: 'mCode', title: '编码' },
-    { field: 'mType', title: '菜单类型', formatter: this.formatMType },
+    { field: 'mType', title: '菜单类型', formatter: FormatMType },
     { field: 'mUrl', title: '菜单路由' },
     {
       field: 'mIsavailable',
       title: '是否启用',
-      formatter: this.formatMIsavailable
+      formatter: FormatMIsavailable
     },
     { field: 'note', title: '备注' },
-    { field: 'mMtime', title: '创建时间' },
+    { field: 'mMtime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     {
-      width: 260,
+      width: 150,
       title: '操作',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
@@ -139,20 +141,6 @@ export default class extends Vue {
 
   // 关联角色模态框显隐
   private isAssociateDialogVisible = false;
-
-  // 列表菜单类型数据回显
-  private formatMType(data: any) {
-    return _.find(this.options, ['value', data.cellValue])?.label
-  }
-
-  // 列表是否启用数据回显
-  private formatMIsavailable(data: any) {
-    return data.cellValue === '1'
-      ? '启用'
-      : data.cellValue === '0'
-        ? '不启用'
-        : '-'
-  }
 
   // 接收树形组件点击节点数据
   private handleNodeClick(data: any) {
