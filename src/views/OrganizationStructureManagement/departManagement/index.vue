@@ -34,6 +34,8 @@
     <!--  -->
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
                :visible="dialogVisible"
+               top="30px"
+               class="commonDialog"
                @close="dialogVisible = false">
       <!-- 主体区域 -->
       <el-form ref="dataForm"
@@ -41,67 +43,92 @@
                :model="departmentData"
                label-position="left"
                label-width="100px"
-               style="width: 400px; margin-left:50px;">
-        <el-form-item :label="'上级科室Id'"
-                      prop="parentId">
-          <el-input v-model="departmentData.parentId"
-                    placeholder="" readonly="readonly"></el-input>
-        </el-form-item>
-        <el-form-item :label="'上级科室'"
-                      prop="parentId">
-          <el-input v-model="departmentData.parentName"
-                    placeholder="请选择" readonly="readonly"></el-input>
-        </el-form-item>
-        <el-form-item :label="'科室名称'"
-                      prop="departmentName">
-          <el-input v-model="departmentData.departmentName"
-                    placeholder="请输入科室名称" />
-        </el-form-item>
-        <el-form-item :label="'科室编码'"
-                      prop="departmentCode">
-          <el-input v-model="departmentData.departmentCode"
-                    placeholder="自动生成"  readonly="readonly"/>
-        </el-form-item>
-        <el-form-item :label="'科室座机'"
-                      prop="departmentMobile">
-          <el-input v-model="departmentData.departmentMobile"
-                    placeholder="请输入科室座机" />
-        </el-form-item>
-
-        <el-form-item :label="'是否启用'"
-                      prop="departmentStatus">
-          <el-input v-model="departmentData.departmentStatus"
-                    placeholder="请输入是否启用" />
-        </el-form-item>
-        <el-form-item :label="'所在医院ID'"
-                      prop="companyInfoId" style="display: none;">
-          <el-input v-model="departmentData.companyInfoId"
-                    placeholder="请输入所在医院" />
-        </el-form-item>
-
-        <el-form-item :label="'所在医院'"
-                      prop="companyInfoName" >
-          <el-input v-model="departmentData.companyInfoName"
-                    placeholder="请输入所在医院" />
-        </el-form-item>
-
-        <el-form-item :label="'所在楼栋楼层'"
-                      prop="departmentDicid">
-          <el-input v-model="departmentData.departmentDicid"
-                    placeholder="请输入所在楼栋楼层" />
-        </el-form-item>
-        <el-form-item :label="'层级代码'"
-                      prop="xpath">
-          <el-input v-model="departmentData.xpath"
-                    placeholder="自动生成" readonly="readonly" />
-        </el-form-item>
-        <el-form-item :label="'备注'">
-          <el-input v-model="departmentData.note"
-                    :autosize="{minRows: 5, maxRows: 8}"
-                    type="textarea"
-                    placeholder="请输入备注" />
-        </el-form-item>
-
+               style="">
+        <el-row :gutter="20">
+          <!-- <el-col :span="12">
+            <el-form-item :label="'上级科室Id'"
+                          prop="parentId">
+              <el-input v-model="departmentData.parentId"
+                        placeholder=""
+                        readonly="readonly"></el-input>
+            </el-form-item>
+          </el-col> -->
+          <el-col :span="12">
+            <el-form-item :label="'上级科室'"
+                          prop="parentId">
+              <el-input v-model="departmentData.parentName"
+                        placeholder="请选择"
+                        readonly="readonly"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="'科室名称'"
+                          prop="departmentName">
+              <el-input v-model="departmentData.departmentName"
+                        placeholder="请输入科室名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="'科室编码'"
+                          prop="departmentCode">
+              <el-input v-model="departmentData.departmentCode"
+                        placeholder="自动生成"
+                        readonly="readonly" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="'科室座机'"
+                          prop="departmentMobile">
+              <el-input v-model="departmentData.departmentMobile"
+                        placeholder="请输入科室座机" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="'是否启用'"
+                          prop="departmentStatus">
+              <el-input v-model="departmentData.departmentStatus"
+                        placeholder="请输入是否启用" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="'所在医院ID'"
+                          prop="companyInfoId"
+                          style="display: none;">
+              <el-input v-model="departmentData.companyInfoId"
+                        placeholder="请输入所在医院" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="'所在医院'"
+                          prop="companyInfoName">
+              <el-input v-model="departmentData.companyInfoName"
+                        placeholder="请输入所在医院" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="'所在楼栋楼层'"
+                          prop="departmentDicid">
+              <el-input v-model="departmentData.departmentDicid"
+                        placeholder="请输入所在楼栋楼层" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="'层级代码'"
+                          prop="xpath">
+              <el-input v-model="departmentData.xpath"
+                        placeholder="自动生成"
+                        readonly="readonly" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item :label="'备注'">
+              <el-input v-model="departmentData.note"
+                        :autosize="{minRows: 5, maxRows: 8}"
+                        type="textarea"
+                        placeholder="请输入备注" />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
 
       <!-- 底部操作 -->
@@ -123,7 +150,7 @@
 </script>
 
 <style lang="scss" scoped>
-  .tab-container {
-    margin: 30px;
-  }
+.tab-container {
+  margin: 30px;
+}
 </style>

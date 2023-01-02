@@ -1,6 +1,7 @@
 <template>
   <div>
     <vxe-grid ref="xGrid"
+              size="mni"
               v-bind="gridOptions"
               :loading="loading"
               :data="tableData"
@@ -12,12 +13,15 @@
       <!-- 自定义工具栏 -->
       <template #toolbar_buttons>
         <vxe-button @click="insertEvent"
+                    size="mini"
                     v-if="toolbarBtns.includes('add')"
                     status="primary">新增</vxe-button>
         <vxe-button @click="groupRemove"
+                    size="mini"
                     v-if="toolbarBtns.includes('delete')"
                     status="warning">批量删除</vxe-button>
         <vxe-button @click="associateRole"
+                    size="mini"
                     v-if="hasAssociate">关联角色</vxe-button>
         <!-- <vxe-button @click="$refs.xGrid.exportData()"
                     v-if="toolbarBtns.includes('import')">导入</vxe-button>
@@ -127,7 +131,11 @@ export default class extends Vue {
       // 设置复选框支持分页勾选，需要设置 rowId 行数据主键
       reserve: true
     },
-    formConfig: this.formConfig ?? {},
+    formConfig: {
+      ...this.formConfig,
+      titleWidth: 100,
+      titleAlign: 'right'
+    } ?? {},
     columns: this.columns // 列表项数据
   }
 

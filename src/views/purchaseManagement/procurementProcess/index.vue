@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="personalCard">
     <main-sub-layout class="main-wrapper rule-config-page">
       <template #left>
         <el-card>
@@ -38,6 +38,8 @@
     <!-- 新增模态框 -->
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
                :visible="dialogVisible"
+               top="30px"
+               class="commonDialog"
                @close="dialogVisible = false">
       <!-- 主体区域 -->
       <el-form ref="dataForm"

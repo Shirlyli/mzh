@@ -41,6 +41,7 @@
     <el-dialog title="操作记录"
                width="80%"
                top="30px"
+               class="commonDialog"
                :visible="processRecordDialogVisible"
                @close="processRecordDialogVisible = false">
       <div class="contentBox">

@@ -27,20 +27,23 @@ export default class extends Vue {
       {
         field: 'name',
         title: '名称',
+        span: 8,
         itemRender: { name: '$input', props: { placeholder: '请输入名称' } }
       },
       {
         field: 'sex',
         title: '菜单路由',
+        span: 8,
         itemRender: { name: '$input', props: { placeholder: '请输入菜单路由' } }
       },
       {
         field: 'time',
         title: '权限标识',
+        span: 8,
         itemRender: { name: '$input', props: { placeholder: '请输入权限标识' } }
       },
-      { field: 'time', title: '创建时间', slots: { default: 'create_time' } },
-      { slots: { default: 'operate_item' } }
+      { field: 'time', title: '创建时间', slots: { default: 'create_time' }, span: 8, folding: true },
+      { slots: { default: 'operate_item' }, span: 24, align: 'center', collapseNode: true }
     ] // 表单项
   };
 

@@ -17,11 +17,18 @@
     text-align: right;
 }
 
+// 
 .personalCard {
+    .el-card {
+        height: calc(100vh - 106px);
+    }
     .el-card__body {
         height: 100%;
         overflow-y: scroll;
-        padding-bottom: 80px;
+        padding: 10px 20px;
+    }
+    .el-tree {
+        padding-bottom: 60px;
     }
 }
 
@@ -40,16 +47,19 @@
     }
 }
 
-.vxe-table {
-    height: calc(100vh - 400px);
+// 设置列表样式
+.personalCard .vxe-table {
+    height: calc(100vh - 370px);
 }
 
-.vxe-table--main-wrapper {
-    height: calc(100vh - 350px);
-}
-
-.el-card {
-    height: calc(100vh - 110px);
+// 设置查询项超过两行的列表项
+.equipmentManagement {
+    .vxe-table--main-wrapper {
+        height: calc(100vh - 350px);
+    }
+    .vxe-table {
+        height: calc(100vh - 410px);
+    }
 }
 
 // 展开收起按钮样式
@@ -63,6 +73,7 @@
     margin-bottom: 10px;
 }
 
+// 抽屉样式
 .el-drawer__body {
     padding: 0 24px;
     overflow-y: scroll;
@@ -70,4 +81,9 @@
 
 .el-date-editor.el-input {
     width: 100%
+}
+
+// 模态框样式调整
+.commonDialog .el-dialog__body {
+    padding: 10px
 }

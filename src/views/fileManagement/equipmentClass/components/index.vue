@@ -2,6 +2,7 @@
   <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
              :visible.sync="showDialogVisible"
              top="30px"
+             class="commonDialog"
              width="80%"
              @close="handleCloseDialog">
     <el-form ref="dataForm"

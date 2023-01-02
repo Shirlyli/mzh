@@ -35,6 +35,8 @@
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
                :visible="dialogVisible"
                @close="dialogVisible = false"
+               top="30px"
+               class="commonDialog"
                width="80%">
       <el-form ref="empolyeeForm"
                :rules="empolyeeRules"
@@ -216,6 +218,8 @@
     <el-dialog :title="personalEditTitle"
                :visible="personalDialogVisible"
                @close="personalDialogVisible = false"
+               top="30px"
+               class="commonDialog"
                width="80%">
       <el-form ref="personalForm"
                :rules="personalRules"
@@ -327,6 +331,8 @@
     <el-dialog title="关联角色"
                :visible="roleDialogVisible"
                @close="roleDialogVisible = false"
+               top="30px"
+               class="commonDialog"
                width="80%"
                height="80%">
       <div class="roleBox">

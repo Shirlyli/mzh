@@ -25,11 +25,12 @@ export default class extends Vue {
     items: [
       {
         field: 'name',
+        span: 8,
         title: '科室名称',
         itemRender: { name: '$input', props: { placeholder: '请输入科室名称' } }
       },
-      { field: 'time', title: '创建时间', slots: { default: 'create_time' } },
-      { slots: { default: 'operate_item' } }
+      { field: 'time', span: 8, title: '创建时间', slots: { default: 'create_time' } },
+      { span: 24, slots: { default: 'operate_item' } }
     ] // 表单项
   };
 

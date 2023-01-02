@@ -34,6 +34,7 @@ export default class extends Vue {
       {
         field: 'name',
         title: '厂商名称',
+        span: 6,
         itemRender: {
           name: '$input',
           props: { placeholder: '请输入厂商名称' }
@@ -42,12 +43,14 @@ export default class extends Vue {
       },
       {
         field: 'nameAbbreviation',
+        span: 6,
         title: '简称',
         itemRender: { name: '$input', props: { placeholder: '请输入简称' } },
         resetValue: ''
       },
       {
         field: 'taxId',
+        span: 6,
         title: '纳税识别号',
         itemRender: {
           name: '$input',
@@ -57,6 +60,7 @@ export default class extends Vue {
       },
       {
         field: 'suppliesType',
+        span: 6,
         title: '厂商类型',
         itemRender: {
           name: '$select',
@@ -67,6 +71,8 @@ export default class extends Vue {
       },
       {
         field: 'runningState',
+        span: 6,
+        folding: true,
         title: '运营状态',
         itemRender: {
           name: '$select',
@@ -77,11 +83,13 @@ export default class extends Vue {
       },
       {
         field: 'domicile',
+        span: 6,
+        folding: true,
         title: '注册地',
         itemRender: { name: '$input', props: { placeholder: '请输入注册地' } },
         resetValue: ''
       },
-      { slots: { default: 'operate_item' } }
+      { slots: { default: 'operate_item' }, span: 24, collapseNode: true, align: 'center' }
     ] // 表单项
   };
 

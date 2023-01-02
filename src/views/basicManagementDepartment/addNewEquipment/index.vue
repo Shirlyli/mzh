@@ -34,6 +34,8 @@
     <!--  -->
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
                :visible="dialogVisible"
+               top="30px"
+               class="commonDialog"
                @close="dialogVisible = false">
       <!-- 主体区域 -->
       <el-form ref="dataForm"
@@ -41,7 +43,7 @@
                :model="departmentData"
                label-position="left"
                label-width="100px"
-               style="width: 400px; margin-left:50px;">
+               style="width: 400px;">
         <el-form-item :label="'上级科室'"
                       prop="parentId">
           <el-input v-model="departmentData.parentName"

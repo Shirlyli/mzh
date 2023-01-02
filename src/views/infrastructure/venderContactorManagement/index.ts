@@ -37,6 +37,7 @@ export default class extends Vue {
       {
         field: 'linkId',
         title: '关联厂商id',
+        span: 6,
         itemRender: {
           name: '$select',
           props: { placeholder: '请选择' },
@@ -51,6 +52,7 @@ export default class extends Vue {
       {
         field: 'lImportant',
         title: '重要程度',
+        span: 6,
         itemRender: {
           name: '$select',
           props: { placeholder: '请选择' },
@@ -61,6 +63,7 @@ export default class extends Vue {
       {
         field: 'lName',
         title: '联系人名字',
+        span: 6,
         itemRender: {
           name: '$input',
           props: { placeholder: '请输入联系人名字' }
@@ -70,6 +73,7 @@ export default class extends Vue {
       {
         field: 'lPosition',
         title: '公司职务',
+        span: 6,
         itemRender: {
           name: '$input',
           props: { placeholder: '请输入公司职务' }
@@ -79,13 +83,15 @@ export default class extends Vue {
       {
         field: 'lTelphone',
         title: '电话',
+        span: 6,
+        folding: true,
         itemRender: {
           name: '$input',
           props: { placeholder: '请输入电话' }
         },
         resetValue: ''
       },
-      { slots: { default: 'operate_item' } }
+      { slots: { default: 'operate_item' }, span: 24, collapseNode: true, align: 'center' }
     ] // 表单项
   };
 

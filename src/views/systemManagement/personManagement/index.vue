@@ -35,6 +35,8 @@
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
                :visible="dialogVisible"
                @close="handleDialogClose"
+               top="30px"
+               class="commonDialog"
                width="80%">
       <el-form ref="dataForm"
                :rules="rules"

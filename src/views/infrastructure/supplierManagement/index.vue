@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="equipmentManagement">
     <el-card>
       <div slot="header"
            class="clearfix">
@@ -17,6 +17,8 @@
     <!-- 模态框区域 -->
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
                :visible="dialogVisible"
+               top="30px"
+               class="commonDialog"
                @close="handleDialogClose">
       <el-form ref="dataForm"
                :rules="rules"
@@ -43,7 +45,7 @@
                        :key="item.value"
                        :label="item.label"
                        :value="item.value">
-              </el-option>
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label="'资产性质'"

@@ -36,7 +36,9 @@
 
     <!-- 新增模态框 -->
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
-               :visible.sync="dialogVisible">
+               :visible.sync="dialogVisible"
+               top="30px"
+               class="commonDialog">
       <el-form ref="dataForm"
                :rules="rules"
                :model="equipmentCategoryData"

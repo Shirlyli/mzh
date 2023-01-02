@@ -41,8 +41,8 @@ export default {
 .wrapper {
   display: flex;
   justify-content: space-between;
-  padding: 16px 24px;
-  height: calc(100vh - 400px);
+  padding: 16px;
+  height: calc(100vh - 88px);
   &-left {
     width: 260px;
     background: #fff;

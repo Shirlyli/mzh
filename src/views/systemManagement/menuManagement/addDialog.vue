@@ -1,6 +1,8 @@
 <template>
   <div>
     <el-dialog :title="'新建'"
+               top="30px"
+               class="commonDialog"
                :visible.sync="dialogFormVisible">
       <el-form ref="dataForm"
                :rules="rules"

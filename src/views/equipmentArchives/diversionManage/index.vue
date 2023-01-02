@@ -218,7 +218,8 @@
                 :limit.sync="listQuery.limit"
                 @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]"
+    <el-dialog :title="textMap[dialogStatus]" top="30px"
+               class="commonDialog"
                :visible.sync="dialogFormVisible">
       <el-form ref="dataForm"
                :rules="rules"

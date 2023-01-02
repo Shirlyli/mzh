@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="personalCard">
     <el-card>
       <div slot="header"
            class="clearfix">
@@ -43,6 +43,7 @@ export default class extends Vue {
       {
         field: 'lOptModual',
         title: '模块名',
+        span: 12,
         itemRender: {
           name: '$input',
           props: { placeholder: '请输入医院名称' }
@@ -51,6 +52,7 @@ export default class extends Vue {
       {
         field: 'lMethod',
         title: '请求方法',
+        span: 12,
         itemRender: {
           name: '$input',
           props: { placeholder: '请输入医院名称' }
@@ -59,9 +61,10 @@ export default class extends Vue {
       {
         field: 'lOptAct',
         title: '操作动作',
+        span: 12,
         slots: { default: 'create_time' }
       },
-      { slots: { default: 'operate_item' } }
+      { slots: { default: 'operate_item' }, span: 12 }
     ] // 表单项  }
   }
 
@@ -73,7 +76,11 @@ export default class extends Vue {
     { field: 'lUri', title: ' Url' },
     { field: 'lIp', title: ' IP' },
     { field: 'lMethod', title: '请求方法' },
-    { field: 'createTime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    {
+      field: 'createTime',
+      title: '创建时间',
+      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+    },
     {
       width: 180,
       title: '操作',
