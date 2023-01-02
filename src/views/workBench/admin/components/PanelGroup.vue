@@ -1,121 +1,26 @@
 <template>
-  <el-row
-    :gutter="40"
-    class="panel-group"
-  >
-    <el-col
-      :xs="12"
-      :sm="12"
-      :lg="6"
-      class="card-panel-col"
-    >
-      <div
-        class="card-panel"
-        @click="handleSetLineChartData('newVisitis')"
-      >
+  <el-row :gutter="40"
+          class="panel-group">
+    <el-col :xs="12"
+            :sm="12"
+            :lg="6"
+            class="card-panel-col"
+            v-for="(item,index) in groupData"
+            :key="index">
+      <div class="card-panel"
+           @click="handleSetLineChartData('newVisitis')">
         <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon
-            name="peoples"
-            class="card-panel-icon"
-          />
+          <svg-icon :name="item.svgType"
+                    class="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            New Visits
+            {{ item.title }}
           </div>
-          <count-to
-            :start-val="0"
-            :end-val="102400"
-            :duration="2600"
-            class="card-panel-num"
-          />
-        </div>
-      </div>
-    </el-col>
-    <el-col
-      :xs="12"
-      :sm="12"
-      :lg="6"
-      class="card-panel-col"
-    >
-      <div
-        class="card-panel"
-        @click="handleSetLineChartData('messages')"
-      >
-        <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon
-            name="message"
-            class="card-panel-icon"
-          />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            Messages
-          </div>
-          <count-to
-            :start-val="0"
-            :end-val="81212"
-            :duration="3000"
-            class="card-panel-num"
-          />
-        </div>
-      </div>
-    </el-col>
-    <el-col
-      :xs="12"
-      :sm="12"
-      :lg="6"
-      class="card-panel-col"
-    >
-      <div
-        class="card-panel"
-        @click="handleSetLineChartData('purchases')"
-      >
-        <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon
-            name="money"
-            class="card-panel-icon"
-          />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            Purchases
-          </div>
-          <count-to
-            :start-val="0"
-            :end-val="9280"
-            :duration="3200"
-            class="card-panel-num"
-          />
-        </div>
-      </div>
-    </el-col>
-    <el-col
-      :xs="12"
-      :sm="12"
-      :lg="6"
-      class="card-panel-col"
-    >
-      <div
-        class="card-panel"
-        @click="handleSetLineChartData('shoppings')"
-      >
-        <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon
-            name="shopping"
-            class="card-panel-icon"
-          />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            Shoppings
-          </div>
-          <count-to
-            :start-val="0"
-            :end-val="13600"
-            :duration="3600"
-            class="card-panel-num"
-          />
+          <count-to :start-val="0"
+                    :end-val="item.count"
+                    :duration="2600"
+                    class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -125,6 +30,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import CountTo from 'vue-count-to'
+import { queryHomeProcessBusinessList } from '@/api/basic'
 
 @Component({
   name: 'PanelGroup',
@@ -133,8 +39,31 @@ import CountTo from 'vue-count-to'
   }
 })
 export default class extends Vue {
-  private handleSetLineChartData(type: string) {
+  public handleSetLineChartData(type: string) {
     this.$emit('handle-set-line-chart-data', type)
+  }
+
+  created() {
+    this.queryHomeProcessBusinessListData()
+  }
+
+  public groupData = [
+    { svgType: 'peoples', count: 4, title: '代审批' },
+    { svgType: 'message', count: 81212, title: 'message' },
+    { svgType: 'money', count: 9280, title: 'money' },
+    { svgType: 'shopping', count: 13600, title: 'Shoppings' }
+  ]
+
+  // TODO:
+  private async queryHomeProcessBusinessListData() {
+    const res: any = await queryHomeProcessBusinessList({
+      page: '1',
+      limit: '20',
+      nextNodeState: '待审核'
+    })
+    if (res.code === 200) {
+      console.log(res)
+    }
   }
 }
 </script>
@@ -155,8 +84,8 @@ export default class extends Vue {
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-    border-color: rgba(0, 0, 0, .05);
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
 
     &:hover {
       .card-panel-icon-wrapper {
@@ -164,7 +93,7 @@ export default class extends Vue {
       }
 
       .icon-people {
-         background: #40c9c6;
+        background: #40c9c6;
       }
 
       .icon-message {
@@ -176,7 +105,7 @@ export default class extends Vue {
       }
 
       .icon-shopping {
-        background: #34bfa3
+        background: #34bfa3;
       }
     }
 
@@ -193,7 +122,7 @@ export default class extends Vue {
     }
 
     .icon-shopping {
-      color: #34bfa3
+      color: #34bfa3;
     }
 
     .card-panel-icon-wrapper {
@@ -229,7 +158,7 @@ export default class extends Vue {
   }
 }
 
-@media (max-width:550px) {
+@media (max-width: 550px) {
   .card-panel-description {
     display: none;
   }

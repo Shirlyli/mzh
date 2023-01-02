@@ -498,3 +498,14 @@ export const getEquipmentData = (data: any) =>
     method: 'POST',
     data
   })
+
+/**
+ * 获取首页代办件
+ * hospitalProcessBusiness/queryHomeProcessBusinessList
+ */
+export const queryHomeProcessBusinessList = (data: any) =>
+  request({
+    url: '/hospitalProcessBusiness/queryHomeProcessBusinessList',
+    method: 'POST',
+    data
+  })

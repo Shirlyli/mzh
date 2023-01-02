@@ -61,6 +61,7 @@
 </template>
 
 <script lang="ts">
+import { queryHomeProcessBusinessList } from '@/api/basic'
 import { Component, Vue } from 'vue-property-decorator'
 import Todo, { ITodo } from './Todo.vue'
 
@@ -109,6 +110,26 @@ export default class extends Vue {
 
   get remaining() {
     return this.todos.filter(todo => !todo.done).length
+  }
+
+  created() {
+    this.queryHomeProcessBusinessListData()
+  }
+
+  private async queryHomeProcessBusinessListData() {
+    const res: any = await queryHomeProcessBusinessList({
+      page: '1',
+      limit: '20',
+      nextNodeState: '待审核'
+    })
+    if (res.code === 200) {
+      console.log(res)
+      this.todos = res.data.map((item:any) => {
+        return {
+          text: item.businessDescription, done: false
+        }
+      })
+    }
   }
 
   private setLocalStorage() {
@@ -161,8 +182,8 @@ export default class extends Vue {
   font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
   color: #4d4d4d;
-  min-width: 230px;
-  max-width: 550px;
+  // min-width: 230px;
+  // max-width: 550px;
   margin: 0 auto ;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
