@@ -6,7 +6,8 @@ export const BasicFormList = [
     field: 'projectName',
     title: '项目名称',
     span: 12,
-    type: 'input'
+    type: 'input',
+    required: true
   },
   {
     field: 'purchaseType',
@@ -19,13 +20,15 @@ export const BasicFormList = [
     title: '申请科室',
     span: 12,
     type: 'select',
-    slot: 'department'
+    slot: 'department',
+    required: true
   },
   {
     field: 'applyPerson',
     title: '申请人',
     span: 12,
     type: 'input',
+    required: true,
     data: UserModule.userData
   },
   {
@@ -38,7 +41,8 @@ export const BasicFormList = [
     field: 'applyReson',
     title: '申请理由',
     span: 12,
-    type: 'input'
+    type: 'input',
+    required: true
   }
 ]
 
@@ -50,6 +54,7 @@ export const EquipmentDetailFormList = [
       title: '设备名称',
       span: 12,
       type: 'select',
+      required: true,
       slot: 'equipment'
     },
     {
@@ -73,19 +78,22 @@ export const ApprovalFormlist = [
     field: 'approveUserName',
     title: '审批人',
     span: 12,
-    type: 'input'
+    type: 'input',
+    required: true
   },
   {
     field: 'approveTime',
     title: '审批时间',
     span: 12,
-    type: 'date'
+    type: 'date',
+    required: true
   },
   {
     field: 'approveOpinion',
     title: '审批意见',
     span: 12,
-    type: 'input'
+    type: 'input',
+    required: true
   },
   {
     field: 'approveStatus',
@@ -99,6 +107,7 @@ export const ApprovalFormlist = [
     title: '审批层级',
     span: 12,
     type: 'select',
+    required: true,
     data: [
       { label: '同意', value: '1' },
       { label: '驳回', value: '0' }
@@ -163,30 +172,3 @@ const aaa = [
     slots: { default: 'operator' }
   }
 ]
-
-const bbb = {
-  projectName: '项目名称aaa',
-  purchaseType: '购置类别',
-  applyDept: '申请科室',
-  applyPerson: '申请人',
-  applyModle: '申请方式',
-  applyReson: '申请理由',
-  applyDetailId: '申请设备明细id',
-  enclosureId: '附件id',
-  applyTime: null,
-  processCode: 'pro_kssp',
-  currentNodeName: '科室申请',
-  currentNodeCode: 'kssq',
-  nextNodeName: '科室审批',
-  nextNodeCode: 'kssp',
-  nextNodeExecutor: '0D0228B583E85D-949F-47CF-B9DA-BC532A206EF4',
-  auditStatus: '审核通过',
-  auditReason: '审核结论',
-  delState: '否',
-  ksspPerson: '科室审批人',
-  ksspTime: null,
-  ksspReason: '科室审批结论',
-  yzspPerson: '院长审批人',
-  yzspTime: null,
-  yzspReason: '院长审批结论'
-}

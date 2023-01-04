@@ -16,8 +16,8 @@
           </el-button>
         </div>
       </div>
-      <el-form ref="dataForm"
-               :rules="{}"
+      <el-form ref="requestParams"
+               :rules="rules"
                :model="requestParams"
                label-position="left"
                label-width="80px"
@@ -33,7 +33,8 @@
                   v-for="(item,index) in watchRequestForm.billMain"
                   :key="index">
             <el-form-item :label="item.title"
-                          prop="applyDetailId">
+                          :prop="'billMain['+item.field+']'"
+                          :rules="item.required ? [{required: true, message: '不能为空', trigger: 'change'}]:[{required: false}]">
               <el-input v-model="requestParams.billMain[item.field]"
                         :placeholder="`请输入${item.title}`"
                         v-if="item.type === 'input'" />
@@ -73,7 +74,8 @@
                       v-for="(equi) in item"
                       :key="equi.field">
                 <el-form-item :label="equi.title"
-                              prop="applyDetailId">
+                              :prop="'billEquipmentList['+index+']['+equi.field+']'"
+                              :rules="equi.required ?[{required: true,message: '不能为空',trigger: 'change'}]:[{required: false}]">
                   <el-input v-model="requestParams.billEquipmentList[index][equi.field]"
                             :placeholder="`请输入${equi.title}`"
                             v-if="equi.type === 'input'" />
@@ -117,7 +119,8 @@
                   v-for="(item,index) in watchRequestForm.billApproveList"
                   :key="index">
             <el-form-item :label="item.title"
-                          prop="applyDetailId">
+                          :prop="'billApproveList['+item.field+']'"
+                          :rules="item.required ? [{required: true, message: '不能为空', trigger: 'change'}]:[{required: false}]">
               <el-input v-model="requestParams.billApproveList[item.field]"
                         :placeholder="`请输入${item.title}`"
                         v-if="item.type === 'input'" />

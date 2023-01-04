@@ -58,11 +58,13 @@ export default class extends Vue {
       {
         field: 'approveStatus',
         title: '任务名称',
+        span: 8,
         itemRender: { name: '$input', props: { placeholder: '请输入任务名称' } }
       },
       {
         field: 'rollOutDepartment',
         title: '制单科室',
+        span: 8,
         itemRender: {
           name: '$select',
           props: { placeholder: '请选择' },
@@ -72,6 +74,7 @@ export default class extends Vue {
       {
         field: 'rollOutDepartment',
         title: '盘点状态',
+        span: 8,
         itemRender: {
           name: '$select',
           props: { placeholder: '请选择' },
@@ -81,9 +84,10 @@ export default class extends Vue {
       {
         field: 'cteaterTime',
         title: '创建时间',
+        span: 10,
         slots: { default: 'create_time' }
       },
-      { slots: { default: 'operate_item' } }
+      { slots: { default: 'operate_item' }, span: 8 }
     ] // 表单项
   };
 

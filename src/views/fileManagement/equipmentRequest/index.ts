@@ -152,7 +152,9 @@ export default class extends Vue {
       rollOutTime: '',
       cause: '',
       status: '',
-      billCode: ''
+      billCode: '',
+      projectName: '', //* 项目名称 /
+      purchaseType: '' // 购置类别 /
     },
     billEquipmentList: [
       {

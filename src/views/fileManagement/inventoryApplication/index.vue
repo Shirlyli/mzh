@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="equipmentManagement">
     <!-- 列表区域 -->
     <el-card>
       <div slot="header"

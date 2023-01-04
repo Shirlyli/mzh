@@ -23,7 +23,7 @@ import moment from 'moment'
   }
 })
 export default class extends Vue {
-  private treeParams = {
+  public treeParams = {
     page: '1',
     limit: '10',
     entity: {
@@ -31,10 +31,10 @@ export default class extends Vue {
     }
   }; // 树形图传参
 
-  private nodeClickData: any = {}; // 点击左侧科室数据
-  private url = 'THospitalDepartmentInfo/queryTree'; // 左侧字典
+  public nodeClickData: any = {}; // 点击左侧科室数据
+  public url = 'THospitalDepartmentInfo/queryTree'; // 左侧字典
 
-  private formConfig = {
+  public formConfig = {
     data: {
       name: '',
       createtime: ''
@@ -54,7 +54,7 @@ export default class extends Vue {
     ] // 表单项
   }; // 查询配置
 
-  private columns = [
+  public columns = [
     { type: 'seq', width: 60, fixed: 'left' },
     { type: 'checkbox', width: 60, fixed: 'left' },
     { field: 'name', title: '设备名称', treeNode: true, width: 140 },
@@ -85,7 +85,7 @@ export default class extends Vue {
     }
   ]; // 列表配置项
 
-  private equipmentCategoryData: any = {
+  public equipmentCategoryData: any = {
     id: '',
     state: 1,
     equipmentVO: {
@@ -190,15 +190,15 @@ export default class extends Vue {
       ]
     },
     equipmentStores: {
-      departmentId: '3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169',
-      boundTime: '2021-12-31T16:00:00',
-      boundType: '入库',
-      bounder: '50B978FC6A069E-A0F3-4481-96C7-BD45AEC295EC',
+      departmentId: '',
+      boundTime: '',
+      boundType: '',
+      bounder: '',
       receivePerson: '',
-      boundNums: '10',
-      beforeBoundNum: '0',
-      afterBoundNum: '10',
-      note: '入库'
+      boundNums: '',
+      beforeBoundNum: '',
+      afterBoundNum: '',
+      note: ''
     },
     // {
     //   id: "",
@@ -253,9 +253,8 @@ export default class extends Vue {
     }
   }; // 设备新增或编辑表单
 
-  private dialogVisible = false; // 新增模态框
-  private dialogStatus = 'create'; // 模态框新增或修改
-  private paramsConfig: any = {
+  public dialogStatus = 'create'; // 模态框新增或修改
+  public paramsConfig: any = {
     url: 'equipment/getEquipmentInfo',
     searchByDepartmentIdUrl: 'equipment/getEquipmentInfoByDepartMentId', // 通过科室id查询数据
     params: {
@@ -265,29 +264,12 @@ export default class extends Vue {
     }
   }; // 根据表单查询项查询数据
 
-  // private formatterValue(data: any) {}
-  // 新增设备
-  private handleInsert() {
-    if (!this.nodeClickData.id) {
-      Message.error('请选中科室后新增')
-      return
-    }
-    this.dialogVisible = true
-    this.dialogStatus = 'create'
-    const { id } = this.nodeClickData
-    this.equipmentCategoryData = {
-      ...this.equipmentCategoryData,
-      equipmentVO: {
-        ...this.equipmentCategoryData.equipmentVO,
-        departmentId: id
-      }
-    }
-  }
-
-  // 接收树形组件点击节点数据
-  private handleNodeClick(data: any) {
+  /**
+   * 接收树形组件点击节点数据
+   * @param data
+   */
+  public handleNodeClick(data: any) {
     this.nodeClickData = data
-    // 查询科室及下级科室 /api/common/dicInfo/querySelfAndPar
     this.paramsConfig = {
       url: 'equipment/getEquipmentInfo',
       params: {
@@ -300,8 +282,33 @@ export default class extends Vue {
     }
   }
 
-  // 触发编辑事件
-  private async handleUpdate(row: any) {
+  /**
+   * 新增设备
+   * @returns
+   */
+  public handleInsert() {
+    if (!this.nodeClickData.id) {
+      Message.error('请选中科室后新增')
+      return
+    }
+    this.dialogStatus = 'create'
+    const { id } = this.nodeClickData
+    this.equipmentCategoryData = {
+      ...this.equipmentCategoryData,
+      equipmentVO: {
+        ...this.equipmentCategoryData.equipmentVO,
+        departmentId: id
+      }
+    }
+    sessionStorage.setItem('EquipmentCategoryData', JSON.stringify(this.equipmentCategoryData))
+    this.$router.push({ path: '/equipmentAddOrUpdate', query: { dialogStatus: this.dialogStatus, type: '新增' } })
+  }
+
+  /**
+   * 触发编辑事件
+   * @param row
+   */
+  public async handleUpdate(row: any) {
     const {
       equipmentDepreciations,
       equipmentInspection,
@@ -326,14 +333,17 @@ export default class extends Vue {
       equipmentStores: { ...equipmentStores[0] },
       equipmentVO
     }
-
     this.dialogStatus = 'update'
-    this.dialogVisible = true
+    sessionStorage.setItem('EquipmentCategoryData', JSON.stringify(this.equipmentCategoryData))
+    this.$router.push({ path: '/equipmentAddOrUpdate', query: { dialogStatus: this.dialogStatus, type: '修改' } })
     await BusinessViewModule.GET_EQUIPMENT_DATA(row.equipmentVO?.departmentId, 1, 10)
   }
 
-  // 删除设备
-  private async handleRemove(row: any) {
+  /**
+   * 删除设备
+   * @param row
+   */
+  public async handleRemove(row: any) {
     let params = []
     if (Array.isArray(row)) {
       const res = _.map(row, function(o) {
@@ -354,9 +364,11 @@ export default class extends Vue {
     Message.success('删除成功')
   }
 
-  // 点击查看按钮接收数据事件
-  private async handleSearchForDetail(row: any) {
-    this.dialogVisible = true
+  /**
+   * 点击查看按钮接收数据事件
+   * @param row
+   */
+  public async handleSearchForDetail(row: any) {
     this.dialogStatus = 'update'
     const res:
       | RESULT_DATA_TYPE
@@ -370,191 +382,5 @@ export default class extends Vue {
     if (res.result) {
       console.log('🚀 ~ handleSearchForDetail ~ res', res.data)
     }
-  }
-
-  private clearForm() {
-    this.equipmentCategoryData = {
-      id: '',
-      state: 1,
-      equipmentVO: {
-        name: '',
-        createtime: '',
-        departmentId: '',
-        marking: '',
-        brand: '',
-        origin: '',
-        equipmentCategoryId: '',
-        activationTime: '',
-        guarantee: '',
-        hospitalId: '',
-        manufactorId: '',
-        equipmentStates: '',
-        idCode: '',
-        price: '',
-        batchNumber: '',
-        registrationCertificat: '',
-        productionName: '',
-        productionTime: '',
-        validity: '',
-        region: '',
-        purchaseTime: '',
-        isExordium: '',
-        meterings: '',
-        source: '',
-        isMetering: '',
-        meteringTime: '',
-        meteringType: '',
-        isEmergency: '',
-        isFixedassets: '',
-        isSpecial: '',
-        fixedassetsType: '',
-        intakeDate: '',
-        financialNo: '',
-        equipmentLocation: '',
-        fixedAssetsNo: '',
-        recordNo: '',
-        unit: '',
-        equipmentPrincipal: '',
-        barCodeNo: '',
-        img: '',
-        scoringGuideUrl: '',
-        qrcode: '',
-        barCode: ''
-      },
-      equipmentMaintain: {
-        lastMaintainTime: '',
-        nextMaintainTime: null,
-        cost: '',
-        createtime: null,
-        companyInfoId: '',
-        userId: '',
-        warrantyPeriod: null,
-        facilitator: null,
-        facilitatorPhone: '',
-        parts: '',
-        img: null,
-        description: ''
-      },
-      equipmentPurchases: {
-        installTime: '',
-        aogDeadlineTime: '',
-        aogTime: '',
-        argumentationTime: '',
-        biddingTime: '',
-        budget: '',
-        checkNote: '',
-        contractAmount: '',
-        contractDeadlineTime: '',
-        contractName: '',
-        contractNum: '',
-        invitationType: '',
-        partyBPhone: '',
-        partyBUnit: '',
-        partyBUser: '',
-        projectNote: '',
-        purchaseNote: '',
-        acceptanceTime: '',
-        oneCheckTime: '',
-        twoCheckTime: '',
-        firstAmountTime: '',
-        endAmountTime: '',
-        purchaseTime: '',
-        purchaseType: '',
-        purchaseWay: '',
-        recordNum: '',
-        recordUser: '',
-        resource: '',
-        signingTime: '',
-        tHospitalEquipmentPayments: [
-          {
-            id: '',
-            amount: '',
-            paymentTime: '',
-            periods: '',
-            prepaymentTime: '',
-            purchaseId: '',
-            status: ''
-          }
-        ]
-      },
-      equipmentStores: [
-        // {
-        //   departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
-        //   boundTime: "2021-12-31T16:00:00",
-        //   boundType: "入库",
-        //   bounder: "50B978FC6A069E-A0F3-4481-96C7-BD45AEC295EC",
-        //   receivePerson: "",
-        //   boundNums: "10",
-        //   beforeBoundNum: "0",
-        //   afterBoundNum: "10",
-        //   note: "入库"
-        // },
-        // {
-        //   id: "",
-        //   equipmentId: "",
-        //   departmentId: "3F503E8DA335FA-C0C9-4FCE-A8C9-F9C0D2C56169",
-        //   boundTime: "2022-12-31T16:00:00",
-        //   boundType: "出库",
-        //   bounder: "C076245F7D308A-CAD4-49E8-BAB6-987544490306",
-        //   receivePerson: "E1D6AB19EF6720-B4EA-46DF-BE10-96F03712FB65",
-        //   boundNums: "2",
-        //   beforeBoundNum: "10",
-        //   afterBoundNum: "8",
-        //   note: "出库"
-        // }
-      ],
-      equipmentResources: {
-        maintainUrl: '',
-        meteringUrl: '',
-        technologyUrl: '',
-        paymentUrl: '',
-        instructionsUrl: '',
-        maintainName: '',
-        meteringName: '',
-        technologyName: '',
-        paymentName: '',
-        instructionsName: ''
-      },
-      equipmentStocks: {
-        departmentId: '',
-        boundNums: ''
-      },
-      equipmentDepreciations: {
-        depreciationTime: '',
-        depreciationLimit: '',
-        depreciationAmount: '',
-        depreciationPeriods: '',
-        depreciationUser: ''
-      },
-      equipmentInspection: {
-        isPeriod: '',
-        isAppearance: '',
-        isParts: '',
-        isFunction: '',
-        inspectionTime: '',
-        createtime: null,
-        userId: '22',
-        appearance: '',
-        parts: '',
-        function: '',
-        img: '',
-        description: '',
-        note: null
-      }
-    }
-  }
-
-  // 新增或编辑确认事件
-  private handleSubmit(value: boolean) {
-    console.log('🚀 ~ value', value);
-    (this.$refs.vexTable as any).findList(this.paramsConfig);
-    (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams)
-    this.dialogVisible = false
-    this.clearForm()
-  }
-
-  private handleClose() {
-    this.dialogVisible = false
-    this.clearForm()
   }
 }

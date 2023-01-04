@@ -5,27 +5,32 @@ export const BasicFormList = [
     title: '申请人',
     span: 12,
     type: 'input',
-    data: UserModule.userData
+    data: UserModule.userData,
+    required: true
   },
   {
     field: 'createTime',
     title: '申请日期',
     span: 12,
-    type: 'date'
+    type: 'date',
+    required: true
+
   },
   {
     field: 'rollOutDepartment',
     title: '转出科室',
     span: 12,
     type: 'select',
-    slot: 'department'
+    slot: 'department',
+    required: true
   },
   {
     field: 'rollInDepartment',
     title: '转入科室',
     span: 12,
     type: 'select',
-    slot: 'department'
+    slot: 'department',
+    required: true
   },
   {
     field: 'equipmentLocation',
@@ -37,7 +42,8 @@ export const BasicFormList = [
     field: 'rollOutTime',
     title: '计划转科日期',
     span: 12,
-    type: 'date'
+    type: 'date',
+    required: true
   },
   {
     field: 'cause',
@@ -48,25 +54,28 @@ export const BasicFormList = [
 ]
 
 export const EquipmentDetailFormList = [
-  {
-    field: 'equipmentId',
-    title: '设备名称',
-    span: 12,
-    type: 'select',
-    slot: 'equipment'
-  },
-  {
-    field: 'barCode',
-    title: '规则型号',
-    span: 12,
-    type: 'input'
-  },
-  {
-    field: 'brand',
-    title: '设备品牌',
-    span: 12,
-    type: 'input'
-  }
+  [
+    {
+      field: 'equipmentId',
+      title: '设备名称',
+      span: 12,
+      type: 'select',
+      required: true,
+      slot: 'equipment'
+    },
+    {
+      field: 'barCode',
+      title: '规则型号',
+      span: 12,
+      type: 'input'
+    },
+    {
+      field: 'brand',
+      title: '设备品牌',
+      span: 12,
+      type: 'input'
+    }
+  ]
 ]
 
 export const ApprovalFormlist = [
@@ -74,19 +83,22 @@ export const ApprovalFormlist = [
     field: 'approveUserName',
     title: '审批人',
     span: 12,
-    type: 'input'
+    type: 'input',
+    required: true
   },
   {
     field: 'approveTime',
     title: '审批时间',
     span: 12,
-    type: 'date'
+    type: 'date',
+    required: true
   },
   {
     field: 'approveOpinion',
     title: '审批意见',
     span: 12,
-    type: 'input'
+    type: 'input',
+    required: true
   },
   {
     field: 'approveStatus',
@@ -103,6 +115,7 @@ export const ApprovalFormlist = [
     title: '审批层级',
     span: 12,
     type: 'select',
+    required: true,
     data: [
       { label: '同意', value: '1' },
       { label: '驳回', value: '0' }

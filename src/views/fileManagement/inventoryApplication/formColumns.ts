@@ -6,13 +6,15 @@ export const BasicFormList = [
     field: 'checkDepartment',
     title: '任务名称',
     span: 12,
-    type: 'input'
+    type: 'input',
+    required: true
   },
   {
     field: 'userName',
     title: '申请人',
     span: 12,
     type: 'input',
+    required: true,
     data: UserModule.userData
   },
   {
@@ -26,6 +28,7 @@ export const BasicFormList = [
     title: '申请科室',
     span: 12,
     type: 'select',
+    required: true,
     slot: 'department'
   },
   {
@@ -44,6 +47,7 @@ export const EquipmentDetailFormList = [
       title: '设备名称',
       span: 12,
       type: 'select',
+      required: true,
       slot: 'equipment'
     },
     {
@@ -67,19 +71,22 @@ export const ApprovalFormlist = [
     field: 'approveUserName',
     title: '审批人',
     span: 12,
-    type: 'input'
+    type: 'input',
+    required: true
   },
   {
     field: 'approveTime',
     title: '审批时间',
     span: 12,
-    type: 'date'
+    type: 'date',
+    required: true
   },
   {
     field: 'approveOpinion',
     title: '审批意见',
     span: 12,
-    type: 'input'
+    type: 'input',
+    required: true
   },
   {
     field: 'approveStatus',
@@ -93,6 +100,7 @@ export const ApprovalFormlist = [
     title: '审批层级',
     span: 12,
     type: 'select',
+    required: true,
     data: [
       { label: '同意', value: '1' },
       { label: '驳回', value: '0' }

@@ -6,7 +6,7 @@
         <span>流程审批</span>
         <!-- 操作按钮 -->
         <div class="btnBox">
-          <el-form ref="dataForm"
+          <el-form ref="equipmentProcessData"
                    :rules="rules"
                    :model="equipmentProcessData"
                    label-position="left"
@@ -18,13 +18,15 @@
                         v-model="submitVisible">
               <el-form-item :label="'下一节点名称'"
                             label-width="120px"
-                            prop="nextNodeName">
+                            prop="nextNodeName"
+                            :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
                 <el-input v-model="equipmentProcessData.nextNodeName"
                           disabled></el-input>
               </el-form-item>
               <el-form-item :label="'审批人'"
                             label-width="120px"
-                            prop="nextNodeExecutor">
+                            prop="nextNodeExecutor"
+                            :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
                 <el-select v-model="equipmentProcessData.nextNodeExecutor"
                            placeholder="请选择">
                   <el-option :label="item.user_name"
@@ -35,12 +37,12 @@
               </el-form-item>
               <el-form-item :label="'意见 '"
                             label-width="120px"
-                            prop="auditReason">
+                            prop="auditReason"
+                            :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
                 <el-input v-model="equipmentProcessData.auditReason"></el-input>
               </el-form-item>
               <div style="text-align: right; margin: 0">
                 <el-button size="mini"
-                           type="text"
                            @click="submitVisible = false">取消</el-button>
                 <el-button @click="handleSubmitProcess"
                            type="primary">
@@ -59,7 +61,8 @@
                         v-model="backVisible">
               <el-form-item :label="'节点名称'"
                             label-width="80px"
-                            prop="nextNodeCode">
+                            prop="nextNodeCode"
+                            :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
                 <el-select v-model="equipmentProcessData.nextNodeCode"
                            placeholder="请选择"
                            @change="handleNodeChange">
@@ -71,7 +74,8 @@
               </el-form-item>
               <el-form-item :label="'审批人'"
                             label-width="80px"
-                            prop="nextNodeExecutor">
+                            prop="nextNodeExecutor"
+                            :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
                 <el-select v-model="equipmentProcessData.nextNodeExecutor"
                            placeholder="请选择">
                   <el-option :label="item.user_name"
@@ -82,15 +86,13 @@
               </el-form-item>
               <div style="text-align: right; margin: 0">
                 <el-button size="mini"
-                           type="text"
                            @click="backVisible = false">取消</el-button>
                 <el-button @click="handleSubmitProcess"
                            type="primary">
                   {{'确定' }}
                 </el-button>
               </div>
-              <el-button slot="reference"
-                         type="warning">回退</el-button>
+              <el-button slot="reference">回退</el-button>
             </el-popover>
 
             <!-- 终止 -->
@@ -100,12 +102,12 @@
                         v-model="endVisible">
               <el-form-item :label="'意见 '"
                             label-width="50px"
-                            prop="auditReason">
+                            prop="auditReason"
+                            :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
                 <el-input v-model="equipmentProcessData.auditReason"></el-input>
               </el-form-item>
               <div style="text-align: right; margin: 0">
                 <el-button size="mini"
-                           type="text"
                            @click="endVisible = false">取消</el-button>
                 <el-button @click="handleSubmitProcess"
                            type="primary">
@@ -119,8 +121,8 @@
           </el-form>
         </div>
       </div>
-      <el-form ref="approvalForm"
-               :rules="{}"
+      <el-form ref="requestParams"
+               :rules="rules"
                :model="requestParams"
                label-position="left"
                label-width="80px"
@@ -209,7 +211,8 @@
                   v-for="(item,index) in watchRequestForm.billApproveList"
                   :key="index">
             <el-form-item :label="item.title"
-                          prop="applyDetailId">
+                          :prop="'billApproveList['+item.field+']'"
+                          :rules="item.required ? [{required: true, message: '不能为空', trigger: 'change'}]:[{required: false}]">
               <el-input v-model="requestParams.billApproveList[item.field]"
                         :placeholder="`请输入${item.title}`"
                         v-if="item.type === 'input'" />

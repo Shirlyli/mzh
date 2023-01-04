@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="personalCard">
     <!-- 列表区域 -->
     <el-card>
       <div slot="header"
@@ -21,21 +21,6 @@
                   :paramsConfig="paramsConfig" />
       </keep-alive>
     </el-card>
-
-    <!-- 新增流程申请 -->
-    <processRequest :dialogVisible="requestDialogVisible"
-                   :requestForm="requestForm"
-                   :requestParams="requestParams"
-                   :processModal="processModal"
-                   @emit-close="handleClose"
-                   @emit-submit-create-request="handleCreateRequest" />
-
-    <!-- 流程审批 -->
-    <ProcessApproval v-show="approvalDialogVisible"
-                     :dialogVisible="approvalDialogVisible"
-                     :processData="clickProcessData"
-                     :basicFormList="basicFormList"
-                     @emit-handle-submit="emitHandleSubmit" />
 
     <!-- 操作记录 -->
     <el-dialog title="操作记录"

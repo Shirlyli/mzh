@@ -6,7 +6,6 @@ import Layout from '@/layout/index.vue'
 import beforeAsyncRoutes from './modules/beforeAsyncRoutes'
 import chartsRouter from './modules/charts'
 import componentsRouter from './modules/components'
-import nestedRoutes from './modules/nested'
 
 Vue.use(VueRouter)
 
@@ -109,15 +108,33 @@ export const constantRoutes: RouteConfig[] = [
         }
       }
     ]
+  },
+  {
+    path: '/equipmentAddOrUpdate',
+    meta: { hidden: true },
+    component: Layout,
+    redirect: '/equipmentAddOrUpdate/index',
+    children: [
+      {
+        path: 'index',
+        component: () =>
+          import(
+            /* webpackChunkName: "401" */ '@/views/fileManagement/equipmentClass/components/index.vue'
+          ),
+        name: '设备',
+        meta: {
+          title: '设备',
+          icon: 'user'
+        }
+      }
+    ]
   }
 ]
 
 export const asyncRoutes = [
-  // ...businessRouter,
   // ...beforeAsyncRoutes,
   // ...chartsRouter,
-  // componentsRouter,
-  // nestedRoutes
+  // componentsRouter
 ]
 
 const createRouter = () =>

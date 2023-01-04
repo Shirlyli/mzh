@@ -12,20 +12,16 @@ import {
 // import { EquipmentInfoTypes } from '../formlist/interface.type'
 import { Form, Message } from 'element-ui'
 import { updateEquipmentInfoData } from '@/api/equipment'
+import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
+import { UserModule } from '@/store/modules/user'
 // import { BusinessViewModule } from '@/store/modules/business'
 @Component({
   name: 'EquipmentFormDialog'
 })
 export default class extends Vue {
-  private showDialogVisible = false;
-  @Prop({ default: 'create' }) dialogStatus!: string;
-  @Prop({ default: false }) dialogVisible!: boolean;
-  @Watch('dialogVisible')
-  private OnchangeDialogVisible(value: any) {
-    this.showDialogVisible = value
-  }
+  public dialogStatus = this.$route.query.dialogStatus;
 
-  private tabMapOptions = [
+  public tabMapOptions = [
     { label: '设备基础信息', key: 'equipmentVO' },
     { label: '设备采购信息', key: 'equipmentPurchases' },
     { label: '设备资料', key: 'equipmentResources' },
@@ -36,53 +32,17 @@ export default class extends Vue {
     { label: '设备折旧', key: 'equipmentDepreciations' }
   ]; // tab栏
 
-  private allFormList: any = {}; // 表单项
-  private rules = {
-    departmentName: [
-      { required: true, message: '请输入部门名称', trigger: 'change' }
-    ]
-  }; // 表单校验
+  public allFormList: any = {}; // 表单项
+  public rules = {}; // 表单校验
 
-  private defaultEquipmentInfoData: any = {}; // 默认新增模态框数据
-  @Prop() equipmentCategoryData!: any;
-  @Watch('equipmentCategoryData')
-  private onChangeEquipmentCategoryData(data: any) {
-    this.defaultEquipmentInfoData = data
-  }
+  public equipmentCategoryData = JSON.parse(
+    sessionStorage.getItem('EquipmentCategoryData') ?? '0'
+  );
 
-  private activeName = 'equipmentVO'; // 当前tab页
+  public activeName = 'equipmentVO'; // 当前tab页
   @Watch('activeName') // 监听tab页
-  private onActiveNameChange(value: string) {
+  public onActiveNameChange(value: string) {
     console.log('🚀 ~ value', value)
-    console.log(this.defaultEquipmentInfoData)
-    // switch (this.activeName) {
-    //   case "equipmentVO":
-    //     this.allFormList[this.activeName] = equipmentVO;
-    //     break;
-    //   case "equipmentPurchases":
-    //     this.allFormList[this.activeName] = equipmentPurchases;
-    //     break;
-    //   case "equipmentResources":
-    //     this.allFormList[this.activeName] = equipmentResources;
-    //     break;
-    //   case "equipmentMaintain":
-    //     this.allFormList[this.activeName] = equipmentMaintain;
-    //     break;
-    //   case "equipmentInspection":
-    //     this.allFormList[this.activeName] = equipmentInspection;
-    //     break;
-    //   case "equipmentStocks":
-    //     this.allFormList[this.activeName] = equipmentStocks;
-    //     break;
-    //   case "equipmentStores":
-    //     this.allFormList[this.activeName] = equipmentStores;
-    //     break;
-    //   case "equipmentDepreciations":
-    //     this.allFormList[this.activeName] = equipmentDepreciations;
-    //     break;
-    //   default:
-    //     console.log("error");
-    // }
   }
 
   async created() {
@@ -99,14 +59,9 @@ export default class extends Vue {
   }
 
   // 新增设备
-  @Emit()
-  emitSubmit(value: boolean) {
-    return value
-  }
-
-  private createData() {
+  public createData() {
     // console.log(this.allFormList);
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.equipmentCategoryData as Form).validate(async valid => {
       if (valid) {
         const {
           equipmentDepreciations,
@@ -150,7 +105,7 @@ export default class extends Vue {
         params.push(paramsConfig)
         const res: any = await updateEquipmentInfoData(params)
         if (res.code === 200) {
-          this.emitSubmit(true)
+          this.closeSelectedTag({ path: '/equipmentAddOrUpdate/index' })
         }
         Message.success('创建成功')
       }
@@ -158,8 +113,8 @@ export default class extends Vue {
   }
 
   // 修改科室
-  private updateData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+  public updateData() {
+    (this.$refs.equipmentCategoryData as Form).validate(async valid => {
       if (valid) {
         const {
           equipmentDepreciations,
@@ -203,20 +158,47 @@ export default class extends Vue {
         params.push(paramsConfig)
         const res: any = await updateEquipmentInfoData(params)
         if (res.code === 200) {
-          this.emitSubmit(true)
+          this.closeSelectedTag({ path: '/equipmentAddOrUpdate/index' })
         }
         Message.success('修改成功')
       }
     })
   }
 
-  // 关闭模态框
-  @Emit()
-  emitCloseDialog() {
-    return false
+  public handleCloseDialog() {
+    this.closeSelectedTag({ path: '/equipmentAddOrUpdate/index' })
   }
 
-  private handleCloseDialog() {
-    this.emitCloseDialog()
+  /******************************
+   * 完成申请后关闭当前tag页
+   * @param view
+   *****************************/
+  private closeSelectedTag(view: ITagView) {
+    console.log('🚀 ~ view', view)
+    TagsViewModule.delView(view)
+    this.toLastView(TagsViewModule.visitedViews, view)
+  }
+
+  private toLastView(visitedViews: ITagView[], view: ITagView) {
+    const latestView = visitedViews.slice(-1)[0]
+    if (latestView !== undefined && latestView.fullPath !== undefined) {
+      this.$router.push(latestView.fullPath).catch(err => {
+        console.warn(err)
+      })
+    } else {
+      // Default redirect to the home page if there is no tags-view, adjust it if you want
+      if (view.name === 'Dashboard') {
+        // to reload home page
+        this.$router
+          .replace({ path: '/redirect' + view.fullPath })
+          .catch(err => {
+            console.warn(err)
+          })
+      } else {
+        this.$router.push((UserModule.menu as any)[0]?.path).catch(err => {
+          console.warn(err)
+        })
+      }
+    }
   }
 }

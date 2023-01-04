@@ -147,7 +147,7 @@ export default class extends Vue {
   public async handleSubmitProcess() {
     const { id } = this.$route.query
     if (this.type === 'submit') {
-      (this.$refs.dataForm as Form).validate(async valid => {
+      (this.$refs.equipmentProcessData as Form).validate(async valid => {
         if (valid) {
           const params = {
             ...this.equipmentProcessData,
@@ -161,12 +161,15 @@ export default class extends Vue {
               path: '/processApproval/index'
             })
           }
-          (this.$refs.dataForm as Form).resetFields()
+          (this.$refs.equipmentProcessData as Form).resetFields()
           Message.success('审批成功')
+        } else {
+          console.log('error')
+          return false
         }
       })
     } else if (this.type === 'end') {
-      (this.$refs.dataForm as Form).validate(async valid => {
+      (this.$refs.equipmentProcessData as Form).validate(async valid => {
         if (valid) {
           const params = {
             ...this.equipmentProcessData,
@@ -180,12 +183,15 @@ export default class extends Vue {
             })
           }
 
-          (this.$refs.dataForm as Form).resetFields()
+          (this.$refs.equipmentProcessData as Form).resetFields()
           Message.success('终止成功')
+        } else {
+          console.log('error')
+          return false
         }
       })
     } else if (this.type === 'back') {
-      (this.$refs.dataForm as Form).validate(async valid => {
+      (this.$refs.equipmentProcessData as Form).validate(async valid => {
         if (valid) {
           const params = {
             ...this.equipmentProcessData,
@@ -198,8 +204,11 @@ export default class extends Vue {
               path: '/processApproval/index'
             })
           }
-          (this.$refs.dataForm as Form).resetFields()
+          (this.$refs.equipmentProcessData as Form).resetFields()
           Message.success('退回成功')
+        } else {
+          console.log('error')
+          return false
         }
       })
     }

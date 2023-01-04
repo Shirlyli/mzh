@@ -9,6 +9,23 @@ import { Component, Vue, Watch, Emit } from 'vue-property-decorator'
   components: {}
 })
 export default class extends Vue {
+  public rules = {
+    // billMain: {
+    //   projectName: [{ required: true, message: '项目名称必填', trigger: 'blur' }],
+    //   applyDept: [{ required: true, message: '申请科室必填', trigger: 'change' }],
+    //   applyPerson: [{ required: true, message: '申请人必填', trigger: 'blur' }]
+    // },
+    // billEquipmentList: {
+    //   equipmentId: [{ required: true, message: '设备名称必填', trigger: 'change' }]
+    // },
+    // billApproveList: {
+    //   approveUserName: [{ required: true, message: '审批人必填', trigger: 'blur' }],
+    //   approveTime: [{ required: true, message: '审批时间必填', trigger: 'change' }],
+    //   approveTier: [{ required: true, message: '审批层级必填', trigger: 'change' }],
+    //   approveOpinion: [{ required: true, message: '审批意见必填', trigger: 'blur' }]
+    // }
+  }
+
   /********************************************
    * 待新增的设备params
    *******************************************/
@@ -75,28 +92,36 @@ export default class extends Vue {
    * 新增流程申请
    ******************************************/
   public async createProcess() {
-    const params = this.requestParams
-    const billApproveList: any = []
-    billApproveList.push(params.billApproveList)
-    const sendParams = []
-    sendParams.push({
-      ...params,
-      billMain: {
-        ...params.billMain,
-        departmentId: params.billMain.departmentName || params.billMain.applyDept
-      },
-      billEquipmentList: params.billEquipmentList,
-      billApproveList
+    (this.$refs as any).requestParams.validate(async(valid:any) => {
+      if (valid) {
+        console.log('🚀 ~ valid', valid)
+        const params = this.requestParams
+        const billApproveList: any = []
+        billApproveList.push(params.billApproveList)
+        const sendParams = []
+        sendParams.push({
+          ...params,
+          billMain: {
+            ...params.billMain,
+            departmentId: params.billMain.departmentName || params.billMain.applyDept
+          },
+          billEquipmentList: params.billEquipmentList,
+          billApproveList
+        })
+        console.log('🚀 ~ sendParams', sendParams)
+        const res: any = await handleSaveCheckApply(sendParams)
+        //  const res: any = await queryHospitalProcessBusinessSave({
+        //   ...this.equipmentProcessData
+        // }) 科室申请
+        if (res.code === 200) {
+          this.$message.success('发起申请成功')
+          this.closeSelectedTag({ path: '/processRequest/index' })
+        }
+      } else {
+        console.log('error submit!!')
+        return false
+      }
     })
-    console.log('🚀 ~ sendParams', sendParams)
-    const res: any = await handleSaveCheckApply(sendParams)
-    //  const res: any = await queryHospitalProcessBusinessSave({
-    //   ...this.equipmentProcessData
-    // }) 科室申请
-    if (res.code === 200) {
-      this.$message.success('发起申请成功')
-      this.closeSelectedTag({ path: '/processRequest/index' })
-    }
   }
 
   public cancelProcess() {
