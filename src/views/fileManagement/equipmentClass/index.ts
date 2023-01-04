@@ -13,6 +13,7 @@ import { RESULT_DATA_TYPE } from '@/utils/index.type'
 // import { EquipmentInfoTypes } from './formlist/interface.type'
 import { BusinessViewModule } from '@/store/modules/business'
 import moment from 'moment'
+import { FormatIsExordium, FormatIsisMetering } from '@/utils/functions'
 @Component({
   name: 'EquipmentCategory',
   components: {
@@ -58,22 +59,21 @@ export default class extends Vue {
     { type: 'seq', width: 60, fixed: 'left' },
     { type: 'checkbox', width: 60, fixed: 'left' },
     { field: 'name', title: '设备名称', treeNode: true, width: 140 },
-    // { field: "id", title: "设备ID", width: 100 },
+    { field: 'price', title: '设备价格', width: 100 },
     { field: 'marking', title: '设备型号', width: 100 },
     { field: 'brand', title: '设备品牌', width: 100 },
     { field: 'num', title: '设备数量', width: 100 },
-    { field: 'equipmentCategoryId', title: '设备类别', width: 100 }, // formatter: this.getformatMIsAvailable
+    { field: 'equipmentCategoryName', title: '设备类别', width: 100 }, // formatter: this.getformatMIsAvailable
     {
-      field: 'department',
+      field: 'departmentName',
       title: '科室名称',
-      width: 100,
-      slots: { default: 'department' }
+      width: 100
+      // slots: { default: 'department' }
     },
-    // { field: "departmentId", title: "科室", width: 100 },
-    { field: 'reason', title: '用途说明', width: 100 },
-    { field: 'userId', title: '申请人', width: 100 },
-    { field: 'hospitalId', title: '所属医院', width: 100 },
-    // { field: "purchaseId", title: "采购ID", width: 100 },
+    { field: 'isExordium', title: '状态', width: 100, formatter: FormatIsExordium },
+    { field: 'isMetering', title: '是否计量检查', width: 100, formatter: FormatIsisMetering },
+    { field: 'userName', title: '申请人', width: 100 },
+    { field: 'hospitalName', title: '所属医院', width: 100 },
     { field: 'createtime', title: '创建时间', width: 100, formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     { field: 'note', title: '备注', width: 100 },
     {

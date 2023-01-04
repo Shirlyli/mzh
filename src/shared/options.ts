@@ -12,9 +12,9 @@ const ALL_OPTIONS = {
   ],
   // 厂商类型
   suppliesType: [
-    { label: '生产商', value: '生产商' },
-    { label: '供应商', value: '供应商' },
-    { label: '维修商', value: '维修商' }
+    { label: '生产商', value: '1' },
+    { label: '供应商', value: '2' },
+    { label: '维修商', value: '3' }
   ],
   // 运营状态
   runningState: [

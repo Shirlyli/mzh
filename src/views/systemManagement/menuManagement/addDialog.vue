@@ -65,10 +65,12 @@
                     placeholder="Please input" />
         </el-form-item>
         <el-form-item :label="'是否启用'">
-          <el-input v-model="tempArticleData.abstractContent"
-                    :autosize="{minRows: 2, maxRows: 4}"
-                    type="textarea"
-                    placeholder="Please input" />
+          <el-radio-group v-model="tempArticleData.abstractContent">
+            <el-radio label="0">不启用
+            </el-radio>
+            <el-radio label="1">启用
+            </el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item :label="'备注'">
           <el-input v-model="tempArticleData.abstractContent"

@@ -35,7 +35,7 @@ class User extends VuexModule implements IUserState {
   public email = '';
   public loginForm = {};
   public menu = [];
-  public userData ={ userId: '', userName: '' };
+  public userData ={};
   @Mutation
   private SET_TOKEN(token: string) {
     this.token = token
@@ -118,10 +118,6 @@ class User extends VuexModule implements IUserState {
     }
     const { roles, userName } = res.data
     this.SET_USER_DATA(res.data)
-    // roles must be a non-empty array
-    // if (!roles || roles.length <= 0) {
-    //   throw Error('GetUserInfo: roles must be a non-null array!')
-    // }
     this.SET_ROLES(['admin'])
     this.SET_NAME(userName)
     this.SET_AVATAR('')

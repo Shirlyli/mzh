@@ -47,17 +47,20 @@
         <el-form-item :label="'上级字典ID'"
                       prop="pid">
           <el-input v-model="commonData.pid"
-                    placeholder="自动生成" disabled="disabled"></el-input>
+                    placeholder="自动生成"
+                    disabled="disabled"></el-input>
         </el-form-item>
         <el-form-item :label="'上级字典名称'"
                       prop="pName">
           <el-input v-model="commonData.pName"
-                    placeholder="自动生成" disabled="disabled"></el-input>
+                    placeholder="自动生成"
+                    disabled="disabled"></el-input>
         </el-form-item>
         <el-form-item :label="'字典类型'"
                       prop="dicType">
           <el-input v-model="commonData.dicType"
-                    placeholder="自动生成" disabled="disabled"/>
+                    placeholder="自动生成"
+                    disabled="disabled" />
         </el-form-item>
         <el-form-item :label="'字典名称'"
                       prop="dicName">
@@ -71,13 +74,18 @@
         </el-form-item>
         <el-form-item :label="'是否启用'"
                       prop="flag">
-          <el-input v-model="commonData.flag"
-                    placeholder="是否启用" />
+          <el-radio-group v-model="commonData.flag">
+            <el-radio label="0">不启用
+            </el-radio>
+            <el-radio label="1">启用
+            </el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item :label="'层级关系'"
                       prop="xpath">
           <el-input v-model="commonData.xpath"
-                    placeholder="自动生成" disabled="disabled"/>
+                    placeholder="自动生成"
+                    disabled="disabled" />
         </el-form-item>
         <el-form-item :label="'备注'">
           <el-input v-model="commonData.note"

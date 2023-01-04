@@ -7,7 +7,8 @@
                class="clearfix">
             <span>流程名称</span>
             <i class="el-icon-plus addBtn"
-               style="float: right" @click="addProcess"></i>
+               style="float: right"
+               @click="addProcess"></i>
           </div>
           <Tree ref="vxeTree"
                 :url="url"
@@ -46,7 +47,7 @@
                :rules="rules"
                :model="processData"
                label-position="left"
-               label-width="100px"
+               label-width="120px"
                style="width: 400px; margin-left:50px;">
         <el-form-item :label="'流程名称'"
                       prop="processName">
@@ -59,12 +60,14 @@
                     placeholder="请输入" />
         </el-form-item>
         <el-form-item :label="'节点名称'"
-                      prop="nodeName">
+                      prop="nodeName"
+                      :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
           <el-input v-model="processData.nodeName"
                     placeholder="请输入" />
         </el-form-item>
         <el-form-item :label="'节点名称编码'"
-                      prop="nodeNameCode">
+                      prop="nodeNameCode"
+                      :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
           <el-input v-model="processData.nodeNameCode"
                     placeholder="请输入" />
         </el-form-item>
@@ -81,16 +84,23 @@
                     :label="1">否</el-radio>
         </el-form-item>
         <el-form-item :label="'角色类型'"
-                      prop="roleType">
+                      prop="roleType"
+                      :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
           <el-radio v-model="processData.roleType"
-                    label="role">角色</el-radio>
+                    label="role" @change="onRoleTypeChange">角色</el-radio>
           <el-radio v-model="processData.roleType"
-                    label="user">用户</el-radio>
+                    label="user" @change="onRoleTypeChange">用户</el-radio>
         </el-form-item>
         <el-form-item :label="'角色名称'"
-                      prop="roleTypeId">
-          <el-input v-model="processData.roleTypeId"
-                    placeholder="请输入" />
+                      prop="roleTypeId"
+                      :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
+          <el-select v-model="processData.roleTypeId"
+                     placeholder="请选择">
+            <el-option :label="item.title"
+                       :value="item.id"
+                       v-for="(item) in roleData"
+                       :key="item.id"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
 
@@ -117,7 +127,7 @@
 .addBtn {
   border: 1px solid #ccc;
   padding: 3px;
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 }

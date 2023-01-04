@@ -14,7 +14,7 @@ export const equipmentInfoData: EquipmentInfoData = {
 }
 
 // 获取科室左侧树形数据
-export const getTreeData = (url:string, data: any) =>
+export const getTreeData = (url: string, data: any) =>
   request({
     url,
     method: 'POST',
@@ -22,7 +22,7 @@ export const getTreeData = (url:string, data: any) =>
   })
 
 // 获取列表数据
-export const getTableDataList = (url:string, data: any) =>
+export const getTableDataList = (url: string, data: any) =>
   request({
     url,
     method: 'POST',
@@ -137,6 +137,13 @@ export const updateSupplierLinkmanData = (data: any) =>
 export const delSupplierLinkmanData = (data: any) =>
   request({
     url: 'supplierLinkman/del',
+    method: 'POST',
+    data
+  })
+// 设备类别树
+export const queryEquipmentCategoryInfo = (data: any) =>
+  request({
+    url: 'tHospitalEquipmentCategoryInfo/queryTree',
     method: 'POST',
     data
   })

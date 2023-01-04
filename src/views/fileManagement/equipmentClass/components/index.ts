@@ -11,9 +11,14 @@ import {
 } from '../formlist/index'
 // import { EquipmentInfoTypes } from '../formlist/interface.type'
 import { Form, Message } from 'element-ui'
-import { updateEquipmentInfoData } from '@/api/equipment'
+import {
+  getEquipmentInfoByDepartmentId,
+  queryEquipmentCategoryInfo,
+  updateEquipmentInfoData
+} from '@/api/equipment'
 import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
+import { queryByConditionSupplier } from '@/api/basic'
 // import { BusinessViewModule } from '@/store/modules/business'
 @Component({
   name: 'EquipmentFormDialog'
@@ -46,6 +51,8 @@ export default class extends Vue {
   }
 
   async created() {
+    this.queryEquipmentCategoryInfo()
+    this.queryByConditionSupplier()
     this.allFormList = {
       equipmentVO: equipmentVO,
       equipmentPurchases: equipmentPurchases,
@@ -55,6 +62,80 @@ export default class extends Vue {
       equipmentStocks: equipmentStocks,
       equipmentStores: equipmentStores,
       equipmentDepreciations: equipmentDepreciations
+    }
+  }
+
+  /**************
+   * 监听科室变化
+   *************/
+  @Watch('equipmentCategoryData.equipmentVO.departmentId', { immediate: true })
+  @Watch('equipmentCategoryData.equipmentVO.applyDept', { immediate: true })
+  public async onChangeRequestParams(formValue: any) {
+    console.log('🚀 ~ 监听科室变化', formValue)
+    if (formValue) {
+      const res: any = await getEquipmentInfoByDepartmentId({
+        page: '1',
+        limit: '10',
+        entity: {
+          departmentId: formValue
+        }
+      })
+      console.log('🚀 ~ res', res.data)
+      if (res.code === 200) {
+        console.log(
+          '🚀 ~ this.allFormList.equipmentVO',
+          this.allFormList.equipmentVO
+        )
+        this.allFormList.equipmentVO.forEach((item: any) => {
+          if (item.slot === 'equipment') {
+            item.options = res.data.map((equip: any) => {
+              return {
+                equipmentVO: equip.equipmentVO,
+                label: equip.equipmentVO.name,
+                value: equip.equipmentVO.id
+              }
+            })
+          }
+        })
+        this.$forceUpdate()
+      }
+    }
+  }
+
+  // 获取设备类别
+  private async queryEquipmentCategoryInfo() {
+    const resData:any = await queryEquipmentCategoryInfo({ page: '1', limit: '10', entity: { id: '' } })
+    if (resData.code === 200) {
+      this.allFormList.equipmentVO.forEach((item: any) => {
+        if (item.slot === 'equipmentCategory') {
+          item.options = resData.data?.[0]?.children.map((equip: any) => {
+            return {
+              ...equip,
+              label: equip.id,
+              value: equip.title
+            }
+          })
+        }
+      })
+    }
+  }
+
+  // 获取厂商
+  private async queryByConditionSupplier() {
+    const resData:any = await queryByConditionSupplier({ page: '1', limit: '10', entity: { id: '' } })
+    console.log('🚀 ~ resData', resData)
+    if (resData.code === 200) {
+      this.allFormList.equipmentVO.forEach((item: any) => {
+        if (item.slot === 'manufactorId') {
+          item.options = resData.data.map((equip: any) => {
+            return {
+              ...equip,
+              label: equip.name,
+              value: equip.id
+            }
+          })
+        }
+      })
     }
   }
 

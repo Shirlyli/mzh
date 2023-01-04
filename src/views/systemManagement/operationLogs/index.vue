@@ -22,8 +22,8 @@ import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
 import VexTable from '@/components/VexTable/index.vue'
 import _ from 'lodash'
-import { delOperationLogs } from '@/api/basic'
 import moment from 'moment'
+import { delOperationLogs } from '@/api/basic'
 @Component({
   name: 'Tab',
   components: {
@@ -74,7 +74,7 @@ export default class extends Vue {
     { field: 'lOperatorName', title: '用户名', width: 80 },
     { field: 'lMethod', title: '标题' },
     { field: 'lUri', title: ' Url' },
-    { field: 'lIp', title: ' IP' },
+    { field: 'lIp', title: ' IP', width: 100 },
     { field: 'lMethod', title: '请求方法' },
     {
       field: 'createTime',
@@ -82,7 +82,7 @@ export default class extends Vue {
       formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
     },
     {
-      width: 180,
+      width: 100,
       title: '操作',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
@@ -111,11 +111,11 @@ export default class extends Vue {
         ids: row.id
       }
     }
-    /* const res: any = await delOperationLogs(params)
+    const res: any = await delOperationLogs(params)
     if (res.result) {
-      ;(this.$refs.vexTable as any).findList(this.paramsConfig)
+      (this.$refs.vexTable as any).findList(this.paramsConfig)
     }
-    this.$message.success('删除成功') */
+    this.$message.success('删除成功')
   }
 }
 </script>

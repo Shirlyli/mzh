@@ -1,12 +1,17 @@
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
 import _ from 'lodash'
-import { delProcessData, updateProcessData } from '@/api/basic'
+import {
+  delProcessData,
+  getRoleTreeData,
+  getUserDataByDeptId,
+  updateProcessData
+} from '@/api/basic'
 import { Form } from 'element-ui'
-import { formatMIsAvailable } from '@/shared/utils'
 import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
 import moment from 'moment'
+import { UserModule } from '@/store/modules/user'
 @Component({
   name: 'InlineEditTable',
   components: {
@@ -33,9 +38,9 @@ export default class extends Vue {
   };
 
   private getformatMIsAvailable = (data: any) => {
-    return data.cellValue === '1'
+    return String(data.cellValue) === '1'
       ? '禁用'
-      : data.cellValue === '0'
+      : String(data.cellValue) === '0'
         ? '不禁用'
         : '-'
   };
@@ -70,7 +75,11 @@ export default class extends Vue {
     },
     // { field: "roleTypeId", title: " 角色类型id " },
     { field: 'cteator', title: '创建人' },
-    { field: 'cteaterTime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    {
+      field: 'cteaterTime',
+      title: '创建时间',
+      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+    },
     {
       width: 160,
       title: '操作',
@@ -96,6 +105,46 @@ export default class extends Vue {
     roleType: '',
     roleTypeId: ''
   };
+
+  /**
+   *获取数据
+   */
+  public roleData: any = [];
+  private async getRoleTreeData(type: any) {
+    let res :any = []
+    if (type === 'role') {
+      const resData: any = await getRoleTreeData()
+      if (resData.code === 200) {
+        res = resData.data?.[0]?.children
+      }
+    } else {
+      const deptId = (UserModule.userData as any)?.employee?.deptId
+      const resUserData: any = await getUserDataByDeptId({
+        page: 1,
+        limit: 10,
+        entity: {
+          deptId
+        }
+      })
+      if (resUserData.code === 200) {
+        res = resUserData.data.map((item:any) => {
+          return { ...item, title: item.eName }
+        })
+      }
+    }
+    this.roleData = res
+    this.$forceUpdate()
+  }
+
+  private onRoleTypeChange(value:any) {
+    this.processData.roleTypeId = ''
+  }
+
+  @Watch('processData.roleType')
+  private onChangeRoleType(value: any) {
+    console.log('🚀 ~ value', value)
+    this.getRoleTreeData(value)
+  }
 
   // 接收树形组件点击节点数据
   private handleNodeClick(data: any) {
@@ -155,6 +204,8 @@ export default class extends Vue {
         (this.$refs.dataForm as Form).resetFields()
         this.$message.success('新增流程配置成功')
         this.clearForm()
+      } else {
+        console.log('🚀 ~ this.processData', this.processData)
       }
     })
   }
@@ -177,13 +228,9 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    const { name, id, pid } = row
     this.processData = { ...this.processData, ...row }
     this.dialogStatus = 'update'
     this.dialogVisible = true
-    this.$nextTick(() => {
-      (this.$refs.dataForm as Form).clearValidate()
-    })
   }
 
   // 删除流程配置
@@ -203,14 +250,11 @@ export default class extends Vue {
     if (res.result) {
       (this.$refs.vexTable as any).findList(this.paramsConfig)
     }
-    (this.$refs.dataForm as Form).resetFields()
+    // (this.$refs.dataForm as Form).resetFields()
     this.$message.success('删除流程配置成功')
   }
 
-  /**
-   * 新增流程配置
-   */
-  // private addProcess() {
-
-  // }
+  private addProcess() {
+    console.log('11')
+  }
 }

@@ -6,6 +6,7 @@ import { Form } from 'element-ui'
 import { dealCommonData, updateCommonData } from '@/api/basic'
 import _ from 'lodash'
 import { debug } from 'webpack'
+import { FormatMIsavailable } from '@/utils/functions'
 @Component({
   name: 'Tab',
   components: {
@@ -22,7 +23,7 @@ export default class extends Vue {
     { field: 'dicCode', title: '字典编码' },
     { field: 'dispindex', title: '字典排序' },
     { field: 'dicType', title: '字典类型' },
-    { field: 'flag', title: '状态' },
+    { field: 'flag', title: '状态', formatter: FormatMIsavailable },
     {
       width: 160,
       title: '操作',

@@ -118,13 +118,18 @@ export const personalBindRole = (data: { userId: string, roleId: string }) =>
     data
   })
 
+// 获取用户通过设备id
+export const getUserDataByDeptId = (data: any) => request({
+  url: '/auth/employee/queryByCondition',
+  method: 'POST',
+  data
+})
 // 查看用户已关联绑定角色
-export const queryRolesByUserId = (data: { userId: string }) =>
-  request({
-    url: '/auth/role/queryRolesByUserId',
-    method: 'POST',
-    data
-  })
+export const queryRolesByUserId = (data: { userId: string }) => request({
+  url: '/auth/role/queryRolesByUserId',
+  method: 'POST',
+  data
+})
 
 // 解绑用户关联角色
 export const personalUnbindRole = (data: { userId: string, roleId: string }) =>
@@ -480,7 +485,7 @@ export const queryOperationLogs = (data: { roleId: string }) =>
     data
   })
 
-export const delOperationLogs = (data: { roleId: string, menuId: string }) =>
+export const delOperationLogs = (data: any) =>
   request({
     url: '/log/del',
     method: 'POST',

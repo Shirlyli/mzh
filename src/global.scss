@@ -87,3 +87,15 @@
 .commonDialog .el-dialog__body {
     padding: 10px
 }
+
+// 左侧菜单栏样式
+.el-menu-item,
+.el-submenu__title {
+    height: 40px;
+    line-height: 40px;
+}
+
+.el-submenu .el-menu-item {
+    height: 40px;
+    line-height: 40px;
+}

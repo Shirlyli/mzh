@@ -11,6 +11,7 @@ import {
 import { FormItemTypes, SupplierFormTypes } from './type'
 import _ from 'lodash'
 import ALL_OPTIONS from '@/shared/options'
+import { FormatRunningState } from '@/utils/functions'
 @Component({
   name: 'Tab',
   components: {
@@ -102,7 +103,8 @@ export default class extends Vue {
     { field: 'suppliesType', title: '厂商类型' },
     {
       field: 'runningState',
-      title: '运营状态'
+      title: '运营状态',
+      formatter: FormatRunningState
     },
     { field: 'assetsPro', title: ' 资产性质' },
     { field: 'domicile', title: ' 注册地' },
@@ -118,7 +120,7 @@ export default class extends Vue {
   ];
 
   // 菜单类型
-  private suppliesTypeOptions = ALL_OPTIONS.MENU_TYPES;
+  private suppliesTypeOptions = ALL_OPTIONS.suppliesType;
 
   private supplierData = {
     name: '',

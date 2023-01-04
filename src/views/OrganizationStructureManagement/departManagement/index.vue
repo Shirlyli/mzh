@@ -86,12 +86,16 @@
           <el-col :span="12">
             <el-form-item :label="'是否启用'"
                           prop="departmentStatus">
-              <el-input v-model="departmentData.departmentStatus"
-                        placeholder="请输入是否启用" />
+              <el-radio-group v-model="departmentData.departmentStatus">
+                <el-radio label="0">不启用
+                </el-radio>
+                <el-radio label="1">启用
+                </el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="'所在医院ID'"
+            <el-form-item :label="'所在医院'"
                           prop="companyInfoId"
                           style="display: none;">
               <el-input v-model="departmentData.companyInfoId"

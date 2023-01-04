@@ -99,9 +99,9 @@ export default class extends Vue {
     { type: 'checkbox', width: 60 },
     { field: 'billCode', title: '盘点单号', width: 150 },
     { field: 'checkDepartment', title: '任务名称' },
-    { field: 'userId', title: '申请人' },
+    { field: 'userName', title: '申请人' },
     { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
-    { field: 'departmentId', title: '制单科室 ' },
+    { field: 'departmentName', title: '制单科室 ' },
     { field: 'equipmentCategory', title: '盘点范围' },
     {
       field: 'approveStatus',
@@ -136,12 +136,14 @@ export default class extends Vue {
    ************************************/
   public handleSearch(row: any) {
     const { id, nextNodeCode } = row
+    row.createTime = moment(row.createTime).format('YYYY-MM-DD')
     this.clickProcessData = row
     this.clickProcessData.billEquipmentList = this.clickProcessData.billEquipmentList.map(
       (item: any) => {
         return { ...item, ...item.equipment }
       }
     )
+    this.clickProcessData.billMain.createTime = moment(this.clickProcessData.billMain.createTime).format('YYYY-MM-DD')
     console.log('🚀 ~ this.clickProcessData', this.clickProcessData)
     sessionStorage.setItem(
       'ClickProcessData',

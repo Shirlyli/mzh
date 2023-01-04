@@ -21,7 +21,26 @@ export function FormatMIsavailable(data: any) {
   return cellValue[0]?.label
 }
 
+// 菜单类型
 export function FormatMType(data: any) {
   const cellValue = _.filter(ALL_OPTIONS.MENU_TYPES, ['value', data.cellValue])
+  return cellValue[0]?.label
+}
+
+// 状态
+export function FormatIsExordium(data: any) {
+  const cellValue = _.filter(ALL_OPTIONS.isExordium, ['value', data.cellValue])
+  return cellValue[0]?.label
+}
+
+// 是否计量检查
+export function FormatIsisMetering(data: any) {
+  const cellValue = _.filter(ALL_OPTIONS.isMetering, ['value', data.cellValue])
+  return cellValue[0]?.label
+}
+
+// 运营状态
+export function FormatRunningState(data: any) {
+  const cellValue = _.filter(ALL_OPTIONS.runningState, ['value', Number(data.cellValue)])
   return cellValue[0]?.label
 }

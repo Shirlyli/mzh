@@ -41,7 +41,7 @@
           <el-select v-model="supplierData.suppliesType"
                      transfer
                      placeholder="请选择">
-            <el-option v-for="item in suppliesType"
+            <el-option v-for="item in suppliesTypeOptions"
                        :key="item.value"
                        :label="item.label"
                        :value="item.value">
