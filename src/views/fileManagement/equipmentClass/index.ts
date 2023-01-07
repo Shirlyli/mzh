@@ -380,7 +380,7 @@ export default class extends Vue {
         }
       })
     if (res.result) {
-      console.log('🚀 ~ handleSearchForDetail ~ res', res.data)
+      console.log('🚀 ~ 点击查看按钮接收数据事件 handleSearchForDetail ~ res', res.data)
     }
   }
 }

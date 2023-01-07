@@ -103,7 +103,6 @@ export default class extends Vue {
   @Prop() paramsConfig!: any
   @Watch('paramsConfig', { immediate: true, deep: true })
   public onParamsConfigChange(newdata: any) {
-    console.log('🚀 ~ newdata', newdata)
     this.findList(newdata)
   }
 
@@ -160,7 +159,6 @@ export default class extends Vue {
 
   // 获取列表数据
   public async findList(config: any) {
-    console.log('🚀 ~ config', config)
     this.loading = true
     this.checkedList = []
     try {
@@ -260,7 +258,6 @@ export default class extends Vue {
 
   // 分页切换事件
   public handlePageChange(pageconfig: any) {
-    console.log('🚀 ~ pageconfig', pageconfig)
     this.tablePage.currentPage = pageconfig.currentPage
     this.tablePage.pageSize = pageconfig.pageSize
     this.paramsConfig.params.page = pageconfig.currentPage

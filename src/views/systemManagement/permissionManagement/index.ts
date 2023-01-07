@@ -43,7 +43,6 @@ export default class extends Vue {
 
   // 接收树形组件点击节点数据
   private async handleNodeClick(data: any) {
-    console.log('🚀 ~ data ~ 接收树形组件点击节点数据', data)
     this.hasChecked = false
     this.nodeClickData = data
     const res: any = await queryMenuTreeAndChoose({ roleId: data.id })

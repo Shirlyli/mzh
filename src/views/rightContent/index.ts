@@ -17,10 +17,6 @@ import VexTable from '@/components/VexTable/index.vue'
 export default class extends Vue {
   @Prop({ default: '' }) private title!: string;
 
-  created() {
-    console.log(this.title)
-  }
-
   @Emit()
   emitHandleCreate() {
     // this.resetTempArticleData();

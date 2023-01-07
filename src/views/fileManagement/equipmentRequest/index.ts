@@ -30,7 +30,6 @@ import moment from 'moment'
 })
 export default class extends Vue {
   async created() {
-    console.log(this.$route)
     await BusinessViewModule.GET_DEPARTMENT_DATA()
     BasicFormList.forEach((item: any) => {
       if (item.slot === 'department') {
@@ -39,7 +38,6 @@ export default class extends Vue {
         })
       }
     })
-    console.log('🚀 ~科室申请～基本信息模块 ', BasicFormList)
   }
 
   public routePath = this.$route.path
@@ -194,7 +192,6 @@ export default class extends Vue {
   };
 
   public handleInsert(row: any) {
-    console.log('🚀 ~ row', row)
     this.addEquipmentRequest()
   }
 
@@ -207,7 +204,6 @@ export default class extends Vue {
     //   title: '流程申请'
     // }
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    console.log('🚀 ~ this.requestForm', this.requestForm, this.requestParams)
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
       .push({
@@ -279,7 +275,6 @@ export default class extends Vue {
       }
     })
     if (res.code === 200) {
-      console.log('🚀 ~ 设备数据', res)
       this.applyDetailData = res.data.map((item: any) => {
         return { label: item.equipmentVO.name, value: item.equipmentVO.id }
       })

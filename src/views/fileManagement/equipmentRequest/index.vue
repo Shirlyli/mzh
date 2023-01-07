@@ -12,6 +12,7 @@
                   :columns="columns"
                   editColumns="['search','del','record']"
                   :hasNotSlotButton="routePath.indexOf('CGX')>-1  ?'add' : 'request'"
+                  :toolbarBtns="[]"
                   @emit-handle-insert="handleInsert"
                   @emit-handle-search="handleSearch"
                   @emit-handle-remove="handleRemove"

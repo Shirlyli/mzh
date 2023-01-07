@@ -167,7 +167,6 @@ export default class extends Vue {
       params
     )
     if (res.result) {
-      console.log('🚀 ~ getCommonTreeData ~ res', res.data)
       this.hLevelList = res.data
     }
   }

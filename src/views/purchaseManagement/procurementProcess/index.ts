@@ -142,13 +142,11 @@ export default class extends Vue {
 
   @Watch('processData.roleType')
   private onChangeRoleType(value: any) {
-    console.log('🚀 ~ value', value)
     this.getRoleTreeData(value)
   }
 
   // 接收树形组件点击节点数据
   private handleNodeClick(data: any) {
-    console.log('🚀 ~ data ~ 接收树形组件点击节点数据', data)
     this.nodeClickData = data
     // 查询菜单及下级菜单 /api/common/dicInfo/querySelfAndPar
     this.paramsConfig = {
@@ -196,7 +194,6 @@ export default class extends Vue {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
         const res: any = await updateProcessData(this.processData)
-        console.log('🚀 ~ this.processData', this.processData)
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig)
         }
@@ -255,6 +252,6 @@ export default class extends Vue {
   }
 
   private addProcess() {
-    console.log('11')
+    console.log('addProcess')
   }
 }

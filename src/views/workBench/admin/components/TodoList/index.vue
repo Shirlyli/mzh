@@ -123,7 +123,6 @@ export default class extends Vue {
       nextNodeState: '待审核'
     })
     if (res.code === 200) {
-      console.log(res)
       this.todos = res.data.map((item:any) => {
         return {
           text: item.businessDescription, done: false

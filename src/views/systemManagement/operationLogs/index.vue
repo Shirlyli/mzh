@@ -9,7 +9,7 @@
                 :formConfig="formConfig"
                 :columns="columns"
                 editColumns="['del']"
-                toolbarBtns="['delete']"
+                :toolbarBtns="['delete']"
                 @emit-handle-remove="handleRemove"
                 :paramsConfig="paramsConfig" />
     </el-card>

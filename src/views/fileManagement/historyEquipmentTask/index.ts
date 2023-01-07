@@ -189,7 +189,6 @@ export default class extends Vue {
   private dialogStatus = 'create';
 
   private handleClick(value:any) {
-    console.log('🚀 ~ value', value.name)
     this.activeName = value.name
     // (this.$refs.vexDoneTable as any).findList(this.paramsConfig);
   }

@@ -122,7 +122,6 @@ export default class extends Vue {
       returnTime: moment(this.clickProcessData.returnTime).format('YYYY-MM-DD'),
       borrowTime: moment(this.clickProcessData.borrowTime).format('YYYY-MM-DD')
     }
-    console.log('🚀 ~ this.clickProcessData', this.clickProcessData)
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
@@ -220,7 +219,6 @@ export default class extends Vue {
    * 新增流程配置
    ******************************/
   public handleInsert(row: any) {
-    console.log('🚀 ~ row', row)
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router

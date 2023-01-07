@@ -384,7 +384,6 @@ export default class extends Vue {
 
   // 点击员工详情展示用户操作页面
   private async handleLoginDialog(row: any) {
-    console.log('🚀 ~ row', row)
     // this.personalDialogVisible = true;
     // const res = await getPersonalInfo({ empId: row.id });
   }

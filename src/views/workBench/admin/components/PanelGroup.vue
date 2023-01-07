@@ -62,7 +62,7 @@ export default class extends Vue {
       nextNodeState: '待审核'
     })
     if (res.code === 200) {
-      console.log(res)
+      console.log('🚀 ~ res', res)
     }
   }
 }

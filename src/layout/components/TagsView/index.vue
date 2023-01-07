@@ -187,7 +187,6 @@ export default class extends Vue {
 
   // 删除当前选中项
   private closeSelectedTag(view: ITagView) {
-    console.log('🚀 ~ view', view)
     TagsViewModule.delView(view)
     if (this.isActive(view)) {
       this.toLastView(TagsViewModule.visitedViews, view)

@@ -12,7 +12,7 @@
                   :columns="columns"
                   editColumns="['search','del','record']"
                   hasNotSlotButton="add"
-                  toolbarBtns="[]"
+                  :toolbarBtns="[]"
                   type="transferApply"
                   @emit-handle-insert="handleInsert"
                   @emit-handle-search="handleSearch"

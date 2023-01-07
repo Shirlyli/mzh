@@ -114,10 +114,8 @@ export default class extends Vue {
    * 新增流程申请
    ******************************************/
   public async createProcess() {
-    console.log('🚀 ~ this.requestParams', this.requestParams);
     (this.$refs as any).requestParams.validate(async(valid:any) => {
       if (valid) {
-        console.log('🚀 ~ valid', valid)
         const params = this.requestParams
         const billApproveList: any = []
         billApproveList.push(params.billApproveList)
@@ -131,7 +129,6 @@ export default class extends Vue {
           billEquipmentList: params.billEquipmentList,
           billApproveList
         })
-        console.log('🚀 ~ sendParams', sendParams)
         const res: any = await handleSaveCheckApply(sendParams)
         //  const res: any = await queryHospitalProcessBusinessSave({
         //   ...this.equipmentProcessData
@@ -156,7 +153,6 @@ export default class extends Vue {
    * @param view
    *****************************/
   private closeSelectedTag(view: ITagView) {
-    console.log('🚀 ~ view', view)
     TagsViewModule.delView(view)
     this.toLastView(TagsViewModule.visitedViews, view)
   }
@@ -193,12 +189,6 @@ export default class extends Vue {
    * 新增设备
    *************************************/
   public addNewEquipment() {
-    console.log(
-      '====',
-      this.watchRequestForm.billEquipmentList,
-      ' this.addEquipment',
-      this.addEquipment
-    )
     const attrLength = this.watchRequestForm.billEquipmentList.length
     if (attrLength !== 0) {
       if (
@@ -217,7 +207,6 @@ export default class extends Vue {
 
   private pushData() {
     this.$nextTick(() => {
-      console.log('🚀 ~ EquipmentDetailFormList', this.addEquipment)
       this.watchRequestForm.billEquipmentList.push(this.addEquipment)
       this.requestParams.billEquipmentList.push({
         id: '',
@@ -234,7 +223,6 @@ export default class extends Vue {
    * @param index
    **************************************/
   public removeKey(label: any, index: number) {
-    console.log('🚀 ~ label', label)
     this.$confirm('此操作将永该, 是否继续?', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',

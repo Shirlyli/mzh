@@ -152,7 +152,6 @@ export default class extends Vue {
 
   // 新增合同
   private createData() {
-    console.log(this.fileList);
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
         const params = {
@@ -170,7 +169,6 @@ export default class extends Vue {
 
   // 修改合同
   private updateData() {
-    console.log(this.fileList);
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
         const { id } = this.contractFormData

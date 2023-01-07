@@ -40,7 +40,6 @@ export default class extends Vue {
         })
       }
     })
-    console.log('🚀 ~ 基本信息模块', BasicFormList)
   }
 
   public basicFormList = BasicFormList;
@@ -145,7 +144,6 @@ export default class extends Vue {
       }
     )
     this.clickProcessData.billMain.createTime = moment(this.clickProcessData.billMain.createTime).format('YYYY-MM-DD')
-    console.log('🚀 ~ this.clickProcessData', this.clickProcessData)
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)

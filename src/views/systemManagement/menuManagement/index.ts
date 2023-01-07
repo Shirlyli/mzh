@@ -144,7 +144,6 @@ export default class extends Vue {
 
   // 接收树形组件点击节点数据
   private handleNodeClick(data: any) {
-    console.log('🚀 ~ data ~ 接收树形组件点击节点数据', data)
     this.nodeClickData = data
     // 查询菜单及下级菜单 /api/common/dicInfo/querySelfAndPar
     this.paramsConfig = {

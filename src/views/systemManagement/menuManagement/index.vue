@@ -25,6 +25,7 @@
                     :columns="columns"
                     hasAssociate="true"
                     editColumns="['edit','del','associate']"
+                    :toolbarBtns="[]"
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"

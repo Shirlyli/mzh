@@ -47,7 +47,7 @@ export default class extends Vue {
   public activeName = 'equipmentVO'; // 当前tab页
   @Watch('activeName') // 监听tab页
   public onActiveNameChange(value: string) {
-    console.log('🚀 ~ value', value)
+    console.log('🚀 ~ onActiveNameChange value', value)
   }
 
   async created() {
@@ -80,12 +80,7 @@ export default class extends Vue {
           departmentId: formValue
         }
       })
-      console.log('🚀 ~ res', res.data)
       if (res.code === 200) {
-        console.log(
-          '🚀 ~ this.allFormList.equipmentVO',
-          this.allFormList.equipmentVO
-        )
         this.allFormList.equipmentVO.forEach((item: any) => {
           if (item.slot === 'equipment') {
             item.options = res.data.map((equip: any) => {
@@ -123,7 +118,6 @@ export default class extends Vue {
   // 获取厂商
   private async queryByConditionSupplier() {
     const resData:any = await queryByConditionSupplier({ page: '1', limit: '10', entity: { id: '' } })
-    console.log('🚀 ~ resData', resData)
     if (resData.code === 200) {
       this.allFormList.equipmentVO.forEach((item: any) => {
         if (item.slot === 'manufactorId') {
@@ -141,7 +135,6 @@ export default class extends Vue {
 
   // 新增设备
   public createData() {
-    // console.log(this.allFormList);
     (this.$refs.equipmentCategoryData as Form).validate(async valid => {
       if (valid) {
         const {
@@ -255,7 +248,6 @@ export default class extends Vue {
    * @param view
    *****************************/
   private closeSelectedTag(view: ITagView) {
-    console.log('🚀 ~ view', view)
     TagsViewModule.delView(view)
     this.toLastView(TagsViewModule.visitedViews, view)
   }

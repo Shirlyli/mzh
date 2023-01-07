@@ -33,7 +33,6 @@ export default class extends Vue {
   public backVisible = false; // 退回
   @Watch('backVisible')
   private onBackVisible(value: any) {
-    console.log('🚀 ~ value', value)
     if (value) {
       this.handleBack()
     }
@@ -42,7 +41,6 @@ export default class extends Vue {
   public endVisible = false; // 终止
   @Watch('endVisible')
   private onEndVisible(value: any) {
-    console.log('🚀 ~ value', value)
     if (value) {
       this.handleEnd()
     }
@@ -167,7 +165,6 @@ export default class extends Vue {
           (this.$refs.equipmentProcessData as Form).resetFields()
           Message.success('审批成功')
         } else {
-          console.log('error')
           return false
         }
       })
@@ -189,7 +186,6 @@ export default class extends Vue {
           (this.$refs.equipmentProcessData as Form).resetFields()
           Message.success('终止成功')
         } else {
-          console.log('error')
           return false
         }
       })
@@ -210,7 +206,6 @@ export default class extends Vue {
           (this.$refs.equipmentProcessData as Form).resetFields()
           Message.success('退回成功')
         } else {
-          console.log('error')
           return false
         }
       })
@@ -222,7 +217,6 @@ export default class extends Vue {
    * @param view
    */
   private closeSelectedTag(view: ITagView) {
-    console.log('🚀 ~ view', view)
     TagsViewModule.delView(view)
     this.toLastView(TagsViewModule.visitedViews, view)
   }
@@ -268,7 +262,6 @@ export default class extends Vue {
     if (res.code === 200) {
       this.allProcessList = res.data
       const dept = _.find(res.data, ['nodeNameCode', nextNodeCode])
-      console.log('🚀 ~ dept', dept)
       this.nextNodeExecutorData = res.data.slice(0, dept.nodeSort - 1)
       if (!this.nextNodeExecutorData.length) {
         Message.error('流程处于初始节点，无法回退')
@@ -323,7 +316,6 @@ export default class extends Vue {
   }
 
   public beforeRemove(file: any, fileList: any) {
-    console.log('🚀 ~ fileList', fileList)
     return this.$confirm(`确定移除 ${file.name}？`)
   }
 }

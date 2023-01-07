@@ -224,7 +224,6 @@ export default class extends Vue {
    * 新增流程配置
    ******************************/
   public handleInsert(row: any) {
-    console.log('🚀 ~ row', row)
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router

@@ -22,7 +22,6 @@ export default class extends Vue {
 
   // 获取列表数据
   private async findList(config: any) {
-    console.log('🚀 ~ config ~ 获取列表数据', config)
     this.loading = true
     try {
       const res: any = await getTableDataList(config.url, config.params)
@@ -46,7 +45,6 @@ export default class extends Vue {
   }
 
   private showPersonalLoginDialog(item: any) {
-    console.log('🚀 ~ item ~ 展示用户设置区域', item)
     this.clickPersonalData = item
     const newPersonalData = _.map(this.employeeData, function(o: any) {
       if (o.id === item.id) {
@@ -81,7 +79,6 @@ export default class extends Vue {
   // 绑定用户设置
   @Emit()
   emitHandleSearch(rowData: any, type:string) {
-    console.log('~ 查看员工信息 ~ emitHandleSearch')
     return { rowData, type }
   }
 

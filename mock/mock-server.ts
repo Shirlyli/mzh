@@ -44,7 +44,6 @@ const connectSwagger = connector(api, apiDefinition, options)
 connectSwagger(app)
 // Print swagger router api summary
 const apiSummary = summarise(apiDefinition)
-console.log(apiSummary)
 
 // Catch 404 error
 app.use((req, res) => {
@@ -61,7 +60,6 @@ const server = http.createServer(app)
 // Listen on provided port, on all network interfaces.
 server.listen(port)
 server.on('error', onError)
-console.log('Mock server started on port ' + port + '!')
 
 // Event listener for HTTP server "error" event.
 function onError(error: any) {
