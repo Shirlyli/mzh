@@ -20,7 +20,6 @@
                :rules="rules"
                :model="requestParams"
                label-position="left"
-               label-width="80px"
                style="margin-left:0;">
 
         <!-- 基本信息 -->
@@ -29,10 +28,11 @@
           <span>基本信息</span>
         </div>
         <el-row :gutter="20">
-          <el-col :span="6"
+          <el-col :span="8"
                   v-for="(item,index) in watchRequestForm.billMain"
                   :key="index">
             <el-form-item :label="item.title"
+                          label-width="120px"
                           :prop="'billMain['+item.field+']'"
                           :rules="item.required ? [{required: true, message: '不能为空', trigger: 'change'}]:[{required: false}]">
               <el-input v-model="requestParams.billMain[item.field]"
@@ -50,7 +50,8 @@
                               v-if="item.type === 'date'"
                               type="date"
                               placeholder="选择日期"
-                              value-format="yyyy-MM-DD">
+                              format="yyyy-MM-dd"
+                              value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -68,12 +69,13 @@
                 v-for="(item,index) in watchRequestForm.billEquipmentList"
                 :key="index">
           <el-col :span="24">
-            <el-row :gutter="20"
+            <el-row :gutter="24"
                     class="singleRow">
               <el-col :span="7"
                       v-for="(equi) in item"
                       :key="equi.field">
                 <el-form-item :label="equi.title"
+                              label-width="120px"
                               :prop="'billEquipmentList['+index+']['+equi.field+']'"
                               :rules="equi.required ?[{required: true,message: '不能为空',trigger: 'change'}]:[{required: false}]">
                   <el-input v-model="requestParams.billEquipmentList[index][equi.field]"
@@ -91,7 +93,7 @@
                                   v-if="equi.type === 'date'"
                                   type="date"
                                   placeholder="选择日期"
-                                  value-format="yyyy-MM-DD">
+                                  value-format="yyyy-MM-dd">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
@@ -105,7 +107,6 @@
               </el-col>
 
             </el-row>
-
           </el-col>
         </el-row>
 
@@ -115,10 +116,11 @@
           <span>审批清单</span>
         </div>
         <el-row :gutter="20">
-          <el-col :span="6"
+          <el-col :span="8"
                   v-for="(item,index) in watchRequestForm.billApproveList"
                   :key="index">
             <el-form-item :label="item.title"
+                          label-width="120px"
                           :prop="'billApproveList['+item.field+']'"
                           :rules="item.required ? [{required: true, message: '不能为空', trigger: 'change'}]:[{required: false}]">
               <el-input v-model="requestParams.billApproveList[item.field]"
@@ -136,11 +138,47 @@
                               v-if="item.type === 'date'"
                               type="date"
                               placeholder="选择日期"
-                              value-format="yyyy-MM-DD">
+                              value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
+
+        <!-- 归还信息  -->
+        <div v-show="watchRequestForm.borrowReturnList">
+          <div class="dividerBox">
+            <el-divider direction="vertical"></el-divider>
+            <span>归还信息</span>
+          </div>
+          <el-row :gutter="20">
+            <el-col :span="8"
+                    v-for="(item,index) in watchRequestForm.borrowReturnList"
+                    :key="index">
+              <el-form-item :label="item.title"
+                            label-width="120px"
+                            :prop="'borrowReturnList['+item.field+']'"
+                            :rules="item.required ? [{required: true, message: '不能为空', trigger: 'change'}]:[{required: false}]">
+                <el-input v-model="requestParams.borrowReturnList[item.field]"
+                          :placeholder="`请输入${item.title}`"
+                          v-if="item.type === 'input'" />
+                <el-select v-model="requestParams.borrowReturnList[item.field]"
+                           v-if="item.type === 'select'"
+                           placeholder="请选择">
+                  <el-option :label="optionValue.label"
+                             :value="optionValue.value"
+                             v-for="optionValue in item.data"
+                             :key="optionValue.label"></el-option>
+                </el-select>
+                <el-date-picker v-model="requestParams.borrowReturnList[item.field]"
+                                v-if="item.type === 'date'"
+                                type="date"
+                                placeholder="选择日期"
+                                value-format="yyyy-MM-DD">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </div>
       </el-form>
 
     </el-card>

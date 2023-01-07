@@ -75,7 +75,7 @@ export default class extends Vue {
     url: '/kssq/queryProcessList', // 根据表单查询项查询数据
     params: {
       page: '1',
-      limit: '20',
+      limit: '10',
       nextNodeExecutor: '3C5775C862C396-346D-46F9-89EC-164A3BF087F2',
       processCode: 'pro_kssq',
       nextNodeState: '已归档'

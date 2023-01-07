@@ -52,7 +52,8 @@ export default class extends Vue {
     data: {
       approveStatus: '',
       rollOutDepartment: '',
-      cteaterTime: ''
+      cteaterTime: '',
+      status: ''
     },
     items: [
       {
@@ -72,7 +73,7 @@ export default class extends Vue {
         }
       },
       {
-        field: 'rollOutDepartment',
+        field: 'status',
         title: '盘点状态',
         span: 8,
         itemRender: {
@@ -123,7 +124,7 @@ export default class extends Vue {
     url: '/checkApply/getCheckApplyInfo', // 根据表单查询项查询数据
     params: {
       page: '1',
-      limit: '20',
+      limit: '10',
       entity: {}
     }
   };

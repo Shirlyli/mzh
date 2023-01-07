@@ -11,10 +11,12 @@ import processRequest from '@/components/processRequest/index.vue'
 import {
   BasicFormList,
   EquipmentDetailFormList,
-  ApprovalFormlist
+  ApprovalFormlist,
+  ReturnInfo
 } from './formColumns'
 import { UserModule } from '@/store/modules/user'
 import moment from 'moment'
+import { FormatApproveStatus } from '@/utils/functions'
 
 @Component({
   name: 'InlineEditTable',
@@ -42,11 +44,11 @@ export default class extends Vue {
    *********************************/
   // 列表查询项-表单
   public formConfig = {
-    data: {
-      approveStatus: '',
-      rollOutDepartment: '',
-      cteaterTime: ''
-    },
+    // data: {
+    //   approveStatus: '',
+    //   rollOutDepartment: '',
+    //   cteaterTime: ''
+    // },
     items: [
       {
         field: 'approveStatus',
@@ -71,14 +73,22 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'billCode', title: '转科单号', width: 150 },
-    { field: 'rollOutDepartmentName', title: '申请科室' },
-    { field: 'userName', title: '申请人' },
-    { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
-    { field: 'rollInDepartmentName', title: ' 转入科室 ' },
-    { field: 'rollOutTime', title: ' 转科日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
-    { field: 'cause', title: ' 转科原因 ' },
-    { field: 'approveStatus', title: ' 审批状态 ' },
+    { field: 'billCode', title: '借用单号', width: 150 },
+    { field: 'departmentName', title: '申请人科室' },
+    { field: 'borrowDepartmentName', title: '借用申请科室' },
+    { field: 'borrowTime', title: '预计借用时间 ', formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    {
+      field: 'returnTime',
+      title: ' 预计归还时间',
+      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+    },
+    { field: 'cause', title: ' 借用原因 ' },
+    { field: 'approveStatus', title: '审批状态', formatter: FormatApproveStatus },
+    {
+      field: 'createTime',
+      title: '申请日期',
+      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+    },
     {
       width: 250,
       title: '操作',
@@ -89,7 +99,7 @@ export default class extends Vue {
 
   // 列表传参
   public paramsConfig: any = {
-    url: '/rollDepartment/getRollDepartmentInfo', // 根据表单查询项查询数据
+    url: '/borrowApply/getBorrowApplyInfo', // 根据表单查询项查询数据
     params: {
       page: '1',
       limit: '10',
@@ -106,6 +116,13 @@ export default class extends Vue {
         return { ...item, ...item.equipment }
       }
     )
+    this.clickProcessData = {
+      ...this.clickProcessData,
+      createTime: moment(this.clickProcessData.createTime).format('YYYY-MM-DD'),
+      returnTime: moment(this.clickProcessData.returnTime).format('YYYY-MM-DD'),
+      borrowTime: moment(this.clickProcessData.borrowTime).format('YYYY-MM-DD')
+    }
+    console.log('🚀 ~ this.clickProcessData', this.clickProcessData)
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
@@ -116,7 +133,7 @@ export default class extends Vue {
     this.$router
       .push({
         path: '/processApproval',
-        query: { nextNodeCode, id, type: '转科' }
+        query: { nextNodeCode, id, type: '借用' }
       })
       .catch(err => {
         console.warn(err)
@@ -141,7 +158,8 @@ export default class extends Vue {
   public requestForm = {
     billMain: BasicFormList,
     billEquipmentList: EquipmentDetailFormList,
-    billApproveList: ApprovalFormlist
+    billApproveList: ApprovalFormlist,
+    borrowReturnList: ReturnInfo
   };
 
   // 申请接口传惨params
@@ -154,11 +172,12 @@ export default class extends Vue {
       userId: (UserModule.userData as any)?.userId,
       userName: (UserModule.userData as any)?.userName,
       createTime: '',
-      rollOutDepartment: '',
-      rollInDepartment: '',
-      equipmentLocation: '',
-      rollOutTime: '',
+      departmentId: '',
+      borrowDepartmentId: '',
+      borrowTime: '',
       cause: '',
+      returnTime: '',
+      returnStatus: '',
       status: '',
       billCode: ''
     },
@@ -176,43 +195,20 @@ export default class extends Vue {
       approveTime: '',
       approveOpinion: '',
       approveStatus: '',
-      billId: ''
-    }
-  };
-
-  public processModal = {
-    id: '',
-    status: '0',
-    billCode: '',
-    billMain: {
-      id: '',
-      userId: '',
-      createTime: '',
-      rollOutDepartment: '',
-      rollInDepartment: '',
-      equipmentLocation: '',
-      rollOutTime: '',
-      cause: '',
-      status: '0',
-      billCode: ''
+      billId: '' // 主表id
     },
-    billEquipmentList: [
-      {
-        id: '',
-        billId: '',
-        equipmentId: ''
-      }
-    ],
-    billApproveList: [
-      {
-        id: '',
-        approveUser: '',
-        approveTime: '',
-        approveOpinion: '',
-        approveStatus: '',
-        chrckId: ''
-      }
-    ]
+    borrowReturnList: {
+      id: '',
+      userId: (UserModule.userData as any)?.userId,
+      userName: (UserModule.userData as any)?.userName,
+      borrowUnivalence: '',
+      borrowDuration: '',
+      totalPrice: '',
+      returnTime: '',
+      returnStatus: '',
+      returnExplain: '',
+      billId: '' // 主表id
+    }
   };
 
   public rules = {
@@ -228,7 +224,7 @@ export default class extends Vue {
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
-      .push({ path: '/processRequest', query: { type: '转科' } })
+      .push({ path: '/processRequest', query: { type: '借用' } })
       .catch(err => {
         console.warn(err)
       })

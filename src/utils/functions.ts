@@ -44,3 +44,9 @@ export function FormatRunningState(data: any) {
   const cellValue = _.filter(ALL_OPTIONS.runningState, ['value', Number(data.cellValue)])
   return cellValue[0]?.label
 }
+
+// 审批状态
+export function FormatApproveStatus(data: any) {
+  const cellValue = _.filter(ALL_OPTIONS.APPROVAL_STATUS, ['value', Number(data.cellValue)])
+  return cellValue[0]?.label
+}

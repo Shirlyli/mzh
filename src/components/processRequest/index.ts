@@ -29,7 +29,28 @@ export default class extends Vue {
   /********************************************
    * 待新增的设备params
    *******************************************/
-  private addEquipment = EquipmentDetailFormList;
+  private addEquipment = [
+    {
+      field: 'equipmentId',
+      title: '设备名称',
+      span: 12,
+      type: 'select',
+      required: true,
+      slot: 'equipment'
+    },
+    {
+      field: 'barCode',
+      title: '规则型号',
+      span: 12,
+      type: 'input'
+    },
+    {
+      field: 'brand',
+      title: '设备品牌',
+      span: 12,
+      type: 'input'
+    }
+  ];
 
   /**********************
    * form表单
@@ -50,6 +71,7 @@ export default class extends Vue {
    *************/
   @Watch('requestParams.billMain.departmentName', { immediate: true })
   @Watch('requestParams.billMain.applyDept', { immediate: true })
+  @Watch('requestParams.billMain.departmentId', { immediate: true })
   public async onChangeRequestParams(formValue: any) {
     console.log('🚀 ~ 监听科室变化', formValue)
     if (formValue) {
@@ -85,13 +107,14 @@ export default class extends Vue {
   @Watch('requestParams.billEquipmentList', { immediate: true, deep: true })
   public onChangeEquipmentId(equipmentId: any) {
     console.log('🚀 ~ 监听设备名称变化', equipmentId, '🚀 ~ form表单数据', this.watchRequestForm)
-    console.log('🚀 ~ params传参数据', this.requestParams)
+    console.log('🚀 ~ params传参数据', this.requestParams.billMain)
   }
 
   /*******************************************
    * 新增流程申请
    ******************************************/
   public async createProcess() {
+    console.log('🚀 ~ this.requestParams', this.requestParams);
     (this.$refs as any).requestParams.validate(async(valid:any) => {
       if (valid) {
         console.log('🚀 ~ valid', valid)
@@ -195,7 +218,6 @@ export default class extends Vue {
   private pushData() {
     this.$nextTick(() => {
       console.log('🚀 ~ EquipmentDetailFormList', this.addEquipment)
-
       this.watchRequestForm.billEquipmentList.push(this.addEquipment)
       this.requestParams.billEquipmentList.push({
         id: '',

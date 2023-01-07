@@ -103,6 +103,7 @@ export default class extends Vue {
   @Prop() paramsConfig!: any
   @Watch('paramsConfig', { immediate: true, deep: true })
   public onParamsConfigChange(newdata: any) {
+    console.log('🚀 ~ newdata', newdata)
     this.findList(newdata)
   }
 
@@ -159,11 +160,11 @@ export default class extends Vue {
 
   // 获取列表数据
   public async findList(config: any) {
+    console.log('🚀 ~ config', config)
     this.loading = true
     this.checkedList = []
     try {
       const res: any = await getTableDataList(config.url, config.params)
-
       if ((res.result || res.code === 200) && res.data) {
         if (this.type === 'equipmentSearch') {
           this.tableData = res.data.map((item: any) => {
@@ -259,9 +260,12 @@ export default class extends Vue {
 
   // 分页切换事件
   public handlePageChange(pageconfig: any) {
+    console.log('🚀 ~ pageconfig', pageconfig)
     this.tablePage.currentPage = pageconfig.currentPage
     this.tablePage.pageSize = pageconfig.pageSize
     this.paramsConfig.params.page = pageconfig.currentPage
+    this.paramsConfig.params.limit = pageconfig.pageSize
+
     this.findList(this.paramsConfig)
   }
 

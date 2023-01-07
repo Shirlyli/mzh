@@ -1,3 +1,4 @@
+
 <template>
   <div class="approvalBox">
     <el-card>
@@ -125,7 +126,7 @@
                :rules="rules"
                :model="requestParams"
                label-position="left"
-               label-width="80px"
+               label-width="120px"
                style="margin-left:0;">
         <!-- 基本信息 -->
         <div class="dividerBox">
@@ -174,6 +175,31 @@
           </el-table>
         </div>
 
+        <!-- 归还信息 -->
+        <div v-show="watchRequestForm.borrowReturnList">
+          <div class="dividerBox">
+            <el-divider direction="vertical"></el-divider>
+            <span>归还信息</span>
+          </div>
+          <div class="contentBox">
+            <el-row :gutter="20">
+              <el-col :span="8"
+                      v-for="(item,index) in watchRequestForm.borrowReturnList"
+                      :key="index">
+                <div class="basicBox">
+                  <span class="title">{{item.title}}:</span>
+                  <span class="value"
+                        v-if="item.type === 'date'">{{processData['borrowReturnList'][0]? moment(processData['borrowReturnList'][0][item.field]).format('YYYY-MM-DD'):'-'}}</span>
+                  <span class="value"
+                        v-else-if="item.type === 'input'">{{processData['borrowReturnList'][0][item.field]?processData['borrowReturnList'][0][item.field]:'-'}}</span>
+                  <span class="value"
+                        v-else>{{ processData['borrowReturnList'][0][item.field]?lodash.filter(item.data,['value',Number(processData['borrowReturnList'][0][item.field])])[0].label :'-'}}</span>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+
         <!-- 附件信息 -->
         <!-- <div class="dividerBox">
         <el-divider direction="vertical"></el-divider>
@@ -201,13 +227,12 @@
       </div> -->
 
         <!-- 审批清单 -->
-
         <div class="dividerBox">
           <el-divider direction="vertical"></el-divider>
           <span>审批清单</span>
         </div>
         <el-row :gutter="20">
-          <el-col :span="6"
+          <el-col :span="8"
                   v-for="(item,index) in watchRequestForm.billApproveList"
                   :key="index">
             <el-form-item :label="item.title"
@@ -228,11 +253,12 @@
                               v-if="item.type === 'date'"
                               type="date"
                               placeholder="选择日期"
-                              value-format="yyyy-MM-DD">
+                              value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
+
       </el-form>
     </el-card>
 
@@ -259,7 +285,7 @@
   margin-bottom: 12px;
   color: #333;
   .title {
-    width: 100px;
+    width: 120px;
   }
   .value {
     color: #999;

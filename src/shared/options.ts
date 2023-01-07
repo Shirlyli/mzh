@@ -90,6 +90,21 @@ const ALL_OPTIONS = {
     { label: '终止', value: 1 },
     { label: '待审批', value: 2 },
     { label: '退回', value: 3 }
+  ],
+  // 归还状态 0：未归还；1：已归还
+  RETURN_STATUS: [
+    { label: '未归还', value: 0 },
+    { label: '已归还', value: 1 }
+  ],
+  // 设备归还状态
+  EQUIP_STATUS: [
+    { label: '完好', value: 1 },
+    { label: '异常', value: 2 }
+  ],
+  // 审批状态
+  APPROVAL_STATUS: [
+    { label: '同意', value: 1 },
+    { label: '驳回', value: 0 }
   ]
 }
 

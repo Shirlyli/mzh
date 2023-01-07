@@ -9,11 +9,14 @@ import { UserModule } from '@/store/modules/user'
 import { Form, Message } from 'element-ui'
 import _ from 'lodash'
 import { Component, Vue, Watch } from 'vue-property-decorator'
+import moment from 'moment'
 @Component({
   name: 'ProcessApproval',
   components: {}
 })
 export default class extends Vue {
+  public moment = moment
+  public lodash = _
   public processData = JSON.parse(
     sessionStorage.getItem('ClickProcessData') ?? '0'
   ); // 流程数据

@@ -119,7 +119,7 @@ export default class extends Vue {
   private async queryHomeProcessBusinessListData() {
     const res: any = await queryHomeProcessBusinessList({
       page: '1',
-      limit: '20',
+      limit: '10',
       nextNodeState: '待审核'
     })
     if (res.code === 200) {
