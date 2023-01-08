@@ -1,5 +1,5 @@
 <template>
-  <div class="personalCard">
+  <div class="commonContainerBox">
     <!-- 列表区域 -->
     <el-card>
       <div slot="header"
@@ -12,7 +12,7 @@
                   :columns="columns"
                   editColumns="['search','del','record']"
                   hasNotSlotButton="add"
-                  :toolbarBtns="[]"
+                   :toolbarBtns="['add', 'import', 'delete', 'export']"
                   type="transferApply"
                   @emit-handle-insert="handleInsert"
                   @emit-handle-search="handleSearch"

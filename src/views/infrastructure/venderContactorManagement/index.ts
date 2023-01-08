@@ -15,7 +15,7 @@ import {
   handleLinkmanDel,
   handleLinkmanUpdate
 } from '@/api/basic'
-import ALL_OPTIONS from '@/shared/options'
+import { ALL_OPTIONS } from '@/shared/options'
 @Component({
   name: 'Tab',
   components: {

@@ -6,7 +6,7 @@ import { Form } from 'element-ui'
 import { delMenuInfo, saveMenuInfo } from '@/api/basic'
 import _ from 'lodash'
 import AssociateRole from '@/components/associateRole/index.vue'
-import ALL_OPTIONS from '@/shared/options'
+import { ALL_OPTIONS } from '@/shared/options'
 import { FormatMIsavailable, FormatMType } from '@/utils/functions'
 import moment from 'moment'
 

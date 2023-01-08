@@ -1,5 +1,5 @@
 <template>
-  <div class="personalCard">
+  <div class="commonContainerBox hasLeftMainContent">
     <main-sub-layout class="main-wrapper rule-config-page">
       <template #left>
         <el-card>
@@ -25,7 +25,7 @@
                     :columns="columns"
                     hasAssociate="true"
                     editColumns="['edit','del','associate']"
-                    :toolbarBtns="[]"
+                    :toolbarBtns="['add', 'import', 'delete', 'export']"
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"

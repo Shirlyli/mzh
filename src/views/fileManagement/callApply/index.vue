@@ -1,18 +1,19 @@
 <template>
-  <div class="commonContainerBox">
+  <div class="equipmentManagement">
     <!-- 列表区域 -->
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>科室申请</span>
+        <span>调用申请</span>
       </div>
       <keep-alive>
         <VexTable ref="vexTable"
                   :formConfig="formConfig"
                   :columns="columns"
                   editColumns="['search','del','record']"
-                  :hasNotSlotButton="routePath.indexOf('CGX')>-1  ?'add' : 'request'"
+                  hasNotSlotButton="add"
                    :toolbarBtns="['add', 'import', 'delete', 'export']"
+                  type="transferApply"
                   @emit-handle-insert="handleInsert"
                   @emit-handle-search="handleSearch"
                   @emit-handle-remove="handleRemove"
@@ -88,6 +89,7 @@
   position: absolute;
   bottom: 10px;
   right: 10px;
-
+  .el-button {
+  }
 }
 </style>

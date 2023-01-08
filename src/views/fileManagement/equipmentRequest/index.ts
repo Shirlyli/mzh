@@ -1,14 +1,13 @@
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
 import {
   getProcessNodeInfoByProcessCodeAndBh,
   getUserListProcessCode,
   queryDepartmentInfoTree,
-  queryHospitalProcessBusinessSave,
   delHospitalProcessBusiness,
   queryProcessRecordList
 } from '@/api/basic'
-import { Form, Message } from 'element-ui'
+import { Message } from 'element-ui'
 import {
   BasicFormList,
   EquipmentDetailFormList,
@@ -141,8 +140,8 @@ export default class extends Vue {
     billCode: '',
     billMain: {
       id: '',
-      userId: UserModule.userData?.userId,
-      userName: UserModule.userData?.userName,
+      userId: (UserModule.userData as any)?.userId,
+      userName: (UserModule.userData as any)?.userName,
       createTime: '',
       rollOutDepartment: '',
       rollInDepartment: '',
@@ -163,8 +162,8 @@ export default class extends Vue {
     ],
     billApproveList: {
       id: '',
-      approveUser: UserModule.userData?.userId,
-      approveUserName: UserModule.userData?.userName,
+      approveUser: (UserModule.userData as any)?.userId,
+      approveUserName: (UserModule.userData as any)?.userName,
       approveTime: '',
       approveOpinion: '',
       approveStatus: '',
@@ -191,7 +190,7 @@ export default class extends Vue {
     billApproveList: ApprovalFormlist
   };
 
-  public handleInsert(row: any) {
+  public handleInsert() {
     this.addEquipmentRequest()
   }
 
@@ -208,7 +207,7 @@ export default class extends Vue {
     this.$router
       .push({
         path: '/processRequest',
-        query: { type: '科室申请' }
+        query: { type: '科室申请', applyUrl: 'KSSQ' }
       })
       .catch(err => {
         console.warn(err)

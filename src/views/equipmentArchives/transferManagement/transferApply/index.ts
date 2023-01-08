@@ -227,7 +227,7 @@ export default class extends Vue {
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
-      .push({ path: '/processRequest', query: { type: '转科' } })
+      .push({ path: '/processRequest', query: { type: '转科', applyUrl: 'ZKSQ' } })
       .catch(err => {
         console.warn(err)
       })

@@ -1,4 +1,4 @@
-import ALL_OPTIONS from '@/shared/options'
+import { ALL_OPTIONS } from '@/shared/options'
 import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
 import _ from 'lodash'

@@ -1,5 +1,5 @@
 <template>
-  <div class="personalCard">
+  <div class="commonContainerBox hasLeftMainContent">
     <main-sub-layout class="main-wrapper rule-config-page">
       <template #left>
         <el-card>

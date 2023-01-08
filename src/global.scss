@@ -17,21 +17,6 @@
     text-align: right;
 }
 
-// 
-.personalCard {
-    .el-card {
-        height: calc(100vh - 106px);
-    }
-    .el-card__body {
-        height: 100%;
-        overflow-y: scroll;
-        padding: 10px 20px;
-    }
-    .el-tree {
-        padding-bottom: 60px;
-    }
-}
-
 .el-row {
     padding: 0 20px;
 }
@@ -47,9 +32,32 @@
     }
 }
 
-// 设置列表样式
-.personalCard .vxe-table {
-    height: calc(100vh - 370px);
+.el-card__header,
+.el-card__body {
+    padding: 10px;
+}
+
+.hasLeftMainContent {
+    .el-card {
+        height: calc(100vh - 106px);
+    }
+    .el-card__body {
+        height: 100%;
+        overflow-y: scroll;
+        padding: 10px 20px;
+    }
+    .el-tree {
+        padding-bottom: 60px;
+    }
+}
+
+// 无左侧树结构列表样式，查询项不超过两行
+.commonContainerBox .vxe-table {
+    height: calc(100vh - 300px);
+}
+
+.noSearch .vxe-table {
+    height: calc(100vh - 250px);
 }
 
 // 设置查询项超过两行的列表项
@@ -58,7 +66,7 @@
         height: calc(100vh - 350px);
     }
     .vxe-table {
-        height: calc(100vh - 410px);
+        height: calc(100vh - 340px);
     }
 }
 

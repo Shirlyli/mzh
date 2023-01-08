@@ -1,15 +1,11 @@
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
 import {
-  getProcessNodeInfoByProcessCodeAndBh,
-  getUserListProcessCode,
-  queryDepartmentInfoTree,
   delHospitalProcessBusiness,
   queryProcessRecordList
 } from '@/api/basic'
 import { BusinessViewModule } from '@/store/modules/business'
 import { Message } from 'element-ui'
-import { getEquipmentInfoByDepartmentId } from '@/api/equipment'
 import ProcessApproval from '@/components/processApproval/index.vue'
 import processRequest from '@/components/processRequest/index.vue'
 import {
@@ -18,9 +14,8 @@ import {
   ApprovalFormlist
 } from './formColumns'
 import { UserModule } from '@/store/modules/user'
-import { ALL_OPTIONS } from '@/shared/options'
-import { FormatApproveStatusColumns } from '@/utils/functions'
 import moment from 'moment'
+import { FormatApproveStatus } from '@/utils/functions'
 
 @Component({
   name: 'InlineEditTable',
@@ -49,65 +44,69 @@ export default class extends Vue {
   // 列表查询项-表单
   public formConfig = {
     data: {
-      approveStatus: '',
-      rollOutDepartment: '',
+      status: '',
+      departmentId: '',
       cteaterTime: '',
-      status: ''
+      instructions: '',
+      useDepartmentId: ''
     },
     items: [
       {
-        field: 'approveStatus',
-        title: '任务名称',
-        span: 8,
-        itemRender: { name: '$input', props: { placeholder: '请输入任务名称' } }
-      },
-      {
-        field: 'rollOutDepartment',
-        title: '制单科室',
-        span: 8,
-        itemRender: {
-          name: '$select',
-          props: { placeholder: '请选择' },
-          options: BusinessViewModule.departmentData
-        }
-      },
-      {
         field: 'status',
-        title: '盘点状态',
-        span: 8,
-        itemRender: {
-          name: '$select',
-          props: { placeholder: '请选择' },
-          options: ALL_OPTIONS.APPROVE_STATUS
-        }
+        title: '单据状态',
+        span: 6,
+        itemRender: { name: '$input', props: { placeholder: '请输入单据状态' } }
+      },
+      {
+        field: 'departmentId',
+        title: '申请科室',
+        span: 6,
+        itemRender: { name: '$input', props: { placeholder: '请输入申请科室' } }
+      },
+      {
+        field: 'useDepartmentId',
+        title: '使用科室',
+        span: 6,
+        itemRender: { name: '$input', props: { placeholder: '请输入使用科室' } }
+      },
+      {
+        field: 'instructions',
+        title: '使用情况',
+        span: 6,
+        itemRender: { name: '$input', props: { placeholder: '请输入使用情况' } }
       },
       {
         field: 'cteaterTime',
         title: '创建时间',
-        span: 10,
+        span: 6,
+        folding: true,
         slots: { default: 'create_time' }
       },
-      { slots: { default: 'operate_item' }, span: 8 }
+      {
+        slots: { default: 'operate_item' },
+        span: 24,
+        collapseNode: true,
+        align: 'center'
+      }
     ] // 表单项
   };
 
-  /*************************************
-   * 列表项
-   ************************************/
+  // 流程配置列表项
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'billCode', title: '盘点单号', width: 150 },
-    { field: 'checkDepartment', title: '任务名称' },
-    { field: 'userName', title: '申请人' },
-    { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
-    { field: 'departmentName', title: '制单科室 ' },
-    { field: 'equipmentCategory', title: '盘点范围' },
-    {
-      field: 'approveStatus',
-      title: '盘点状态 ',
-      formatter: (data: any) => FormatApproveStatusColumns(data)
-    },
+    { field: 'billCode', title: '外调单号', width: 150 },
+    { field: 'departmentName', title: '申请人科室' },
+    { field: 'transferDepartmentId', title: '外调科室' },
+    { field: 'departmentPrincipal', title: '科室负责人' },
+    { field: 'transferType', title: '外调类型' },
+    { field: 'transferTime', title: '外调时间', formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'contacts', title: '乙方联系人' },
+    { field: 'contactWay', title: '联系方式' },
+    { field: 'destination', title: '外调目的地' },
+    { field: 'cause', title: ' 外调原因 ' },
+    { field: 'approveStatus', title: '审批状态', formatter: FormatApproveStatus },
+    { field: 'createTime', title: '申请日期', formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD') },
     {
       width: 250,
       title: '操作',
@@ -116,11 +115,9 @@ export default class extends Vue {
     }
   ];
 
-  /*************************************
-   * 列表传参
-   ************************************/
+  // 列表传参
   public paramsConfig: any = {
-    url: '/checkApply/getCheckApplyInfo', // 根据表单查询项查询数据
+    url: '/transferApply/getTransferApplyInfo', // 根据表单查询项查询数据
     params: {
       page: '1',
       limit: '10',
@@ -128,22 +125,21 @@ export default class extends Vue {
     }
   };
 
-  public clickProcessData: any = {}; // 当前操作流程节点信息
-
-  /*************************************
-   * 点击查看按钮事件-跳转审批页面
-   * @param row
-   ************************************/
+  //  点击查看按钮事件
   public handleSearch(row: any) {
     const { id, nextNodeCode } = row
-    row.createTime = moment(row.createTime).format('YYYY-MM-DD')
     this.clickProcessData = row
     this.clickProcessData.billEquipmentList = this.clickProcessData.billEquipmentList.map(
       (item: any) => {
         return { ...item, ...item.equipment }
       }
     )
-    this.clickProcessData.billMain.createTime = moment(this.clickProcessData.billMain.createTime).format('YYYY-MM-DD')
+    this.clickProcessData = {
+      ...this.clickProcessData,
+      createTime: moment(this.clickProcessData.createTime).format('YYYY-MM-DD'),
+      returnTime: moment(this.clickProcessData.returnTime).format('YYYY-MM-DD'),
+      borrowTime: moment(this.clickProcessData.borrowTime).format('YYYY-MM-DD')
+    }
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
@@ -154,17 +150,14 @@ export default class extends Vue {
     this.$router
       .push({
         path: '/processApproval',
-        query: { nextNodeCode, id, type: '盘点' }
+        query: { nextNodeCode, id, type: '外调' }
       })
       .catch(err => {
         console.warn(err)
       })
   }
 
-  /*************************************
-   * 删除事件
-   * @param data
-   ************************************/
+  // 删除事件
   public async handleRemove(data: any) {
     const res: any = await delHospitalProcessBusiness({
       ids: data.id
@@ -192,14 +185,15 @@ export default class extends Vue {
     billCode: '',
     billMain: {
       id: '',
-      userId: UserModule.userData?.userId,
-      userName: UserModule.userData?.userName,
+      userId: (UserModule.userData as any)?.userId,
+      userName: (UserModule.userData as any)?.userName,
       createTime: '',
-      rollOutDepartment: '',
-      rollInDepartment: '',
-      equipmentLocation: '',
-      rollOutTime: '',
+      departmentId: '',
+      borrowDepartmentId: '',
+      borrowTime: '',
       cause: '',
+      returnTime: '',
+      returnStatus: '',
       status: '',
       billCode: ''
     },
@@ -212,23 +206,43 @@ export default class extends Vue {
     ],
     billApproveList: {
       id: '',
-      approveUser: UserModule.userData?.userId,
-      approveUserName: UserModule.userData?.userName,
+      approveUser: (UserModule.userData as any)?.userId,
+      approveUserName: (UserModule.userData as any)?.userName,
       approveTime: '',
       approveOpinion: '',
       approveStatus: '',
-      billId: ''
+      billId: '' // 主表id
+    },
+    borrowReturnList: {
+      id: '',
+      userId: (UserModule.userData as any)?.userId,
+      userName: (UserModule.userData as any)?.userName,
+      borrowUnivalence: '',
+      borrowDuration: '',
+      totalPrice: '',
+      returnTime: '',
+      returnStatus: '',
+      returnExplain: '',
+      billId: '' // 主表id
     }
+  };
+
+  public rules = {
+    nextNodeExecutor: [{ require: true, trigger: 'change', message: '请选择' }],
+    approveStatus: [{ require: true, trigger: 'change', message: '请选择' }]
   };
 
   /*******************************
    * 新增流程配置
    ******************************/
-  public handleInsert() {
+  public handleInsert(row: any) {
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
-      .push({ path: '/processRequest', query: { type: '盘点', applyUrl: 'PDSQ' } })
+      .push({
+        path: '/processRequest',
+        query: { type: '外调', applyUrl: 'WDSQ' }
+      })
       .catch(err => {
         console.warn(err)
       })
@@ -254,4 +268,10 @@ export default class extends Vue {
       this.processRecordListData = res.data
     }
   }
+
+  /************************************
+   * 流程审批相关
+   *************************************/
+  public applyDeptData = []; // 科室
+  public clickProcessData: any = {}; // 当前操作流程节点信息
 }

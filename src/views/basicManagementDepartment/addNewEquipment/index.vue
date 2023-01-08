@@ -1,5 +1,5 @@
 <template>
-  <div class="personalCard">
+  <div class="commonContainerBox hasLeftMainContent">
     <main-sub-layout class="main-wrapper rule-config-page">
       <template #left>
         <el-card>
@@ -23,7 +23,7 @@
                     :formConfig="formConfig"
                     :columns="columns"
                     editColumns="['edit','del']"
-                    :toolbarBtns="[]"
+                     :toolbarBtns="['add', 'import', 'delete', 'export']"
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"

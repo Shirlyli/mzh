@@ -5,7 +5,7 @@ import VexTable from '@/components/VexTable/index.vue'
 import { Form } from 'element-ui'
 import { dealEquipmentData, updateEquipmentData } from '@/api/equipment'
 import _ from 'lodash'
-import ALL_OPTIONS from '@/shared/options'
+import { ALL_OPTIONS } from '@/shared/options'
 import moment from 'moment'
 // import { TreeData } from "@/mock/tree";
 @Component({

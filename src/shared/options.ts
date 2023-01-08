@@ -1,4 +1,4 @@
-const ALL_OPTIONS = {
+export const ALL_OPTIONS = {
   // 医院配置
   hospital: {
     id: '3A8F0344E6AC24-2F51-4154-B02B-B1CBA28B4F85',
@@ -108,4 +108,11 @@ const ALL_OPTIONS = {
   ]
 }
 
-export default ALL_OPTIONS
+export const APPLY_URL:any = {
+  BFSQ: 'scrapApply/saveScrapApply',
+  JYSQ: 'borrowApply/saveBorrowApply',
+  PDSQ: 'checkApply/saveCheckApply',
+  ZKSQ: 'rollDepartment/saveRollDepartment',
+  KSSQ: 'kssq/save',
+  WDSQ: 'transferApply/saveTransferApply'
+}

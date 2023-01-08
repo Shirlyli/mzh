@@ -1,4 +1,4 @@
-import ALL_OPTIONS from '@/shared/options'
+import { ALL_OPTIONS } from '@/shared/options'
 import { BusinessViewModule } from '@/store/modules/business'
 /**
  * 设备基础信息

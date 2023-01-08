@@ -1,5 +1,5 @@
 <template>
-  <div class="personalCard">
+  <div class="hasLeftMainContent noSearch">
     <main-sub-layout class="main-wrapper rule-config-page">
       <template #left>
         <el-card>
@@ -26,7 +26,7 @@
                     :formConfig="formConfig"
                     :columns="columns"
                     editColumns="['edit','del']"
-                    :toolbarBtns="[]"
+                     :toolbarBtns="['add', 'import', 'delete', 'export']"
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"
@@ -99,3 +99,10 @@
 
 <script lang="ts" src="./index.ts">
 </script>
+
+<style lang="scss" scoped>
+.el-card__body {
+  overflow-y: scroll;
+  height: 100%;
+}
+</style>

@@ -514,3 +514,20 @@ export const queryHomeProcessBusinessList = (data: any) =>
     method: 'POST',
     data
   })
+
+/**
+   * 报废申请  scrapApply/saveScrapApply
+   */
+export const saveScrapApply = (data: any) =>
+  request({
+    url: '/scrapApply/saveScrapApply',
+    method: 'POST',
+    data
+  })
+
+export const saveProcessApply = (url:any, data: any) =>
+  request({
+    url,
+    method: 'POST',
+    data
+  })

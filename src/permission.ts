@@ -1,4 +1,4 @@
-import router from './router'
+import router, { constantRoutes } from './router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { Message } from 'element-ui'
@@ -7,6 +7,7 @@ import { UserModule } from '@/store/modules/user'
 import { PermissionModule } from '@/store/modules/permission'
 import i18n from '@/lang' // Internationalization
 import settings from './settings'
+import { getToken } from './utils/cookies'
 
 NProgress.configure({ showSpinner: false })
 
@@ -22,25 +23,40 @@ const getPageTitle = (key: string) => {
 }
 
 router.beforeEach(async(to: Route, _: Route, next: any) => {
+  // Start progress bar
   NProgress.start()
-  const state = JSON.parse(sessionStorage.getItem('state') || '0')
-  if (UserModule.token) {
+  const hasToken = getToken()
+  console.log('to', to)
+  console.log('🚀 ~ hasToken', hasToken)
+  console.log('🚀 ~ UserModule', UserModule.token)
+  // Determine whether the user has logged in
+  if (hasToken) {
+    console.log('🚀 ~ UserModule', UserModule)
     if (to.path === '/login') {
       // If is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done()
     } else {
+      console.log('🚀 ~ UserModule', UserModule.roles)
+      // Check whether the user has obtained his permission roles
       if (UserModule.roles.length === 0) {
         try {
           // Note: roles must be a object array! such as: ['admin'] or ['developer', 'editor']
           await UserModule.GetUserInfo()
           const roles = UserModule.roles
+          console.log('🚀 ~ roles', roles)
           // Generate accessible routes map based on role
           PermissionModule.GenerateRoutes(roles)
+          console.log('🚀 ~ PermissionModule.dynamicRoutes', PermissionModule.dynamicRoutes)
           // Dynamically add accessible routes
           PermissionModule.dynamicRoutes.forEach(route => {
             router.addRoute(route)
           })
+          console.log('🚀 ~ router', router)
+
+          // constantRoutes.forEach(route => {
+          //   router.addRoute(route)
+          // })
           // Hack: ensure addRoutes is complete
           // Set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })

@@ -11,7 +11,7 @@
                   :formConfig="formConfig"
                   :columns="columns"
                   editColumns="['search','record']"
-                  :toolbarBtns="[]"
+                   :toolbarBtns="['add', 'import', 'delete', 'export']"
                   hasNotSlotButton="true"
                   @emit-handle-search="handleSearch"
                   @emit-handle-record="handleRecord"

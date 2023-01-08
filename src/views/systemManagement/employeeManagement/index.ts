@@ -17,7 +17,7 @@ import {
 } from '@/api/basic'
 import Content from './content.vue'
 import { VXETable } from 'vxe-table'
-import ALL_OPTIONS from '@/shared/options'
+import { ALL_OPTIONS } from '@/shared/options'
 import moment from 'moment'
 @Component({
   name: 'Tab',

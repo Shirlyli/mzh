@@ -1,5 +1,5 @@
 <template>
-  <div class="personalCard">
+  <div class="commonContainerBox">
     <el-card>
       <div slot="header"
            class="clearfix">
@@ -43,7 +43,7 @@ export default class extends Vue {
       {
         field: 'lOptModual',
         title: '模块名',
-        span: 12,
+        span: 5,
         itemRender: {
           name: '$input',
           props: { placeholder: '请输入医院名称' }
@@ -52,7 +52,7 @@ export default class extends Vue {
       {
         field: 'lMethod',
         title: '请求方法',
-        span: 12,
+        span: 5,
         itemRender: {
           name: '$input',
           props: { placeholder: '请输入医院名称' }
@@ -61,10 +61,10 @@ export default class extends Vue {
       {
         field: 'lOptAct',
         title: '操作动作',
-        span: 12,
+        span: 10,
         slots: { default: 'create_time' }
       },
-      { slots: { default: 'operate_item' }, span: 12 }
+      { slots: { default: 'operate_item' }, span: 4 }
     ] // 表单项  }
   }
 

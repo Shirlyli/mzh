@@ -10,7 +10,7 @@ import {
 } from '@/api/equipment'
 import { FormItemTypes, SupplierFormTypes } from './type'
 import _ from 'lodash'
-import ALL_OPTIONS from '@/shared/options'
+import { ALL_OPTIONS } from '@/shared/options'
 import { FormatRunningState } from '@/utils/functions'
 @Component({
   name: 'Tab',

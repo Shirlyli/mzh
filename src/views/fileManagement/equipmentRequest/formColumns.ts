@@ -1,4 +1,4 @@
-import ALL_OPTIONS from '@/shared/options'
+import { ALL_OPTIONS } from '@/shared/options'
 import { UserModule } from '@/store/modules/user'
 
 export const BasicFormList = [

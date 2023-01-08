@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="hasLeftMainContent">
     <!-- 角色绑定 菜单点击关联角色 -->
     <el-dialog title="关联角色"
                :visible="roleDialogVisible"

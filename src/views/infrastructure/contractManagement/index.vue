@@ -1,5 +1,5 @@
 <template>
-  <div class="personalCard">
+  <div class="commonContainerBox">
     <el-card>
       <div slot="header"
            class="clearfix">
@@ -9,7 +9,7 @@
                 :formConfig="formConfig"
                 :columns="columns"
                 editColumns="['edit','del']"
-                :toolbarBtns="[]"
+                 :toolbarBtns="['add', 'import', 'delete', 'export']"
                 @emit-handle-insert="handleInsert"
                 @emit-handle-update="handleUpdate"
                 @emit-handle-remove="handleRemove"

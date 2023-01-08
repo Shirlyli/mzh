@@ -1,5 +1,5 @@
 <template>
-  <div class="personalCard">
+  <div class="noSearch hasLeftMainContent">
     <main-sub-layout class="main-wrapper rule-config-page">
       <template #left>
         <el-card>
@@ -28,7 +28,7 @@
                     :columns="columns"
                     type="process"
                     editColumns="['edit','del']"
-                    :toolbarBtns="[]"
+                     :toolbarBtns="['add', 'import', 'delete', 'export']"
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"

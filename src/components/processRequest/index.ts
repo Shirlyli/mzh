@@ -1,30 +1,15 @@
-import { handleSaveCheckApply } from '@/api/basic'
+import { saveProcessApply } from '@/api/basic'
 import { getEquipmentInfoByDepartmentId } from '@/api/equipment'
 import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
-import { EquipmentDetailFormList } from '@/views/equipmentArchives/transferManagement/transferApply/formColumns'
 import { Component, Vue, Watch, Emit } from 'vue-property-decorator'
+import { APPLY_URL } from '@/shared/options'
 @Component({
   name: 'processRequest',
   components: {}
 })
 export default class extends Vue {
-  public rules = {
-    // billMain: {
-    //   projectName: [{ required: true, message: '项目名称必填', trigger: 'blur' }],
-    //   applyDept: [{ required: true, message: '申请科室必填', trigger: 'change' }],
-    //   applyPerson: [{ required: true, message: '申请人必填', trigger: 'blur' }]
-    // },
-    // billEquipmentList: {
-    //   equipmentId: [{ required: true, message: '设备名称必填', trigger: 'change' }]
-    // },
-    // billApproveList: {
-    //   approveUserName: [{ required: true, message: '审批人必填', trigger: 'blur' }],
-    //   approveTime: [{ required: true, message: '审批时间必填', trigger: 'change' }],
-    //   approveTier: [{ required: true, message: '审批层级必填', trigger: 'change' }],
-    //   approveOpinion: [{ required: true, message: '审批意见必填', trigger: 'blur' }]
-    // }
-  }
+  public rules = {}
 
   /********************************************
    * 待新增的设备params
@@ -115,7 +100,8 @@ export default class extends Vue {
    ******************************************/
   public async createProcess() {
     (this.$refs as any).requestParams.validate(async(valid:any) => {
-      if (valid) {
+      const { applyUrl } = this.$route.query
+      if (valid && applyUrl) {
         const params = this.requestParams
         const billApproveList: any = []
         billApproveList.push(params.billApproveList)
@@ -129,7 +115,7 @@ export default class extends Vue {
           billEquipmentList: params.billEquipmentList,
           billApproveList
         })
-        const res: any = await handleSaveCheckApply(sendParams)
+        const res: any = await saveProcessApply(APPLY_URL[applyUrl], sendParams)
         //  const res: any = await queryHospitalProcessBusinessSave({
         //   ...this.equipmentProcessData
         // }) 科室申请

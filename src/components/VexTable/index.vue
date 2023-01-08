@@ -203,6 +203,8 @@ export default class extends Vue {
   public resetFor() {
     this.formConfig.data = {}
     this.paramsConfig.params.entity = {}
+    console.log('🚀 ~  this.paramsConfig', this.paramsConfig)
+    this.findList(this.paramsConfig)
   }
 
   // 编辑
@@ -257,11 +259,11 @@ export default class extends Vue {
   }
 
   // 分页切换事件
-  public handlePageChange(pageconfig: any) {
-    this.tablePage.currentPage = pageconfig.currentPage
-    this.tablePage.pageSize = pageconfig.pageSize
-    this.paramsConfig.params.page = pageconfig.currentPage
-    this.paramsConfig.params.limit = pageconfig.pageSize
+  public handlePageChange(pageConfig: any) {
+    this.tablePage.currentPage = pageConfig.currentPage
+    this.tablePage.pageSize = pageConfig.pageSize
+    this.paramsConfig.params.page = pageConfig.currentPage
+    this.paramsConfig.params.limit = pageConfig.pageSize
 
     this.findList(this.paramsConfig)
   }

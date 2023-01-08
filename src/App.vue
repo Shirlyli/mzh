@@ -13,8 +13,8 @@ import { UserModule } from '@/store/modules/user'
 @Component({
   name: 'App',
   components: {
-    ServiceWorkerUpdatePopup,
-  },
+    ServiceWorkerUpdatePopup
+  }
 })
 export default class extends Vue {
   created() {
@@ -25,16 +25,18 @@ export default class extends Vue {
     // beforeunload事件在页面刷新时先触发
     window.addEventListener('beforeunload', this.saveState)
   }
+
   mounted() {
     window.addEventListener('unload', this.saveState)
   }
+
   private saveState() {
     sessionStorage.setItem(
       'state',
       JSON.stringify({
         token: UserModule.token,
         loginForm: UserModule.loginForm,
-        roles: UserModule.roles,
+        roles: UserModule.roles
       })
     )
   }

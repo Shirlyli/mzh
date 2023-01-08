@@ -12,7 +12,6 @@ import { PermissionModule } from './permission'
 import { TagsViewModule } from './tags-view'
 import store from '@/store'
 import { queryLeftMenuData } from '@/api/basic'
-import { Base64 } from 'js-base64'
 export interface IUserState {
   token: string
   name: string
@@ -88,6 +87,7 @@ class User extends VuexModule implements IUserState {
     userName = userName.trim()
     const res: any = await login({ userName, userPwd })
     if (res.code) {
+      // localStorage.setItem('userInfo', JSON.stringify(userInfo))
       setToken(res.data.token)
       this.SET_TOKEN(res.data.token)
     }
@@ -108,18 +108,18 @@ class User extends VuexModule implements IUserState {
 
   @Action({ rawError: true })
   public async GetUserInfo() {
+    // const userInfo = JSON.parse(localStorage.getItem('userInfo') ?? '0')
+
     if (this.token === '') {
       throw Error('GetUserInfo: token is undefined!')
     }
-    const state = JSON.parse(sessionStorage.getItem('state') || '0')
     const res = await getUserInfo(this.loginForm)
     if (!res.data) {
       throw Error('Verification failed, please Login again.')
     }
-    const { roles, userName } = res.data
     this.SET_USER_DATA(res.data)
     this.SET_ROLES(['admin'])
-    this.SET_NAME(userName)
+    this.SET_NAME(res.data.userName)
     this.SET_AVATAR('')
     this.SET_INTRODUCTION('')
     this.SET_EMAIL('')

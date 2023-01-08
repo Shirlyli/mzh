@@ -8,10 +8,9 @@ import {
 import { RouteConfig } from 'vue-router'
 import { asyncRoutes, constantRoutes } from '@/router'
 import store from '@/store'
-// import { queryLeftMenuData } from '@/api/basic'
 import Layout from '@/layout/index.vue'
-// import { Message } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
+import { queryLeftMenuData } from '@/api/basic'
 const hasPermission = (roles: string[], route: RouteConfig) => {
   if (route.meta && route.meta.roles) {
     return roles.some(role => route.meta.roles.includes(role))
@@ -58,11 +57,11 @@ export function generaMenu(routes: any, data: any) {
                 component: (resolve: any) =>
                   require([`@/views${item.component}/index.vue`], resolve),
                 name: item.name,
-                meta: item.meta
+                meta: { ...item.meta, roles: ['admin'] }
               }
             ],
         name: item.name,
-        meta: item.meta
+        meta: { ...item.meta, roles: ['admin'] }
       }
       // 遍历子标签，并加入到主目录的children中去
       item.children.forEach((i: any) => {
@@ -71,7 +70,7 @@ export function generaMenu(routes: any, data: any) {
           component: (resolve: any) =>
             require([`@/views${i.component}/index.vue`], resolve),
           name: i.name,
-          meta: i.meta,
+          meta: { ...i.meta, roles: ['admin'] },
           children: i.children.length
             ? []
             : [
@@ -80,7 +79,7 @@ export function generaMenu(routes: any, data: any) {
                   component: (resolve: any) =>
                     require([`@/views${i.component}/index.vue`], resolve),
                   name: i.name,
-                  meta: i.meta
+                  meta: { ...i.meta, roles: ['admin'] }
                 }
               ]
         }
@@ -91,7 +90,7 @@ export function generaMenu(routes: any, data: any) {
             component: (resolve: any) =>
               require([`@/views${o.component}/index.vue`], resolve),
             name: o.name,
-            meta: o.meta,
+            meta: { ...o.meta, roles: ['admin'] },
             children: o.children.length
               ? []
               : [
@@ -100,7 +99,7 @@ export function generaMenu(routes: any, data: any) {
                     component: (resolve: any) =>
                       require([`@/views${o.component}/index.vue`], resolve),
                     name: o.name,
-                    meta: o.meta
+                    meta: { ...o.meta, roles: ['admin'] }
                   }
                 ]
           }
@@ -110,7 +109,7 @@ export function generaMenu(routes: any, data: any) {
               component: (resolve: any) =>
                 require([`@/views${u.component}/index.vue`], resolve),
               name: u.name,
-              meta: u.meta,
+              meta: { ...u.meta, roles: ['admin'] },
               children: u.children.length
                 ? []
                 : [
@@ -119,7 +118,7 @@ export function generaMenu(routes: any, data: any) {
                       component: (resolve: any) =>
                         require([`@/views${u.component}/index.vue`], resolve),
                       name: u.name,
-                      meta: u.meta
+                      meta: { ...u.meta, roles: ['admin'] }
                     }
                   ]
             }
@@ -155,45 +154,39 @@ class Permission extends VuexModule implements IPermissionState {
   }
 
   @Action
-  public GenerateRoutes(roles: string[]) {
-    return new Promise(resolve => {
-      let accessedRoutes
-      if (roles.includes('admin')) {
-        accessedRoutes = asyncRoutes
-      } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-      }
-      // console.log("🚀 ~ asyncRoutes", asyncRoutes);
-      // this.SET_ROUTES(accessedRoutes);
-      // 【新加入】开始
-      const loadMenuData: any = []
-      // queryLeftMenuData({}).then((response: any) => {
-      const data = UserModule.menu
-      // 我的code为100200为正常
-      // if (response.code !== 200) {
-      //   Message({ type: "error", message: "菜单数据加载异常" });
-      // } else {
-      // 获取目录的json
-      // data = mockData.data;
-      // 把data的数据拷贝到loadMenuData里面
-      Object.assign(loadMenuData, data)
-      // 把asyncRoutes的数据拷贝到tempAsyncRoutes里面
-      const tempAsyncRoutes = Object.assign([], accessedRoutes)
-      // 最最重要的，把loadMenuData追加到tempAsyncRoutes后面
-      generaMenu(tempAsyncRoutes, loadMenuData)
-      // 定义accessedRoutes
-      let newaccessedRoutes
-      // 把 tempAsyncRoutes 的值给 accessedRoutes ，并输出
-      // eslint-disable-next-line prefer-const
-      newaccessedRoutes = tempAsyncRoutes || []
-      // 下面这些就是加载目录了
-      this.SET_ROUTES(newaccessedRoutes)
-      resolve(newaccessedRoutes)
-      // }
-      // });
-    }).catch(error => {
-      console.log('🚀 ~ error', error)
-    })
+  public async GenerateRoutes(roles: string[]) {
+    let accessedRoutes
+    if (roles.includes('admin')) {
+      accessedRoutes = asyncRoutes
+    } else {
+      accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+    }
+    console.log('🚀 ~ accessedRoutes', accessedRoutes)
+    // 【新加入】开始
+    const loadMenuData: any = []
+    const data = UserModule.menu
+    console.log('🚀 ~ data', data)
+    // 把data的数据拷贝到loadMenuData里面
+    Object.assign(loadMenuData, data)
+    // 把asyncRoutes的数据拷贝到tempAsyncRoutes里面
+    const tempAsyncRoutes = Object.assign([], accessedRoutes)
+    // 最最重要的，把loadMenuData追加到tempAsyncRoutes后面
+    generaMenu(tempAsyncRoutes, loadMenuData)
+    // 定义accessedRoutes
+    let newaccessedRoutes
+    // 把 tempAsyncRoutes 的值给 accessedRoutes ，并输出
+    // eslint-disable-next-line prefer-const
+    newaccessedRoutes = tempAsyncRoutes || []
+    console.log('🚀 ~ newaccessedRoutes', newaccessedRoutes)
+    // 下面这些就是加载目录了
+    this.SET_ROUTES(newaccessedRoutes)
+    return newaccessedRoutes
+    // return new Promise(resolve => {
+
+    //   resolve(newaccessedRoutes)
+    // }).catch(error => {
+    //   console.log('🚀 ~ error', error)
+    // })
   }
 }
 
