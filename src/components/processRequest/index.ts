@@ -100,7 +100,7 @@ export default class extends Vue {
    ******************************************/
   public async createProcess() {
     (this.$refs as any).requestParams.validate(async(valid:any) => {
-      const { applyUrl } = this.$route.query
+      const applyUrl:any = this.$route.query.applyUrl
       if (valid && applyUrl) {
         const params = this.requestParams
         const billApproveList: any = []
@@ -115,10 +115,7 @@ export default class extends Vue {
           billEquipmentList: params.billEquipmentList,
           billApproveList
         })
-        const res: any = await saveProcessApply(APPLY_URL[applyUrl], sendParams)
-        //  const res: any = await queryHospitalProcessBusinessSave({
-        //   ...this.equipmentProcessData
-        // }) 科室申请
+        const res: any = await saveProcessApply((APPLY_URL as any)[applyUrl], sendParams)
         if (res.code === 200) {
           this.$message.success('发起申请成功')
           this.closeSelectedTag({ path: '/processRequest/index' })

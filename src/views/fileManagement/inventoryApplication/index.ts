@@ -1,15 +1,11 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
 import {
-  getProcessNodeInfoByProcessCodeAndBh,
-  getUserListProcessCode,
-  queryDepartmentInfoTree,
   delHospitalProcessBusiness,
   queryProcessRecordList
 } from '@/api/basic'
 import { BusinessViewModule } from '@/store/modules/business'
 import { Message } from 'element-ui'
-import { getEquipmentInfoByDepartmentId } from '@/api/equipment'
 import ProcessApproval from '@/components/processApproval/index.vue'
 import processRequest from '@/components/processRequest/index.vue'
 import {
@@ -192,8 +188,8 @@ export default class extends Vue {
     billCode: '',
     billMain: {
       id: '',
-      userId: UserModule.userData?.userId,
-      userName: UserModule.userData?.userName,
+      userId: (UserModule.userData as any)?.userId,
+      userName: (UserModule.userData as any)?.userName,
       createTime: '',
       rollOutDepartment: '',
       rollInDepartment: '',
@@ -212,8 +208,8 @@ export default class extends Vue {
     ],
     billApproveList: {
       id: '',
-      approveUser: UserModule.userData?.userId,
-      approveUserName: UserModule.userData?.userName,
+      approveUser: (UserModule.userData as any)?.userId,
+      approveUserName: (UserModule.userData as any)?.userName,
       approveTime: '',
       approveOpinion: '',
       approveStatus: '',
