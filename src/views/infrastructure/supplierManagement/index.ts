@@ -5,7 +5,6 @@ import VexTable from '@/components/VexTable/index.vue'
 import { Form } from 'element-ui'
 import {
   delSupplierData,
-  getTableDataList,
   updateSupplierData
 } from '@/api/equipment'
 import { FormItemTypes, SupplierFormTypes } from './type'
@@ -21,7 +20,7 @@ import { FormatRunningState } from '@/utils/functions'
   }
 })
 export default class extends Vue {
-  private formConfig: { data: SupplierFormTypes, items: FormItemTypes[] } = {
+  public formConfig: { data: SupplierFormTypes, items: FormItemTypes[] } = {
     data: {
       domicile: '',
       id: '',
@@ -94,7 +93,7 @@ export default class extends Vue {
     ] // 表单项
   };
 
-  private columns = [
+  public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'name', title: '厂商名称' },
@@ -120,9 +119,10 @@ export default class extends Vue {
   ];
 
   // 菜单类型
-  private suppliesTypeOptions = ALL_OPTIONS.suppliesType;
+  public suppliesTypeOptions = ALL_OPTIONS.suppliesType;
 
-  private supplierData = {
+  public importDialogVisible = false
+  public supplierData = {
     name: '',
     nameAbbreviation: '',
     suppliesType: '',
@@ -132,13 +132,13 @@ export default class extends Vue {
     id: ''
   }; // 新增或编辑表单
 
-  private rules = {
+  public rules = {
     name: [{ required: true, message: '请输入厂商名称', trigger: 'change' }]
   }; // 表单校验
 
-  private dialogVisible = false; // 新增过模态框
-  private dialogStatus = 'create';
-  private paramsConfig = {
+  public dialogVisible = false; // 新增过模态框
+  public dialogStatus = 'create';
+  public paramsConfig = {
     url: '/supplier/queryByCondition',
     params: {
       page: 1,
@@ -147,23 +147,23 @@ export default class extends Vue {
     }
   };
 
-  private nodeClickData: any = {}; // 点击供应商数据
+  public nodeClickData: any = {}; // 点击供应商数据
 
-  private hLevelList = []; // 字典表
-
+  public hLevelList = []; // 字典表
+  public fileList = []
   // 新增供应商
-  private handleInsert() {
+  public handleInsert() {
     this.dialogStatus = 'create'
     this.dialogVisible = true;
     (this.$refs.dataForm as Form).resetFields()
   }
 
-  private handleReset() {
+  public handleReset() {
     (this.$refs.dataForm as Form).resetFields()
   }
 
   // 模态框关闭事件
-  private handleDialogClose() {
+  public handleDialogClose() {
     this.dialogVisible = false
     this.supplierData = {
       name: '',
@@ -177,7 +177,7 @@ export default class extends Vue {
   }
 
   // 新增供应商
-  private createData() {
+  public createData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
         const {
@@ -208,7 +208,7 @@ export default class extends Vue {
   }
 
   // 修改供应商
-  private updateData() {
+  public updateData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
         const {
@@ -240,7 +240,7 @@ export default class extends Vue {
   }
 
   // 触发编辑事件
-  private handleUpdate(row: any) {
+  public handleUpdate(row: any) {
     const {
       id,
       name,
@@ -267,7 +267,7 @@ export default class extends Vue {
   }
 
   // 删除供应商
-  private async handleRemove(row: any) {
+  public async handleRemove(row: any) {
     let params = {}
     if (Array.isArray(row)) {
       const res = _.map(row, 'id')
@@ -284,5 +284,27 @@ export default class extends Vue {
       (this.$refs.vexTable as any).findList(this.paramsConfig)
     }
     this.$message.success('删除成功')
+  }
+
+  public handleImport(row:any) {
+    console.log('🚀 ~ row', row)
+    this.importDialogVisible = true
+  }
+
+  public handleRemoveFile(file:any, fileList:any) {
+    console.log(file, fileList)
+  }
+
+  public handlePreview(file:any) {
+    console.log(file)
+  }
+
+  public handleExceed(files:any, fileList:any) {
+    this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+  }
+
+  public beforeRemove(file:any, fileList:any) {
+    console.log('🚀 ~ fileList', fileList)
+    return this.$confirm(`确定移除 ${file.name}？`)
   }
 }

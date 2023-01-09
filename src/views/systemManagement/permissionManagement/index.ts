@@ -1,16 +1,12 @@
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
 import VexTable from '@/components/VexTable/index.vue'
-import AddDialog from './addDialog.vue'
-import { Form, Message } from 'element-ui'
+import { Message } from 'element-ui'
 import {
-  delRoleInfo,
   queryMenuTreeAndChoose,
-  saveRoleInfo,
   saveRoleWithMenu
 } from '@/api/basic'
-import _ from 'lodash'
 @Component({
   name: 'Tab',
   components: {
@@ -20,9 +16,9 @@ import _ from 'lodash'
   }
 })
 export default class extends Vue {
-  private nodeClickData: any = {};
-  private url = '/auth/role/queryTree'; // 左侧字典
-  private treeParams = {
+  public nodeClickData: any = {};
+  public url = '/auth/role/queryTree'; // 左侧字典
+  public treeParams = {
     page: '1',
     limit: '10',
     entity: {
@@ -30,19 +26,22 @@ export default class extends Vue {
     }
   }; // 树形图传参
 
-  /**
+  /**************
    * 右侧菜单
-   */
-  private menuData: any = []; // 菜单数据
-  private defaultProps = {
+   *************/
+  public menuData: any = []; // 菜单数据
+  public defaultProps = {
     children: 'children',
     label: 'title'
   };
 
-  private hasChecked = false;
+  public hasChecked = false;
 
-  // 接收树形组件点击节点数据
-  private async handleNodeClick(data: any) {
+  /*****************************************
+   * 接收树形组件点击节点数据
+   * @param data
+   ****************************************/
+  public async handleNodeClick(data: any) {
     this.hasChecked = false
     this.nodeClickData = data
     const res: any = await queryMenuTreeAndChoose({ roleId: data.id })
@@ -61,7 +60,12 @@ export default class extends Vue {
     return data.title.indexOf(value) !== -1
   }
 
-  private handleChecked(data: any, value: any) {
+  /****************************************
+   * 全县列表数据修改
+   * @param data
+   * @param value
+   ***************************************/
+  public handleChecked(data: any, value: any) {
     if (value.checkedKeys.length) {
       this.hasChecked = true
     } else {
@@ -69,9 +73,12 @@ export default class extends Vue {
     }
   }
 
-  // 保存
-  private async handleSave() {
-    const checkedNodes = (this.$refs.menuTree as any).getCheckedNodes()
+  /*******************************
+   * 保存
+   ******************************/
+  public async handleSave() {
+    // (this.$refs.menuTree as any).setCheckedNodes([]);
+    // const checkedNodes = (this.$refs.menuTree as any).getCheckedNodes()
     const checkedKeys = (this.$refs.menuTree as any).getCheckedKeys()
     if (checkedKeys.length) {
       const res: any = await saveRoleWithMenu({
@@ -83,11 +90,13 @@ export default class extends Vue {
         this.hasChecked = false
       }
     }
-    // (this.$refs.menuTree as any).setCheckedNodes([]);
   }
 
-  //
-  private handleDel() {
-    (this.$refs.menuTree as any).setCheckedKeys([])
+  /*******************************
+   * 取消
+   ******************************/
+  public handleDel() {
+    this.hasChecked = false
+    this.handleNodeClick(this.nodeClickData)
   }
 }

@@ -394,7 +394,11 @@ export default class extends Vue {
 
   // 删除账户信息
   public async delPersonal(res: any) {
-    const type = await VXETable.modal.confirm('您确定要解绑改用户?')
+    if (res.result && res.count === 0) {
+      this.$message.success('该用户尚未绑定账号')
+      return
+    }
+    const type = await VXETable.modal.confirm('您确定要解绑该用户?')
     if (type === 'confirm' && res.result && res.count === 1) {
       const isDelete:any = await delPersonalInfo({ ids: res.data.userId })
       if (isDelete.code === 200) {

@@ -23,12 +23,12 @@
         <vxe-button @click="associateRole"
                     size="mini"
                     v-if="hasAssociate">关联角色</vxe-button>
+        <vxe-button v-if="toolbarBtns.includes('import')"
+                    @click="handleImport">导入</vxe-button>
+
         <!-- <vxe-button @click="$refs.xGrid.exportData()"
-                    v-if="toolbarBtns.includes('import')">导入</vxe-button>
-        <vxe-button @click="$refs.xGrid.exportData()"
                     v-if="toolbarBtns.includes('export')">导出</vxe-button> -->
       </template>
-
       <template #add_button>
         <vxe-button @click="insertEvent"
                     status="primary">生成申请单</vxe-button>
@@ -36,6 +36,7 @@
       <template #department="{row}">
         <span>{{row.department?row.department.name :'-'}}</span>
       </template>
+
       <!-- 表单查询项 -->
       <template #create_time="{data}">
         <el-date-picker v-model="data.createtime"
@@ -46,21 +47,12 @@
                         end-placeholder="结束日期">
         </el-date-picker>
       </template>
-      <template #operate_item>
-        <vxe-button type="submit"
-                    status="success"
-                    content="查询"
-                    @click="searchFor"></vxe-button>
-        <vxe-button type="reset"
-                    content="重置"
-                    @click="resetFor"></vxe-button>
-      </template>
       <template #departmentSelect="{data}">
         <div>
           <el-select v-model="data.rollOutDepartment"
                      placeholder="请选择">
             <el-tree node-key="id"
-                     :data="[]"
+                     :data="BussniessDepartmentData"
                      :props="{
                                   children: 'children',
                                   label: 'title'
@@ -78,6 +70,16 @@
           </el-select>
         </div>
       </template>
+      <template #operate_item>
+        <vxe-button type="submit"
+                    status="success"
+                    content="查询"
+                    @click="searchFor"></vxe-button>
+        <vxe-button type="reset"
+                    content="重置"
+                    @click="resetFor"></vxe-button>
+      </template>
+
       <!-- 表格操作 -->
       <template #operateHasSearch="{row}">
         <vxe-button content="查看"
@@ -115,6 +117,7 @@ import { getTableDataList } from '@/api/equipment'
 import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
 import VXETable from 'vxe-table'
 import { Message } from 'element-ui'
+import { BusinessViewModule } from '@/store/modules/business'
 @Component({
   name: 'VexTable',
   components: {}
@@ -183,7 +186,7 @@ export default class extends Vue {
   }
 
   public checkedList = [] // 已选列
-
+  public fileList = []
   // 获取列表数据
   public async findList(config: any) {
     this.loading = true
@@ -347,6 +350,19 @@ export default class extends Vue {
 
   public handleRecord(row: any) {
     this.emitHandleRecord(row)
+  }
+
+  get BussniessDepartmentData() {
+    return BusinessViewModule.departmentData
+  }
+
+  @Emit()
+  emitHandleImport(value: any) {
+    return value
+  }
+
+  public handleImport(row:any) {
+    this.emitHandleImport(row)
   }
 }
 </script>

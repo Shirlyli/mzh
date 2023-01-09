@@ -61,13 +61,15 @@ export default class extends Vue {
         field: 'departmentId',
         title: '申请科室',
         span: 6,
-        itemRender: { name: '$input', props: { placeholder: '请输入申请科室' } }
+        itemRender: { name: '$input', props: { placeholder: '请输入申请科室' } },
+        slots: { default: 'departmentSelect' }
       },
       {
         field: 'useDepartmentId',
         title: '使用科室',
         span: 6,
-        itemRender: { name: '$input', props: { placeholder: '请输入使用科室' } }
+        itemRender: { name: '$input', props: { placeholder: '请输入使用科室' } },
+        slots: { default: 'departmentSelect' }
       },
       {
         field: 'instructions',

@@ -9,10 +9,11 @@
                 :formConfig="formConfig"
                 :columns="columns"
                 editColumns="['edit','del']"
-                 :toolbarBtns="['add', 'import', 'delete', 'export']"
+                :toolbarBtns="['add', 'import', 'delete', 'export']"
                 @emit-handle-insert="handleInsert"
                 @emit-handle-update="handleUpdate"
                 @emit-handle-remove="handleRemove"
+                @emit-handle-import="handleImport"
                 :paramsConfig="paramsConfig" />
     </el-card>
     <!-- 模态框区域 -->
@@ -80,6 +81,28 @@
 
       </div>
     </el-dialog>
+
+    <el-dialog title="导入"
+               :visible="importDialogVisible"
+               top="10%"
+               class="commonDialog"
+               @close="importDialogVisible = false">
+      <el-upload class="upload-demo"
+                 drag
+                 action="https://jsonplaceholder.typicode.com/posts/"
+                 :on-preview="handlePreview"
+                 :on-remove="handleRemoveFile"
+                 :before-remove="beforeRemove"
+                 :limit="3"
+                 :on-exceed="handleExceed"
+                 :file-list="fileList"
+                 multiple>
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <!-- <div class="el-upload__tip"
+             slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
+      </el-upload>
+    </el-dialog>
   </div>
 </template>
 
@@ -89,5 +112,10 @@
 <style lang="scss" scoped>
 .tab-container {
   margin: 30px;
+}
+
+.upload-demo{
+  text-align: center;
+    padding: 30px;
 }
 </style>
