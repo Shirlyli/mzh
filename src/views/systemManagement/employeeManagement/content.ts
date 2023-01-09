@@ -2,6 +2,8 @@ import { getTableDataList } from '@/api/equipment'
 import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator'
 import _ from 'lodash'
 import { Message } from 'element-ui'
+import { VXETable } from 'vxe-table'
+
 @Component({
   name: 'Content',
   components: {}
@@ -9,19 +11,19 @@ import { Message } from 'element-ui'
 export default class extends Vue {
   @Prop() paramsConfig!: any;
   @Watch('paramsConfig', { immediate: true, deep: true })
-  private onParamsConfigChange(newData: any) {
+  public onParamsConfigChange(newData: any) {
     this.findList(newData)
   }
 
-  private loading = false;
-  private employeeData: any = []; // 获取到的员工数据
-  private clickPersonalData: any = {}; // 当前点击的员工数据
+  public loading = false;
+  public employeeData: any = []; // 获取到的员工数据
+  public clickPersonalData: any = {}; // 当前点击的员工数据
   created() {
     this.findList(this.paramsConfig)
   }
 
   // 获取列表数据
-  private async findList(config: any) {
+  public async findList(config: any) {
     this.loading = true
     try {
       const res: any = await getTableDataList(config.url, config.params)
@@ -44,7 +46,7 @@ export default class extends Vue {
     return rowData
   }
 
-  private showPersonalLoginDialog(item: any) {
+  public showPersonalLoginDialog(item: any) {
     this.clickPersonalData = item
     const newPersonalData = _.map(this.employeeData, function(o: any) {
       if (o.id === item.id) {
@@ -62,7 +64,7 @@ export default class extends Vue {
     console.log('新增员工===')
   }
 
-  private insertEmployee() {
+  public insertEmployee() {
     this.emitHandleInsert()
   }
 
@@ -72,7 +74,7 @@ export default class extends Vue {
     return rowData
   }
 
-  private updateEmployee() {
+  public updateEmployee() {
     this.emitHandleUpdate(this.clickPersonalData)
   }
 
@@ -82,7 +84,7 @@ export default class extends Vue {
     return { rowData, type }
   }
 
-  private searchPersonalDetail() {
+  public searchPersonalDetail() {
     if (!this.clickPersonalData.id) {
       Message.error('请选择员工后进行用户设置')
       return
@@ -96,25 +98,29 @@ export default class extends Vue {
     return rowData
   }
 
-  private dealEmployeeInfo() {
+  public async dealEmployeeInfo() {
     if (!this.clickPersonalData.id) {
       Message.error('请选择员工后删除')
       return
     }
-    this.emitHandleRemove(this.clickPersonalData)
-    // }
+    const type = await VXETable.modal.confirm('您确定要删除该员工信息?')
+    if (type === 'confirm') {
+      this.emitHandleRemove(this.clickPersonalData)
+    }
   }
 
   // 查看角色
 
-  private searchRole() {
+  public searchRole() {
     if (!this.clickPersonalData.id) {
       Message.error('请选择员工后查看角色')
     }
   }
 
   // 密码重置
-  // private resetPassword() {}
+  public resetPassword() {
+    console.log('resetPassword')
+  }
 
   // 关联角色
   @Emit()
@@ -122,7 +128,7 @@ export default class extends Vue {
     return rowData
   }
 
-  private associateRole() {
+  public associateRole() {
     if (!this.clickPersonalData.id) {
       Message.error('请选择员工后关联角色')
       return
@@ -131,7 +137,7 @@ export default class extends Vue {
   }
 
   // 解除账号绑定
-  private deletePersonalBind() {
+  public deletePersonalBind() {
     this.emitHandleSearch(this.clickPersonalData, 'unbind')
   }
 }

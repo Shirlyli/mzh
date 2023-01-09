@@ -23,7 +23,7 @@ import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
 import _ from 'lodash'
 @Component({
   name: 'Tree',
-  components: {},
+  components: {}
 })
 export default class extends Vue {
   @Prop({ default: String }) url!: string
@@ -32,7 +32,7 @@ export default class extends Vue {
   public filterText = ''
   public treeData: any[] = [] // 树形数据
   public treeLoading = false // loading是否
-  public expandData: any = [] //默认展开数据集合
+  public expandData: any = [] // 默认展开数据集合
   created() {
     this.getTreeListData()
   }
@@ -49,7 +49,7 @@ export default class extends Vue {
               ...item,
               id: item?.processCode,
               title: item?.processName,
-              children: [],
+              children: []
             }
           })
         } else if (res.data[0] && res.data[0].children) {
@@ -71,13 +71,15 @@ export default class extends Vue {
   // 监听输入框输入数据
   @Watch('filterText', { immediate: true, deep: true })
   onChangeValue(val: any) {
-    ;(this.$refs.tree as any).filter(val)
+    if (val) {
+      (this.$refs.tree as any).filter(val)
+    }
   }
 
   // 默认配置项
   public defaultProps = {
     children: 'children',
-    label: 'title',
+    label: 'title'
   }
 
   @Emit()

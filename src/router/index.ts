@@ -60,9 +60,9 @@ export const constantRoutes: RouteConfig[] = [
         path: 'index',
         component: () =>
           import(/* webpackChunkName: "profile" */ '@/views/profile/index.vue'),
-        name: 'Profile',
+        name: '个人中心',
         meta: {
-          title: 'profile',
+          title: '个人中心',
           icon: 'user',
           noCache: true
         }
@@ -119,7 +119,7 @@ export const constantRoutes: RouteConfig[] = [
         path: 'index',
         component: () =>
           import(
-            /* webpackChunkName: "401" */ '@/views/fileManagement/equipmentClass/components/index.vue'
+            /* webpackChunkName: "401" */ '@/views/equipmentFileManagement/equipmentClass/components/index.vue'
           ),
         name: '设备',
         meta: {

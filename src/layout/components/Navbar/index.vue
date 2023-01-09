@@ -15,13 +15,14 @@
         <!-- <header-search class="right-menu-item" /> -->
         <error-log class="errLog-container right-menu-item hover-effect" />
         <screenfull class="right-menu-item hover-effect" />
-        <el-tooltip
+        <!-- 大小切换 -->
+        <!-- <el-tooltip
           :content="$t('navbar.size')"
           effect="dark"
           placement="bottom"
         >
           <size-select class="right-menu-item hover-effect" />
-        </el-tooltip>
+        </el-tooltip> -->
         <!-- 语言切换 -->
         <!-- <lang-select class="right-menu-item hover-effect" /> -->
       </template>
@@ -109,7 +110,7 @@ export default class extends Vue {
   }
 
   get avatar() {
-    const url = require('@/'+'assets/custom-theme/avator.jpeg')
+    const url = require('@/' + 'assets/custom-theme/avator.jpeg')
     // return UserModule.avatar
     return url
   }

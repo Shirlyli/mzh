@@ -125,7 +125,7 @@ export const getUserDataByDeptId = (data: any) => request({
   data
 })
 // 查看用户已关联绑定角色
-export const queryRolesByUserId = (data: { userId: string }) => request({
+export const queryRolesByUserId = (data: { user_id: string }) => request({
   url: '/auth/role/queryRolesByUserId',
   method: 'POST',
   data

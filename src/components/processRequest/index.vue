@@ -35,9 +35,32 @@
                           label-width="120px"
                           :prop="'billMain['+item.field+']'"
                           :rules="item.required ? [{required: true, message: '不能为空', trigger: 'change'}]:[{required: false}]">
+              <!-- 普通输入框 -->
               <el-input v-model="requestParams.billMain[item.field]"
                         :placeholder="`请输入${item.title}`"
                         v-if="item.type === 'input'" />
+              <!-- 树形下拉框 -->
+              <el-select v-model="requestParams.billMain[item.field]"
+                         placeholder="请选择"
+                         v-if="item.type === 'treeSelect'">
+                <el-tree node-key="id"
+                         :data="item.data"
+                         :props="{
+                                  children: 'children',
+                                  label: 'title'
+                                 }"
+                         class="add_tree"
+                         :expand-on-click-node="false"
+                         :check-on-click-node="true">
+                  <span class="custom-tree-node"
+                        slot-scope="{node, data}">
+                    <el-option style="padding: 0"
+                               :label="data.title"
+                               :value="data.id"></el-option>
+                  </span>
+                </el-tree>
+              </el-select>
+              <!-- 下拉框 -->
               <el-select v-model="requestParams.billMain[item.field]"
                          v-if="item.type === 'select'"
                          placeholder="请选择">
@@ -46,6 +69,7 @@
                            v-for="optionValue in item.data"
                            :key="optionValue.label"></el-option>
               </el-select>
+              <!-- 时间 -->
               <el-date-picker v-model="requestParams.billMain[item.field]"
                               v-if="item.type === 'date'"
                               type="date"
@@ -53,6 +77,13 @@
                               format="yyyy-MM-dd"
                               value-format="yyyy-MM-dd">
               </el-date-picker>
+              <!-- 多行文本框 -->
+              <el-input type="textarea"
+                        :rows="2"
+                        v-if="item.type === 'textarea'"
+                        placeholder="请输入内容"
+                        v-model="requestParams.billMain[item.field]">
+              </el-input>
             </el-form-item>
           </el-col>
         </el-row>

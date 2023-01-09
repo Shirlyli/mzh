@@ -29,7 +29,7 @@ import moment from 'moment'
   }
 })
 export default class extends Vue {
-  private formConfig = {
+  public formConfig = {
     data: {
       eName: '',
       createtime: '',
@@ -60,7 +60,7 @@ export default class extends Vue {
     ] // 表单项
   };
 
-  private columns = [
+  public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'eName', title: '员工名称', width: 120 },
@@ -93,7 +93,7 @@ export default class extends Vue {
     }
   ];
 
-  private treeParams = {
+  public treeParams = {
     page: '1',
     limit: '10',
     entity: {
@@ -101,7 +101,7 @@ export default class extends Vue {
     }
   }; // 树形图传参
 
-  private employeeData = {
+  public employeeData = {
     id: '',
     eName: '',
     citizenNo: '',
@@ -127,18 +127,18 @@ export default class extends Vue {
     sex: ''
   }; // 新增或编辑表单
 
-  private defaultProps = {
+  public defaultProps = {
     children: 'children',
     label: 'title'
   }; // 角色树配置
 
-  private roleData = []; // 角色数据
-  private roleDialogVisible = false; // 角色关联模态框显隐
-  private dialogVisible = false; // 新增模态框
-  private personalDialogVisible = false; // 用户设置模态框
-  private personalDialogType = 'add'; //
-  private dialogStatus = 'create';
-  private paramsConfig = {
+  public roleData = []; // 角色数据
+  public roleDialogVisible = false; // 角色关联模态框显隐
+  public dialogVisible = false; // 新增模态框
+  public personalDialogVisible = false; // 用户设置模态框
+  public personalDialogType = 'add'; //
+  public dialogStatus = 'create';
+  public paramsConfig = {
     // url: "/auth/employee/queryByDeptId",
     url: '/auth/employee/queryByCondition',
     params: {
@@ -150,9 +150,11 @@ export default class extends Vue {
     }
   };
 
-  private nodeClickData: any = {}; // 点击科室数据
-  private url = 'THospitalDepartmentInfo/queryTree'; // 左侧字典
-  private personalData = {
+  public nodeClickData: any = {}; // 点击科室数据
+  public url = 'THospitalDepartmentInfo/queryTree'; // 左侧字典
+
+  public personalData = {
+    userCtime: '',
     userName: '',
     employeeName: '',
     userPwd: '',
@@ -168,19 +170,18 @@ export default class extends Vue {
     dispindex: ''
   }; // 用户设置数据
 
-  private personalEditTitle = '新增用户设置';
-  private personalRules = {
-    userName: [{ required: true, message: '请输入登录名', trigger: 'change' }],
-    userPwd: [{ required: true, message: '请输入密码', trigger: 'change' }],
-    employeeName: [
-      { required: true, message: '请输入用户名', trigger: 'change' }
-    ]
+  public personalEditTitle = '新增用户设置';
+  public personalRules = {
+    userName: [{ required: true, message: '不能为空', trigger: 'change' }],
+    employeeName: [{ required: true, message: '不能为空', trigger: 'change' }],
+    userPwd: [{ required: true, message: '不能为空', trigger: 'change' }]
+
   }; // 用户设置表单校验
 
-  private loading = false; // 角色绑定列表loading
-  private bindRoleData = []; // 用户已绑定角色
-  private clickEmployeeInfo: any = {}; // 当前点击员工数据
-  private empolyeeRules = {
+  public loading = false; // 角色绑定列表loading
+  public bindRoleData = []; // 用户已绑定角色
+  public clickEmployeeInfo: any = {}; // 当前点击员工数据
+  public empolyeeRules = {
     userName: [{ required: true, message: '请输入登录名', trigger: 'change' }],
     userPwd: [{ required: true, message: '请输入密码', trigger: 'change' }],
     employeeName: [
@@ -193,7 +194,7 @@ export default class extends Vue {
   }
 
   // 获取角色树数据
-  private async getRoleTreeData() {
+  public async getRoleTreeData() {
     const res: any = await getRoleTreeData()
     if (res.code === 200) {
       const newRoleData = res.data[0].children.map((item: any) => {
@@ -206,7 +207,7 @@ export default class extends Vue {
     }
   }
 
-  private clearEmployeeForm() {
+  public clearEmployeeForm() {
     this.employeeData = {
       id: '',
       eName: '',
@@ -234,8 +235,27 @@ export default class extends Vue {
     }
   }
 
+  public clearPersonalData() {
+    this.personalData = {
+      userCtime: '',
+      userName: '',
+      employeeName: '',
+      userPwd: '',
+      userEmpId: '',
+      userStatus: '',
+      userType: '0',
+      userUnlocktime: '',
+      userMtime: '',
+      userPmtime: '',
+      userLtime: '',
+      note: '',
+      token: '',
+      dispindex: ''
+    }
+  }
+
   // 新增员工
-  private handleInsert() {
+  public handleInsert() {
     this.clearEmployeeForm()
     const { title, id } = this.nodeClickData
     if (!id) {
@@ -251,7 +271,7 @@ export default class extends Vue {
   }
 
   // 接收树形组件点击节点数据
-  private handleNodeClick(data: any) {
+  public handleNodeClick(data: any) {
     this.nodeClickData = data
     // 查询科室及下级科室 /api/common/dicInfo/querySelfAndPar
     this.paramsConfig = {
@@ -268,14 +288,14 @@ export default class extends Vue {
   }
 
   // 触发修改员工信息
-  private handleUpdate(row: any) {
+  public handleUpdate(row: any) {
     this.employeeData = { ...row, deptName: this.nodeClickData.title }
     this.dialogStatus = 'update'
     this.dialogVisible = true
   }
 
   // 新增员工
-  private createData() {
+  public createData() {
     (this.$refs.empolyeeForm as Form).validate(async valid => {
       if (valid) {
         const params = this.employeeData
@@ -294,7 +314,7 @@ export default class extends Vue {
   }
 
   // 修改员工信息
-  private updateData() {
+  public updateData() {
     (this.$refs.empolyeeForm as Form).validate(async valid => {
       if (valid) {
         const params = this.employeeData
@@ -314,7 +334,7 @@ export default class extends Vue {
   }
 
   // 删除员工信息
-  private async handleRemove(row: any) {
+  public async handleRemove(row: any) {
     let params = {}
     if (Array.isArray(row)) {
       const res = _.map(row, 'id')
@@ -328,34 +348,41 @@ export default class extends Vue {
     }
     const res: any = await dealPersonalData(params)
     if (res.result) {
+      this.$message.success('删除成功');
       (this.$refs.vexTable as any).findList(this.paramsConfig);
       (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams)
+    } else {
+      this.$message.error('删除失败')
     }
-    this.$message.success('删除成功')
   }
 
   // 查看用户设置
-  private async handleSearchForDetail(data: any) {
+  public async handleSearchForDetail(data: any) {
+    this.clearPersonalData()
     const { rowData, type } = data
     const res: any = await getPersonalInfo({ empId: rowData.id })
+    console.log('🚀 ~ res', res)
     if (res.result && res.count === 1) {
       this.personalData = {
         ...res.data,
         userEmpId: rowData.id,
-        employeeName: rowData.eName
+        employeeName: rowData.eName,
+        userLtime: moment().format('YYYY-MM-DD')
       }
     } else {
       this.personalData = {
         ...this.personalData,
         userEmpId: rowData.id,
-        employeeName: rowData.eName
+        employeeName: rowData.eName,
+        userCtime: moment().format('YYYY-MM-DD'),
+        userLtime: moment().format('YYYY-MM-DD')
       }
     }
     if (type === 'bind') {
       this.personalDialogVisible = true
       if (rowData) {
         this.personalDialogType = 'edit'
-        this.personalEditTitle = '修改用户设置'
+        this.personalEditTitle = '员工绑定账户'
       } else {
         this.personalDialogType = 'add'
         this.personalEditTitle = '新增用户设置'
@@ -365,7 +392,8 @@ export default class extends Vue {
     }
   }
 
-  private async delPersonal(res: any) {
+  // 删除账户信息
+  public async delPersonal(res: any) {
     const type = await VXETable.modal.confirm('您确定要解绑改用户?')
     if (type === 'confirm' && res.result && res.count === 1) {
       const isDelete:any = await delPersonalInfo({ ids: res.data.userId })
@@ -377,19 +405,19 @@ export default class extends Vue {
           this.treeParams
         )
       } else {
-        this.$message.success('解绑失败')
+        this.$message.error('解绑失败')
       }
     }
   }
 
   // 点击员工详情展示用户操作页面
-  private async handleLoginDialog(row: any) {
+  public async handleLoginDialog(row: any) {
     // this.personalDialogVisible = true;
     // const res = await getPersonalInfo({ empId: row.id });
   }
 
   // 保存用户设置
-  private async savePersonalData() {
+  public async savePersonalData() {
     const res: any = await bindPersonalInfo({
       ...this.personalData
     })
@@ -403,9 +431,9 @@ export default class extends Vue {
     this.personalDialogVisible = false
   }
 
-  private async queryRolesByUserIdData(row: any) {
+  public async queryRolesByUserIdData(row: any) {
     this.loading = true
-    const res: any = await queryRolesByUserId({ userId: row.userId })
+    const res: any = await queryRolesByUserId({ user_id: row.userId })
     if (res.result) {
       this.$message.success(res.msg)
       this.bindRoleData = res.data
@@ -414,7 +442,7 @@ export default class extends Vue {
   }
 
   // 绑定角色信息
-  private async handleAssociateRole(row: any) {
+  public async handleAssociateRole(row: any) {
     this.clickEmployeeInfo = row
     if (this.nodeClickData) {
       if (row.userId) {
@@ -427,7 +455,7 @@ export default class extends Vue {
   }
 
   // 角色树点击事件
-  private async handleRoleNodeClick(data: any) {
+  public async handleRoleNodeClick(data: any) {
     const res: any = await personalBindRole({
       userId: this.clickEmployeeInfo.userId,
       roleId: data.id
@@ -439,13 +467,13 @@ export default class extends Vue {
   }
 
   // 关联角色确认保存事件
-  private saveRelationRoleData() {
+  public saveRelationRoleData() {
     // console.log((this.$refs.roleTree as any).getCheckedNodes());
     // console.log((this.$refs.roleTree as any).getCheckedKeys());
   }
 
   // 角色删除事件
-  private async handleDelete(row: any) {
+  public async handleDelete(row: any) {
     // console.log("🚀 ~ row ~角色删除事件", row);
     const type = await VXETable.modal.confirm('您确定要删除该数据?')
     if (type === 'confirm') {
@@ -458,5 +486,9 @@ export default class extends Vue {
         this.queryRolesByUserIdData(this.clickEmployeeInfo)
       }
     }
+  }
+
+  public cellDBLClickEvent() {
+    console.log('cellDBLClickEvent')
   }
 }

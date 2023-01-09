@@ -24,7 +24,8 @@ export default class extends Vue {
   private formConfig = {
     data: {
       mName: '',
-      mType: ''
+      mType: '',
+      mUrl: ''
     },
     items: [
       {
@@ -46,12 +47,12 @@ export default class extends Vue {
           options: ALL_OPTIONS.MENU_TYPES
         }
       },
-      /* {
-        field: "size",
-        title: "权限标识",
-        itemRender: {name: "$input", props: {placeholder: "请输入权限标识"}}
+      {
+        field: 'mUrl',
+        title: '菜单路由',
+        itemRender: { name: '$input', props: { placeholder: '请输入菜单路由' } }
       },
-      {field: "mMtime", title: "创建时间", slots: {default: "create_time"}}, */
+      // {field: "mMtime", title: "创建时间", slots: {default: "create_time"}},
       { slots: { default: 'operate_item' } }
     ] // 表单项
   };

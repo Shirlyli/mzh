@@ -19,10 +19,10 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import { RouteRecord, Route } from 'vue-router'
 
 @Component({
-  name: 'Breadcrumb',
+  name: 'Breadcrumb'
 })
 export default class extends Vue {
-  private breadcrumbs: RouteRecord[] = []
+  public breadcrumbs: RouteRecord[] = []
 
   @Watch('$route')
   private onRouteChange(route: Route) {
@@ -38,12 +38,14 @@ export default class extends Vue {
   }
 
   private getBreadcrumb() {
-    let matched = this.$route.matched.filter(
+    const matched = this.$route.matched.filter(
       (item) => item.meta && item.meta.title
     )
+    console.log('🚀 ~ this.$route', this.$route)
+    console.log('🚀 ~ matched', matched)
     const first = matched[0]
     if (!this.isDashboard(first)) {
-      //matched = [{ path: '/dashboard', meta: { title: 'dashboard' } } as RouteRecord].concat(matched)
+      // matched = [{ path: '/dashboard', meta: { title: 'dashboard' } } as RouteRecord].concat(matched)
     }
     this.breadcrumbs = matched.filter((item) => {
       return item.meta && item.meta.title && item.meta.breadcrumb !== false
@@ -65,7 +67,7 @@ export default class extends Vue {
     return toPath(params)
   }
 
-  private handleLink(item: any) {
+  public handleLink(item: any) {
     const { redirect, path } = item
     if (redirect) {
       this.$router.push(redirect).catch((err) => {

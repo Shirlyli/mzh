@@ -57,6 +57,7 @@ export default class extends Vue {
   @Watch('requestParams.billMain.departmentName', { immediate: true })
   @Watch('requestParams.billMain.applyDept', { immediate: true })
   @Watch('requestParams.billMain.departmentId', { immediate: true })
+  @Watch('requestParams.billMain.rollOutDepartment', { immediate: true })
   public async onChangeRequestParams(formValue: any) {
     console.log('🚀 ~ 监听科室变化', formValue)
     if (formValue) {

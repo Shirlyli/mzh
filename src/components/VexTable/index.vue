@@ -55,6 +55,29 @@
                     content="重置"
                     @click="resetFor"></vxe-button>
       </template>
+      <template #departmentSelect="{data}">
+        <div>
+          <el-select v-model="data.rollOutDepartment"
+                     placeholder="请选择">
+            <el-tree node-key="id"
+                     :data="[]"
+                     :props="{
+                                  children: 'children',
+                                  label: 'title'
+                                 }"
+                     class="add_tree"
+                     :expand-on-click-node="false"
+                     :check-on-click-node="true">
+              <span class="custom-tree-node"
+                    slot-scope="{node, data}">
+                <el-option style="padding: 0"
+                           :label="data.title"
+                           :value="data.id"></el-option>
+              </span>
+            </el-tree>
+          </el-select>
+        </div>
+      </template>
       <!-- 表格操作 -->
       <template #operateHasSearch="{row}">
         <vxe-button content="查看"
@@ -118,6 +141,9 @@ export default class extends Vue {
     showOverflow: true,
     height: 'auto',
     exportConfig: {},
+    rowConfig: {
+      keyField: 'id'
+    },
     treeConfig: {
       transform: true,
       rowField: 'id'
@@ -131,11 +157,12 @@ export default class extends Vue {
       // 设置复选框支持分页勾选，需要设置 rowId 行数据主键
       reserve: true
     },
-    formConfig: {
-      ...this.formConfig,
-      titleWidth: 100,
-      titleAlign: 'right'
-    } ?? {},
+    formConfig:
+      {
+        ...this.formConfig,
+        titleWidth: 100,
+        titleAlign: 'right'
+      } ?? {},
     columns: this.columns // 列表项数据
   }
 

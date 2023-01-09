@@ -47,14 +47,16 @@
         <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item :label="'用户名称'"
-                          prop="eName">
+                          prop="eName"
+                          :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
               <el-input v-model="employeeData.eName"
                         placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'性别'"
-                          prop="sex">
+                          prop="sex"
+                          :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
               <el-select v-model="employeeData.sex"
                          placeholder="请选择">
                 <el-option label="男"
@@ -67,7 +69,8 @@
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'身份证'"
-                          prop="citizenNo">
+                          prop="citizenNo"
+                          :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
               <el-input v-model="employeeData.citizenNo"
                         placeholder="请输入"></el-input>
             </el-form-item>
@@ -77,7 +80,8 @@
 
           <el-col :span="8">
             <el-form-item :label="'出生日期'"
-                          prop="birth">
+                          prop="birth"
+                          :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
               <el-date-picker v-model="employeeData.birth"
                               type="date"
                               placeholder="选择日期"
@@ -95,7 +99,8 @@
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'手机号码'"
-                          prop="phoneNo">
+                          prop="phoneNo"
+                          :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
               <el-input v-model="employeeData.phoneNo"
                         placeholder="请输入"></el-input>
             </el-form-item>
@@ -136,7 +141,8 @@
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'科室'"
-                          prop="deptName">
+                          prop="deptName"
+                          :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
               <el-input v-model="employeeData.deptName"
                         placeholder="请输入"></el-input>
             </el-form-item>
@@ -223,42 +229,34 @@
                width="80%">
       <el-form ref="personalForm"
                :rules="personalRules"
-               :model="personalData"
                label-position="left"
                label-width="100px"
                style="width: 100%">
         <el-row :gutter="20">
           <el-col :span="8">
             <el-form-item :label="'登录名'"
-                          prop="phoneNo">
+                          prop="userName">
               <el-input v-model="personalData.userName"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'用户名'"
-                          prop="officeNo">
+                          prop="employeeName">
               <el-input v-model="personalData.employeeName"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'用户密码'"
-                          prop="email">
+                          prop="userPwd">
               <el-input v-model="personalData.userPwd"
-                        placeholder="请选择"></el-input>
+                        placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
-          <!-- <el-col :span="8">
-            <el-form-item :label="'确认密码'"
-                          prop="education">
-              <el-input v-model="personalData.userSecondPwd"
-                        placeholder="请选择"></el-input>
-            </el-form-item>
-          </el-col> -->
           <el-col :span="8">
             <el-form-item :label="'用户状态'"
-                          prop="degree">
+                          prop="userStatus">
               <el-select v-model="personalData.userStatus"
                          placeholder="请选择">
                 <el-option label="启用"
@@ -271,7 +269,7 @@
           <el-col :span="8"
                   v-if="personalDialogType=== 'edit'">
             <el-form-item :label="'用户创建时间'"
-                          prop="collage">
+                          prop="userCtime">
               <el-date-picker v-model="personalData.userCtime"
                               value-format="yyyy-MM-dd"
                               placeholder="请选择"></el-date-picker>
@@ -280,7 +278,7 @@
           <el-col :span="8"
                   v-if="personalDialogType=== 'edit'">
             <el-form-item :label="'用户修改时间'"
-                          prop="eType">
+                          prop="userLtime">
               <el-date-picker v-model="personalData.userLtime"
                               value-format="yyyy-MM-dd"
                               placeholder="请选择"></el-date-picker>
@@ -289,7 +287,7 @@
           <el-col :span="8"
                   v-if="personalDialogType=== 'edit'">
             <el-form-item :label="'密码修改时间'"
-                          prop="eProf">
+                          prop="userPmtime">
               <el-date-picker v-model="personalData.userPmtime"
                               value-format="yyyy-MM-dd"
                               placeholder="请选择"></el-date-picker>
@@ -298,7 +296,7 @@
           <el-col :span="8"
                   v-if="personalDialogType=== 'edit'">
             <el-form-item :label="'用户解锁时间'"
-                          prop="ePost">
+                          prop="userUnlocktime">
               <el-date-picker v-model="personalData.userUnlocktime"
                               placeholder="请选择"></el-date-picker>
             </el-form-item>
