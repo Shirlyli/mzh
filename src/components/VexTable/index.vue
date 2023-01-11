@@ -39,7 +39,7 @@
 
       <!-- 表单查询项 -->
       <template #create_time="{data}">
-        <el-date-picker v-model="data.createtime"
+        <el-date-picker v-model="data.createTime"
                         value-format="yyyy-MM-dd"
                         type="daterange"
                         range-separator="至"
@@ -127,7 +127,7 @@ export default class extends Vue {
   @Prop({ default: {} }) formConfig!: any
   @Prop({ default: [] }) columns!: []
   @Prop() paramsConfig!: any
-  @Watch('paramsConfig', { immediate: true, deep: true })
+  @Watch('paramsConfig', { immediate: true })
   public onParamsConfigChange(newdata: any) {
     this.findList(newdata)
   }
@@ -232,8 +232,9 @@ export default class extends Vue {
   // 重置并查询
   public resetFor() {
     this.formConfig.data = {}
-    this.paramsConfig.params.entity = {}
-    console.log('🚀 ~  this.paramsConfig', this.paramsConfig)
+    this.paramsConfig.params.entity = {
+      createTime: []
+    }
     this.findList(this.paramsConfig)
   }
 
@@ -290,11 +291,11 @@ export default class extends Vue {
 
   // 分页切换事件
   public handlePageChange(pageConfig: any) {
+    console.log('🚀 ~ pageConfig', pageConfig)
     this.tablePage.currentPage = pageConfig.currentPage
     this.tablePage.pageSize = pageConfig.pageSize
     this.paramsConfig.params.page = pageConfig.currentPage
     this.paramsConfig.params.limit = pageConfig.pageSize
-
     this.findList(this.paramsConfig)
   }
 
@@ -361,7 +362,7 @@ export default class extends Vue {
     return value
   }
 
-  public handleImport(row:any) {
+  public handleImport(row: any) {
     this.emitHandleImport(row)
   }
 }

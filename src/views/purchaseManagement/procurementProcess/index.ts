@@ -76,7 +76,7 @@ export default class extends Vue {
     // { field: "roleTypeId", title: " 角色类型id " },
     { field: 'cteator', title: '创建人' },
     {
-      field: 'cteaterTime',
+      field: 'createTime',
       title: '创建时间',
       formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
     },

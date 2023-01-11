@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="img-box">
-      <img src="../../assets/login-left.png"
+      <img :src="require('@/assets/login-left.png')"
            alt="">
     </div>
     <div>
@@ -241,8 +241,7 @@ export default class extends Vue {
 
 .login-container {
   min-height: 720px;
-  height: 100%;
-  background-image: url('../../assets/login-full.png');
+  background-image: url('~@/assets/login-full.png');
   background-size: cover;
   background-repeat: no-repeat;
   display: flex;

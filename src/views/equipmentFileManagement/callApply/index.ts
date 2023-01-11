@@ -46,7 +46,7 @@ export default class extends Vue {
     data: {
       status: '',
       departmentId: '',
-      cteaterTime: '',
+      createTime: '',
       instructions: '',
       useDepartmentId: ''
     },
@@ -78,7 +78,7 @@ export default class extends Vue {
         itemRender: { name: '$input', props: { placeholder: '请输入使用情况' } }
       },
       {
-        field: 'cteaterTime',
+        field: 'createTime',
         title: '创建时间',
         span: 6,
         folding: true,

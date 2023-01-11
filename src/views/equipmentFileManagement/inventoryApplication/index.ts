@@ -47,7 +47,7 @@ export default class extends Vue {
     data: {
       approveStatus: '',
       rollOutDepartment: '',
-      cteaterTime: '',
+      createTime: '',
       status: ''
     },
     items: [
@@ -78,7 +78,7 @@ export default class extends Vue {
         }
       },
       {
-        field: 'cteaterTime',
+        field: 'createTime',
         title: '创建时间',
         span: 10,
         slots: { default: 'create_time' }
