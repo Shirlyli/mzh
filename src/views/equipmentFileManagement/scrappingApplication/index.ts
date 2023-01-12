@@ -150,7 +150,7 @@ export default class extends Vue {
 
     this.$router
       .push({
-        path: '/processApproval',
+        path: `/processApproval/index/${'BFSQ'}`,
         query: { nextNodeCode, id, type: '报废' }
       })
       .catch(err => {
@@ -240,7 +240,7 @@ export default class extends Vue {
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
-      .push({ path: '/processRequest', query: { type: '报废', applyUrl: 'BFSQ' } })
+      .push({ path: `/processRequest/index/${'BFSQ'}`, query: { type: '报废', applyUrl: 'BFSQ' } })
       .catch(err => {
         console.warn(err)
       })

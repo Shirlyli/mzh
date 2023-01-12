@@ -46,6 +46,7 @@
                                   label: 'title'
                                  }"
                                    class="add_tree"
+                                   default-expand-all="true"
                                    :expand-on-click-node="false"
                                    :check-on-click-node="true">
                             <span class="custom-tree-node"

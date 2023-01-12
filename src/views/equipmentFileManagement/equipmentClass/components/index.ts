@@ -19,7 +19,7 @@ import { UserModule } from '@/store/modules/user'
 import { queryByConditionSupplier } from '@/api/basic'
 // import { BusinessViewModule } from '@/store/modules/business'
 @Component({
-  name: 'EquipmentFormDialog'
+  name: 'equipmentAddOrUpdate'
 })
 export default class extends Vue {
   public dialogStatus = this.$route.query.dialogStatus;

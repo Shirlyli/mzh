@@ -151,7 +151,7 @@ export default class extends Vue {
 
     this.$router
       .push({
-        path: '/processApproval',
+        path: `/processApproval/index/${'WDSQ'}`,
         query: { nextNodeCode, id, type: '外调' }
       })
       .catch(err => {
@@ -242,7 +242,7 @@ export default class extends Vue {
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
       .push({
-        path: '/processRequest',
+        path: `/processRequest/index/${'WDSQ'}`,
         query: { type: '外调', applyUrl: 'WDSQ' }
       })
       .catch(err => {

@@ -11,7 +11,7 @@ import _ from 'lodash'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import moment from 'moment'
 @Component({
-  name: 'ProcessApproval',
+  name: 'processApproval',
   components: {}
 })
 export default class extends Vue {

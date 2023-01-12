@@ -135,22 +135,22 @@ export default class extends Vue {
     }
   }
 
-  private loginForm = {
+  public loginForm = {
     userName: 'admin',
     userPwd: '123456'
   }
 
-  private loginRules = {
+  public loginRules = {
     username: [{ validator: this.validateUsername, trigger: 'blur' }],
     password: [{ validator: this.validatePassword, trigger: 'blur' }]
   }
 
-  private passwordType = 'password'
-  private loading = false
-  private showDialog = false
-  private capsTooltip = false
-  private redirect?: string
-  private otherQuery: Dictionary<string> = {}
+  public passwordType = 'password'
+  public loading = false
+  public showDialog = false
+  public capsTooltip = false
+  public redirect?: string
+  public otherQuery: Dictionary<string> = {}
 
   @Watch('$route', { immediate: true })
   private onRouteChange(route: Route) {
@@ -171,13 +171,13 @@ export default class extends Vue {
     }
   }
 
-  private checkCapslock(e: KeyboardEvent) {
+  public checkCapslock(e: KeyboardEvent) {
     const { key } = e
     this.capsTooltip =
       key !== null && key.length === 1 && key >= 'A' && key <= 'Z'
   }
 
-  private showPwd() {
+  public showPwd() {
     if (this.passwordType === 'password') {
       this.passwordType = ''
     } else {
@@ -188,7 +188,7 @@ export default class extends Vue {
     })
   }
 
-  private handleLogin() {
+  public handleLogin() {
     (this.$refs.loginForm as ElForm).validate(async(valid: boolean) => {
       if (valid) {
         this.loading = true
@@ -229,14 +229,14 @@ export default class extends Vue {
 <style lang="scss">
 // References: https://www.zhangxinxu.com/wordpress/2018/01/css-caret-color-first-line/
 @supports (-webkit-mask: none) and (not (cater-color: $loginCursorColor)) {
-  .login-container .el-input {
-    input {
-      // color: $loginCursorColor;
-    }
-    input::first-line {
-      // color: $lightGray;
-    }
-  }
+  // .login-container .el-input {
+  //   input {
+  //     // color: $loginCursorColor;
+  //   }
+  //   input::first-line {
+  //     // color: $lightGray;
+  //   }
+  // }
 }
 
 .login-container {

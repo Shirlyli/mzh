@@ -120,8 +120,8 @@ export default class extends Vue {
 
     this.$router
       .push({
-        path: '/processApproval',
-        query: { nextNodeCode, id, type: '转科' }
+        path: `/processApproval/index/${'SBYS'}`,
+        query: { nextNodeCode, id, type: '设备验收' }
       })
       .catch(err => {
         console.warn(err)
@@ -232,7 +232,7 @@ export default class extends Vue {
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
-      .push({ path: '/processRequest', query: { type: '转科', applyUrl: 'ZKSQ' } })
+      .push({ path: `/processRequest/index/${'SBYS'}`, query: { type: '设备验收', applyUrl: 'SBYS' } })
       .catch(err => {
         console.warn(err)
       })

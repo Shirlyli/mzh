@@ -76,15 +76,16 @@ export const constantRoutes: RouteConfig[] = [
     redirect: '/processApproval/index',
     children: [
       {
-        path: 'index',
+        path: 'index/:url',
         component: () =>
           import(
             /* webpackChunkName: "401" */ '@/components/processApproval/index.vue'
           ),
-        name: '流程审批',
+        name: 'processApproval',
         meta: {
           title: '流程审批',
-          icon: 'user'
+          icon: 'user',
+          noCache: false
         }
       }
     ]
@@ -96,15 +97,16 @@ export const constantRoutes: RouteConfig[] = [
     redirect: '/processRequest/index',
     children: [
       {
-        path: 'index',
+        path: 'index/:url',
         component: () =>
           import(
             /* webpackChunkName: "401" */ '@/components/processRequest/index.vue'
           ),
-        name: '流程申请',
+        name: 'processRequest',
         meta: {
           title: '流程申请',
-          icon: 'user'
+          icon: 'user',
+          noCache: false
         }
       }
     ]
@@ -121,10 +123,11 @@ export const constantRoutes: RouteConfig[] = [
           import(
             /* webpackChunkName: "401" */ '@/views/equipmentFileManagement/equipmentClass/components/index.vue'
           ),
-        name: '设备',
+        name: 'equipmentAddOrUpdate',
         meta: {
           title: '设备',
-          icon: 'user'
+          icon: 'user',
+          noCache: false
         }
       }
     ]

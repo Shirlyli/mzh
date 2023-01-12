@@ -209,7 +209,7 @@ export default class extends Vue {
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
       .push({
-        path: '/processRequest',
+        path: `/processRequest/index/${'KSSQ'}`,
         query: { type: '科室申请', applyUrl: 'KSSQ' }
       })
       .catch(err => {
@@ -313,7 +313,7 @@ export default class extends Vue {
     )
     sessionStorage.setItem('BasicFormList', JSON.stringify(this.basicFormList))
     this.$router
-      .push({ path: '/processApproval', query: { nextNodeCode, id, type: '科室申请' } })
+      .push({ path: `/processApproval/index/${'KSSQ'}`, query: { nextNodeCode, id, type: '科室申请' } })
       .catch(err => {
         console.warn(err)
       })
