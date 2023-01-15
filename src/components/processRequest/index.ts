@@ -14,7 +14,7 @@ export default class extends Vue {
   /********************************************
    * 待新增的设备params
    *******************************************/
-  private addEquipment = [
+  public addEquipment = [
     {
       field: 'equipmentId',
       title: '设备名称',
@@ -136,12 +136,12 @@ export default class extends Vue {
    * 完成申请后关闭当前tag页
    * @param view
    *****************************/
-  private closeSelectedTag(view: ITagView) {
+  public closeSelectedTag(view: ITagView) {
     TagsViewModule.delView(view)
     this.toLastView(TagsViewModule.visitedViews, view)
   }
 
-  private toLastView(visitedViews: ITagView[], view: ITagView) {
+  public toLastView(visitedViews: ITagView[], view: ITagView) {
     const latestView = visitedViews.slice(-1)[0]
     if (latestView !== undefined && latestView.fullPath !== undefined) {
       this.$router.push(latestView.fullPath).catch(err => {
@@ -189,7 +189,7 @@ export default class extends Vue {
     }
   }
 
-  private pushData() {
+  public pushData() {
     this.$nextTick(() => {
       this.watchRequestForm.billEquipmentList.push(this.addEquipment)
       this.requestParams.billEquipmentList.push({

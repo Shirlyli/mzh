@@ -137,6 +137,7 @@ export default class extends Vue {
   }
 
   private onRoleTypeChange(value:any) {
+    console.log('🚀 ~ value', value)
     this.processData.roleTypeId = ''
   }
 
@@ -175,6 +176,7 @@ export default class extends Vue {
 
   // 新增流程配置
   private handleInsert(row: any) {
+    console.log('🚀 ~ row', row)
     this.clearForm()
     if (!this.nodeClickData.id) {
       this.$message.error('请选择流程名称后新增')

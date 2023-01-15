@@ -1,4 +1,4 @@
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
 import VexTable from '@/components/VexTable/index.vue'
@@ -279,6 +279,7 @@ export default class extends Vue {
   }
 
   private handleCloseAssociateDialog(data: any) {
+    console.log('🚀 ~ data', data)
     this.isAssociateDialogVisible = false
   }
 }

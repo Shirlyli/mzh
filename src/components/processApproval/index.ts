@@ -316,6 +316,7 @@ export default class extends Vue {
   }
 
   public beforeRemove(file: any, fileList: any) {
+    console.log('🚀 ~ fileList', fileList)
     return this.$confirm(`确定移除 ${file.name}？`)
   }
 }

@@ -53,7 +53,7 @@
                          :expand-on-click-node="false"
                          :check-on-click-node="true">
                   <span class="custom-tree-node"
-                        slot-scope="{node, data}">
+                        slot-scope="{data}">
                     <el-option style="padding: 0"
                                :label="data.title"
                                :value="data.id"></el-option>

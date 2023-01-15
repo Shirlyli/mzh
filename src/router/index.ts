@@ -3,9 +3,9 @@ import VueRouter, { RouteConfig } from 'vue-router'
 /* Layout */
 import Layout from '@/layout/index.vue'
 /* Router modules */
-import beforeAsyncRoutes from './modules/beforeAsyncRoutes'
-import chartsRouter from './modules/charts'
-import componentsRouter from './modules/components'
+// import beforeAsyncRoutes from './modules/beforeAsyncRoutes'
+// import chartsRouter from './modules/charts'
+// import componentsRouter from './modules/components'
 
 Vue.use(VueRouter)
 
