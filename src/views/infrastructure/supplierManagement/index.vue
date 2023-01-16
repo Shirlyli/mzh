@@ -9,17 +9,19 @@
                 :formConfig="formConfig"
                 :columns="columns"
                 editColumns="['edit','del']"
-                :toolbarBtns="['add', 'import', 'delete', 'export']"
+                :toolbarBtns="['add', 'import', 'delete', 'export','downLoad']"
                 @emit-handle-insert="handleInsert"
                 @emit-handle-update="handleUpdate"
                 @emit-handle-remove="handleRemove"
                 @emit-handle-import="handleImport"
+                @emit-handle-export="handleExport"
                 :paramsConfig="paramsConfig" />
     </el-card>
     <!-- 模态框区域 -->
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
                :visible="dialogVisible"
                top="30px"
+               width="60%"
                class="commonDialog"
                @close="handleDialogClose">
       <el-form ref="dataForm"
@@ -27,44 +29,46 @@
                :model="supplierData"
                label-position="left"
                label-width="100px"
-               style="width: 400px; margin-left:50px;">
-        <el-form-item :label="'厂商名称'"
-                      prop="name">
-          <el-input v-model="supplierData.name"
-                    placeholder="请输入厂商名称"></el-input>
-        </el-form-item>
-        <el-form-item :label="'厂商简称'"
-                      prop="nameAbbreviation">
-          <el-input v-model="supplierData.nameAbbreviation"
-                    placeholder="请输入厂商简称"></el-input>
-        </el-form-item>
-        <el-form-item :label="'厂商类型'"
-                      prop="suppliesType">
-          <el-select v-model="supplierData.suppliesType"
-                     transfer
-                     placeholder="请选择">
-            <el-option v-for="item in suppliesTypeOptions"
-                       :key="item.value"
-                       :label="item.label"
-                       :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="'资产性质'"
-                      prop="assetsPro">
-          <el-input v-model="supplierData.assetsPro"
-                    placeholder="请输入资产性质"></el-input>
-        </el-form-item>
-        <el-form-item :label="'座机电话'"
-                      prop="hPhone">
-          <el-input v-model="supplierData.phoneNo"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
-        <el-form-item :label="'备注'"
-                      prop="note">
-          <el-input v-model="supplierData.note"
-                    placeholder="请选择"></el-input>
-        </el-form-item>
+               >
+        <el-row :gutter="24">
+          <el-col :span="12"
+                  v-for="(item,index) in basicFormList"
+                  :key="index">
+            <el-form-item :label="item.title"
+                          label-width="120px"
+                          :prop="item.field"
+                          :rules="item.required ? [{required: true, message: '不能为空', trigger: 'change'}]:[{required: false}]">
+              <!-- 普通输入框 -->
+              <el-input v-model="supplierData[item.field]"
+                        :placeholder="`请输入${item.title}`"
+                        v-if="item.type === 'input'" />
+              <!-- 下拉框 -->
+              <el-select v-model="supplierData[item.field]"
+                         v-if="item.type === 'select'"
+                         placeholder="请选择">
+                <el-option :label="optionValue.label"
+                           :value="optionValue.value"
+                           v-for="optionValue in item.data"
+                           :key="optionValue.label"></el-option>
+              </el-select>
+              <!-- 时间 -->
+              <el-date-picker v-model="supplierData[item.field]"
+                              v-if="item.type === 'date'"
+                              type="date"
+                              placeholder="选择日期"
+                              format="yyyy-MM-dd"
+                              value-format="yyyy-MM-dd">
+              </el-date-picker>
+              <!-- 多行文本框 -->
+              <el-input type="textarea"
+                        :rows="2"
+                        v-if="item.type === 'textarea'"
+                        placeholder="请输入内容"
+                        v-model="supplierData[item.field]">
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
 
       <!-- 底部操作 -->
@@ -87,20 +91,22 @@
                top="10%"
                class="commonDialog"
                @close="importDialogVisible = false">
-      <el-upload class="upload-demo"
-                 drag
-                 action="https://jsonplaceholder.typicode.com/posts/"
-                 :on-preview="handlePreview"
+               <!--                  :on-preview="handlePreview"
                  :on-remove="handleRemoveFile"
                  :before-remove="beforeRemove"
+                 :headers="{'contentType': 'multipart/form-data;chartset:UTF-8'}"
+                -->
+      <el-upload class="upload-demo"
+                 drag
+                 action="#"
+                :on-change="onFileChange"
                  :limit="3"
+                 accept="'.xlsx','.xls'"
                  :on-exceed="handleExceed"
                  :file-list="fileList"
                  multiple>
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <!-- <div class="el-upload__tip"
-             slot="tip">只能上传jpg/png文件，且不超过500kb</div> -->
       </el-upload>
     </el-dialog>
   </div>

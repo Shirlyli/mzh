@@ -26,6 +26,8 @@
         <vxe-button v-if="toolbarBtns.includes('import')"
                     @click="handleImport">导入</vxe-button>
 
+                    <vxe-button v-if="toolbarBtns.includes('downLoad')" @click="downLoadXlsx">下载模板</vxe-button>
+
         <!-- <vxe-button @click="$refs.xGrid.exportData()"
                     v-if="toolbarBtns.includes('export')">导出</vxe-button> -->
       </template>
@@ -364,6 +366,16 @@ export default class extends Vue {
 
   public handleImport(row: any) {
     this.emitHandleImport(row)
+  }
+
+  // 下载模板
+  @Emit()
+  emitHandleExport() {
+    console.log('sss')
+  }
+
+  public downLoadXlsx() {
+    this.emitHandleExport()
   }
 }
 </script>

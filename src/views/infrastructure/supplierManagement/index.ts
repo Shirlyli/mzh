@@ -10,7 +10,9 @@ import {
 import { FormItemTypes, SupplierFormTypes } from './type'
 import _ from 'lodash'
 import { ALL_OPTIONS } from '@/shared/options'
-import { FormatRunningState } from '@/utils/functions'
+import { importFileList } from '@/api/basic'
+import { BasicFormList } from './formColumns'
+import moment from 'moment'
 @Component({
   name: 'Tab',
   components: {
@@ -97,19 +99,19 @@ export default class extends Vue {
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'name', title: '厂商名称' },
-    { field: 'nameAbbreviation', title: '简称' },
     { field: 'taxId', title: '纳税识别号' },
-    { field: 'suppliesType', title: '厂商类型' },
     {
       field: 'runningState',
-      title: '运营状态',
-      formatter: FormatRunningState
+      title: '运营状态'
+      // formatter: FormatRunningState
     },
-    { field: 'assetsPro', title: ' 资产性质' },
-    { field: 'domicile', title: ' 注册地' },
+    { field: 'registeredCapital', title: '注册资金' },
+    { field: 'phoneNo', title: '电话' },
+    { field: 'email', title: '邮箱' },
+    { field: 'regeditAddress', title: ' 注册地' },
     { field: 'legalPerson', title: '法人' },
-    { field: 'phoneNo', title: '座机' },
-    { field: 'dispindex', title: ' 排序' },
+    { field: 'ctime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'note', title: '备注' },
     {
       width: 160,
       title: '操作',
@@ -122,13 +124,28 @@ export default class extends Vue {
   public suppliesTypeOptions = ALL_OPTIONS.suppliesType;
 
   public importDialogVisible = false
-  public supplierData = {
+  public basicFormList = BasicFormList;
+  public supplierData :any= {
     name: '',
-    nameAbbreviation: '',
+    bussinessScope: '',
     suppliesType: '',
     assetsPro: '',
     phoneNo: '',
     note: '',
+    bussinessType: '',
+    domicile: '',
+    regeditAddress: '',
+    registrationNumber: '',
+    trade: '',
+    taxId: '',
+    email: '',
+    otherEmail: '',
+    otherPhoneNo: '',
+    legalPerson: '',
+    establishmentDate: '',
+    approvalDate: '',
+    yearReportAddress: '',
+    registeredCapital: '',
     id: ''
   }; // 新增或编辑表单
 
@@ -167,11 +184,25 @@ export default class extends Vue {
     this.dialogVisible = false
     this.supplierData = {
       name: '',
-      nameAbbreviation: '',
+      bussinessScope: '',
       suppliesType: '',
       assetsPro: '',
       phoneNo: '',
       note: '',
+      bussinessType: '',
+      domicile: '',
+      regeditAddress: '',
+      registrationNumber: '',
+      trade: '',
+      taxId: '',
+      email: '',
+      otherEmail: '',
+      otherPhoneNo: '',
+      legalPerson: '',
+      establishmentDate: '',
+      approvalDate: '',
+      yearReportAddress: '',
+      registeredCapital: '',
       id: ''
     }
   }
@@ -182,7 +213,6 @@ export default class extends Vue {
       if (valid) {
         const {
           name,
-          nameAbbreviation,
           suppliesType,
           assetsPro,
           phoneNo,
@@ -191,7 +221,6 @@ export default class extends Vue {
         const params = {
           id: '',
           name,
-          nameAbbreviation,
           suppliesType,
           assetsPro,
           phoneNo,
@@ -214,7 +243,6 @@ export default class extends Vue {
         const {
           id,
           name,
-          nameAbbreviation,
           suppliesType,
           assetsPro,
           phoneNo,
@@ -223,7 +251,6 @@ export default class extends Vue {
         const params = {
           id,
           name,
-          nameAbbreviation,
           suppliesType,
           assetsPro,
           phoneNo,
@@ -244,20 +271,48 @@ export default class extends Vue {
     const {
       id,
       name,
-      nameAbbreviation,
+      bussinessScope,
       suppliesType,
       assetsPro,
       phoneNo,
-      note
+      note,
+      bussinessType,
+      domicile,
+      regeditAddress,
+      registrationNumber,
+      trade,
+      taxId,
+      email,
+      otherEmail,
+      otherPhoneNo,
+      legalPerson,
+      establishmentDate,
+      approvalDate,
+      yearReportAddress,
+      registeredCapital
     } = row
     this.supplierData = {
       id,
       name,
-      nameAbbreviation,
+      bussinessScope,
       suppliesType,
       assetsPro,
       phoneNo,
-      note
+      note,
+      bussinessType,
+      domicile,
+      regeditAddress,
+      registrationNumber,
+      trade,
+      taxId,
+      email,
+      otherEmail,
+      otherPhoneNo,
+      legalPerson,
+      establishmentDate,
+      approvalDate,
+      yearReportAddress,
+      registeredCapital
     }
     this.dialogStatus = 'update'
     this.dialogVisible = true
@@ -306,5 +361,24 @@ export default class extends Vue {
   public beforeRemove(file:any, fileList:any) {
     console.log('🚀 ~ fileList', fileList)
     return this.$confirm(`确定移除 ${file.name}？`)
+  }
+
+  // 导入表格
+  public async onFileChange(file:any) {
+    console.log('🚀 ~ file', file)
+    const formData = new FormData()
+    formData.append('formFile', file.raw)
+    const res :any = await importFileList('supplier', formData)
+    console.log('🚀 ~ res', res)
+  }
+
+  public handleExport() {
+    const a = document.createElement('a')
+    a.href = '/excel/template.xlsx'
+    a.download = '厂商模版.xlsx'
+    a.style.display = 'none'
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
   }
 }

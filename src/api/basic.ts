@@ -119,17 +119,19 @@ export const personalBindRole = (data: { userId: string, roleId: string }) =>
   })
 
 // 获取用户通过设备id
-export const getUserDataByDeptId = (data: any) => request({
-  url: '/auth/employee/queryByCondition',
-  method: 'POST',
-  data
-})
+export const getUserDataByDeptId = (data: any) =>
+  request({
+    url: '/auth/employee/queryByCondition',
+    method: 'POST',
+    data
+  })
 // 查看用户已关联绑定角色
-export const queryRolesByUserId = (data: { user_id: string }) => request({
-  url: '/auth/role/queryRolesByUserId',
-  method: 'POST',
-  data
-})
+export const queryRolesByUserId = (data: { user_id: string }) =>
+  request({
+    url: '/auth/role/queryRolesByUserId',
+    method: 'POST',
+    data
+  })
 
 // 解绑用户关联角色
 export const personalUnbindRole = (data: { userId: string, roleId: string }) =>
@@ -516,8 +518,8 @@ export const queryHomeProcessBusinessList = (data: any) =>
   })
 
 /**
-   * 报废申请  scrapApply/saveScrapApply
-   */
+ * 报废申请  scrapApply/saveScrapApply
+ */
 export const saveScrapApply = (data: any) =>
   request({
     url: '/scrapApply/saveScrapApply',
@@ -525,9 +527,20 @@ export const saveScrapApply = (data: any) =>
     data
   })
 
-export const saveProcessApply = (url:any, data: any) =>
+export const saveProcessApply = (url: any, data: any) =>
   request({
     url,
+    method: 'POST',
+    data
+  })
+
+/***
+ * 导入接口
+ */
+
+export const importFileList = (type: any, data: any) =>
+  request({
+    url: `tools/xlsImportDB?tableId=${type}`,
     method: 'POST',
     data
   })
