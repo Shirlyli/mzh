@@ -1,10 +1,10 @@
 <template>
-  <div class="commonContainerBox">
+  <div class="equipmentManagement">
     <!-- 列表区域 -->
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>借用申请</span>
+        <span>维修申请</span>
       </div>
       <keep-alive>
         <VexTable ref="vexTable"
@@ -12,8 +12,7 @@
                   :columns="columns"
                   editColumns="['search','del','record']"
                   hasNotSlotButton="add"
-                   :toolbarBtns="['add', 'import', 'delete', 'export']"
-                  type="transferApply"
+                  :toolbarBtns="['add', 'import', 'delete', 'export']"
                   @emit-handle-insert="handleInsert"
                   @emit-handle-search="handleSearch"
                   @emit-handle-remove="handleRemove"
@@ -59,7 +58,6 @@
   position: absolute;
   bottom: 10px;
   right: 10px;
-  .el-button {
-  }
+
 }
 </style>

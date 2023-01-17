@@ -19,12 +19,15 @@ import processRequest from '@/components/processRequest/index.vue'
 import { UserModule } from '@/store/modules/user'
 import { BusinessViewModule } from '@/store/modules/business'
 import moment from 'moment'
+import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
+
 @Component({
   name: 'InlineEditTable',
   components: {
     VexTable,
     ProcessApproval,
-    processRequest
+    processRequest,
+    ProcessOperationRecord
   }
 })
 export default class extends Vue {
@@ -99,7 +102,6 @@ export default class extends Vue {
     params: {
       page: '1',
       limit: '20',
-      nextNodeExecutor: '', // TODO: 后续删除
       processCode: 'pro_kssq',
       nextNodeState: '待审核' // 状态
     }

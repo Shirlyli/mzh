@@ -44,7 +44,9 @@
                label-position="left"
                label-width="80px"
                style="width: 100%">
-        <el-row :gutter="20">
+        <el-row type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
           <el-col :span="8">
             <el-form-item :label="'用户名称'"
                           prop="eName"
@@ -76,7 +78,9 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <el-row type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
 
           <el-col :span="8">
             <el-form-item :label="'出生日期'"
@@ -106,7 +110,9 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <el-row type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
 
           <el-col :span="8">
             <el-form-item :label="'办公号码'"
@@ -130,7 +136,9 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <el-row type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
 
           <el-col :span="8">
             <el-form-item :label="'学位'"
@@ -155,7 +163,9 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <el-row type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
 
           <el-col :span="8">
             <el-form-item :label="'大学'"
@@ -179,7 +189,9 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <el-row type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
           <el-col :span="8">
             <el-form-item :label="'职位'"
                           prop="ePost">
@@ -232,7 +244,9 @@
                label-position="left"
                label-width="100px"
                style="width: 100%">
-        <el-row :gutter="20">
+        <el-row type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
           <el-col :span="8">
             <el-form-item :label="'登录名'"
                           prop="userName">

@@ -45,7 +45,9 @@
                label-position="left"
                label-width="80px"
                style="width: 100%">
-        <el-row :gutter="20">
+        <el-row type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
           <el-col :span="8">
             <el-form-item :label="'登录账号'"
                           prop="eName">

@@ -15,7 +15,8 @@ import {
 } from './formColumns'
 import { UserModule } from '@/store/modules/user'
 import moment from 'moment'
-import { FormatApproveStatus } from '@/utils/functions'
+import { FormatChildStatus, FormatMainStatus } from '@/utils/functions'
+import { ALL_OPTIONS } from '@/shared/options'
 import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
 
 @Component({
@@ -46,47 +47,42 @@ export default class extends Vue {
   // 列表查询项-表单
   public formConfig = {
     data: {
-      status: '',
-      departmentId: '',
-      createTime: '',
-      instructions: '',
-      useDepartmentId: ''
+      mainStatus: '',
+      status: ''
     },
     items: [
       {
+        field: 'mainStatus',
+        title: '主流程状态',
+        span: 6,
+        itemRender: { name: '$select', props: { placeholder: '请输入单据状态' }, options: ALL_OPTIONS.MAIN_STATUS }
+      },
+      {
         field: 'status',
-        title: '单据状态',
+        title: '子流程状态',
         span: 6,
-        itemRender: { name: '$input', props: { placeholder: '请输入单据状态' } }
+        itemRender: { name: '$select', props: { placeholder: '请输入单据状态' }, options: ALL_OPTIONS.CHILD_STATUS }
       },
+      // {
+      //   field: 'departmentId',
+      //   title: '申请科室',
+      //   span: 6,
+      //   itemRender: { name: '$input', props: { placeholder: '请输入申请科室' } },
+      //   slots: { default: 'departmentSelect' }
+      // },
+      // {
+      //   field: 'createTime',
+      //   title: '创建时间',
+      //   span: 8,
+      //   // folding: true,
+      //   slots: { default: 'create_time' }
+      // },
       {
-        field: 'departmentId',
-        title: '申请科室',
-        span: 6,
-        itemRender: { name: '$input', props: { placeholder: '请输入申请科室' } },
-        slots: { default: 'departmentSelect' }
-      },
-      {
-        field: 'useDepartmentId',
-        title: '使用科室',
-        span: 6,
-        itemRender: { name: '$input', props: { placeholder: '请输入使用科室' } },
-        slots: { default: 'departmentSelect' }
-      },
-      {
-        field: 'instructions',
-        title: '使用情况',
-        span: 6,
-        itemRender: { name: '$input', props: { placeholder: '请输入使用情况' } }
-      },
-      {
-        field: 'createTime',
-        title: '创建时间',
-        span: 6,
-        folding: true,
-        slots: { default: 'create_time' }
-      },
-      { slots: { default: 'operate_item' }, span: 24, collapseNode: true, align: 'center' }
+        slots: { default: 'operate_item' },
+        span: 4
+        // collapseNode: true,
+        // align: 'center'
+      }
     ] // 表单项
   };
 
@@ -94,22 +90,17 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'billCode', title: '报废单号', width: 150 },
-    { field: 'departmentName', title: '申请人科室' },
-    { field: 'useDepartmentName', title: '使用科室' },
-    { field: 'instructions', title: '使用情况' },
-    {
-      field: 'status',
-      title: '单据状态',
-      formatter: FormatApproveStatus
-    },
-    { field: 'cause', title: ' 报废原因 ' },
-    { field: 'approveStatus', title: '审批状态', formatter: FormatApproveStatus },
-    {
-      field: 'createTime',
-      title: '申请日期',
-      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
-    },
+    { field: 'applyDepartment', title: '申请科室', width: 150 },
+    { field: 'applyTelphone', title: '申请号码' },
+    { field: 'applyTime', title: '申请时间' },
+    { field: 'billCode', title: '流程编码' },
+    { field: 'faultProblem', title: '维修原因' },
+    { field: 'transferTime', title: '外调时间', formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'mainStatus', title: '主流程状态', formatter: FormatMainStatus },
+    { field: 'problemDesc', title: '问题描述' },
+    { field: 'status', title: '子流程状态', formatter: FormatChildStatus },
+    { field: 'urgency', title: ' 紧急程度 ' },
+    { field: 'userName', title: '申请人' },
     {
       width: 250,
       title: '操作',
@@ -120,7 +111,7 @@ export default class extends Vue {
 
   // 列表传参
   public paramsConfig: any = {
-    url: '/scrapApply/getScrapApplyInfo', // 根据表单查询项查询数据
+    url: '/repairApply/queryByCondition', // 根据表单查询项查询数据
     params: {
       page: '1',
       limit: '10',
@@ -152,8 +143,8 @@ export default class extends Vue {
 
     this.$router
       .push({
-        path: `/processApproval/index/${'BFSQ'}`,
-        query: { nextNodeCode, id, type: '报废' }
+        path: `/processApproval/index/${'WDSQ'}`,
+        query: { nextNodeCode, id, type: '外调' }
       })
       .catch(err => {
         console.warn(err)
@@ -243,7 +234,10 @@ export default class extends Vue {
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
-      .push({ path: `/processRequest/index/${'BFSQ'}`, query: { type: '报废', applyUrl: 'BFSQ' } })
+      .push({
+        path: `/processRequest/index/${'WXSQ'}`,
+        query: { type: '维修', applyUrl: 'WXSQ' }
+      })
       .catch(err => {
         console.warn(err)
       })

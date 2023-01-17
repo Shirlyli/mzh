@@ -27,7 +27,9 @@
           <el-divider direction="vertical"></el-divider>
           <span>基本信息</span>
         </div>
-        <el-row :gutter="20">
+        <el-row :gutter="22" type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
           <el-col :span="8"
                   v-for="(item,index) in watchRequestForm.billMain"
                   :key="index">
@@ -146,7 +148,9 @@
           <el-divider direction="vertical"></el-divider>
           <span>审批清单</span>
         </div>
-        <el-row :gutter="20">
+        <el-row :gutter="22" type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
           <el-col :span="8"
                   v-for="(item,index) in watchRequestForm.billApproveList"
                   :key="index">
@@ -181,7 +185,9 @@
             <el-divider direction="vertical"></el-divider>
             <span>归还信息</span>
           </div>
-          <el-row :gutter="20">
+          <el-row type="flex"
+                  justify="start"
+                  style="flex-wrap:wrap; flex-direction: row">
             <el-col :span="8"
                     v-for="(item,index) in watchRequestForm.borrowReturnList"
                     :key="index">

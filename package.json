@@ -20,6 +20,7 @@
         "codemirror": "^5.60.0",
         "core-js": "^3.10.0",
         "cors": "^2.8.5",
+        "cuid": "^2.1.8",
         "driver.js": "^0.9.8",
         "echarts": "^5.0.2",
         "element-ui": "^2.15.1",

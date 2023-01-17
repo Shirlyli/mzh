@@ -16,13 +16,15 @@ import {
 import { UserModule } from '@/store/modules/user'
 import moment from 'moment'
 import { FormatApproveStatus } from '@/utils/functions'
+import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
 
 @Component({
   name: 'InlineEditTable',
   components: {
     VexTable,
     processRequest,
-    ProcessApproval
+    ProcessApproval,
+    ProcessOperationRecord
   }
 })
 export default class extends Vue {

@@ -50,3 +50,15 @@ export function FormatApproveStatus(data: any) {
   const cellValue = _.filter(ALL_OPTIONS.APPROVAL_STATUS, ['value', Number(data.cellValue)])
   return cellValue[0]?.label
 }
+
+// 主流程状态
+export function FormatMainStatus(data: any) {
+  const cellValue = _.filter(ALL_OPTIONS.MAIN_STATUS, ['value', Number(data.cellValue)])
+  return cellValue[0]?.label
+}
+
+// 子流程状态
+export function FormatChildStatus(data: any) {
+  const cellValue = _.filter(ALL_OPTIONS.CHILD_STATUS, ['value', Number(data.cellValue)])
+  return cellValue[0]?.label
+}

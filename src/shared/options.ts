@@ -105,6 +105,23 @@ export const ALL_OPTIONS = {
   APPROVAL_STATUS: [
     { label: '同意', value: 1 },
     { label: '驳回', value: 0 }
+  ],
+  // 主流程状态
+  MAIN_STATUS: [
+    { label: '申请', value: 1 },
+    { label: '派工', value: 2 },
+    { label: '维修中', value: 3 },
+    { label: '待验收', value: 4 },
+    { label: '已验收', value: 5 }
+
+  ],
+  // 子流程状态
+  CHILD_STATUS: [
+    { label: '流转中', value: 20 },
+    { label: '退回', value: 21 },
+    { label: '作废', value: 22 },
+    { label: '已归档', value: 23 }
+
   ]
 }
 

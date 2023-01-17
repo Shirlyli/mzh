@@ -45,7 +45,9 @@
                label-position="left"
                label-width="100px"
                style="">
-        <el-row :gutter="20">
+        <el-row type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
           <!-- <el-col :span="12">
             <el-form-item :label="'上级科室Id'"
                           prop="parentId">

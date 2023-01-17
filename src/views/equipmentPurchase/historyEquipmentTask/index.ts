@@ -1,6 +1,5 @@
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
-import _ from 'lodash'
 import {
   getProcessNodeInfoByProcessCodeAndBh,
   getUserListProcessCode,
@@ -11,11 +10,13 @@ import { BasicFormList } from '../equipmentRequest/formColumns'
 import { getEquipmentInfoByDepartmentId } from '@/api/equipment'
 import moment from 'moment'
 import ProcessApproval from '@/components/processApproval/index.vue'
+import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
 @Component({
   name: 'InlineEditTable',
   components: {
     VexTable,
-    ProcessApproval
+    ProcessApproval,
+    ProcessOperationRecord
   }
 })
 export default class extends Vue {
@@ -76,7 +77,6 @@ export default class extends Vue {
     params: {
       page: '1',
       limit: '10',
-      nextNodeExecutor: '3C5775C862C396-346D-46F9-89EC-164A3BF087F2',
       processCode: 'pro_kssq',
       nextNodeState: '已归档'
     }
@@ -109,6 +109,7 @@ export default class extends Vue {
   public applyDetailData = []; // 设备列表
   public activeName = 'toDoTask'; // 当前tab页
   public createFormList = BasicFormList;
+  public basicFormList = BasicFormList;
   public fileList = []; // 附件信息
   public approvalDialogVisible = false; // 审批节点抽屉显隐
   public clickProcessData: any = {}; // 当前操作流程节点信息
@@ -193,9 +194,47 @@ export default class extends Vue {
     // (this.$refs.vexDoneTable as any).findList(this.paramsConfig);
   }
 
-  /**
+  //  点击查看按钮事件
+  public handleSearch(row: any) {
+    const { id, nextNodeCode } = row
+    this.clickProcessData = row
+    sessionStorage.setItem(
+      'ClickProcessData',
+      JSON.stringify(this.clickProcessData)
+    )
+    sessionStorage.setItem('BasicFormList', JSON.stringify(this.basicFormList))
+    this.$router
+      .push({ path: `/processApproval/index/${'KSSQ'}`, query: { nextNodeCode, id, type: '科室申请' } })
+      .catch(err => {
+        console.warn(err)
+      })
+  }
+
+  public emitHandleSubmit(value: boolean) {
+    this.approvalDialogVisible = false
+    if (value) {
+      (this.$refs.vexTable as any).findList(this.doneFormConfig)
+    }
+  }
+
+  // 获取流程操作记录
+  private async queryProcessRecordListData(data: any) {
+    const res: any = await queryProcessRecordList({
+      businessId: data.id
+    })
+    if (res.result) {
+      this.processRecordListData = res.data
+    }
+  }
+
+  public handleRecord(data: any) {
+    this.processRecordDialogVisible = true
+    this.queryProcessRecordListData(data)
+  }
+
+  /************************
    * 附件上传
-   */
+   *************************/
   private handleRemoveField(file: any, fileList: any) {
     console.log(file, fileList)
   }
@@ -214,34 +253,5 @@ export default class extends Vue {
 
   private beforeRemove(file: any, fileList: any) {
     return this.$confirm(`确定移除 ${file.name}？`)
-  }
-
-  //  点击查看按钮事件
-  public handleSearch(row: any) {
-    this.approvalDialogVisible = true
-    this.clickProcessData = row
-  }
-
-  public emitHandleSubmit(value: boolean) {
-    this.approvalDialogVisible = false
-    if (value) {
-      (this.$refs.vexTable as any).findList(this.doneFormConfig)
-    }
-  }
-
-  // 获取流程操作记录 queryProcessRecordList
-  private async queryProcessRecordListData(data: any) {
-    const res: any = await queryProcessRecordList({
-      businessId: data.id
-    })
-    if (res.result) {
-      this.processRecordListData = res.data
-    }
-  }
-
-  // 操作记录
-  public handleRecord(data: any) {
-    this.processRecordDialogVisible = true
-    this.queryProcessRecordListData(data)
   }
 }

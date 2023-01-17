@@ -134,7 +134,9 @@
           <span>基本信息</span>
         </div>
         <div class="contentBox">
-          <el-row :gutter="20">
+          <el-row type="flex"
+                  justify="start"
+                  style="flex-wrap:wrap; flex-direction: row">
             <el-col :span="8"
                     v-for="(item,index) in watchRequestForm.billMain"
                     :key="index">
@@ -182,7 +184,9 @@
             <span>归还信息</span>
           </div>
           <div class="contentBox">
-            <el-row :gutter="20">
+            <el-row type="flex"
+                    justify="start"
+                    style="flex-wrap:wrap; flex-direction: row">
               <el-col :span="8"
                       v-for="(item,index) in watchRequestForm.borrowReturnList"
                       :key="index">
