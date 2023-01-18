@@ -136,7 +136,7 @@
                            icon="el-icon-delete"
                            type="danger"
                            plain
-                           @click="removeKey(item,index)"></el-button>
+                           @click="removeKey(item,index)">删除</el-button>
               </el-col>
 
             </el-row>
