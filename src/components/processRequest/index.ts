@@ -1,4 +1,4 @@
-import { saveProcessApply } from '@/api/basic'
+import { getProcessNodeInfoByProcessCodeAndBh, getUserListProcessCode, queryDepartmentInfoTree, saveProcessApply } from '@/api/basic'
 import { getEquipmentInfoByDepartmentId } from '@/api/equipment'
 import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
@@ -9,7 +9,7 @@ import { APPLY_URL } from '@/shared/options'
   components: {}
 })
 export default class extends Vue {
-  public rules = {}
+  public rules = {};
 
   /********************************************
    * 待新增的设备params
@@ -92,7 +92,12 @@ export default class extends Vue {
    ***************************/
   @Watch('requestParams.billEquipmentList', { immediate: true, deep: true })
   public onChangeEquipmentId(equipmentId: any) {
-    console.log('🚀 ~ 监听设备名称变化', equipmentId, '🚀 ~ form表单数据', this.watchRequestForm)
+    console.log(
+      '🚀 ~ 监听设备名称变化',
+      equipmentId,
+      '🚀 ~ form表单数据',
+      this.watchRequestForm
+    )
     console.log('🚀 ~ params传参数据', this.requestParams.billMain)
   }
 
@@ -100,26 +105,28 @@ export default class extends Vue {
    * 新增流程申请
    ******************************************/
   public async createProcess() {
-    (this.$refs as any).requestParams.validate(async(valid:any) => {
-      const applyUrl:any = this.$route.query.applyUrl
+    (this.$refs as any).requestParams.validate(async(valid: any) => {
+      const applyUrl: any = this.$route.query.applyUrl
       if (valid && applyUrl) {
         const params = this.requestParams
         const billApproveList: any = []
-        billApproveList.push(params.billApproveList)
+        billApproveList.push({ ...params.billApproveList, optType: 'add' })
         const sendParams = []
         sendParams.push({
           ...params,
           billMain: {
             ...params.billMain,
-            departmentId: params.billMain.departmentName || params.billMain.applyDept
+            departmentId:
+              params.billMain.departmentName || params.billMain.applyDept
           },
           billEquipmentList: params.billEquipmentList,
           billApproveList
         })
+        console.log('🚀 ~ 提交 sendParams', sendParams)
         const res: any = await saveProcessApply((APPLY_URL as any)[applyUrl], sendParams)
         if (res.code === 200) {
-          this.$message.success('发起申请成功')
-          this.closeSelectedTag({ path: '/processRequest/index' })
+          this.$message.success('发起流程申请成功')
+          this.closeSelectedTag({ path: `/processRequest/index/${applyUrl}` })
         }
       } else {
         console.log('error submit!!')
@@ -128,8 +135,48 @@ export default class extends Vue {
     })
   }
 
+  /*******************************
+   * 取消流程
+   *****************************/
   public cancelProcess() {
-    this.closeSelectedTag({ path: '/processRequest/index' })
+    this.closeSelectedTag({ path: `/processRequest/index/${this.$route.query.applyUrl}` })
+  }
+
+  /*******************************
+   * 保存流程
+   *****************************/
+  public saveProcess() {
+    (this.$refs as any).requestParams.validate(async(valid: any) => {
+      const applyUrl: any = this.$route.query.applyUrl
+      if (valid && applyUrl) {
+        const params = this.requestParams
+        // const billApproveList: any = []
+        // billApproveList.push(params.billApproveList)
+        const sendParams = []
+        sendParams.push({
+          ...params,
+          billMain: {
+            ...params.billMain,
+            departmentId:
+              params.billMain.departmentName || params.billMain.applyDept
+          },
+          billEquipmentList: params.billEquipmentList,
+          billApproveList: []
+        })
+        console.log('🚀 ~ 保存 sendParams', sendParams)
+        const res: any = await saveProcessApply(
+          (APPLY_URL as any)[applyUrl],
+          sendParams
+        )
+        if (res.code === 200) {
+          this.$message.success('保存流程申请成功')
+          this.closeSelectedTag({ path: `/processRequest/index/${applyUrl}` })
+        }
+      } else {
+        console.log('error submit!!')
+        return false
+      }
+    })
   }
 
   /******************************
@@ -233,5 +280,74 @@ export default class extends Vue {
         //   message: "已取消删除"
         // });
       })
+  }
+
+  /**********************************************
+   * 获取节点信息 queryProcessCodeAndBhResData
+   * 获取人员权限列表 getUserListProcessCode
+   * 获取节点人员权限列表 queryUserListProcessCode
+   ***********************************************/
+  public applyDeptData: any = []; // 科室数据
+  public nextNodeExecutorData: any = []; // 下一节点执行人
+  public applyDetailData: any = []; // 设备列表
+
+  created() {
+    const applyUrl: any = this.$route.query.applyUrl
+    console.log('🚀 ~ applyUrl', applyUrl)
+    const processCode :string = this.requestParams.billApproveList.processCode
+    console.log('🚀 ~ processCode', processCode)
+    this.queryCodeDataFirst(processCode)
+  }
+
+  /**************************
+   * 获取节点信息
+   *************************/
+  public async queryCodeDataFirst(code:string) {
+    const currentCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
+      processCode: code,
+      nodeSort: 1
+    })
+    console.log('🚀 ~ currentCodeData', currentCodeData)
+    if (currentCodeData.code === 200) {
+      const {
+        nodeName,
+        nodeNameCode,
+        nodeSort
+      } = currentCodeData.data
+      this.requestParams.billApproveList = { ...this.requestParams.billApproveList, currentNodeName: nodeName, currentNodeCode: nodeNameCode }
+      this.queryProcessCodeAndBhResData(nodeSort, code)
+      this.queryUserListProcessCode(nodeSort, code)
+    }
+  }
+
+  /**************************
+   * 获取下一节点信息
+   ************************/
+  public async queryProcessCodeAndBhResData(nodeSort: any, code:string) {
+    const nextCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
+      processCode: code,
+      nodeSort: nodeSort + 1
+    })
+    console.log('🚀 ~ nextCodeData', nextCodeData)
+    if (nextCodeData.code === 200) {
+      const { nodeName, nodeNameCode } = nextCodeData.data
+      this.requestParams.billApproveList = { ...this.requestParams.billApproveList, nextNodeName: nodeName, nextNodeCode: nodeNameCode }
+    }
+  }
+
+  /**************************
+   * 获取下一节点操作人
+   * @param nodeSort
+   * @param code
+   *************************/
+  public async queryUserListProcessCode(nodeSort: number, code:string) {
+    const nextNodeExecutorData: any = await getUserListProcessCode({
+      processCode: code,
+      nodeSort: nodeSort + 1
+    })
+    console.log('🚀 ~ nextNodeExecutorData', nextNodeExecutorData)
+    if (nextNodeExecutorData.code === 200) {
+      this.requestParams.billApproveList = { ...this.requestParams.billApproveList, nextNodeExecutor: nextNodeExecutorData.data[0].user_id }
+    }
   }
 }

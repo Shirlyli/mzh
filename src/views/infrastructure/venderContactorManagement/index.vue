@@ -3,7 +3,7 @@
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>厂商联系人</span>
+        <span>厂家联系人</span>
       </div>
       <VexTable ref="vexTable"
                 :formConfig="formConfig"
@@ -69,10 +69,10 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="'厂商'"
+        <el-form-item :label="'公司'"
                       prop="linkId">
           <el-input v-model="venderContactorFormData.linkId"
-                    placeholder="请输入厂商"></el-input>
+                    placeholder="请输入公司"></el-input>
         </el-form-item>
         <el-form-item :label="'备注'"
                       prop="note">

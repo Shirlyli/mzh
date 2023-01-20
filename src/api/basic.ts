@@ -538,9 +538,9 @@ export const saveProcessApply = (url: any, data: any) =>
  * 导入接口
  */
 
-export const importFileList = (type: any, data: any) =>
+export const importFileList = (data: any) =>
   request({
-    url: `tools/xlsImportDB?tableId=${type}`,
+    url: `fileupload/uploadXlsAndImport`,
     method: 'POST',
     data
   })

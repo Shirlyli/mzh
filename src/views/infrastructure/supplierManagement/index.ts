@@ -365,10 +365,12 @@ export default class extends Vue {
 
   // 导入表格
   public async onFileChange(file:any) {
+    debugger;
     console.log('🚀 ~ file', file)
     const formData = new FormData()
     formData.append('formFile', file.raw)
-    const res :any = await importFileList('supplier', formData)
+    formData.append('type', 'supplier')
+    const res :any = await importFileList(formData)
     console.log('🚀 ~ res', res)
   }
 

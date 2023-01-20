@@ -1,9 +1,6 @@
 import { Component, Vue } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
 import {
-  getProcessNodeInfoByProcessCodeAndBh,
-  getUserListProcessCode,
-  queryDepartmentInfoTree,
   delHospitalProcessBusiness,
   queryProcessRecordList
 } from '@/api/basic'
@@ -13,7 +10,6 @@ import {
   EquipmentDetailFormList,
   ApprovalFormlist
 } from './formColumns'
-import { getEquipmentInfoByDepartmentId } from '@/api/equipment'
 import ProcessApproval from '@/components/processApproval/index.vue'
 import processRequest from '@/components/processRequest/index.vue'
 import { UserModule } from '@/store/modules/user'
@@ -31,6 +27,8 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
   }
 })
 export default class extends Vue {
+  public routePath = this.$route.path;
+
   async created() {
     await BusinessViewModule.GET_DEPARTMENT_DATA()
     // BasicFormList.forEach((item: any) => {
@@ -42,8 +40,9 @@ export default class extends Vue {
     // })
   }
 
-  public routePath = this.$route.path
-  // 列表查询项-表单
+  /**************************
+   * 列表查询项-表单
+   *************************/
   public formConfig = {
     data: {
       processName: '',
@@ -52,15 +51,22 @@ export default class extends Vue {
     },
     items: [
       {
-        field: 'processName',
-        title: '流程名称',
-        itemRender: { name: '$input', props: { placeholder: '请输入流程名称' } },
+        field: 'projectName',
+        title: '项目名称',
+        itemRender: {
+          name: '$input',
+          props: { placeholder: '请输入项目名称' }
+        },
         span: 5
       },
       {
-        field: 'nodeName',
-        title: '节点名称',
-        itemRender: { name: '$input', props: { placeholder: '请输入节点名称' } },
+        field: 'applyDept',
+        title: '申请科室',
+        itemRender: {
+          name: '$input',
+          props: { placeholder: '请输入申请科室' }
+        },
+        slots: { default: 'departmentSelect' },
         span: 5
       },
       {
@@ -80,7 +86,11 @@ export default class extends Vue {
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'applyDept', title: '申请科室', width: 150 },
-    { field: 'applyTime', title: '申请日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    {
+      field: 'applyTime',
+      title: '申请日期',
+      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+    },
     { field: 'projectName', title: '项目名称' },
     { field: 'purchaseType', title: '购置类别' },
     { field: 'purchaseType', title: ' 采购类型 ' },
@@ -96,65 +106,36 @@ export default class extends Vue {
 
   public basicFormList = BasicFormList;
 
-  // 待处理列表传参
+  /**************************
+   * 待处理列表传参
+   **************************/
   public paramsConfig: any = {
-    url: '/kssq/queryProcessList', // 根据表单查询项查询数据
+    url: '/kssq/getKssqInfoList', // 根据表单查询项查询数据
     params: {
       page: '1',
       limit: '20',
-      processCode: 'pro_kssq',
-      nextNodeState: '待审核' // 状态
+      entity: {
+        projectName: '',
+        applyPerson: ''
+      }
     }
   };
 
-  /**************************
-   * 新增流程表单form
-   *************************/
-  public equipmentProcessData = {
-    processName: '',
-    projectName: '', //* 项目名称 /
-    purchaseType: '', // 购置类别 /
-    applyDept: '', // 申请科室 /
-    applyPerson: '', // 申请人 /
-    applyModle: '', // 申请方式 /
-    applyReson: '', // 申请理由 /
-    applyDetailId: '', // 申请设备明细id /
-    enclosureId: '', // 附件id /
-    applyTime: '', // 申请时间 /
-    processCode: 'pro_kssp', // 流程code /
-    currentNodeName: '', // 当前节点名称 /
-    currentNodeCode: '', // 当前节点code /
-    nextNodeName: '', // 下一节点名称 /
-    nextNodeCode: '', // 下一节点code /
-    nextNodeExecutor: '', // 下一节点执行人 */
-    auditStatus: '', // 审核状态(审核通过,审核不通过，回退,作废)
-    auditReason: '', // 审核结论
-    delState: '', // 是否删除(是|否)
-    ksspPerson: '', // 科室审批人
-    ksspTime: '', // 科室审批时间
-    ksspReason: '', // 科室审批结论
-    yzspPerson: '', // 院长审批人
-    yzspTime: '', // 院长审批时间
-    yzspReason: '' // 院长审批结论
-  };
-
-  // 申请接口传惨params
+  /*************************
+   * 申请接口传惨params
+   ************************/
   public requestParams = {
     id: '',
     status: '0',
     billCode: '',
     billMain: {
       id: '',
+      billCode: '',
       userId: (UserModule.userData as any)?.userId,
       userName: (UserModule.userData as any)?.userName,
-      createTime: '',
-      rollOutDepartment: '',
-      rollInDepartment: '',
-      equipmentLocation: '',
-      rollOutTime: '',
-      cause: '',
-      status: '',
-      billCode: '',
+      applyDept: '',
+      applyModle: '',
+      applyReson: '',
       projectName: '', //* 项目名称 /
       purchaseType: '' // 购置类别 /
     },
@@ -167,18 +148,21 @@ export default class extends Vue {
     ],
     billApproveList: {
       id: '',
-      approveUser: (UserModule.userData as any)?.userId,
-      approveUserName: (UserModule.userData as any)?.userName,
-      approveTime: '',
-      approveOpinion: '',
-      approveStatus: '',
+      nextNodeExecutor: '',
+      nextNodeExecutorName: '',
+      auditReason: '',
+      auditStatus: '',
+      processCode: 'pro_kssq',
+      currentNodeName: '',
+      currentNodeCode: '',
+      nextNodeName: '',
+      nextNodeCode: '',
+      optType: '', // 保存 -不传，提交 ---add，审批---update
       billId: ''
-    }
+    },
+    dicAttachmentsList: []
   };
 
-  public applyDeptData: any = []; // 科室数据
-  public nextNodeExecutorData: any = []; // 下一节点执行人
-  public applyDetailData: any = []; // 设备列表
   public createFormList = BasicFormList;
   public clickProcessData: any = {}; // 当前操作流程节点信息
   public processRecordListData = []; // 操作记录
@@ -203,10 +187,6 @@ export default class extends Vue {
    * 新增科室申请
    *************************/
   public addEquipmentRequest() {
-    // this.queryCodeDataFirst()
-    //       meta: {
-    //   title: '流程申请'
-    // }
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
@@ -219,89 +199,6 @@ export default class extends Vue {
       })
   }
 
-  /**********************************************
-   * 获取科室数据 queryDepartmentInfoTree
-   * 获取节点信息 queryProcessCodeAndBhResData
-   * 获取人员权限列表 getUserListProcessCode
-   * 获取设备明细数据 queryEquipmentData
-   * 获取节点人员权限列表 queryUserListProcessCode
-   ***********************************************/
-  /**************************
-   * 获取节点信息
-   *************************/
-  public async queryCodeDataFirst() {
-    this.queryDeptData()
-    const currentCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
-      processCode: 'pro_kssq',
-      nodeSort: 1
-    })
-    if (currentCodeData.code === 200) {
-      const {
-        processName,
-        processCode,
-        nodeName,
-        nodeNameCode,
-        nodeSort
-      } = currentCodeData.data
-      this.equipmentProcessData = {
-        ...this.equipmentProcessData,
-        processCode,
-        processName,
-        currentNodeName: nodeName,
-        currentNodeCode: nodeNameCode
-      }
-      this.queryProcessCodeAndBhResData(nodeSort)
-      this.queryUserListProcessCode(nodeSort)
-    }
-  }
-
-  public async queryProcessCodeAndBhResData(nodeSort: any) {
-    const nextCodeData: any = await getProcessNodeInfoByProcessCodeAndBh({
-      processCode: 'pro_kssq',
-      nodeSort: nodeSort + 1
-    })
-    if (nextCodeData.code === 200) {
-      const { nodeName, nodeNameCode } = nextCodeData.data
-      this.equipmentProcessData = {
-        ...this.equipmentProcessData,
-        nextNodeName: nodeName,
-        nextNodeCode: nodeNameCode
-      }
-    }
-  }
-
-  public async queryEquipmentData() {
-    const res: any = await getEquipmentInfoByDepartmentId({
-      page: '1',
-      limit: '10',
-      entity: {
-        departmentId: this.equipmentProcessData.applyDept
-      }
-    })
-    if (res.code === 200) {
-      this.applyDetailData = res.data.map((item: any) => {
-        return { label: item.equipmentVO.name, value: item.equipmentVO.id }
-      })
-    }
-  }
-
-  public async queryUserListProcessCode(nodeSort: number) {
-    const nextNodeExecutorData: any = await getUserListProcessCode({
-      processCode: 'pro_kssq',
-      nodeSort: nodeSort + 1
-    })
-    if (nextNodeExecutorData.code === 200) {
-      this.nextNodeExecutorData = nextNodeExecutorData.data
-    }
-  }
-
-  public async queryDeptData() {
-    const res: any = await queryDepartmentInfoTree({})
-    if (res.code === 200 && res.data) {
-      this.applyDeptData = res.data[0].children
-    }
-  }
-
   /**************************
    * 点击查看按钮事件-跳转审批页面
    * @param row
@@ -309,13 +206,23 @@ export default class extends Vue {
   public handleSearch(row: any) {
     const { id, nextNodeCode } = row
     this.clickProcessData = row
+    this.clickProcessData.billEquipmentList = this.clickProcessData.billEquipmentList.map(
+      (item: any) => {
+        return { ...item, ...item.equipment }
+      }
+    )
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
     )
     sessionStorage.setItem('BasicFormList', JSON.stringify(this.basicFormList))
+    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
+    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
-      .push({ path: `/processApproval/index/${'KSSQ'}`, query: { nextNodeCode, id, type: '科室申请' } })
+      .push({
+        path: `/processApproval/index/${'KSSQ'}`,
+        query: { nextNodeCode, id, type: '科室申请' }
+      })
       .catch(err => {
         console.warn(err)
       })

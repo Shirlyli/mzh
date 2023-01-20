@@ -11,6 +11,7 @@
                   :formConfig="formConfig"
                   :columns="columns"
                   editColumns="['search','del','record']"
+                  type="transferApply"
                   :hasNotSlotButton="routePath.indexOf('CGX')>-1  ?'add' : 'request'"
                    :toolbarBtns="['add', 'import', 'delete', 'export']"
                   @emit-handle-insert="handleInsert"

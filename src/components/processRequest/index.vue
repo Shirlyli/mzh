@@ -6,13 +6,19 @@
         <span>流程申请</span>
         <div class="demo-drawer__footer">
           <el-button size="mini"
-                     @click="cancelProcess()">
-            {{ $t('table.cancel') }}
+                     type="primary"
+                     plain
+                     @click="saveProcess()">
+            {{ '保存' }}
           </el-button>
           <el-button type="primary"
                      size="mini"
                      @click="createProcess()">
-            {{ $t('table.confirm') }}
+            {{ '提交'}}
+          </el-button>
+          <el-button size="mini"
+                     @click="cancelProcess()">
+            {{ '取消' }}
           </el-button>
         </div>
       </div>
@@ -27,7 +33,8 @@
           <el-divider direction="vertical"></el-divider>
           <span>基本信息</span>
         </div>
-        <el-row :gutter="22" type="flex"
+        <el-row :gutter="22"
+                type="flex"
                 justify="start"
                 style="flex-wrap:wrap; flex-direction: row">
           <el-col :span="8"
@@ -148,7 +155,8 @@
           <el-divider direction="vertical"></el-divider>
           <span>审批清单</span>
         </div>
-        <el-row :gutter="22" type="flex"
+        <el-row :gutter="22"
+                type="flex"
                 justify="start"
                 style="flex-wrap:wrap; flex-direction: row">
           <el-col :span="8"

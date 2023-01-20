@@ -15,8 +15,8 @@ import moment from 'moment'
   components: {}
 })
 export default class extends Vue {
-  public moment = moment
-  public lodash = _
+  public moment = moment;
+  public lodash = _;
   public processData = JSON.parse(
     sessionStorage.getItem('ClickProcessData') ?? '0'
   ); // 流程数据
@@ -24,10 +24,6 @@ export default class extends Vue {
   public watchRequestForm = JSON.parse(
     sessionStorage.getItem('RequestForm') ?? '0'
   ); // 流程表单配置数据columns
-
-  public requestParams: any = JSON.parse(
-    sessionStorage.getItem('RequestParams') ?? '0'
-  );
 
   public submitVisible = false; // 同意
   public backVisible = false; // 退回
@@ -48,22 +44,13 @@ export default class extends Vue {
 
   private type = 'submit'; // 审批类型-通过，终止
   private title = '流程审批';
-  public equipmentProcessData = {
-    currentNodeName: '', // 当前节点name
-    currentNodeCode: '', // 当前节点code
-    nextNodeName: '', // 下一节点名称
-    nextNodeCode: '', // 下一节点code
-    nextNodeExecutor: '', // 下一节点执行人
-    auditStatus: '', // 审核状态(审核通过,审核不通过，回退,作废)
-    auditReason: '', // 审核结论
-    delState: '' // 是否删除(是|否)
-    /* ksspPerson: "", //科室审批人
-    ksspTime: "", //科室审批时间
-    ksspReason: "", //科室审批结论
-    yzspPerson: "", //院长审批人
-    yzspTime: "", //院长审批时间
-    yzspReason: "" //院长审批结论 */
-  };
+
+  /**********************
+   * 保存接口params
+   *********************/
+  public requestParams: any = JSON.parse(
+    sessionStorage.getItem('RequestParams') ?? '0'
+  );
 
   public rules = {};
   public nextNodeNameData: any = {}; // 下一节点名称
@@ -212,10 +199,10 @@ export default class extends Vue {
     }
   }
 
-  /**
+  /*********************************
    * 删除当前选中项
    * @param view
-   */
+   ********************************/
   private closeSelectedTag(view: ITagView) {
     TagsViewModule.delView(view)
     this.toLastView(TagsViewModule.visitedViews, view)

@@ -89,7 +89,8 @@ export const ALL_OPTIONS = {
   APPROVE_STATUS: [
     { label: '终止', value: 1 },
     { label: '待审批', value: 2 },
-    { label: '退回', value: 3 }
+    { label: '退回', value: 3 },
+    { label: '通过', value: 4 }
   ],
   // 归还状态 0：未归还；1：已归还
   RETURN_STATUS: [
@@ -130,6 +131,6 @@ export const APPLY_URL:any = {
   JYSQ: 'borrowApply/saveBorrowApply',
   PDSQ: 'checkApply/saveCheckApply',
   ZKSQ: 'rollDepartment/saveRollDepartment',
-  KSSQ: 'kssq/save',
+  KSSQ: 'kssq/saveOrUpdate',
   WDSQ: 'transferApply/saveTransferApply'
 }
