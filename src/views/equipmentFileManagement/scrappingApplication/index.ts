@@ -108,7 +108,7 @@ export default class extends Vue {
     {
       field: 'createTime',
       title: '申请日期',
-      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
     },
     {
       width: 250,
@@ -118,13 +118,16 @@ export default class extends Vue {
     }
   ];
 
+  public query = this.$route.path
   // 列表传参
   public paramsConfig: any = {
     url: '/scrapApply/getScrapApplyInfo', // 根据表单查询项查询数据
     params: {
       page: '1',
       limit: '10',
-      entity: {}
+      entity: {
+        status: this.query.indexOf('CGX') > -1 ? '0' : this.query.indexOf('YSQ') > -1 || this.query.indexOf('WSP') > -1 ? '1' : this.query.indexOf('YSP') > -1 ? '2' : ''
+      }
     }
   };
 

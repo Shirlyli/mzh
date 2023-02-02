@@ -88,6 +88,11 @@
                     placeholder="自动生成"
                     disabled="disabled" />
         </el-form-item>
+        <el-form-item :label="'排序'"
+                      prop="dispindex">
+          <el-input v-model="commonData.dispindex"
+                    placeholder="系统自动生成"/>
+        </el-form-item>
         <el-form-item :label="'备注'">
           <el-input v-model="commonData.note"
                     :autosize="{minRows: 5, maxRows: 8}"

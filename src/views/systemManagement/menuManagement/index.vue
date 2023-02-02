@@ -107,6 +107,11 @@
           <el-input type="textarea" v-model="menuData.mDesc"
                     placeholder="请输入"/>
         </el-form-item>
+        <el-form-item :label="'排序'"
+                      prop="dispindex">
+          <el-input v-model="menuData.dispindex"
+                    placeholder="系统自动生成"/>
+        </el-form-item>
         <el-form-item :label="'备注'"
                       prop="note">
           <el-input type="textarea" v-model="menuData.note"

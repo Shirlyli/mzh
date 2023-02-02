@@ -41,8 +41,6 @@ export default class extends Vue {
     const matched = this.$route.matched.filter(
       (item) => item.meta && item.meta.title
     )
-    console.log('🚀 ~ this.$route', this.$route)
-    console.log('🚀 ~ matched', matched)
     const first = matched[0]
     if (!this.isDashboard(first)) {
       // matched = [{ path: '/dashboard', meta: { title: 'dashboard' } } as RouteRecord].concat(matched)

@@ -1,7 +1,6 @@
 import { Component, Vue } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
 import {
-  delHospitalProcessBusiness,
   queryProcessRecordList
 } from '@/api/basic'
 import { BusinessViewModule } from '@/store/modules/business'
@@ -15,7 +14,7 @@ import {
 } from './formColumns'
 import { UserModule } from '@/store/modules/user'
 import moment from 'moment'
-import { ALL_OPTIONS } from '@/shared/options'
+import { equipmentCategoryData } from '@/shared/options'
 import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
 
 @Component({
@@ -28,15 +27,12 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
   }
 })
 export default class extends Vue {
+  public routePath = this.$route.path;
+  // private isDYS = this.routePath.indexOf('DYS') > -1;// 待验收
+  // private isYYS = this.routePath.indexOf('YYS') > -1;// 已验收
+
   async created() {
     await BusinessViewModule.GET_DEPARTMENT_DATA()
-    // BasicFormList.forEach((item: any) => {
-    //   if (item.slot === 'department') {
-    //     item.data = BusinessViewModule.departmentData.map((dept: any) => {
-    //       return { label: dept.title, value: dept.id }
-    //     })
-    //   }
-    // })
   }
 
   public basicFormList = BasicFormList;
@@ -51,12 +47,6 @@ export default class extends Vue {
       createTime: ''
     },
     items: [
-      {
-        field: 'approveStatus',
-        title: '审批状态',
-        itemRender: { name: '$select', props: { placeholder: '请输入审批状态' }, options: ALL_OPTIONS.APPROVAL_STATUS },
-        span: 5
-      },
       {
         field: 'rollOutDepartment',
         title: '申请科室',
@@ -78,68 +68,42 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'billCode', title: '转科单号', width: 150 },
-    { field: 'rollOutDepartmentName', title: '申请科室' },
-    { field: 'userName', title: '申请人' },
-    { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
-    { field: 'rollInDepartmentName', title: ' 转入科室 ' },
-    { field: 'rollOutTime', title: ' 转科日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
-    { field: 'cause', title: ' 转科原因 ' },
-    { field: 'approveStatus', title: ' 审批状态 ' },
+    { field: 'applyDept', title: '申请科室', width: 150 },
     {
-      width: 250,
+      field: 'applyTime',
+      title: '申请日期',
+      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+    },
+    { field: 'projectName', title: '项目名称' },
+    { field: 'purchaseType', title: '购置类别' },
+    { field: 'purchaseType', title: ' 采购类型 ' },
+    { field: 'nextNodeName', title: ' 当前节点' },
+    {
+      width: 100,
       title: '操作',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
   ];
 
-  // 列表传参
+  public commonEquipmentCategoryData = equipmentCategoryData
+
+  /**
+   * 列表传参
+   * 已验收查看--查询已验收数据
+   */
   public paramsConfig: any = {
-    url: '/rollDepartment/getRollDepartmentInfo', // 根据表单查询项查询数据
+    url: '/kssq/getKssqInfoList', // 待验收--查询已归档数据
     params: {
       page: '1',
-      limit: '10',
-      entity: {}
+      limit: '20',
+      entity: {
+        status: '',
+        projectName: '',
+        applyPerson: ''
+      }
     }
   };
-
-  //  点击查看按钮事件
-  public handleSearch(row: any) {
-    const { id, nextNodeCode } = row
-    this.clickProcessData = row
-    this.clickProcessData.billEquipmentList = this.clickProcessData.billEquipmentList.map(
-      (item: any) => {
-        return { ...item, ...item.equipment }
-      }
-    )
-    sessionStorage.setItem(
-      'ClickProcessData',
-      JSON.stringify(this.clickProcessData)
-    )
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
-
-    this.$router
-      .push({
-        path: `/processApproval/index/${'SBYS'}`,
-        query: { nextNodeCode, id, type: '设备验收' }
-      })
-      .catch(err => {
-        console.warn(err)
-      })
-  }
-
-  // 删除事件
-  public async handleRemove(data: any) {
-    const res: any = await delHospitalProcessBusiness({
-      ids: data.id
-    })
-    if (res.result) {
-      (this.$refs.vexTable as any).findList(this.paramsConfig)
-      Message.info('删除流程成功')
-    }
-  }
 
   /****************
    * 流程申请相关
@@ -227,20 +191,6 @@ export default class extends Vue {
     approveStatus: [{ require: true, trigger: 'change', message: '请选择' }]
   };
 
-  /*******************************
-   * 新增流程配置
-   ******************************/
-  public handleInsert(row: any) {
-    console.log('🚀 ~ row', row)
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
-    this.$router
-      .push({ path: `/processRequest/index/${'SBYS'}`, query: { type: '设备验收', applyUrl: 'SBYS' } })
-      .catch(err => {
-        console.warn(err)
-      })
-  }
-
   /*****************************
    * 操作记录
    ***************************/
@@ -262,9 +212,15 @@ export default class extends Vue {
     }
   }
 
-  /************************************
-   * 流程审批相关
-   *************************************/
-  public applyDeptData = []; // 科室
-  public clickProcessData: any = {}; // 当前操作流程节点信息
+  /**
+   *验收点击跳转
+   */
+  public handleAcceptance(row:any) {
+    console.log('🚀 ~ row', row)
+    sessionStorage.setItem('ClickProcessData', JSON.stringify(row.billMain))
+    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
+    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    sessionStorage.setItem('EquipmentCategoryData', JSON.stringify(this.commonEquipmentCategoryData))
+    this.$router.push({ path: '/equipmentAcceptOrWarehousing/index', query: { type: '验收' } })
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
 import {
   delHospitalProcessBusiness,
@@ -28,6 +28,10 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
   }
 })
 export default class extends Vue {
+  public routePath = this.$route.path;
+  // private isDYS = this.routePath.indexOf('DYS') > -1;// 待验收
+  // private isYYS = this.routePath.indexOf('YYS') > -1;// 已验收
+
   async created() {
     await BusinessViewModule.GET_DEPARTMENT_DATA()
   }
@@ -71,79 +75,40 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'billCode', title: '转科单号', width: 150 },
-    { field: 'rollOutDepartmentName', title: '申请科室' },
-    { field: 'userName', title: '申请人' },
-    { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
-    { field: 'rollInDepartmentName', title: ' 转入科室 ' },
-    { field: 'rollOutTime', title: ' 转科日期', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
-    { field: 'cause', title: ' 转科原因 ' },
-    { field: 'approveStatus', title: ' 审批状态 ' },
+    { field: 'applyDept', title: '申请科室', width: 150 },
     {
-      width: 250,
+      field: 'applyTime',
+      title: '申请日期',
+      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+    },
+    { field: 'projectName', title: '项目名称' },
+    { field: 'purchaseType', title: '购置类别' },
+    { field: 'purchaseType', title: ' 采购类型 ' },
+    { field: 'nextNodeName', title: ' 当前节点' },
+    {
+      width: 100,
       title: '操作',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
   ];
 
-  public query = this.$route.path
-  private getStatus() {
-    const status = this.query.indexOf('CGX') > -1 ? ['add', 'import', 'delete', 'export'] : this.query.indexOf('YSQ') > -1 || this.query.indexOf('DSP') > -1 ? '1' : this.query.indexOf('YSP') > -1 ? '2' : ''
-    console.log('🚀 ~ status', status)
-    return status
-  }
-
-  public toolbarBtns = ['addProcess']
-  public editColumns = ['search', 'del', 'record']
-  // 列表传参
+  /**
+   * 列表传参
+   * 已验收查看--查询已验收数据
+   */
   public paramsConfig: any = {
-    url: '/rollDepartment/getRollDepartmentInfo', // 根据表单查询项查询数据
+    url: '/kssq/getKssqInfoList', // 待验收--查询已归档数据
     params: {
       page: '1',
-      limit: '10',
+      limit: '20',
       entity: {
-        status: this.query.indexOf('CGX') > -1 ? '0' : this.query.indexOf('YSQ') > -1 || this.query.indexOf('DSP') > -1 ? '1' : this.query.indexOf('YSP') > -1 ? '2' : ''
+        status: '',
+        projectName: '',
+        applyPerson: ''
       }
     }
   };
-
-  //  点击查看按钮事件
-  public handleSearch(row: any) {
-    const { id, nextNodeCode } = row
-    this.clickProcessData = row
-    this.clickProcessData.billEquipmentList = this.clickProcessData.billEquipmentList.map(
-      (item: any) => {
-        return { ...item, ...item.equipment }
-      }
-    )
-    sessionStorage.setItem(
-      'ClickProcessData',
-      JSON.stringify(this.clickProcessData)
-    )
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
-
-    this.$router
-      .push({
-        path: `/processApproval/index/${'ZKSQ'}`,
-        query: { nextNodeCode, id, type: '转科' }
-      })
-      .catch(err => {
-        console.warn(err)
-      })
-  }
-
-  // 删除事件
-  public async handleRemove(data: any) {
-    const res: any = await delHospitalProcessBusiness({
-      ids: data.id
-    })
-    if (res.result) {
-      (this.$refs.vexTable as any).findList(this.paramsConfig)
-      Message.info('删除流程成功')
-    }
-  }
 
   /****************
    * 流程申请相关
@@ -231,20 +196,6 @@ export default class extends Vue {
     approveStatus: [{ require: true, trigger: 'change', message: '请选择' }]
   };
 
-  /*******************************
-   * 新增流程配置
-   ******************************/
-  public handleInsert(row: any) {
-    console.log('🚀 ~ row', row)
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
-    this.$router
-      .push({ path: `/processRequest/index/${'ZKSQ'}`, query: { type: '转科', applyUrl: 'ZKSQ' } })
-      .catch(err => {
-        console.warn(err)
-      })
-  }
-
   /*****************************
    * 操作记录
    ***************************/
@@ -266,9 +217,7 @@ export default class extends Vue {
     }
   }
 
-  /************************************
-   * 流程审批相关
-   *************************************/
-  public applyDeptData = []; // 科室
-  public clickProcessData: any = {}; // 当前操作流程节点信息
+  public handleWarehousing(row:any) {
+    console.log('🚀 ~ row', row)
+  }
 }

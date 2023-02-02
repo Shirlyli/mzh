@@ -53,7 +53,7 @@ export default class extends Vue {
     { field: 'hType', title: ' 医院类型' },
     { field: 'hPhone', title: ' 电话' },
     { field: 'note', title: ' 备注' },
-    { field: 'createtime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'createtime', title: '创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
     { field: 'createrId', title: '创建人' },
     {
       width: 180,

@@ -174,7 +174,8 @@ export default class extends Vue {
   }
 
   private refreshSelectedTag(view: ITagView) {
-    TagsViewModule.delCachedView(view)
+    console.log('🚀 ~ view', view)
+    // TagsViewModule.delCachedView(view)
     const { fullPath } = view
     this.$nextTick(() => {
       this.$router.replace({

@@ -90,6 +90,7 @@ export const constantRoutes: RouteConfig[] = [
       }
     ]
   },
+  // 流程申请
   {
     path: '/processRequest',
     meta: { hidden: true },
@@ -111,6 +112,7 @@ export const constantRoutes: RouteConfig[] = [
       }
     ]
   },
+  // 流程审批
   {
     path: '/equipmentAddOrUpdate',
     meta: { hidden: true },
@@ -124,6 +126,28 @@ export const constantRoutes: RouteConfig[] = [
             /* webpackChunkName: "401" */ '@/views/equipmentFileManagement/equipmentClass/components/index.vue'
           ),
         name: 'equipmentAddOrUpdate',
+        meta: {
+          title: '设备',
+          icon: 'user',
+          noCache: false
+        }
+      }
+    ]
+  },
+  // 验收 入库等
+  {
+    path: '/equipmentAcceptOrWarehousing',
+    meta: { hidden: true },
+    component: Layout,
+    redirect: '/equipmentAcceptOrWarehousing/index',
+    children: [
+      {
+        path: 'index',
+        component: () =>
+          import(
+            /* webpackChunkName: "401" */ '@/views/equipmentPurchase/equipmentAcceptance/components.vue'
+          ),
+        name: 'equipmentAcceptOrWarehousing',
         meta: {
           title: '设备',
           icon: 'user',

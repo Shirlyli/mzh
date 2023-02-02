@@ -95,7 +95,7 @@ export default class extends Vue {
     { field: 'applyTime', title: '申请时间' },
     { field: 'billCode', title: '流程编码' },
     { field: 'faultProblem', title: '维修原因' },
-    { field: 'transferTime', title: '外调时间', formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'transferTime', title: '外调时间', formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD') },
     { field: 'mainStatus', title: '主流程状态', formatter: FormatMainStatus },
     { field: 'problemDesc', title: '问题描述' },
     { field: 'status', title: '子流程状态', formatter: FormatChildStatus },

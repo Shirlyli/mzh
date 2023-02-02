@@ -161,11 +161,9 @@ class Permission extends VuexModule implements IPermissionState {
     } else {
       accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
     }
-    console.log('🚀 ~ accessedRoutes', accessedRoutes)
     // 【新加入】开始
     const loadMenuData: any = []
     const data = UserModule.menu
-    console.log('🚀 ~ data', data)
     // 把data的数据拷贝到loadMenuData里面
     Object.assign(loadMenuData, data)
     // 把asyncRoutes的数据拷贝到tempAsyncRoutes里面
@@ -177,7 +175,6 @@ class Permission extends VuexModule implements IPermissionState {
     // 把 tempAsyncRoutes 的值给 accessedRoutes ，并输出
     // eslint-disable-next-line prefer-const
     newaccessedRoutes = tempAsyncRoutes || []
-    console.log('🚀 ~ newaccessedRoutes', newaccessedRoutes)
     // 下面这些就是加载目录了
     this.SET_ROUTES(newaccessedRoutes)
     return newaccessedRoutes

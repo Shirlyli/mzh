@@ -38,7 +38,7 @@ export default class extends Vue {
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 80 },
     { field: 'name', title: ' 科室名称', treeNode: true },
-    { field: 'basicData', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'basicData', title: '创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
     {
       width: 160,
       title: '操作',

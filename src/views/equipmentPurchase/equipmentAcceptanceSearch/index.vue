@@ -4,15 +4,15 @@
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>转科申请</span>
+        <span>已验收查看</span>
       </div>
       <keep-alive>
         <VexTable ref="vexTable"
                   :formConfig="formConfig"
                   :columns="columns"
-                  :editColumns="editColumns"
+                  editColumns="['search','del','record']"
                   hasNotSlotButton="add"
-                  :toolbarBtns="toolbarBtns"
+                  :toolbarBtns="[]"
                   type="transferApply"
                   @emit-handle-insert="handleInsert"
                   @emit-handle-search="handleSearch"
@@ -21,10 +21,6 @@
                   :paramsConfig="paramsConfig" />
       </keep-alive>
     </el-card>
-
-    <!-- 操作记录 -->
-    <ProcessOperationRecord :processRecordDialogVisible="processRecordDialogVisible"
-                            :processRecordListData="processRecordListData" />
   </div>
 
 </template>

@@ -34,7 +34,7 @@ class User extends VuexModule implements IUserState {
   public email = '';
   public loginForm = {};
   public menu = [];
-  public userData ={};
+  public userData = {};
   @Mutation
   private SET_TOKEN(token: string) {
     this.token = token
@@ -109,24 +109,28 @@ class User extends VuexModule implements IUserState {
   @Action({ rawError: true })
   public async GetUserInfo() {
     // const userInfo = JSON.parse(localStorage.getItem('userInfo') ?? '0')
-
+    console.log('GetUserInfo  === this.token', this.token, JSON.parse(sessionStorage.getItem('store')))
     if (this.token === '') {
       throw Error('GetUserInfo: token is undefined!')
     }
     const res = await getUserInfo(this.loginForm)
+    console.log('🚀 ~ res', res, 'this.token', this.token)
     if (!res.data) {
       throw Error('Verification failed, please Login again.')
     }
     this.SET_USER_DATA(res.data)
-    this.SET_ROLES(['admin'])
+    this.SET_ROLES([res.data.userName])
     this.SET_NAME(res.data.userName)
     this.SET_AVATAR('')
     this.SET_INTRODUCTION('')
     this.SET_EMAIL('')
+    this.SET_TOKEN(res.data.token)
+    sessionStorage.setItem('store', JSON.stringify(res.data))
   }
 
   @Action
   public async ChangeRoles(role: string) {
+    console.log('🚀 ~ ChangeRoles')
     // Dynamically modify permissions
     const token = role + '-token'
     this.SET_TOKEN(token)
@@ -145,6 +149,7 @@ class User extends VuexModule implements IUserState {
 
   @Action
   public async LogOut() {
+    console.log('this.token', this.token)
     if (this.token === '') {
       throw Error('LogOut: token is undefined!')
     }

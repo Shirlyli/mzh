@@ -10,7 +10,7 @@ import {
 import { FormItemTypes, SupplierFormTypes } from './type'
 import _ from 'lodash'
 import { ALL_OPTIONS } from '@/shared/options'
-import { importFileList } from '@/api/basic'
+import { importFileList, uploadFile } from '@/api/basic'
 import { BasicFormList } from './formColumns'
 import moment from 'moment'
 @Component({
@@ -110,7 +110,7 @@ export default class extends Vue {
     { field: 'email', title: '邮箱' },
     { field: 'regeditAddress', title: ' 注册地' },
     { field: 'legalPerson', title: '法人' },
-    { field: 'ctime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'ctime', title: '创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
     { field: 'note', title: '备注' },
     {
       width: 160,
@@ -365,12 +365,10 @@ export default class extends Vue {
 
   // 导入表格
   public async onFileChange(file:any) {
-    debugger;
-    console.log('🚀 ~ file', file)
     const formData = new FormData()
     formData.append('formFile', file.raw)
     formData.append('type', 'supplier')
-    const res :any = await importFileList(formData)
+    const res :any = await uploadFile(formData)
     console.log('🚀 ~ res', res)
   }
 

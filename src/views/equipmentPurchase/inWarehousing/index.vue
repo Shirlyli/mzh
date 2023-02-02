@@ -4,27 +4,20 @@
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>转科申请</span>
+        <span>入库</span>
       </div>
       <keep-alive>
         <VexTable ref="vexTable"
                   :formConfig="formConfig"
                   :columns="columns"
-                  :editColumns="editColumns"
+                  editColumns="['inwarehousing']"
                   hasNotSlotButton="add"
-                  :toolbarBtns="toolbarBtns"
+                  :toolbarBtns="[]"
                   type="transferApply"
-                  @emit-handle-insert="handleInsert"
-                  @emit-handle-search="handleSearch"
-                  @emit-handle-remove="handleRemove"
-                  @emit-handle-record="handleRecord"
+                  @emit-handle-warehousing="handleWarehousing"
                   :paramsConfig="paramsConfig" />
       </keep-alive>
     </el-card>
-
-    <!-- 操作记录 -->
-    <ProcessOperationRecord :processRecordDialogVisible="processRecordDialogVisible"
-                            :processRecordListData="processRecordListData" />
   </div>
 
 </template>
@@ -59,7 +52,5 @@
   position: absolute;
   bottom: 10px;
   right: 10px;
-  .el-button {
-  }
 }
 </style>

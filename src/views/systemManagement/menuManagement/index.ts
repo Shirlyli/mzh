@@ -71,7 +71,8 @@ export default class extends Vue {
       formatter: FormatMIsavailable
     },
     { field: 'note', title: '备注' },
-    { field: 'mMtime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'dispindex', title: '排序' },
+    { field: 'mMtime', title: '创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
     {
       width: 150,
       title: '操作',
@@ -127,7 +128,8 @@ export default class extends Vue {
     mOpentype: '',
     mDesc: '',
     note: '',
-    mIsavailable: ''
+    mIsavailable: '',
+    dispindex:''
   };
 
   // 菜单类型
@@ -171,7 +173,8 @@ export default class extends Vue {
       mOpentype: '',
       mDesc: '',
       note: '',
-      mIsavailable: ''
+      mIsavailable: '',
+      dispindex:''
     }
   }
 
@@ -279,7 +282,6 @@ export default class extends Vue {
   }
 
   private handleCloseAssociateDialog(data: any) {
-    console.log('🚀 ~ data', data)
     this.isAssociateDialogVisible = false
   }
 }

@@ -82,7 +82,7 @@ export default class extends Vue {
     { field: 'ePostState', title: '在职状态', width: 120 },
     { field: 'note', title: '备注', width: 120 },
     { field: 'dispindex', title: '排序', width: 120 },
-    { field: 'createtime', title: '创建时间', width: 120, formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'createtime', title: '创建时间', width: 120, formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
     { field: 'sex', title: '性别', width: 120 },
     {
       width: 160,
@@ -495,4 +495,6 @@ export default class extends Vue {
   public cellDBLClickEvent() {
     console.log('cellDBLClickEvent')
   }
+
+
 }

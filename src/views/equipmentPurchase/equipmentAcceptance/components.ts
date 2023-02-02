@@ -8,7 +8,7 @@ import {
   equipmentStores,
   equipmentInspection,
   equipmentVO
-} from '../formlist/index'
+} from './formlist'
 import { Form, Message } from 'element-ui'
 import {
   queryEquipmentCategoryInfo,
@@ -26,21 +26,35 @@ export default class extends Vue {
 
   public tabMapOptions = [
     { label: '设备基础信息', key: 'equipmentVO' },
-    { label: '设备采购信息', key: 'equipmentPurchases' },
-    { label: '设备资料', key: 'equipmentResources' },
-    { label: '设备保养', key: 'equipmentMaintain' },
-    { label: '设备巡检', key: 'equipmentInspection' },
-    { label: '仓库记录', key: 'equipmentStocks' },
-    { label: '出入库记录', key: 'equipmentStores' },
-    { label: '设备折旧', key: 'equipmentDepreciations' }
+    { label: '设备采购信息', key: 'equipmentPurchases' }
+    // { label: '设备资料', key: 'equipmentResources' },
+    // { label: '设备保养', key: 'equipmentMaintain' },
+    // { label: '设备巡检', key: 'equipmentInspection' },
+    // { label: '仓库记录', key: 'equipmentStocks' },
+    // { label: '出入库记录', key: 'equipmentStores' },
+    // { label: '设备折旧', key: 'equipmentDepreciations' }
   ]; // tab栏
 
   public allFormList: any = {}; // 表单项
   public rules = {}; // 表单校验
+  /**********************
+   * 保存接口params
+   *********************/
+  public requestParams: any = JSON.parse(
+    sessionStorage.getItem('RequestParams') ?? '0'
+  );
+
+  public watchRequestForm = JSON.parse(
+    sessionStorage.getItem('RequestForm') ?? '0'
+  ); // 流程表单配置数据columns
 
   public equipmentCategoryData = JSON.parse(
     sessionStorage.getItem('EquipmentCategoryData') ?? '0'
   );
+
+  public processData = JSON.parse(
+    sessionStorage.getItem('ClickProcessData') ?? '0'
+  ); // 流程数据
 
   public activeName = 'equipmentVO'; // 当前tab页
   @Watch('activeName') // 监听tab页
@@ -49,6 +63,7 @@ export default class extends Vue {
   }
 
   async created() {
+    console.log(this.processData, this.equipmentCategoryData, this.watchRequestForm, this.requestParams)
     this.queryEquipmentCategoryInfo()
     this.queryByConditionSupplier()
     this.allFormList = {
@@ -131,7 +146,7 @@ export default class extends Vue {
     }
   }
 
-  // 保存设备验收
+  // 验收设备
   public createData() {
     (this.$refs.equipmentCategoryData as Form).validate(async valid => {
       if (valid) {
@@ -175,70 +190,18 @@ export default class extends Vue {
         }
         const params = []
         params.push(paramsConfig)
+        console.log('🚀 ~ params', params)
         const res: any = await updateEquipmentInfoData(params)
         if (res.code === 200) {
-          this.closeSelectedTag({ path: '/equipmentAcceptOrWarehousing/index' })
+          this.closeSelectedTag({ path: '/equipmentAddOrUpdate' })
         }
         Message.success('创建成功')
       }
     })
   }
 
-  // 修改科室
-  public updateData() {
-    (this.$refs.equipmentCategoryData as Form).validate(async valid => {
-      if (valid) {
-        const {
-          equipmentDepreciations,
-          equipmentInspection,
-          equipmentMaintain,
-          equipmentPurchases,
-          equipmentResources,
-          equipmentStocks,
-          equipmentStores,
-          equipmentVO,
-          id,
-          state
-        } = this.equipmentCategoryData
-        const paramsConfig = {
-          equipmentDepreciations: Object.values(equipmentDepreciations).length
-            ? [equipmentDepreciations]
-            : [],
-          equipmentInspection: Object.values(equipmentInspection).length
-            ? [equipmentInspection]
-            : [],
-          equipmentMaintain: Object.values(equipmentMaintain).length
-            ? [equipmentMaintain]
-            : [],
-          equipmentPurchases: Object.values(equipmentPurchases).length
-            ? [equipmentPurchases]
-            : [],
-          equipmentResources: Object.values(equipmentResources).length
-            ? [equipmentResources]
-            : [],
-          equipmentStocks: Object.values(equipmentStocks).length
-            ? [equipmentStocks]
-            : [],
-          equipmentStores: Object.values(equipmentStores).length
-            ? [equipmentStores]
-            : [],
-          equipmentVO,
-          id,
-          state
-        }
-        const params = []
-        params.push(paramsConfig)
-        const res: any = await updateEquipmentInfoData(params)
-        if (res.code === 200) {
-          this.closeSelectedTag({ path: '/equipmentAcceptOrWarehousing/index' })
-        }
-        Message.success('修改成功')
-      }
-    })
-  }
-
   public handleCloseDialog() {
-    this.closeSelectedTag({ path: '/equipmentAcceptOrWarehousing/index' })
+    this.closeSelectedTag({ path: '/equipmentAddOrUpdate/index' })
   }
 
   /******************************

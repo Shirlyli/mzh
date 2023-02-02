@@ -43,7 +43,7 @@ export const BasicFormList = [
     field: 'applyReson',
     title: '申请理由',
     span: 12,
-    type: 'input',
+    type: 'textarea',
     required: true
   }
 ]
@@ -55,22 +55,46 @@ export const EquipmentDetailFormList = [
       field: 'equipmentId',
       title: '设备名称',
       span: 12,
-      type: 'select',
+      type: 'input',
       required: true,
       slot: 'equipment'
     },
     {
-      field: 'barCode',
-      title: '规则型号',
+      field: 'unit',
+      title: '设备单位',
       span: 12,
       type: 'input'
     },
     {
-      field: 'brand',
-      title: '设备品牌',
+      field: 'equipment_num',
+      title: '设备数量',
+      span: 12,
+      type: 'input'
+    },
+    {
+      field: 'price',
+      title: '设备价格',
+      span: 12,
+      type: 'input'
+    },
+    {
+      field: 'is_import',
+      title: '是否进口',
       span: 12,
       type: 'input'
     }
+    // {
+    //   field: 'barCode',
+    //   title: '规则型号',
+    //   span: 12,
+    //   type: 'input'
+    // },
+    // {
+    //   field: 'brand',
+    //   title: '设备品牌',
+    //   span: 12,
+    //   type: 'input'
+    // }
   ]
 ]
 

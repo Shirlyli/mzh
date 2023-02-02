@@ -10,14 +10,15 @@
         <VexTable ref="vexTable"
                   :formConfig="formConfig"
                   :columns="columns"
-                  editColumns="['search','del','record']"
+                  :editColumns="editColumns"
                   type="transferApply"
                   :hasNotSlotButton="routePath.indexOf('CGX')>-1  ?'add' : 'request'"
-                   :toolbarBtns="['add', 'import', 'delete', 'export']"
+                   :toolbarBtns="toobarBtns"
                   @emit-handle-insert="handleInsert"
                   @emit-handle-search="handleSearch"
                   @emit-handle-remove="handleRemove"
                   @emit-handle-record="handleRecord"
+                  @emit-handle-update="handleUpdate"
                   :paramsConfig="paramsConfig" />
       </keep-alive>
     </el-card>

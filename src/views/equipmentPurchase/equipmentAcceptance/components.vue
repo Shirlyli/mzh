@@ -1,9 +1,11 @@
 <template>
   <div class="equipmentAddOrUpdate">
+
+    <!-- 设备信息 -->
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>设备{{ dialogStatus==='create'?'新增':'修改' }}</span>
+        <span>设备{{ $route.query.type}}</span>
         <div class="btnBox">
           <el-button @click="handleCloseDialog"
                      size="mini">
@@ -11,10 +13,25 @@
           </el-button>
           <el-button type="primary"
                      size="mini"
-                     @click="dialogStatus==='create'?createData():updateData()">
-            {{ $t('table.confirm') }}
+                     @click="createData()">
+            {{ '保存' }}
           </el-button>
         </div>
+      </div>
+      <!-- 流程信息 -->
+      <div class="contentBox">
+        <el-row type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
+          <el-col :span="8"
+                  v-for="(item,index) in watchRequestForm.billMain"
+                  :key="index">
+            <div class="basicBox">
+              <span class="title">{{item.title}}:</span>
+              <span class="value">{{processData[item.field]?processData[item.field]:'-'}}</span>
+            </div>
+          </el-col>
+        </el-row>
       </div>
       <el-form ref="equipmentCategoryData"
                :rules="rules"
@@ -78,10 +95,9 @@
                       <el-input v-model="equipmentCategoryData[item.key][formItem.key]"
                                 v-if="!formItem.type"
                                 :placeholder="`请输入${formItem.label}`" />
-                      <el-button v-model="equipmentCategoryData[item.key][formItem.key]"
+                      <!-- <el-button v-model="equipmentCategoryData[item.key][formItem.key]"
                                  v-if="formItem.type=== 'button'"
-                                 type="primary">查看</el-button>
-                      <!--  v-model="equipmentCategoryData[item.key][formItem.key]" -->
+                                 type="primary">生成</el-button> -->
                       <el-upload class="upload-demo"
                                  v-if="formItem.type==='upload'"
                                  action="/fileupload/addFileSubmitAndResult"
@@ -115,7 +131,7 @@
   </div>
 </template>
 
-<script lang="ts" src="./index.ts" >
+<script lang="ts" src="./components.ts" >
 </script>
 
 <style lang="scss" scoped>
@@ -132,5 +148,10 @@
 }
 .el-tabs--border-card > .el-tabs__content {
   padding: 10px;
+}
+
+.contentBox {
+  font-size: 14px;
+  margin: 10px 0 20px 0;
 }
 </style>

@@ -45,7 +45,7 @@ export const login = (data: any) =>
 export const logout = () =>
   request({
     // url: '/users/logout',
-    url: '/login/logout',
+    url: '/login/loyout',
     method: 'post'
   })
 

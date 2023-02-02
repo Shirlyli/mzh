@@ -73,7 +73,7 @@ export const equipmentVO = [
   },
   { label: '生产厂家', key: 'manufactorId', required: true },
   { label: '采购日期', key: 'purchaseTime', type: 'date', required: true },
-  { label: '二维码base64', key: 'qrcode', type: 'button' },
+  // { label: '二维码base64', key: 'qrcode', type: 'button' },
   { label: '维保服务商', key: 'facilitator' },
   { label: '维保截止日期', key: 'guarantee', type: 'date' },
   { label: '国别', key: 'region', type: 'select', options: ALL_OPTIONS.region },

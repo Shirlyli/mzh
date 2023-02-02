@@ -55,7 +55,7 @@ export default class extends Vue {
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'applyDept', title: '申请科室', width: 150 },
-    { field: 'applyTime', title: '申请日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'applyTime', title: '申请日期', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
     { field: 'projectName', title: '项目名称' },
     { field: 'purchaseType', title: '购置类别' },
     { field: 'purchaseType', title: ' 采购类型 ' },

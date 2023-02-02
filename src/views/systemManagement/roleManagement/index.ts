@@ -54,7 +54,7 @@ export default class extends Vue {
     { field: 'rName', title: '名称', treeNode: true },
     { field: 'rDesc', title: '角色路径' },
     { field: 'note', title: '备注' },
-    { field: 'rCtime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'rCtime', title: '创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
     {
       width: 160,
       title: '操作',
@@ -160,7 +160,7 @@ export default class extends Vue {
           )
         }
         this.dialogVisible = false
-        this.$message.success('新增菜单成功')
+        this.$message.success('新增角色成功')
       }
     })
   }
@@ -211,4 +211,5 @@ export default class extends Vue {
     }
     this.$message.success('删除菜单成功')
   }
+
 }

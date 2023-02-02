@@ -537,10 +537,37 @@ export const saveProcessApply = (url: any, data: any) =>
 /***
  * 导入接口
  */
-
 export const importFileList = (data: any) =>
   request({
-    url: `fileupload/uploadXlsAndImport`,
+    url: 'fileupload/uploadXlsAndImport',
+    method: 'POST',
+    data
+  })
+
+/**
+ * 附件上传
+ */
+export const uploadFile = (data: any) =>
+  request({
+    url: '/fileupload/addFileSubmitAndResult',
+    method: 'POST',
+    data
+  })
+
+/**
+   * 根据审批流程获取单据
+   * {
+   * "page": "1",
+    "limit": "10",
+    "entity": {
+        "businessId": "0B19711668B65C-FBEC-4703-88FC-413E784C355C",
+        "processCode": "pro_roll_department"
+    }
+   * }
+   */
+export const getBillInfoByApprove = (data: any) =>
+  request({
+    url: '/bill/getBillInfoByApprove',
     method: 'POST',
     data
   })

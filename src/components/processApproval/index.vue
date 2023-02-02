@@ -6,7 +6,7 @@
            class="clearfix">
         <span>流程审批</span>
         <!-- 操作按钮 -->
-        <div class="btnBox">
+        <div class="btnBox" v-if=" $route.query.code === 'edit'">
           <el-form ref="equipmentProcessData"
                    :rules="rules"
                    :model="equipmentProcessData"
@@ -14,7 +14,7 @@
                    style="margin-left:20px;">
             <!-- 同意 -->
             <el-popover placement="top"
-                        width="300"
+                        width="500"
                         class="popover"
                         v-model="submitVisible">
               <el-form-item :label="'下一节点名称'"
@@ -40,7 +40,7 @@
                             label-width="120px"
                             prop="auditReason"
                             :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
-                <el-input v-model="equipmentProcessData.auditReason"></el-input>
+                <el-input v-model="equipmentProcessData.auditReason" type="textarea"></el-input>
               </el-form-item>
               <div style="text-align: right; margin: 0">
                 <el-button size="mini"
@@ -57,7 +57,7 @@
 
             <!-- 回退 -->
             <el-popover placement="top"
-                        width="260"
+                        width="500"
                         class="popover"
                         v-model="backVisible">
               <el-form-item :label="'节点名称'"
@@ -85,6 +85,12 @@
                              :key="item.user_id"></el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item :label="'意见 '"
+                            label-width="70px"
+                            prop="auditReason"
+                            :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
+                <el-input v-model="equipmentProcessData.auditReason" type="textarea"></el-input>
+              </el-form-item>
               <div style="text-align: right; margin: 0">
                 <el-button size="mini"
                            @click="backVisible = false">取消</el-button>
@@ -98,14 +104,14 @@
 
             <!-- 终止 -->
             <el-popover placement="top"
-                        width="200"
+                        width="500"
                         class="popover"
                         v-model="endVisible">
               <el-form-item :label="'意见 '"
-                            label-width="50px"
+                            label-width="70px"
                             prop="auditReason"
                             :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
-                <el-input v-model="equipmentProcessData.auditReason"></el-input>
+                <el-input v-model="equipmentProcessData.auditReason" type="textarea"></el-input>
               </el-form-item>
               <div style="text-align: right; margin: 0">
                 <el-button size="mini"
@@ -157,22 +163,19 @@
           <el-table :data="processData.billEquipmentList"
                     style="width: 100%"
                     border>
-            <el-table-column prop="name"
+            <el-table-column prop="equipmentId"
                              label="设备名称"
                              width="180">
             </el-table-column>
-            <el-table-column prop="marking"
-                             label="设备编号"
+            <el-table-column prop="unit"
+                             label="设备单位"
                              width="180">
             </el-table-column>
             <el-table-column prop="price"
                              label="价格">
             </el-table-column>
-            <el-table-column prop="marking"
-                             label="规则型号">
-            </el-table-column>
-            <el-table-column prop="brand"
-                             label="设备厂家">
+            <el-table-column prop="equipmentNum"
+                             label="设备数量">
             </el-table-column>
           </el-table>
         </div>
@@ -231,7 +234,7 @@
       </div> -->
 
         <!-- 审批清单 -->
-        <div class="dividerBox">
+        <!-- <div class="dividerBox">
           <el-divider direction="vertical"></el-divider>
           <span>审批清单</span>
         </div>
@@ -261,8 +264,35 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-        </el-row>
-
+        </el-row> -->
+        <div class="dividerBox">
+          <el-divider direction="vertical"></el-divider>
+          <span>操作记录</span>
+        </div>
+        <div class="contentBox">
+        <el-table :data="processData.processRecord"
+                  style="width: 100%"
+                  border>
+          <el-table-column prop="nodeName"
+                           label="节点名称"
+                           width="180">
+          </el-table-column>
+          <el-table-column prop="operator"
+                           label="操作人"
+                           width="180">
+          </el-table-column>
+          <el-table-column prop="auditStatus"
+                           label="审核状态"
+                           width="180">
+          </el-table-column>
+          <el-table-column prop="auditmind"
+                           label="操作说明">
+          </el-table-column>
+          <el-table-column prop="operatorTime"
+                           label="操作时间">
+          </el-table-column>
+        </el-table>
+      </div>
       </el-form>
     </el-card>
 

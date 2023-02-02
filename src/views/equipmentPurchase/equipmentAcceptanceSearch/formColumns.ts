@@ -3,39 +3,58 @@ import { BusinessViewModule } from '@/store/modules/business'
 import { UserModule } from '@/store/modules/user'
 export const BasicFormList = [
   {
-    field: 'projectName',
-    title: '项目名称',
+    field: 'userName',
+    title: '申请人',
     span: 12,
     type: 'input',
+    data: UserModule.userData,
     required: true
   },
   {
-    field: 'purchaseType',
-    title: '购置类别',
+    field: 'createTime',
+    title: '申请日期',
     span: 12,
-    type: 'input'
+    type: 'date',
+    required: true
+
   },
   {
-    field: 'applyDept',
-    title: '申请科室',
+    field: 'rollOutDepartment',
+    title: '转出科室',
     span: 12,
     type: 'treeSelect',
     slot: 'department',
-    data: BusinessViewModule.departmentData,
-    required: true
+    required: true,
+    data: BusinessViewModule.departmentData
   },
   {
-    field: 'applyModle',
-    title: '申请方式',
+    field: 'rollInDepartment',
+    title: '转入科室',
+    span: 12,
+    type: 'treeSelect',
+    slot: 'department',
+    required: true,
+    data: BusinessViewModule.departmentData
+
+  },
+  {
+    field: 'equipmentLocation',
+    title: '新存放地点',
     span: 12,
     type: 'input'
   },
   {
-    field: 'applyReson',
-    title: '申请理由',
+    field: 'rollOutTime',
+    title: '计划转科日期',
     span: 12,
-    type: 'textarea',
+    type: 'date',
     required: true
+  },
+  {
+    field: 'cause',
+    title: '转科原因',
+    span: 12,
+    type: 'input'
   }
 ]
 

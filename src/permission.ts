@@ -23,40 +23,30 @@ const getPageTitle = (key: string) => {
 }
 
 router.beforeEach(async(to: Route, _: Route, next: any) => {
-  // Start progress bar
   NProgress.start()
+  // 获取用户 token
   const hasToken = getToken()
-  console.log('to', to)
-  console.log('🚀 ~ hasToken', hasToken)
-  console.log('🚀 ~ UserModule', UserModule.token)
-  // Determine whether the user has logged in
-  if (hasToken) {
-    console.log('🚀 ~ UserModule', UserModule)
+  if (UserModule.token) {
     if (to.path === '/login') {
       // If is logged in, redirect to the home page
       next({ path: '/' })
       NProgress.done()
     } else {
-      console.log('🚀 ~ UserModule', UserModule.roles)
-      // Check whether the user has obtained his permission roles
+      // 如果在其他页面，判断用户是否已经登录
+      const hasRoles = JSON.parse(sessionStorage.getItem('store') ?? '0')
+      // console.log('🚀 ~ hasRoles', hasRoles)
       if (UserModule.roles.length === 0) {
+        // console.log('premission roles 查看用户是否成功登录') // 用于 Debug 查看用户是否成功登录
         try {
           // Note: roles must be a object array! such as: ['admin'] or ['developer', 'editor']
           await UserModule.GetUserInfo()
           const roles = UserModule.roles
-          console.log('🚀 ~ roles', roles)
           // Generate accessible routes map based on role
           PermissionModule.GenerateRoutes(roles)
-          console.log('🚀 ~ PermissionModule.dynamicRoutes', PermissionModule.dynamicRoutes)
           // Dynamically add accessible routes
           PermissionModule.dynamicRoutes.forEach(route => {
             router.addRoute(route)
           })
-          console.log('🚀 ~ router', router)
-
-          // constantRoutes.forEach(route => {
-          //   router.addRoute(route)
-          // })
           // Hack: ensure addRoutes is complete
           // Set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })

@@ -13,6 +13,10 @@
       <!-- 自定义工具栏 -->
       <template #toolbar_buttons>
         <vxe-button @click="insertEvent"
+                    v-if="toolbarBtns.includes('addProcess')"
+                    status="primary">生成申请单</vxe-button>
+
+        <vxe-button @click="insertEvent"
                     size="mini"
                     v-if="toolbarBtns.includes('add')"
                     status="primary">新增</vxe-button>
@@ -26,14 +30,14 @@
         <vxe-button v-if="toolbarBtns.includes('import')"
                     @click="handleImport">导入</vxe-button>
 
-                    <vxe-button v-if="toolbarBtns.includes('downLoad')" @click="downLoadXlsx">下载模板</vxe-button>
+        <vxe-button v-if="toolbarBtns.includes('downLoad')"
+                    @click="downLoadXlsx">下载模板</vxe-button>
 
         <!-- <vxe-button @click="$refs.xGrid.exportData()"
                     v-if="toolbarBtns.includes('export')">导出</vxe-button> -->
       </template>
       <template #add_button>
-        <vxe-button @click="insertEvent"
-                    status="primary">生成申请单</vxe-button>
+
       </template>
       <template #department="{row}">
         <span>{{row.department?row.department.name :'-'}}</span>
@@ -89,7 +93,12 @@
                     @click="searchForDetails(row)"></vxe-button>
         <vxe-button content="编辑"
                     v-if="editColumns.includes('edit')"
-                    @click="editRowEvent(row)"></vxe-button>
+                    @click="editRowEvent(row)"
+                    status="success"></vxe-button>
+        <vxe-button content="审批"
+                    v-if="editColumns.includes('approval')"
+                    @click="editRowEvent(row)"
+                    status="success"></vxe-button>
         <vxe-button content="操作记录"
                     v-if="editColumns.includes('record')"
                     @click="handleRecord(row)"></vxe-button>
@@ -97,7 +106,18 @@
                     status='warning'
                     v-if="editColumns.includes('del')"
                     @click="removeRowEvent(row)"></vxe-button>
-
+        <vxe-button content="验收"
+                    status='success'
+                    v-if="editColumns.includes('acceptance')"
+                    @click="acceptanceRowEvent(row)"></vxe-button>
+        <vxe-button content="入库"
+                    status='success'
+                    v-if="editColumns.includes('inwarehousing')"
+                    @click="warehousingRowEvent(row)"></vxe-button>
+        <vxe-button content="出库"
+                    status='success'
+                    v-if="editColumns.includes('outwarehousing')"
+                    @click="warehousingRowEvent(row)"></vxe-button>
       </template>
 
       <!--分页 -->
@@ -178,12 +198,7 @@ export default class extends Vue {
     zoom: true,
     custom: true,
     slots: {
-      buttons:
-        this.hasNotSlotButton === 'add'
-          ? 'add_button'
-          : this.hasNotSlotButton
-            ? ''
-            : 'toolbar_buttons'
+      buttons: 'toolbar_buttons'
     }
   }
 
@@ -203,7 +218,7 @@ export default class extends Vue {
           this.tablePage.total = res.count
         } else if (this.type === 'transferApply') {
           this.tableData = res.data.map((item: any) => {
-            return { ...item, ...item.billMain, ...item.billApproveList[0] }
+            return { ...item, ...item.billApproveList[0], ...item.billMain }
           })
           this.tablePage.total = res.count
         } else {
@@ -376,6 +391,26 @@ export default class extends Vue {
 
   public downLoadXlsx() {
     this.emitHandleExport()
+  }
+
+  // 验收
+  @Emit()
+  emitHandleAcceptanceRow(value: any) {
+    return value
+  }
+
+  public acceptanceRowEvent(row: any) {
+    this.emitHandleAcceptanceRow(row)
+  }
+
+  // 出入库
+  @Emit()
+  emitHandleWarehousing(value: any) {
+    return value
+  }
+
+  public warehousingRowEvent(row:any) {
+    this.emitHandleWarehousing(row)
   }
 }
 </script>

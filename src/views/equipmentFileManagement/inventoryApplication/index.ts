@@ -98,7 +98,7 @@ export default class extends Vue {
     { field: 'billCode', title: '盘点单号', width: 150 },
     { field: 'checkDepartment', title: '任务名称' },
     { field: 'userName', title: '申请人' },
-    { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
     { field: 'departmentName', title: '制单科室 ' },
     { field: 'equipmentCategory', title: '盘点范围' },
     {
@@ -122,7 +122,9 @@ export default class extends Vue {
     params: {
       page: '1',
       limit: '10',
-      entity: {}
+      entity: {
+        status: '0'
+      }
     }
   };
 

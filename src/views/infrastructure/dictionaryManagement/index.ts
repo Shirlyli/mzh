@@ -49,7 +49,8 @@ export default class extends Vue {
     dicType: '',
     dicCode: '',
     flag: '',
-    note: ''
+    note: '',
+    dispindex:'',
   }; // 新增或编辑表单
 
   private rules = {
@@ -91,7 +92,8 @@ export default class extends Vue {
       dicType: '',
       dicCode: '',
       flag: '1',
-      note: ''
+      note: '',
+      dispindex:''
     }
   }
 
@@ -127,7 +129,8 @@ export default class extends Vue {
           ctime: '',
           note: '',
           isLeaf: 1,
-          xpath: xpath
+          xpath: xpath,
+          dispindex:''
         }
         const res: any = await updateCommonData(params)
         if (res.result) {
@@ -148,7 +151,7 @@ export default class extends Vue {
     debugger;
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { id, pid, dicName, pName, xpath, dicType, dicCode, flag } = this.commonData
+        const { id, pid, dicName, pName, xpath, dicType, dicCode, flag,dispindex } = this.commonData
         const params = {
           id: id,
           dicType: dicType,
@@ -160,7 +163,8 @@ export default class extends Vue {
           ctime: '',
           note: '',
           isLeaf: '',
-          xpath: xpath
+          xpath: xpath,
+          dispindex:dispindex
         }
         const res: any = await updateCommonData(params)
         if (res.result) {
@@ -178,7 +182,7 @@ export default class extends Vue {
 
   // 触发编辑事件
   private handleUpdate(row: any) {
-    const { dicName, pName, id, pid, xpath, dicType, dicCode, flag, note } = row
+    const { dicName, pName, id, pid, xpath, dicType, dicCode, flag, note,dispindex } = row
     this.commonData = {
       id,
       pid,
@@ -188,7 +192,8 @@ export default class extends Vue {
       dicType,
       dicCode,
       flag,
-      note
+      note,
+      dispindex
     }
     this.dialogStatus = 'update'
     this.dialogVisible = true

@@ -1,8 +1,8 @@
 import {
   getProcessNodeInfoByProcessCodeAndBh,
   getUserListProcessCode,
-  queryHospitalProcessBusinessUpdate,
-  queryProcessData
+  queryProcessData,
+  saveProcessApply
 } from '@/api/basic'
 import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
@@ -10,9 +10,14 @@ import { Form, Message } from 'element-ui'
 import _ from 'lodash'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import moment from 'moment'
+import { APPLY_URL } from '@/shared/options'
+import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
+
 @Component({
   name: 'processApproval',
-  components: {}
+  components: {
+    ProcessOperationRecord
+  }
 })
 export default class extends Vue {
   public moment = moment;
@@ -26,6 +31,13 @@ export default class extends Vue {
   ); // 流程表单配置数据columns
 
   public submitVisible = false; // 同意
+  @Watch('submitVisible')
+  private onSubmitVisible(value: any) {
+    if (value) {
+      this.handleSubmit()
+    }
+  }
+
   public backVisible = false; // 退回
   @Watch('backVisible')
   private onBackVisible(value: any) {
@@ -57,6 +69,14 @@ export default class extends Vue {
   public nextNodeExecutorData: any = {}; // 下一节点处理人
   public nodeExecutorData: any = []; // 当前节点处理人
   public allProcessList: any = []; // 所有流程节点
+  public equipmentProcessData = {
+    nextNodeName: '',
+    nextNodeCode: '',
+    currentNodeCode: '',
+    currentNodeName: '',
+    nextNodeExecutor: '',
+    auditReason: ''
+  }
 
   /**************************************************
    * 获取当前节点信息，并根据当前节点信息获取下一节点信息数据
@@ -125,28 +145,44 @@ export default class extends Vue {
     this.queryCurrentCodeAndBhResData(nextNodeCode, 'submit')
   }
 
-  mounted() {
-    this.handleSubmit()
-  }
-
   /****************************************************
    * 确认流程处理 /api/hospitalProcess/getProcessNodeInfoByProcessCodeAndBh
    ***************************************************/
   public async handleSubmitProcess() {
-    const { id } = this.$route.query
+    const { processCode } = this.$route.query
+    const applyUrl: any = this.$route.query.applyUrl
+    const params = this.requestParams
+    console.log('🚀 ~ params', params)
     if (this.type === 'submit') {
       (this.$refs.equipmentProcessData as Form).validate(async valid => {
         if (valid) {
-          const params = {
+          const sendParams = []
+          const billApproveList = [{
             ...this.equipmentProcessData,
-            id,
-            operator: '操作人',
+            processCode,
+            optType: 'update',
+            id: params.billApproveList[0]?.id,
+            // operator: '操作人',
             auditStatus: '审核通过' // 审核状态(审核通过,审核不通过，回退,作废)
-          }
-          const res: any = await queryHospitalProcessBusinessUpdate(params)
-          if (res.result) {
+          }]
+          sendParams.push({
+            ...params,
+            billMain: {
+              ...params.billMain,
+              departmentId:
+              params.billMain.departmentName || params.billMain.applyDept
+            },
+            billEquipmentList: params.billEquipmentList,
+            billApproveList
+          })
+          console.log('🚀 ~ 保存 sendParams', sendParams)
+          const res: any = await saveProcessApply(
+            (APPLY_URL as any)[applyUrl],
+            sendParams
+          )
+          if (res.data) {
             this.closeSelectedTag({
-              path: '/processApproval/index'
+              path: `/processApproval/index/${applyUrl}`
             })
           }
           (this.$refs.equipmentProcessData as Form).resetFields()
@@ -158,15 +194,32 @@ export default class extends Vue {
     } else if (this.type === 'end') {
       (this.$refs.equipmentProcessData as Form).validate(async valid => {
         if (valid) {
-          const params = {
+          const sendParams = []
+          const billApproveList = [{
             ...this.equipmentProcessData,
-            id,
+            processCode,
+            optType: 'update',
+            // operator: '操作人',
             auditStatus: '作废' // 审核状态(审核通过,审核不通过，回退,作废)
-          }
-          const res: any = await queryHospitalProcessBusinessUpdate(params)
-          if (res.result) {
+          }]
+          sendParams.push({
+            ...params,
+            billMain: {
+              ...params.billMain,
+              departmentId:
+              params.billMain.departmentName || params.billMain.applyDept
+            },
+            billEquipmentList: params.billEquipmentList,
+            billApproveList
+          })
+          console.log('🚀 ~ 保存 sendParams', sendParams)
+          const res: any = await saveProcessApply(
+            (APPLY_URL as any)[applyUrl],
+            sendParams
+          )
+          if (res.data) {
             this.closeSelectedTag({
-              path: '/processApproval/index'
+              path: `/processApproval/index/${applyUrl}`
             })
           }
 
@@ -178,16 +231,34 @@ export default class extends Vue {
       })
     } else if (this.type === 'back') {
       (this.$refs.equipmentProcessData as Form).validate(async valid => {
+        console.log('🚀 ~ valid', valid, this.equipmentProcessData)
         if (valid) {
-          const params = {
+          const billApproveList = [{
             ...this.equipmentProcessData,
-            id,
+            processCode,
+            optType: 'update',
+            // operator: '操作人',
             auditStatus: '回退' // 审核状态(审核通过,审核不通过，回退,作废)
-          }
-          const res: any = await queryHospitalProcessBusinessUpdate(params)
-          if (res.result) {
+          }]
+          const sendParams = []
+          sendParams.push({
+            ...params,
+            billMain: {
+              ...params.billMain,
+              departmentId:
+              params.billMain.departmentName || params.billMain.applyDept
+            },
+            billEquipmentList: params.billEquipmentList,
+            billApproveList
+          })
+          console.log('🚀 ~ 保存 sendParams', sendParams)
+          const res: any = await saveProcessApply(
+            (APPLY_URL as any)[applyUrl],
+            sendParams
+          )
+          if (res.data) {
             this.closeSelectedTag({
-              path: '/processApproval/index'
+              path: `/processApproval/index/${applyUrl}`
             })
           }
           (this.$refs.equipmentProcessData as Form).resetFields()
@@ -197,6 +268,7 @@ export default class extends Vue {
         }
       })
     }
+    this.submitVisible = false
   }
 
   /*********************************

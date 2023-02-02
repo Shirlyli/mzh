@@ -84,18 +84,18 @@ export default class extends Vue {
     { field: 'billCode', title: '借用单号', width: 150 },
     { field: 'departmentName', title: '申请人科室' },
     { field: 'borrowDepartmentName', title: '借用申请科室' },
-    { field: 'borrowTime', title: '预计借用时间 ', formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'borrowTime', title: '预计借用时间 ', formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD') },
     {
       field: 'returnTime',
       title: ' 预计归还时间',
-      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
     },
     { field: 'cause', title: ' 借用原因 ' },
     { field: 'approveStatus', title: '审批状态', formatter: FormatApproveStatus },
     {
       field: 'createTime',
       title: '申请日期',
-      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
     },
     {
       width: 250,
@@ -111,7 +111,9 @@ export default class extends Vue {
     params: {
       page: '1',
       limit: '10',
-      entity: {}
+      entity: {
+        status: '0'
+      }
     }
   };
 

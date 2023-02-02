@@ -151,7 +151,7 @@
         </el-row>
 
         <!-- 审批清单 -->
-        <div class="dividerBox">
+        <!-- <div class="dividerBox">
           <el-divider direction="vertical"></el-divider>
           <span>审批清单</span>
         </div>
@@ -185,7 +185,7 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
 
         <!-- 归还信息  -->
         <div v-show="watchRequestForm.borrowReturnList">
@@ -276,6 +276,10 @@
   border: 1px dashed #000;
   .el-form-item {
     margin-bottom: 0pt;
+  }
+
+  .el-col{
+    margin-bottom: 12px;
   }
 }
 

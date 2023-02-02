@@ -10,21 +10,14 @@
         <VexTable ref="vexTable"
                   :formConfig="formConfig"
                   :columns="columns"
-                  editColumns="['search','del','record']"
+                  editColumns="['acceptance']"
                   hasNotSlotButton="add"
-                   :toolbarBtns="['add', 'import', 'delete', 'export']"
+                  :toolbarBtns="[]"
                   type="transferApply"
-                  @emit-handle-insert="handleInsert"
-                  @emit-handle-search="handleSearch"
-                  @emit-handle-remove="handleRemove"
-                  @emit-handle-record="handleRecord"
+                  @emit-handle-acceptance-row="handleAcceptance"
                   :paramsConfig="paramsConfig" />
       </keep-alive>
     </el-card>
-
-    <!-- 操作记录 -->
-    <ProcessOperationRecord :processRecordDialogVisible="processRecordDialogVisible"
-                            :processRecordListData="processRecordListData" />
   </div>
 
 </template>
@@ -59,7 +52,5 @@
   position: absolute;
   bottom: 10px;
   right: 10px;
-  .el-button {
-  }
 }
 </style>

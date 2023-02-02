@@ -78,7 +78,7 @@ export default class extends Vue {
     {
       field: 'createTime',
       title: '创建时间',
-      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
     },
     {
       width: 160,

@@ -50,7 +50,7 @@ export default class extends Vue {
     { field: 'isMetering', title: '是否计量检查', width: 100, formatter: FormatIsisMetering },
     { field: 'userName', title: '申请人', width: 100 },
     { field: 'hospitalName', title: '所属医院', width: 100 },
-    { field: 'createtime', title: '创建时间', width: 100, formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'createtime', title: '创建时间', width: 100, formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
     { field: 'note', title: '备注', width: 100 },
     {
       width: 160,

@@ -28,22 +28,77 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
 })
 export default class extends Vue {
   public routePath = this.$route.path;
+  private isYSQ = this.routePath.indexOf('YSQ') > -1;// 已申请
+  private isCGX = this.routePath.indexOf('CGX') > -1;// 草稿箱
+  private isDSP = this.routePath.indexOf('DSP') > -1;// 待审批
 
   async created() {
+    console.log('🚀 ~ routePath', this.routePath)
+    if (this.isDSP || this.isYSQ) {
+      this.columns = [
+        ...this.columns,
+        { field: 'nextNodeName', title: ' 当前节点' },
+        { field: 'nextNodeState', title: ' 状态 ' },
+        {
+          width: 200,
+          title: '操作',
+          slots: { default: 'operateHasSearch' },
+          showOverflow: true
+        }
+      ]
+      this.formConfig.items = [...this.formConfig.items, {
+        field: 'nextNodeName',
+        title: '流程节点',
+        itemRender: {
+          name: '$input',
+          props: { placeholder: '请输入流程节点' }
+        },
+        span: 8
+      }, {
+        field: 'createTime',
+        title: '创建时间',
+        slots: { default: 'create_time' },
+        span: 9,
+        folding: true
+      },
+      { slots: { default: 'operate_item' }, span: 24, collapseNode: true, align: 'center' }]
+    } else if (this.isCGX) {
+      this.columns = [
+        ...this.columns,
+        {
+          width: 160,
+          title: '操作',
+          slots: { default: 'operateHasSearch' },
+          showOverflow: true
+        }
+      ]
+      this.formConfig.items = [...this.formConfig.items, {
+        field: 'createTime',
+        title: '创建时间',
+        slots: { default: 'create_time' },
+        span: 10
+      },
+      { slots: { default: 'operate_item' }, span: 4 }]
+    }
     await BusinessViewModule.GET_DEPARTMENT_DATA()
-    // BasicFormList.forEach((item: any) => {
-    //   if (item.slot === 'department') {
-    //     item.data = BusinessViewModule.departmentData.map((dept: any) => {
-    //       return { label: dept.title, value: dept.id }
-    //     })
-    //   }
-    // })
   }
+
+  public toobarBtns =
+    this.isYSQ || this.isDSP
+      ? []
+      : ['addProcess', 'import', 'delete', 'export'];
+
+  public editColumns =
+    this.isCGX
+      ? ['search', 'del']
+      : this.isYSQ
+        ? ['search']
+        : ['approval', 'record'];
 
   /**************************
    * 列表查询项-表单
    *************************/
-  public formConfig = {
+  public formConfig :any= {
     data: {
       processName: '',
       nodeName: '',
@@ -57,8 +112,9 @@ export default class extends Vue {
           name: '$input',
           props: { placeholder: '请输入项目名称' }
         },
-        span: 5
+        span: this.isCGX ? 5 : 8
       },
+
       {
         field: 'applyDept',
         title: '申请科室',
@@ -67,41 +123,27 @@ export default class extends Vue {
           props: { placeholder: '请输入申请科室' }
         },
         slots: { default: 'departmentSelect' },
-        span: 5
-      },
-      {
-        field: 'createTime',
-        title: '创建时间',
-        slots: { default: 'create_time' },
-        span: 10
-      },
-      { slots: { default: 'operate_item' }, span: 4 }
+        span: this.isCGX ? 5 : 8
+      }
+
     ] // 表单项
   };
 
   /************************
    * 流程配置列表项
    *************************/
-  public columns = [
+  public columns: any = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'applyDept', title: '申请科室', width: 150 },
     {
       field: 'applyTime',
       title: '申请日期',
-      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
     },
     { field: 'projectName', title: '项目名称' },
     { field: 'purchaseType', title: '购置类别' },
-    { field: 'purchaseType', title: ' 采购类型 ' },
-    { field: 'nextNodeName', title: ' 当前节点' },
-    { field: 'nextNodeState', title: ' 状态 ' },
-    {
-      width: 250,
-      title: '操作',
-      slots: { default: 'operateHasSearch' },
-      showOverflow: true
-    }
+    { field: 'purchaseType', title: ' 采购类型 ' }
   ];
 
   public basicFormList = BasicFormList;
@@ -115,6 +157,7 @@ export default class extends Vue {
       page: '1',
       limit: '20',
       entity: {
+        status: this.isYSQ ? '' : this.isCGX ? '0' : '1',
         projectName: '',
         applyPerson: ''
       }
@@ -199,33 +242,63 @@ export default class extends Vue {
       })
   }
 
-  /**************************
-   * 点击查看按钮事件-跳转审批页面
-   * @param row
-   *************************/
-  public handleSearch(row: any) {
-    const { id, nextNodeCode } = row
+  public routerToApproval(row: any, type: string) {
+    const {
+      id,
+      nextNodeCode,
+      status,
+      processCode,
+      billCode,
+      billMain,
+      billApproveList,
+      billEquipmentList,
+      dicAttachmentsList
+    } = row
     this.clickProcessData = row
     this.clickProcessData.billEquipmentList = this.clickProcessData.billEquipmentList.map(
       (item: any) => {
         return { ...item, ...item.equipment }
       }
     )
+    const sendRequestParams = {
+      id,
+      status,
+      billCode,
+      billMain,
+      billApproveList,
+      billEquipmentList,
+      dicAttachmentsList
+    }
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
     )
     sessionStorage.setItem('BasicFormList', JSON.stringify(this.basicFormList))
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    sessionStorage.setItem('RequestParams', JSON.stringify(sendRequestParams))
     this.$router
       .push({
         path: `/processApproval/index/${'KSSQ'}`,
-        query: { nextNodeCode, id, type: '科室申请' }
+        query: {
+          nextNodeCode,
+          processCode,
+          type: '科室申请',
+          applyUrl: 'KSSQ',
+          code: type
+        }
       })
       .catch(err => {
         console.warn(err)
       })
+  }
+
+  /**************************
+   * 点击查看按钮事件-跳转审批页面
+   * @param row
+   *************************/
+  public handleSearch(row: any) {
+    console.log('🚀 ~ row', row)
+    this.routerToApproval(row, 'search')
   }
 
   /**************************
@@ -261,5 +334,12 @@ export default class extends Vue {
   public handleRecord(data: any) {
     this.processRecordDialogVisible = true
     this.queryProcessRecordListData(data)
+  }
+
+  /****************************
+   * 编辑
+   **************************/
+  public handleUpdate(data: any) {
+    this.routerToApproval(data, 'edit')
   }
 }

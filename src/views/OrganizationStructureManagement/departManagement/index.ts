@@ -39,7 +39,7 @@ export default class extends Vue {
     { field: 'name', title: ' 科室名称', treeNode: true },
     { field: 'mobile', title: '座机', treeNode: true },
     { field: 'note', title: '描述', treeNode: true },
-    { field: 'ctime', title: '创建时间', formatter: (data:any) => moment(data.cellvalue).format('YYYY-MM-DD') },
+    { field: 'ctime', title: '创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
     {
       width: 160,
       title: '操作',
