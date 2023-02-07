@@ -53,13 +53,15 @@ export default class extends Vue {
           name: '$input',
           props: { placeholder: '请输入流程节点' }
         },
+        resetValue: '',
         span: 8
       }, {
         field: 'createTime',
         title: '创建时间',
         slots: { default: 'create_time' },
         span: 9,
-        folding: true
+        folding: true,
+        resetValue: []
       },
       { slots: { default: 'operate_item' }, span: 24, collapseNode: true, align: 'center' }]
     } else if (this.isCGX) {
@@ -76,7 +78,8 @@ export default class extends Vue {
         field: 'createTime',
         title: '创建时间',
         slots: { default: 'create_time' },
-        span: 10
+        span: 10,
+        resetValue: ''
       },
       { slots: { default: 'operate_item' }, span: 4 }]
     }
@@ -108,6 +111,7 @@ export default class extends Vue {
       {
         field: 'projectName',
         title: '项目名称',
+        resetValue: '',
         itemRender: {
           name: '$input',
           props: { placeholder: '请输入项目名称' }
@@ -118,12 +122,13 @@ export default class extends Vue {
       {
         field: 'applyDept',
         title: '申请科室',
+        resetValue: '',
         itemRender: {
           name: '$input',
           props: { placeholder: '请输入申请科室' }
         },
         slots: { default: 'departmentSelect' },
-        span: this.isCGX ? 5 : 8
+        span: this.isCGX ? 8 : 8
       }
 
     ] // 表单项
@@ -135,7 +140,7 @@ export default class extends Vue {
   public columns: any = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'applyDept', title: '申请科室', width: 150 },
+    { field: 'applyDeptName', title: '申请科室', width: 150 },
     {
       field: 'applyTime',
       title: '申请日期',
@@ -155,7 +160,7 @@ export default class extends Vue {
     url: '/kssq/getKssqInfoList', // 根据表单查询项查询数据
     params: {
       page: '1',
-      limit: '20',
+      limit: '10',
       entity: {
         status: this.isYSQ ? '' : this.isCGX ? '0' : '1',
         projectName: '',
@@ -237,7 +242,7 @@ export default class extends Vue {
         path: `/processRequest/index/${'KSSQ'}`,
         query: { type: '科室申请', applyUrl: 'KSSQ' }
       })
-      .catch(err => {
+      .catch((err:any) => {
         console.warn(err)
       })
   }
@@ -257,9 +262,10 @@ export default class extends Vue {
     this.clickProcessData = row
     this.clickProcessData.billEquipmentList = this.clickProcessData.billEquipmentList.map(
       (item: any) => {
-        return { ...item, ...item.equipment }
+        return { ...item }
       }
     )
+    console.log('🚀 ~ this.clickProcessData', this.clickProcessData)
     const sendRequestParams = {
       id,
       status,
@@ -287,7 +293,7 @@ export default class extends Vue {
           code: type
         }
       })
-      .catch(err => {
+      .catch((err:any) => {
         console.warn(err)
       })
   }

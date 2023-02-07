@@ -177,7 +177,7 @@ export default class extends Vue {
         params.push(paramsConfig)
         const res: any = await updateEquipmentInfoData(params)
         if (res.code === 200) {
-          this.closeSelectedTag({ path: '/equipmentAcceptOrWarehousing/index' })
+          this.closeSelectedTag({ path: '/equipmentAddOrUpdate/index' })
         }
         Message.success('创建成功')
       }
@@ -230,7 +230,7 @@ export default class extends Vue {
         params.push(paramsConfig)
         const res: any = await updateEquipmentInfoData(params)
         if (res.code === 200) {
-          this.closeSelectedTag({ path: '/equipmentAcceptOrWarehousing/index' })
+          this.closeSelectedTag({ path: '/equipmentAddOrUpdate/index' })
         }
         Message.success('修改成功')
       }
@@ -238,7 +238,7 @@ export default class extends Vue {
   }
 
   public handleCloseDialog() {
-    this.closeSelectedTag({ path: '/equipmentAcceptOrWarehousing/index' })
+    this.closeSelectedTag({ path: '/equipmentAddOrUpdate/index' })
   }
 
   /******************************

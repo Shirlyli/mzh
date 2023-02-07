@@ -23,9 +23,10 @@ export const equipmentVO = [
     type: 'treeSelect',
     slot: 'equipmentCategory'
   },
-  { label: '设备来源', key: 'source', required: true },
+  { label: '设备来源', key: 'source' },
   { label: '设备原值', key: 'region', required: true },
   { label: '设备数量', key: 'num', required: true },
+  { label: '设备价格', key: 'price', required: true },
   { label: '设备型号', key: 'marking', required: true },
   {
     label: '设备是否删除',
@@ -39,15 +40,13 @@ export const equipmentVO = [
     label: '设备状态',
     key: 'equipmentStates',
     type: 'select',
-    options: ALL_OPTIONS.equipmentStates,
-    required: true
+    options: ALL_OPTIONS.equipmentStates
   },
   {
     label: '设备来源',
     key: 'source',
     type: 'select',
-    options: ALL_OPTIONS.source,
-    required: true
+    options: ALL_OPTIONS.source
   },
   { label: '设备单位', key: 'unit' },
   { label: '设备所在地', key: 'equipmentLocation' },
@@ -56,29 +55,28 @@ export const equipmentVO = [
   { label: '设备图片', key: 'img' },
   { label: '注册证号', key: 'registrationCertificat' },
   { label: '产品批号', key: 'batchNumber' },
-  { label: '品牌', key: 'brand', required: true },
+  { label: '品牌', key: 'brand' },
   {
     label: '生产商',
     key: 'manufactorId',
-    required: true,
     type: 'select',
     slot: 'manufactorId'
   },
-  { label: '购入日期', key: 'intakeDate', type: 'date', required: true },
+  { label: '购入日期', key: 'intakeDate', type: 'date' },
   {
     label: '状态',
     key: 'isExordium',
     type: 'select',
     options: ALL_OPTIONS.isExordium
   },
-  { label: '生产厂家', key: 'manufactorId', required: true },
-  { label: '采购日期', key: 'purchaseTime', type: 'date', required: true },
+  { label: '生产厂家', key: 'manufactorId' },
+  { label: '采购日期', key: 'purchaseTime', type: 'date' },
   // { label: '二维码base64', key: 'qrcode', type: 'button' },
   { label: '维保服务商', key: 'facilitator' },
   { label: '维保截止日期', key: 'guarantee', type: 'date' },
   { label: '国别', key: 'region', type: 'select', options: ALL_OPTIONS.region },
   { label: '财务编号', key: 'financialNo' },
-  { label: '启用日期', key: 'activationTime', type: 'date', required: true },
+  { label: '启用日期', key: 'activationTime', type: 'date' },
   { label: '注册证号', key: 'registrationCertificat' },
   { label: '评分指南', key: 'scoringGuideUrl' },
   { label: '固定资产编号', key: 'fixedAssetsNo' },
@@ -121,8 +119,8 @@ export const equipmentVO = [
   { label: '计量检查日期', key: 'meteringTime', type: 'date' },
   { label: '计量器具类别', key: 'meteringType' },
   { label: '上市许可持有人名称', key: 'productionName' },
-  { label: '生产日期', key: 'productionTime', type: 'date', required: true },
-  { label: '保质期', key: 'validity', required: true }
+  { label: '生产日期', key: 'productionTime', type: 'date' },
+  { label: '保质期', key: 'validity' }
 ]
 
 /**
@@ -140,17 +138,17 @@ export const equipmentPurchases = [
   { label: '中标时间', key: 'biddingTime', type: 'date', required: true },
   { label: '单项预算', key: 'budget', required: true },
   { label: '验收情况', key: 'checkNote' },
-  { label: '合同金额', key: 'contractAmount', required: true },
+  { label: '合同金额', key: 'contractAmount' },
   {
     label: '合同截至日期',
     key: 'contractDeadlineTime',
     type: 'date',
     required: true
   },
-  { label: '合同名称', key: 'contractName', required: true },
-  { label: '合同编码', key: 'contractNum', required: true },
-  { label: '设备', key: 'equipmentId', required: true },
-  { label: '招标形式', key: 'invitationType', required: true },
+  { label: '合同名称', key: 'contractName' },
+  { label: '合同编码', key: 'contractNum' },
+  { label: '设备', key: 'equipmentId' },
+  { label: '招标形式', key: 'invitationType' },
   { label: '乙方联系方式', key: 'partyBPhone' },
   { label: '乙方单位', key: 'partyBUnit' },
   { label: '乙方联系人', key: 'partyBUser' },
@@ -164,16 +162,16 @@ export const equipmentPurchases = [
   { label: '购置日期', key: 'purchaseTime', type: 'date' },
   { label: '购置类别', key: 'purchaseType' },
   { label: '采购方式', key: 'purchaseWay' },
-  { label: '档案编码', key: 'recordNum', required: true },
-  { label: '档案管理员', key: 'recordUser', required: true },
+  { label: '档案编码', key: 'recordNum' },
+  { label: '档案管理员', key: 'recordUser' },
   { label: '附属资料', key: 'resource' },
   { label: '签订日期', key: 'signingTime', type: 'date' },
-  { label: '付款金额', key: 'amount', required: true },
-  { label: '付款日期', key: 'paymentTime', type: 'date', required: true },
-  { label: '期数', key: 'periods', required: true },
-  { label: '预付日期', key: 'prepaymentTime', type: 'date', required: true },
-  { label: '采购id', key: 'purchaseId', required: true },
-  { label: '付款状态', key: 'status', required: true }
+  { label: '付款金额', key: 'amount' },
+  { label: '付款日期', key: 'paymentTime', type: 'date' },
+  { label: '期数', key: 'periods' },
+  { label: '预付日期', key: 'prepaymentTime', type: 'date' },
+  // { label: '采购ID', key: 'purchaseId' },
+  { label: '付款状态', key: 'status' }
 ]
 
 /**

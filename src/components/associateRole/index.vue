@@ -137,7 +137,7 @@ export default class extends Vue {
 
   // 获取已绑定角色树数据
   public async getBindRoleTreeData(data: any) {
-    const res: any = await queryRolesByMenuId({ menuId: data[0].id })
+    const res: any = await queryRolesByMenuId({ menu_id: data[0].id })
     if (res.code === 200) {
       this.bindRoleData = res.data
     }

@@ -121,11 +121,9 @@
             </keep-alive>
           </el-tab-pane>
         </el-tabs>
-
       </el-form>
       <div slot="footer"
            class="dialog-footer">
-
       </div>
     </el-card>
   </div>

@@ -56,6 +56,11 @@
     height: calc(100vh - 300px);
 }
 
+//查询项超过三行
+.triggerContainerBox .vxe-table {
+    height: calc(100vh - 400px);
+}
+
 .noSearch .vxe-table {
     height: calc(100vh - 250px);
 }

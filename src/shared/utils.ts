@@ -11,3 +11,16 @@ export const formatMIsRoleType = (data: any) => {
       ? '用户'
       : '-'
 }
+
+export const handleDepartData = (datas: any) => {
+  return datas.map((item: any) => {
+    if (item.children.length) {
+      return {
+        id: item.id,
+        label: item.title,
+        children: handleDepartData(item.children)
+      }
+    }
+    return { id: item.id, label: item.title }
+  })
+}

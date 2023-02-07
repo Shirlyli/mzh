@@ -20,7 +20,7 @@
             <span>字典列表</span>
           </div>
           <VexTable ref="vexTable"
-                    :formConfig="formConfig"
+                    :formConfig="{}"
                     :columns="columns"
                     editColumns="['edit','del']"
                      :toolbarBtns="['add', 'import', 'delete', 'export']"

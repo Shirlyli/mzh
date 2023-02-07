@@ -22,22 +22,22 @@ import { UserModule } from '@/store/modules/user'
 })
 export default class extends Vue {
   // 左侧字典url
-  private url = '/hospitalProcess/queryAllProcessList';
+  public url = '/hospitalProcess/queryAllProcessList';
   // 列表查询项-表单
-  private formConfig = {
+  public formConfig = {
     data: {},
     items: [] // 表单项
   };
 
-  private rules = {};
+  public rules = {};
   // 树形图传参
-  private treeParams = {
+  public treeParams = {
     page: '1',
     limit: '10',
     entity: {}
   };
 
-  private getformatMIsAvailable = (data: any) => {
+  public getformatMIsAvailable = (data: any) => {
     return String(data.cellValue) === '1'
       ? '禁用'
       : String(data.cellValue) === '0'
@@ -45,7 +45,7 @@ export default class extends Vue {
         : '-'
   };
 
-  private formatMIsRoleType(data: any) {
+  public formatMIsRoleType(data: any) {
     return data.cellValue === 'role'
       ? '角色'
       : data.cellValue === 'user'
@@ -53,9 +53,9 @@ export default class extends Vue {
         : '-'
   }
 
-  private nodeClickData: any = {};
+  public nodeClickData: any = {};
   // 流程配置列表项
-  private columns = [
+  public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'processName', title: '流程名称', width: 150 },
@@ -88,14 +88,14 @@ export default class extends Vue {
     }
   ];
 
-  private paramsConfig: any = {
+  public paramsConfig: any = {
     url: '/hospitalProcess/queryProcessNodeListByProcessNode', // 根据表单查询项查询数据
     params: {
       processCode: 'pro_kssq'
     }
   };
 
-  private processData = {
+  public processData :any= {
     processName: '',
     processCode: '',
     nodeName: '',
@@ -107,15 +107,17 @@ export default class extends Vue {
   };
 
   /**
-   *获取数据
+   *获取角色名称数据
    */
   public roleData: any = [];
-  private async getRoleTreeData(type: any) {
+  public async getRoleTreeData(type: any) {
     let res :any = []
     if (type === 'role') {
       const resData: any = await getRoleTreeData()
       if (resData.code === 200) {
-        res = resData.data?.[0]?.children
+        res = resData.data?.[0]?.children.map((item:any) => {
+          return { ...item, userId: item.id }
+        })
       }
     } else {
       const deptId = (UserModule.userData as any)?.employee?.deptId
@@ -136,18 +138,18 @@ export default class extends Vue {
     this.$forceUpdate()
   }
 
-  private onRoleTypeChange(value:any) {
+  public onRoleTypeChange(value:any) {
     console.log('🚀 ~ value', value)
     this.processData.roleTypeId = ''
   }
 
   @Watch('processData.roleType')
-  private onChangeRoleType(value: any) {
+  public onChangeRoleType(value: any) {
     this.getRoleTreeData(value)
   }
 
   // 接收树形组件点击节点数据
-  private handleNodeClick(data: any) {
+  public handleNodeClick(data: any) {
     this.nodeClickData = data
     // 查询菜单及下级菜单 /api/common/dicInfo/querySelfAndPar
     this.paramsConfig = {
@@ -158,10 +160,10 @@ export default class extends Vue {
     }
   }
 
-  private dialogVisible = false; // 模态框
-  private dialogStatus = 'create';
+  public dialogVisible = false; // 模态框
+  public dialogStatus = 'create';
 
-  private clearForm() {
+  public clearForm() {
     this.processData = {
       processName: '',
       processCode: '',
@@ -175,8 +177,8 @@ export default class extends Vue {
   }
 
   // 新增流程配置
-  private handleInsert(row: any) {
-    console.log('🚀 ~ row', row)
+  public handleInsert(row: any) {
+    this.dialogStatus = 'create'
     this.clearForm()
     if (!this.nodeClickData.id) {
       this.$message.error('请选择流程名称后新增')
@@ -191,10 +193,22 @@ export default class extends Vue {
     }
   }
 
+  // 触发编辑事件
+  public handleUpdate(row: any) {
+    console.log('🚀 ~ row', row)
+    const { roleType } = row
+    this.processData = roleType === 'user' ? { ...this.processData, ...row, roleTypeId: row.roleTypeId.split(',') } : { ...this.processData, ...row }
+    console.log('🚀 ~ this.processData', this.processData)
+    this.dialogStatus = 'update'
+    this.dialogVisible = true
+  }
+
   // 新增流程配置
-  private createData() {
+  public createData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
+        const { roleTypeId, roleType } = this.processData
+        this.processData = roleType === 'user' ? { ...this.processData } : { ...this.processData, roleTypeId: roleTypeId.join(',') }
         const res: any = await updateProcessData(this.processData)
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig)
@@ -210,10 +224,12 @@ export default class extends Vue {
   }
 
   // 修改流程配置
-  private updateData() {
+  public updateData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const res: any = await updateProcessData(this.processData)
+        const { roleTypeId, roleType } = this.processData
+        this.processData = roleType === 'user' ? { ...this.processData } : { ...this.processData, roleTypeId: roleTypeId.join(',') }
+        const res: any = await updateProcessData({ ...this.processData })
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig)
         }
@@ -225,15 +241,8 @@ export default class extends Vue {
     })
   }
 
-  // 触发编辑事件
-  private handleUpdate(row: any) {
-    this.processData = { ...this.processData, ...row }
-    this.dialogStatus = 'update'
-    this.dialogVisible = true
-  }
-
   // 删除流程配置
-  private async handleRemove(row: any) {
+  public async handleRemove(row: any) {
     let params = {}
     if (Array.isArray(row)) {
       const res = _.map(row, 'id')
@@ -253,7 +262,7 @@ export default class extends Vue {
     this.$message.success('删除流程配置成功')
   }
 
-  private addProcess() {
+  public addProcess() {
     console.log('addProcess')
   }
 }

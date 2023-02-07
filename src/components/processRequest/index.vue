@@ -49,8 +49,17 @@
                         :placeholder="`请输入${item.title}`"
                         v-if="item.type === 'input'" />
               <!-- 树形下拉框 -->
-              <el-select v-model="requestParams.billMain[item.field]"
+              <treeselect :options="item.data"
+                          v-model="requestParams.billMain[item.field]"
+                          clearable
+                          :disable-branch-nodes="true"
+                          search-nested
+                          placeholder="请选择"
+                          v-if="item.type === 'treeSelect'" />
+              <!-- <el-select v-model="requestParams.billMain[item.field]"
                          placeholder="请选择"
+                         filterable
+                         :filter-method="fliterMethods"
                          v-if="item.type === 'treeSelect'">
                 <el-tree node-key="id"
                          :data="item.data"
@@ -68,7 +77,7 @@
                                :value="data.id"></el-option>
                   </span>
                 </el-tree>
-              </el-select>
+              </el-select> -->
               <!-- 下拉框 -->
               <el-select v-model="requestParams.billMain[item.field]"
                          v-if="item.type === 'select'"
@@ -278,7 +287,7 @@
     margin-bottom: 0pt;
   }
 
-  .el-col{
+  .el-col {
     margin-bottom: 12px;
   }
 }

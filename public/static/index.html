@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>医疗设备全生命周期统计</title>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script>
+        $(window).load(function() {
+            $(".loading").fadeOut()
+        })
+    </script>
+
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/map.css">
+</head>
+
+<body>
+    <div class="loading">
+        <div class="loadbox"> <img src="picture/loading.gif"> 页面加载中... </div>
+    </div>
+    <div class="data">
+        <div class="data-title">
+            <div class="title-center ">设备全生命周期数据统计</div>
+        </div>
+        <div class="data-content">
+            <div class="con-left fl">
+                <div class="left-top">
+                    <div class="info boxstyle">
+                        <div class="title">实时统计</div>
+                        <div class="info-main">
+                            <ul>
+                                <li><img src="picture/shebeizongshu.png" alt=""><span>设备总数(台)</span>
+                                    <p>2,457</p>
+                                </li>
+                                <li><img src="picture/info-img-2.png" alt=""><span>在运设备(台)</span>
+                                    <p>2,157</p>
+                                </li>
+                                <li><img src="picture/baofei.png" alt=""><span>报废设备(台)</span>
+                                    <p>200</p>
+                                </li>
+                                <li><img src="picture/weixiu.png" alt=""><span>维修设备(台)</span>
+                                    <p>100</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="top-bottom boxstyle">
+                        <div class="title">科室分类</div>
+                        <div id="echarts_1" class="charts"></div>
+                    </div>
+                </div>
+                <div class="left-bottom boxstyle">
+                    <div class="title">设备分类</div>
+                    <div id="echarts_2" class="charts"></div>
+                </div>
+            </div>
+            <div class="con-center fl">
+                <div class="map-num">
+                    <p>设备厂家分布情况</p>
+                    <div class="num">
+                        <span>2</span>
+                        <span>4</span>
+                        <span>5</span>
+                        <span>7</span>
+
+                    </div>
+                </div>
+                <div class="cen-top map" id="map"></div>
+                <div class="cen-bottom boxstyle">
+                    <div class="title">设备检修高峰时间段</div>
+                    <div id="echarts_3" class="charts"></div>
+                </div>
+            </div>
+            <div class="con-right fr">
+                <div class="right-top boxstyle">
+                    <div class="title">本月新增TOP5</div>
+                    <div id="echarts_4" class="charts"></div>
+                </div>
+                <div class="right-center boxstyle">
+                    <div class="title">维修设备类别TOP5</div>
+                    <div id="echarts_5" class="charts"></div>
+                </div>
+                <div class="right-bottom boxstyle">
+                    <div class="title">报废类别TOP10</div>
+                    <div id="echarts_6" class="charts"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="js/echarts.min.js"></script>
+<script src="js/china.js"></script>
+<script src="js/echarts.js"></script>
+
+</html>

@@ -201,7 +201,7 @@ export const onMenuIdUnBindRole = (data: { menuId: string, roleId: string }) =>
   })
 
 //  菜单查询已绑定的角色 /auth/role/queryRolesByMenuId
-export const queryRolesByMenuId = (data: { menuId: string }) =>
+export const queryRolesByMenuId = (data: { menu_id: string }) =>
   request({
     url: '/auth/role/queryRolesByMenuId',
     method: 'POST',
@@ -568,6 +568,27 @@ export const uploadFile = (data: any) =>
 export const getBillInfoByApprove = (data: any) =>
   request({
     url: '/bill/getBillInfoByApprove',
+    method: 'POST',
+    data
+  })
+
+/**
+   * 验收
+   * 保存
+   * purchaseCheck/savePurchaseCheck
+   * 查询
+   * /api/purchaseCheck/queryPurchaseCheckList
+   */
+export const savePurchaseCheck = (data: any) =>
+  request({
+    url: '/purchaseCheck/savePurchaseCheck',
+    method: 'POST',
+    data
+  })
+
+export const queryPurchaseCheckList = (data: any) =>
+  request({
+    url: '/purchaseCheck/queryPurchaseCheckList',
     method: 'POST',
     data
   })

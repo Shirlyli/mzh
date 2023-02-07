@@ -1,4 +1,5 @@
 import { ALL_OPTIONS } from '@/shared/options'
+import { handleDepartData } from '@/shared/utils'
 import { BusinessViewModule } from '@/store/modules/business'
 import { UserModule } from '@/store/modules/user'
 
@@ -17,12 +18,12 @@ export const BasicFormList = [
     type: 'input'
   },
   {
-    field: 'applyDept',
+    field: 'applyDeptName',
     title: '申请科室',
     span: 12,
     type: 'treeSelect',
     slot: 'department',
-    data: BusinessViewModule.departmentData,
+    data: handleDepartData(BusinessViewModule.departmentData),
     required: true
   },
   // {
@@ -66,7 +67,7 @@ export const EquipmentDetailFormList = [
       type: 'input'
     },
     {
-      field: 'equipment_num',
+      field: 'equipmentNum',
       title: '设备数量',
       span: 12,
       type: 'input'
@@ -78,10 +79,14 @@ export const EquipmentDetailFormList = [
       type: 'input'
     },
     {
-      field: 'is_import',
+      field: 'isImport',
       title: '是否进口',
       span: 12,
-      type: 'input'
+      type: 'select',
+      data: [
+        { label: '是', value: 1 },
+        { label: '否', value: 0 }
+      ]
     }
     // {
     //   field: 'barCode',

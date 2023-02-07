@@ -4,7 +4,6 @@ import {
   queryProcessRecordList
 } from '@/api/basic'
 import { BusinessViewModule } from '@/store/modules/business'
-import { Message } from 'element-ui'
 import ProcessApproval from '@/components/processApproval/index.vue'
 import processRequest from '@/components/processRequest/index.vue'
 import {
@@ -68,7 +67,7 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'applyDept', title: '申请科室', width: 150 },
+    { field: 'applyDeptName', title: '申请科室', width: 150 },
     {
       field: 'applyTime',
       title: '申请日期',
@@ -77,7 +76,7 @@ export default class extends Vue {
     { field: 'projectName', title: '项目名称' },
     { field: 'purchaseType', title: '购置类别' },
     { field: 'purchaseType', title: ' 采购类型 ' },
-    { field: 'nextNodeName', title: ' 当前节点' },
+    // { field: 'nextNodeName', title: ' 当前节点' },
     {
       width: 100,
       title: '操作',
@@ -96,9 +95,9 @@ export default class extends Vue {
     url: '/kssq/getKssqInfoList', // 待验收--查询已归档数据
     params: {
       page: '1',
-      limit: '20',
+      limit: '10',
       entity: {
-        status: '',
+        status: '2',
         projectName: '',
         applyPerson: ''
       }
@@ -197,30 +196,30 @@ export default class extends Vue {
   public processRecordListData = []; // 操作记录
   public processRecordDialogVisible = false; // 操作记录显隐
 
-  public handleRecord(data: any) {
-    this.processRecordDialogVisible = true
-    this.queryProcessRecordListData(data)
-  }
-
-  // 获取流程操作记录 queryProcessRecordList
-  public async queryProcessRecordListData(data: any) {
-    const res: any = await queryProcessRecordList({
-      businessId: data.id
-    })
-    if (res.result) {
-      this.processRecordListData = res.data
-    }
-  }
-
   /**
    *验收点击跳转
    */
   public handleAcceptance(row:any) {
     console.log('🚀 ~ row', row)
+    const { equipmentId, unit, price } = row.billEquipmentList[0]
+    this.commonEquipmentCategoryData = {
+      ...this.commonEquipmentCategoryData,
+      equipmentVO: {
+        ...this.commonEquipmentCategoryData.equipmentVO,
+        name: equipmentId,
+        equipmentId,
+        unit,
+        price,
+        departmentId: row.billMain.applyDept,
+        id: ''
+      }
+    }
+    // TODO:
     sessionStorage.setItem('ClickProcessData', JSON.stringify(row.billMain))
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    sessionStorage.setItem('RequestParams', JSON.stringify(row))
     sessionStorage.setItem('EquipmentCategoryData', JSON.stringify(this.commonEquipmentCategoryData))
+    console.log('🚀 ~ this.commonEquipmentCategoryData', this.commonEquipmentCategoryData)
     this.$router.push({ path: '/equipmentAcceptOrWarehousing/index', query: { type: '验收' } })
   }
 }

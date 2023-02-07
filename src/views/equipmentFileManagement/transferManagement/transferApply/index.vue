@@ -12,7 +12,7 @@
                   :columns="columns"
                   :editColumns="editColumns"
                   hasNotSlotButton="add"
-                  :toolbarBtns="toolbarBtns"
+                  :toolbarBtns="toobarBtns"
                   type="transferApply"
                   @emit-handle-insert="handleInsert"
                   @emit-handle-search="handleSearch"

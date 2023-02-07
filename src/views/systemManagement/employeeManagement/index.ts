@@ -29,6 +29,7 @@ import moment from 'moment'
   }
 })
 export default class extends Vue {
+  public innerVisible = false
   public formConfig = {
     data: {
       eName: '',
@@ -439,7 +440,7 @@ export default class extends Vue {
     this.loading = true
     const res: any = await queryRolesByUserId({ user_id: row.userId })
     if (res.result) {
-      this.$message.success(res.msg)
+      // this.$message.success(res.msg)
       this.bindRoleData = res.data
       this.loading = false
     }
@@ -477,24 +478,25 @@ export default class extends Vue {
   }
 
   // 角色删除事件
+  public clickDeleteRowData:any = {}
   public async handleDelete(row: any) {
-    // console.log("🚀 ~ row ~角色删除事件", row);
-    const type = await VXETable.modal.confirm('您确定要删除该数据?')
-    if (type === 'confirm') {
-      const res: any = await personalUnbindRole({
-        userId: this.clickEmployeeInfo.userId,
-        roleId: row.id
-      })
-      if (res.result) {
-        this.$message.success('解绑成功')
-        this.queryRolesByUserIdData(this.clickEmployeeInfo)
-      }
+    this.innerVisible = true
+    this.clickDeleteRowData = row
+  }
+
+  public async submitCancelRoleData() {
+    const res: any = await personalUnbindRole({
+      userId: this.clickEmployeeInfo.userId,
+      roleId: this.clickDeleteRowData.id
+    })
+    if (res.result) {
+      this.$message.success('解绑成功')
+      this.queryRolesByUserIdData(this.clickEmployeeInfo)
     }
+    this.innerVisible = false
   }
 
   public cellDBLClickEvent() {
     console.log('cellDBLClickEvent')
   }
-
-
 }

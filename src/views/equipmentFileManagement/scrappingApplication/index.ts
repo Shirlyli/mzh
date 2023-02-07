@@ -30,14 +30,24 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
 export default class extends Vue {
   async created() {
     await BusinessViewModule.GET_DEPARTMENT_DATA()
-    // BasicFormList.forEach((item: any) => {
-    //   if (item.slot === 'department') {
-    //     item.data = BusinessViewModule.departmentData.map((dept: any) => {
-    //       return { label: dept.title, value: dept.id }
-    //     })
-    //   }
-    // })
   }
+
+  public routePath = this.$route.path;
+  private isYSQ = this.routePath.indexOf('YSQ') > -1;// 已申请
+  private isCGX = this.routePath.indexOf('CGX') > -1;// 草稿箱
+  private isDSP = this.routePath.indexOf('DSP') > -1;// 待审批
+
+  public toobarBtns =
+    this.isYSQ || this.isDSP
+      ? []
+      : ['addProcess', 'import', 'delete', 'export'];
+
+  public editColumns =
+    this.isCGX
+      ? ['search', 'del']
+      : this.isYSQ
+        ? ['search']
+        : ['approval', 'record'];
 
   public basicFormList = BasicFormList;
   /**********************************
@@ -126,7 +136,7 @@ export default class extends Vue {
       page: '1',
       limit: '10',
       entity: {
-        status: this.query.indexOf('CGX') > -1 ? '0' : this.query.indexOf('YSQ') > -1 || this.query.indexOf('WSP') > -1 ? '1' : this.query.indexOf('YSP') > -1 ? '2' : ''
+        status: this.query.indexOf('CGX') > -1 ? '0' : this.query.indexOf('YSQ') > -1 || this.query.indexOf('DSP') > -1 ? '' : this.query.indexOf('DSP') > -1 ? '1' : ''
       }
     }
   };

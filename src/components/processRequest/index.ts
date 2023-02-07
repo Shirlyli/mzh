@@ -4,9 +4,13 @@ import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
 import { Component, Vue, Watch, Emit } from 'vue-property-decorator'
 import { APPLY_URL } from '@/shared/options'
+import Treeselect from '@riophae/vue-treeselect'
+
 @Component({
   name: 'processRequest',
-  components: {}
+  components: {
+    Treeselect
+  }
 })
 export default class extends Vue {
   public rules = {};
@@ -29,7 +33,7 @@ export default class extends Vue {
       type: 'input'
     },
     {
-      field: 'equipment_num',
+      field: 'equipmentNum',
       title: '设备数量',
       span: 12,
       type: 'input'
@@ -41,7 +45,7 @@ export default class extends Vue {
       type: 'input'
     },
     {
-      field: 'is_import',
+      field: 'isImport',
       title: '是否进口',
       span: 12,
       type: 'input'
@@ -128,6 +132,7 @@ export default class extends Vue {
           status: '1',
           billMain: {
             ...params.billMain,
+            applyDept: params.billMain.applyDeptName,
             departmentId:
               params.billMain.departmentName || params.billMain.applyDept
           },
@@ -204,7 +209,7 @@ export default class extends Vue {
   public toLastView(visitedViews: ITagView[], view: ITagView) {
     const latestView = visitedViews.slice(-1)[0]
     if (latestView !== undefined && latestView.fullPath !== undefined) {
-      this.$router.push(latestView.fullPath).catch(err => {
+      this.$router.push(latestView.fullPath).catch((err:any) => {
         console.warn(err)
       })
     } else {
@@ -213,11 +218,11 @@ export default class extends Vue {
         // to reload home page
         this.$router
           .replace({ path: '/redirect' + view.fullPath })
-          .catch(err => {
+          .catch((err:any) => {
             console.warn(err)
           })
       } else {
-        this.$router.push((UserModule.menu as any)[0]?.path).catch(err => {
+        this.$router.push((UserModule.menu as any)[0]?.path).catch((err:any) => {
           console.warn(err)
         })
       }
@@ -362,5 +367,12 @@ export default class extends Vue {
     if (nextNodeExecutorData.code === 200) {
       this.requestParams.billApproveList = { ...this.requestParams.billApproveList, nextNodeExecutor: nextNodeExecutorData.data[0].user_id }
     }
+  }
+
+  /***************************
+   * 科室查询筛选逻辑
+   **************************/
+  public fliterMethods(e:string) {
+    console.log('🚀 ~ e', e)
   }
 }

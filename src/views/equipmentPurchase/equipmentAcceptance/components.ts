@@ -16,10 +16,10 @@ import {
 } from '@/api/equipment'
 import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
-import { queryByConditionSupplier, uploadFile } from '@/api/basic'
+import { queryByConditionSupplier, savePurchaseCheck, uploadFile } from '@/api/basic'
 // import { BusinessViewModule } from '@/store/modules/business'
 @Component({
-  name: 'equipmentAddOrUpdate'
+  name: 'equipmentAcceptOrWarehousing'
 })
 export default class extends Vue {
   public dialogStatus = this.$route.query.dialogStatus;
@@ -63,7 +63,12 @@ export default class extends Vue {
   }
 
   async created() {
-    console.log(this.processData, this.equipmentCategoryData, this.watchRequestForm, this.requestParams)
+    console.log(
+      'this.processData', this.processData,
+      'this.equipmentCategoryData', this.equipmentCategoryData,
+      'watchRequestForm', this.watchRequestForm,
+      'requestParams', this.requestParams
+    )
     this.queryEquipmentCategoryInfo()
     this.queryByConditionSupplier()
     this.allFormList = {
@@ -112,7 +117,11 @@ export default class extends Vue {
 
   // 获取设备类别
   private async queryEquipmentCategoryInfo() {
-    const resData:any = await queryEquipmentCategoryInfo({ page: '1', limit: '10', entity: { id: '' } })
+    const resData: any = await queryEquipmentCategoryInfo({
+      page: '1',
+      limit: '10',
+      entity: { id: '' }
+    })
     if (resData.code === 200) {
       this.allFormList.equipmentVO.forEach((item: any) => {
         if (item.slot === 'equipmentCategory') {
@@ -130,7 +139,11 @@ export default class extends Vue {
 
   // 获取厂商
   private async queryByConditionSupplier() {
-    const resData:any = await queryByConditionSupplier({ page: '1', limit: '10', entity: { id: '' } })
+    const resData: any = await queryByConditionSupplier({
+      page: '1',
+      limit: '10',
+      entity: { id: '' }
+    })
     if (resData.code === 200) {
       this.allFormList.equipmentVO.forEach((item: any) => {
         if (item.slot === 'manufactorId') {
@@ -148,6 +161,11 @@ export default class extends Vue {
 
   // 验收设备
   public createData() {
+    this.saveEquipment()
+  }
+
+  // 保存设备信息  并 保存验收信息
+  private saveEquipment() {
     (this.$refs.equipmentCategoryData as Form).validate(async valid => {
       if (valid) {
         const {
@@ -191,17 +209,26 @@ export default class extends Vue {
         const params = []
         params.push(paramsConfig)
         console.log('🚀 ~ params', params)
-        const res: any = await updateEquipmentInfoData(params)
-        if (res.code === 200) {
-          this.closeSelectedTag({ path: '/equipmentAddOrUpdate' })
+        const purchaseParams = {
+          checkState: '已验收',
+          bussinessId: this.requestParams.id,
+          equId: this.equipmentCategoryData.equipmentVO.name,
+          equName: this.equipmentCategoryData.equipmentVO.name
         }
-        Message.success('创建成功')
+        console.log('🚀 ~ purchaseParams', purchaseParams)
+        const res: any = await updateEquipmentInfoData(params)
+        const purchaseRes = await savePurchaseCheck(purchaseParams)
+        console.log('🚀 ~ purchaseRes', purchaseRes)
+        if (res.code === 200) {
+          this.closeSelectedTag({ path: '/equipmentAcceptOrWarehousing/index' })
+        }
+        Message.success('验收成功')
       }
     })
   }
 
   public handleCloseDialog() {
-    this.closeSelectedTag({ path: '/equipmentAddOrUpdate/index' })
+    this.closeSelectedTag({ path: '/equipmentAcceptOrWarehousing/index' })
   }
 
   /******************************
@@ -239,12 +266,12 @@ export default class extends Vue {
   /*******************************
    * 附件上传
    ******************************/
-  public fileList :any= []
-  public onFileChange(file:any) {
+  public fileList: any = [];
+  public onFileChange(file: any) {
     console.log('🚀 ~ file onFileChange', file)
   }
 
-  public async onFileProgress(file:any) {
+  public async onFileProgress(file: any) {
     console.log('🚀 ~ file onFileChange', file)
     const formData = new FormData()
     formData.append('formFile', file.raw)
@@ -253,16 +280,16 @@ export default class extends Vue {
     console.log('🚀 ~ res', res)
   }
 
-  public onFileSuccess(file:any) {
+  public onFileSuccess(file: any) {
     console.log('🚀 ~ file onFileSuccess', file)
     this.fileList = [...this.fileList, file]
   }
 
-  public onFileRemove(file:any) {
+  public onFileRemove(file: any) {
     console.log('🚀 ~ file', file)
   }
 
-  public handleExceed(file:any) {
+  public handleExceed(file: any) {
     console.log('🚀 ~ file', file)
   }
 }

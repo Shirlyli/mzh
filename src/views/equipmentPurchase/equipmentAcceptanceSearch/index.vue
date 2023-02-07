@@ -10,14 +10,10 @@
         <VexTable ref="vexTable"
                   :formConfig="formConfig"
                   :columns="columns"
-                  editColumns="['search','del','record']"
+                  editColumns="[]"
                   hasNotSlotButton="add"
                   :toolbarBtns="[]"
-                  type="transferApply"
-                  @emit-handle-insert="handleInsert"
                   @emit-handle-search="handleSearch"
-                  @emit-handle-remove="handleRemove"
-                  @emit-handle-record="handleRecord"
                   :paramsConfig="paramsConfig" />
       </keep-alive>
     </el-card>

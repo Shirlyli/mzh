@@ -28,7 +28,7 @@
                     :columns="columns"
                     type="process"
                     editColumns="['edit','del']"
-                     :toolbarBtns="['add', 'import', 'delete', 'export']"
+                    :toolbarBtns="['add', 'import', 'delete', 'export']"
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"
@@ -49,33 +49,38 @@
                :model="processData"
                label-position="left"
                label-width="120px"
-               style="width: 400px; margin-left:50px;">
+               style="margin:20px 20px;">
         <el-form-item :label="'流程名称'"
                       prop="processName">
           <el-input v-model="processData.processName"
-                    placeholder="请选择"></el-input>
+                    placeholder="请选择"
+                    :disabled="dialogStatus==='create'?false:true"></el-input>
         </el-form-item>
         <el-form-item :label="'流程代码'"
                       prop="processCode">
           <el-input v-model="processData.processCode"
-                    placeholder="请输入" />
+                    placeholder="请输入"
+                    :disabled="dialogStatus==='create'?false:true" />
         </el-form-item>
         <el-form-item :label="'节点名称'"
                       prop="nodeName"
                       :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
           <el-input v-model="processData.nodeName"
-                    placeholder="请输入" />
+                    placeholder="请输入"
+                    :disabled="dialogStatus==='create'?false:true" />
         </el-form-item>
         <el-form-item :label="'节点名称编码'"
                       prop="nodeNameCode"
                       :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
           <el-input v-model="processData.nodeNameCode"
-                    placeholder="请输入" />
+                    placeholder="请输入"
+                    :disabled="dialogStatus==='create'?false:true" />
         </el-form-item>
         <el-form-item :label="'节点顺序'"
                       prop="nodeSort">
           <el-input v-model="processData.nodeSort"
-                    placeholder="请输入" />
+                    placeholder="请输入"
+                    :disabled="dialogStatus==='create'?false:true" />
         </el-form-item>
         <el-form-item :label="'是否禁用'"
                       prop="isDisable">
@@ -88,19 +93,39 @@
                       prop="roleType"
                       :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
           <el-radio v-model="processData.roleType"
-                    label="role" @change="onRoleTypeChange">角色</el-radio>
+                    label="role"
+                    @change="onRoleTypeChange">角色</el-radio>
           <el-radio v-model="processData.roleType"
-                    label="user" @change="onRoleTypeChange">用户</el-radio>
+                    label="user"
+                    @change="onRoleTypeChange">用户</el-radio>
         </el-form-item>
         <el-form-item :label="'角色名称'"
                       prop="roleTypeId"
+                      v-if="processData.roleType==='role'"
                       :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
           <el-select v-model="processData.roleTypeId"
-                     placeholder="请选择">
+                     placeholder="请选择"
+                     filterable>
+            <!-- item.userId -->
             <el-option :label="item.title"
                        :value="item.id"
                        v-for="(item) in roleData"
-                       :key="item.id"></el-option>
+                       :key="item.userId"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="'用户名称'"
+                      prop="roleTypeId"
+                      v-else-if="processData.roleType==='user'"
+                      :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
+          <el-select v-model="processData.roleTypeId"
+                     placeholder="请选择"
+                     multiple
+                     filterable>
+            <!-- item.userId -->
+            <el-option :label="item.title"
+                       :value="item.userId"
+                       v-for="(item) in roleData"
+                       :key="item.userId"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -134,6 +159,10 @@
 }
 .edit-input {
   padding-right: 100px;
+}
+
+.el-select,.el-select--medium{
+  width:100%
 }
 
 .cancel-btn {

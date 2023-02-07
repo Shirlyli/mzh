@@ -13,6 +13,7 @@
         "mock": "cd mock && ts-node-dev mock-server.ts"
     },
     "dependencies": {
+        "@riophae/vue-treeselect": "^0.4.0",
         "@tinymce/tinymce-vue": "^3.2.6",
         "@toast-ui/editor": "^2.5.1",
         "axios": "^0.21.1",
@@ -42,6 +43,7 @@
         "script-loader": "^0.7.2",
         "sortablejs": "^1.13.0",
         "tinymce": "^5.7.1",
+        "tslib": "^2.5.0",
         "vue": "^2.6.12",
         "vue-class-component": "^7.2.6",
         "vue-count-to": "^1.0.13",
@@ -55,6 +57,7 @@
         "vuedraggable": "^2.24.3",
         "vuex": "^3.6.2",
         "vuex-module-decorators": "^1.0.1",
+        "vuex-persistedstate": "^4.1.0",
         "vxe-table": "3.6.6",
         "xe-utils": "^3.1.12",
         "xlsx": "^0.16.9",

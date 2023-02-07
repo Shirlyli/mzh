@@ -44,9 +44,9 @@
       <li @click="closeOthersTags">
         {{ $t('tagsView.closeOthers') }}
       </li>
-      <li @click="closeAllTags(selectedTag)">
+      <!-- <li @click="closeAllTags(selectedTag)">
         {{ $t('tagsView.closeAll') }}
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>

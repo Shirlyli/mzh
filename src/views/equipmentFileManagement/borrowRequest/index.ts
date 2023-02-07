@@ -65,7 +65,7 @@ export default class extends Vue {
         title: '申请科室',
         itemRender: { name: '$input', props: { placeholder: '请输入申请科室' } },
         slots: { default: 'departmentSelect' },
-        span: 5
+        span: 8
       },
       {
         field: 'createTime',

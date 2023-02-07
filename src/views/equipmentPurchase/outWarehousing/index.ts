@@ -101,7 +101,7 @@ export default class extends Vue {
     url: '/kssq/getKssqInfoList', // 待验收--查询已归档数据
     params: {
       page: '1',
-      limit: '20',
+      limit: '10',
       entity: {
         status: '',
         projectName: '',

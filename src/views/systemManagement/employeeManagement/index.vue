@@ -347,6 +347,24 @@
                class="commonDialog"
                width="80%"
                height="80%">
+      <el-dialog width="30%"
+                 title="删除角色"
+                 :visible.sync="innerVisible"
+                 append-to-body>
+        <div>
+          您确定要删除该数据?
+        </div>
+        <div slot="footer"
+             class="dialog-footer">
+          <el-button @click="innerVisible = false">
+            {{ $t('table.cancel') }}
+          </el-button>
+          <el-button type="primary"
+                   @click="submitCancelRoleData">
+          {{ '确定'}}
+        </el-button>
+        </div>
+      </el-dialog>
       <div class="roleBox">
         <main-sub-layout class="main-wrapper rule-config-page">
           <template #left>

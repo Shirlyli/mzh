@@ -32,6 +32,23 @@ export default class extends Vue {
     await BusinessViewModule.GET_DEPARTMENT_DATA()
   }
 
+  public routePath = this.$route.path;
+  private isYSQ = this.routePath.indexOf('YSQ') > -1;// 已申请
+  private isCGX = this.routePath.indexOf('CGX') > -1;// 草稿箱
+  private isDSP = this.routePath.indexOf('DSP') > -1;// 待审批
+
+  public toobarBtns =
+    this.isYSQ || this.isDSP
+      ? []
+      : ['addProcess', 'import', 'delete', 'export'];
+
+  public editColumns =
+    this.isCGX
+      ? ['search', 'del']
+      : this.isYSQ
+        ? ['search']
+        : ['approval', 'record'];
+
   public basicFormList = BasicFormList;
   /**********************************
    * 列表相关
@@ -48,14 +65,14 @@ export default class extends Vue {
         field: 'approveStatus',
         title: '审批状态',
         itemRender: { name: '$select', props: { placeholder: '请输入审批状态' }, options: ALL_OPTIONS.APPROVAL_STATUS },
-        span: 5
+        span: 4
       },
       {
         field: 'rollOutDepartment',
         title: '申请科室',
         itemRender: { name: '$input', props: { placeholder: '请输入申请科室' } },
         slots: { default: 'departmentSelect' },
-        span: 5
+        span: 8
       },
       {
         field: 'createTime',
@@ -63,7 +80,7 @@ export default class extends Vue {
         slots: { default: 'create_time' },
         span: 10
       },
-      { slots: { default: 'operate_item' }, span: 4 }
+      { slots: { default: 'operate_item' }, span: 8 }
     ] // 表单项
   };
 
@@ -88,14 +105,6 @@ export default class extends Vue {
   ];
 
   public query = this.$route.path
-  private getStatus() {
-    const status = this.query.indexOf('CGX') > -1 ? ['add', 'import', 'delete', 'export'] : this.query.indexOf('YSQ') > -1 || this.query.indexOf('DSP') > -1 ? '1' : this.query.indexOf('YSP') > -1 ? '2' : ''
-    console.log('🚀 ~ status', status)
-    return status
-  }
-
-  public toolbarBtns = ['addProcess']
-  public editColumns = ['search', 'del', 'record']
   // 列表传参
   public paramsConfig: any = {
     url: '/rollDepartment/getRollDepartmentInfo', // 根据表单查询项查询数据
@@ -103,7 +112,7 @@ export default class extends Vue {
       page: '1',
       limit: '10',
       entity: {
-        status: this.query.indexOf('CGX') > -1 ? '0' : this.query.indexOf('YSQ') > -1 || this.query.indexOf('DSP') > -1 ? '1' : this.query.indexOf('YSP') > -1 ? '2' : ''
+        status: this.query.indexOf('CGX') > -1 ? '0' : this.query.indexOf('YSQ') > -1 ? '' : this.query.indexOf('DSP') > -1 ? '1' : ''
       }
     }
   };
@@ -155,7 +164,7 @@ export default class extends Vue {
     billApproveList: ApprovalFormlist
   };
 
-  // 申请接口传惨params
+  // 申请接口传参params
   public requestParams = {
     id: '',
     status: '0',
@@ -163,10 +172,10 @@ export default class extends Vue {
     billMain: {
       id: '',
       userId: (UserModule.userData as any)?.userId,
-      userName: (UserModule.userData as any)?.userName,
+      userName: (UserModule.userData as any)?.employee?.eName,
       createTime: '',
-      rollOutDepartment: '',
-      rollInDepartment: '',
+      rollOutDepartment: null,
+      rollInDepartment: null,
       equipmentLocation: '',
       rollOutTime: '',
       cause: '',
@@ -189,46 +198,6 @@ export default class extends Vue {
       approveStatus: '',
       billId: ''
     }
-  };
-
-  public processModal = {
-    id: '',
-    status: '0',
-    billCode: '',
-    billMain: {
-      id: '',
-      userId: '',
-      createTime: '',
-      rollOutDepartment: '',
-      rollInDepartment: '',
-      equipmentLocation: '',
-      rollOutTime: '',
-      cause: '',
-      status: '0',
-      billCode: ''
-    },
-    billEquipmentList: [
-      {
-        id: '',
-        billId: '',
-        equipmentId: ''
-      }
-    ],
-    billApproveList: [
-      {
-        id: '',
-        approveUser: '',
-        approveTime: '',
-        approveOpinion: '',
-        approveStatus: '',
-        chrckId: ''
-      }
-    ]
-  };
-
-  public rules = {
-    nextNodeExecutor: [{ require: true, trigger: 'change', message: '请选择' }],
-    approveStatus: [{ require: true, trigger: 'change', message: '请选择' }]
   };
 
   /*******************************

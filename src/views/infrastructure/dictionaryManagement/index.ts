@@ -16,7 +16,7 @@ import { FormatMIsavailable } from '@/utils/functions'
   }
 })
 export default class extends Vue {
-  private columns = [
+  public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'dicName', title: '字典值', treeNode: true },
@@ -32,7 +32,7 @@ export default class extends Vue {
     }
   ]; // 列表配置项
 
-  private treeParams = {
+  public treeParams = {
     page: '1',
     limit: '10',
     entity: {
@@ -40,7 +40,7 @@ export default class extends Vue {
     }
   }; // 树形图传参
 
-  private commonData = {
+  public commonData = {
     id: '',
     pid: '',
     pName: '',
@@ -50,10 +50,10 @@ export default class extends Vue {
     dicCode: '',
     flag: '',
     note: '',
-    dispindex:'',
+    dispindex: ''
   }; // 新增或编辑表单
 
-  private rules = {
+  public rules = {
     dicName: [
       { required: true, message: '请输入字典名称', trigger: 'change' }
     ],
@@ -62,9 +62,9 @@ export default class extends Vue {
     ]
   }; // 表单校验
 
-  private dialogVisible = false; // 新增模态框
-  private dialogStatus = 'create';
-  private paramsConfig = {
+  public dialogVisible = false; // 新增模态框
+  public dialogStatus = 'create';
+  public paramsConfig = {
     url: 'common/dicInfo/querySelfAndPar',
     params: {
       page: 1,
@@ -75,11 +75,11 @@ export default class extends Vue {
     }
   };
 
-  private nodeClickData: any = {}; // 点击科室数据
-  private url = '/common/dicInfo/queryTree'; // 左侧字典
+  public nodeClickData: any = {}; // 点击科室数据
+  public url = '/common/dicInfo/queryTree'; // 左侧字典
 
   // 新增字典
-  private handleInsert() {
+  public handleInsert() {
     this.dialogVisible = true
     const { title, id } = this.nodeClickData
     // (this.$refs.dataForm as Form).setFiledsValue
@@ -93,12 +93,12 @@ export default class extends Vue {
       dicCode: '',
       flag: '1',
       note: '',
-      dispindex:''
+      dispindex: ''
     }
   }
 
   // 接收树形组件点击节点数据
-  private handleNodeClick(data: any) {
+  public handleNodeClick(data: any) {
     this.nodeClickData = data
     // 查询科室及下级科室 /api/common/dicInfo/querySelfAndPar
     this.paramsConfig = {
@@ -114,7 +114,7 @@ export default class extends Vue {
   }
 
   // 新增字典
-  private createData() {
+  public createData() {
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
         const { pid, dicName, pName, xpath } = this.commonData
@@ -130,7 +130,7 @@ export default class extends Vue {
           note: '',
           isLeaf: 1,
           xpath: xpath,
-          dispindex:''
+          dispindex: ''
         }
         const res: any = await updateCommonData(params)
         if (res.result) {
@@ -147,11 +147,11 @@ export default class extends Vue {
   }
 
   // 修改字典
-  private updateData() {
+  public updateData() {
     debugger;
     (this.$refs.dataForm as Form).validate(async valid => {
       if (valid) {
-        const { id, pid, dicName, pName, xpath, dicType, dicCode, flag,dispindex } = this.commonData
+        const { id, pid, dicName, pName, xpath, dicType, dicCode, flag, dispindex } = this.commonData
         const params = {
           id: id,
           dicType: dicType,
@@ -164,7 +164,7 @@ export default class extends Vue {
           note: '',
           isLeaf: '',
           xpath: xpath,
-          dispindex:dispindex
+          dispindex: dispindex
         }
         const res: any = await updateCommonData(params)
         if (res.result) {
@@ -181,8 +181,8 @@ export default class extends Vue {
   }
 
   // 触发编辑事件
-  private handleUpdate(row: any) {
-    const { dicName, pName, id, pid, xpath, dicType, dicCode, flag, note,dispindex } = row
+  public handleUpdate(row: any) {
+    const { dicName, pName, id, pid, xpath, dicType, dicCode, flag, note, dispindex } = row
     this.commonData = {
       id,
       pid,
@@ -203,7 +203,7 @@ export default class extends Vue {
   }
 
   // 删除科室
-  private async handleRemove(row: any) {
+  public async handleRemove(row: any) {
     let params = {}
     if (Array.isArray(row)) {
       const res = _.map(row, 'id')

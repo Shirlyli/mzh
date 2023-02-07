@@ -1,17 +1,7 @@
 <template>
-  <div>
-    <transition name="fade-transform"
-                mode="out-in">
-      <router-view />
-    </transition>
-  </div>
+  <router-view />
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+<script>
 
-@Component({
-  name: 'BasicManagementDepartment'
-})
-export default class extends Vue {}
 </script>

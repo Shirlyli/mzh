@@ -55,10 +55,23 @@
       </template>
       <template #departmentSelect="{data}">
         <div>
-          <el-select v-model="data.rollOutDepartment"
-                     placeholder="请选择">
+          <treeselect :options="BussniessDepartmentData"
+                      v-model="data.deparmentId"
+                      clearable
+                      search-nested
+                      :disable-branch-nodes="true"
+                      placeholder="请选择" />
+          <!-- <el-select v-model="deparmentId"
+                     placeholder="请选择"
+                     multiple
+                     @remove-tag="removeTag"
+                     collapse-tags>
             <el-tree node-key="id"
+                     ref="departmentTree"
                      :data="BussniessDepartmentData"
+                     show-checkbox
+                     @check-change="checkChange"
+                     accordion
                      :props="{
                                   children: 'children',
                                   label: 'title'
@@ -73,7 +86,8 @@
                            :value="data.id"></el-option>
               </span>
             </el-tree>
-          </el-select>
+          </el-select> -->
+
         </div>
       </template>
       <template #operate_item>
@@ -140,9 +154,12 @@ import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
 import VXETable from 'vxe-table'
 import { Message } from 'element-ui'
 import { BusinessViewModule } from '@/store/modules/business'
+import Treeselect from '@riophae/vue-treeselect'
+
+// import type { TreeSelectProps } from 'ant-design-vue'
 @Component({
   name: 'VexTable',
-  components: {}
+  components: { Treeselect }
 })
 export default class extends Vue {
   @Prop({ default: ['add', 'import', 'delete', 'export'] }) toolbarBtns!: any
@@ -247,10 +264,19 @@ export default class extends Vue {
   }
 
   // 重置并查询
+  public query = this.$route.path
   public resetFor() {
     this.formConfig.data = {}
-    this.paramsConfig.params.entity = {
-      createTime: []
+    const status =
+      this.query.indexOf('CGX') > -1
+        ? '0'
+        : this.query.indexOf('YSQ') > -1
+          ? ''
+          : this.query.indexOf('DSP') > -1
+            ? '1'
+            : ''
+    if (Object.keys(this.paramsConfig.params.entity).includes('status')) {
+      this.paramsConfig.params.entity = { status }
     }
     this.findList(this.paramsConfig)
   }
@@ -370,8 +396,23 @@ export default class extends Vue {
     this.emitHandleRecord(row)
   }
 
+  // 操作科室数据
+  private handleDepartData(datas: any) {
+    return datas.map((item: any) => {
+      if (item.children.length) {
+        return {
+          id: item.id,
+          label: item.title,
+          children: this.handleDepartData(item.children)
+        }
+      }
+      return { id: item.id, label: item.title }
+    })
+  }
+
   get BussniessDepartmentData() {
-    return BusinessViewModule.departmentData
+    const resData = this.handleDepartData(BusinessViewModule.departmentData)
+    return resData
   }
 
   @Emit()
@@ -409,8 +450,53 @@ export default class extends Vue {
     return value
   }
 
-  public warehousingRowEvent(row:any) {
+  public warehousingRowEvent(row: any) {
     this.emitHandleWarehousing(row)
   }
+
+  // 科室选中事件
+  public deparmentId = null
+  // public checkChange(
+  //   checkArr: any,
+  //   isChecked: boolean,
+  //   isChildChecked: boolean
+  // ) {
+  //   console.log(
+  //     '🚀 ~ checkArr',
+  //     checkArr,
+  //     'isChecked',
+  //     isChecked,
+  //     'isChildChecked',
+  //     isChildChecked
+  //   )
+
+  //   const checkedNodes = (this.$refs.departmentTree as any).getCheckedNodes()
+  //   this.paramsConfig.params.entity = {
+  //     department: checkedNodes.map((item: any) => item.id)
+  //   }
+  //   this.deparmentId = checkedNodes
+  //     .filter((some: any) => !some.disabled)
+  //     .map((item: any) => item.label)
+  // }
+
+  // 多选模式下移除tag时触发
+  // public removeTag(values: any) {
+  //   console.log('🚀 ~ values', values)
+  //   const checkedNodes = (this.$refs.departmentTree as any).getCheckedNodes()
+  //   const filterNodes = checkedNodes
+  //     .filter((some: any) => !some.disabled && some.title !== values)
+  //     .map((item: any) => item.id)
+  //   console.log('🚀 ~ filterNodes', filterNodes)
+  //   ;(this.$refs.departmentTree as any).setCheckedKeys(filterNodes)
+
+  //   console.log('🚀 ~ checkedNodes', checkedNodes)
+  // }
 }
 </script>
+
+<style scoped lang="scss">
+.el-select,
+.el-select--medium {
+  width: 100%;
+}
+</style>

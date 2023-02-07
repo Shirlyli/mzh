@@ -26,6 +26,7 @@ export const equipmentVO = [
   { label: '设备来源', key: 'source', required: true },
   { label: '设备原值', key: 'region', required: true },
   { label: '设备数量', key: 'num', required: true },
+  { label: '设备价格', key: 'price', required: true },
   { label: '设备型号', key: 'marking', required: true },
   {
     label: '设备是否删除',

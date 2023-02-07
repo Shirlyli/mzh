@@ -19,11 +19,13 @@ import '@/pwa/register-service-worker'
 import * as directives from '@/directives'
 import * as filters from '@/filters'
 import './global.scss'
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import 'xe-utils'
 import VXETable, { Input } from 'vxe-table' // 注意xe-utils与VXETable的引入顺序,有些版本会报错
 import 'vxe-table/lib/index.css'
-
+Vue.use(Treeselect)
 // Vue.use(Loading);
 Vue.use(VXETable)
 // Vue.prototype.$XModal = VXETable.modal
@@ -42,7 +44,7 @@ Vue.use(SvgIcon, {
 
 // Register global directives
 Object.keys(directives).forEach(key => {
-  Vue.directive(key, (directives as { [key: string]: DirectiveOptions })[key])
+  Vue.directive(key, (directives as { [key: string]: any })[key])
 })
 
 // Register global filter functions
@@ -56,5 +58,5 @@ new Vue({
   router,
   store,
   i18n,
-  render: h => h(App)
+  render: (h: any) => h(App)
 }).$mount('#app')

@@ -26,6 +26,10 @@ export default class extends Vue {
     sessionStorage.getItem('ClickProcessData') ?? '0'
   ); // 流程数据
 
+  created() {
+    console.log('🚀 ~ processData', this.processData)
+  }
+
   public watchRequestForm = JSON.parse(
     sessionStorage.getItem('RequestForm') ?? '0'
   ); // 流程表单配置数据columns

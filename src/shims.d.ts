@@ -6,7 +6,12 @@ declare module '*.vue' {
 declare module 'element-ui/lib/locale/lang/*' {
   export const elementLocale: any
 }
-
+declare module 'element-ui'
+declare module 'vue'
+declare module 'moment'
+declare module 'vue-svgicon'
+declare module 'vxe-table'
+declare module 'vue-property-decorator'
 declare module '*.gif' {
   export const gif: any
 }
