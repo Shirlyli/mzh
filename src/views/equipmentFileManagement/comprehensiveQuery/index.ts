@@ -145,7 +145,7 @@ export default class extends Vue {
     { field: 'note', title: '备注', width: 100 }
     // {
     //   width: 160,
-    //   title: '操作',
+    //   title: '操作', fixed: 'right',
     //   slots: { default: 'operateHasSearch' },
     //   showOverflow: true,
     //   fixed: 'right'
@@ -204,6 +204,7 @@ export default class extends Vue {
       equipmentVO
     }
     this.dialogStatus = 'update'
+    // TODO: 换成store存储
     sessionStorage.setItem('EquipmentCategoryData', JSON.stringify(this.equipmentCategoryData))
     this.$router.push({ path: '/equipmentAddOrUpdate', query: { dialogStatus: this.dialogStatus, type: '修改' } })
     await BusinessViewModule.GET_EQUIPMENT_DATA(row.equipmentVO?.departmentId, 1, 10)

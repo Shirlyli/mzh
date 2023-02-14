@@ -132,6 +132,7 @@
           </el-form>
         </div>
       </div>
+
       <!-- 流程当前节点 -->
       <el-row :gutter="20">
         <el-col :span="8">
@@ -234,34 +235,138 @@
           </div>
         </div>
 
-        <!-- 附件信息 -->
-        <!-- <div class="dividerBox">
-        <el-divider direction="vertical"></el-divider>
-        <span>附件信息</span>
-      </div>
-      <div class="contentBox">
-        <el-table :data="[]"
-                  style="width: 100%"
-                  border>
-          <el-table-column prop="nodeName"
-                           label="文件名"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="auditStatus"
-                           label="提交人"
-                           width="180">
-          </el-table-column>
-          <el-table-column prop="auditmind"
-                           label="上传时间">
-          </el-table-column>
-          <el-table-column prop="nextOperator"
-                           label="操作">
-          </el-table-column>
-        </el-table>
-      </div> -->
+        <!-- 评审进度 -->
+        <!-- TODO: 评审进度页面绘制-->
+        <div>
+          <div class="dividerBox">
+            <el-divider direction="vertical"></el-divider>
+            <span>评审进度</span>
+          </div>
+          <div class="contentBox">
+            <el-table :data="[{id: 1,nodeName: '管理员',operator: '',auditStatus: '已审核'}]"
+                      style="width: 100%"
+                      border>
+              <el-table-column prop="id"
+                               label="序号">
+              </el-table-column>
+              <el-table-column prop="nodeName"
+                               label="评审人">
+              </el-table-column>
+              <el-table-column prop="operator"
+                               label="评审时间">
+                <template slot-scope="scope">
+                  <span style="margin-left: 10px">{{ moment(scope.row.operatorTime).format('YYYY-MM-DD h:mm:ss ')}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="auditStatus"
+                               label="评审状态">
+              </el-table-column>
+            </el-table>
+          </div>
+        </div>
 
-        <!-- 审批清单 -->
-        <!-- <div class="dividerBox">
+        <!-- 标书记录 -->
+        <div class="dividerBox">
+          <el-divider direction="vertical"></el-divider>
+          <span>标书记录</span>
+        </div>
+        <div class="contentBox">
+          <el-table :data="[{nodeName: '设备资料',operator: '管理员',auditStatus: ''}]"
+                    style="width: 100%"
+                    border>
+            <el-table-column prop="nodeName"
+                             label="文件名">
+            </el-table-column>
+            <el-table-column prop="operator"
+                             label="提交人">
+            </el-table-column>
+            <el-table-column prop="auditStatus"
+                             label="上传时间">
+              <template slot-scope="scope">
+                <span style="margin-left: 10px">{{ moment(scope.row.operatorTime).format('YYYY-MM-DD h:mm:ss ')}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="auditmind"
+                             label="操作">
+              <template slot-scope="scope">
+                <el-button type="primary">下载</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+
+        <!-- 招标明细 -->
+        <div class="dividerBox">
+          <el-divider direction="vertical"></el-divider>
+          <span>招标明细</span>
+        </div>
+
+        <!--  附件信息 -->
+        <div class="dividerBox">
+          <el-divider direction="vertical"></el-divider>
+          <span>附件信息</span>
+        </div>
+        <div class="contentBox">
+          <el-table :data="[{nodeName: '设备资料',operator: '管理员',auditStatus: ''}]"
+                    style="width: 100%"
+                    border>
+            <el-table-column prop="nodeName"
+                             label="文件名"
+                             width="180">
+            </el-table-column>
+            <el-table-column prop="operator"
+                             label="提交人"
+                             width="180">
+            </el-table-column>
+            <el-table-column prop="auditStatus"
+                             label="上传时间"
+                             width="180">
+              <template slot-scope="scope">
+                <span style="margin-left: 10px">{{ moment(scope.row.operatorTime).format('YYYY-MM-DD h:mm:ss ')}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="auditmind"
+                             label="操作">
+            </el-table-column>
+          </el-table>
+        </div>
+
+        <!-- 操作记录 -->
+        <div class="dividerBox">
+          <el-divider direction="vertical"></el-divider>
+          <span>操作记录</span>
+        </div>
+        <div class="contentBox">
+          <el-table :data="processData.processRecord"
+                    style="width: 100%"
+                    border>
+            <el-table-column prop="nodeName"
+                             label="节点名称"
+                             width="180">
+            </el-table-column>
+            <el-table-column prop="operator"
+                             label="操作人"
+                             width="180">
+            </el-table-column>
+            <el-table-column prop="auditStatus"
+                             label="审核状态"
+                             width="180">
+            </el-table-column>
+            <el-table-column prop="auditmind"
+                             label="处理意见">
+            </el-table-column>
+            <el-table-column prop="operatorTime"
+                             label="操作时间">
+              <template slot-scope="scope">
+                <span style="margin-left: 10px">{{ moment(scope.row.operatorTime).format('YYYY-MM-DD h:mm:ss ')}}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-form>
+    </el-card>
+    <!-- 审批清单 -->
+    <!-- <div class="dividerBox">
           <el-divider direction="vertical"></el-divider>
           <span>审批清单</span>
         </div>
@@ -292,40 +397,6 @@
             </el-form-item>
           </el-col>
         </el-row> -->
-        <div class="dividerBox">
-          <el-divider direction="vertical"></el-divider>
-          <span>操作记录</span>
-        </div>
-        <div class="contentBox">
-          <el-table :data="processData.processRecord"
-                    style="width: 100%"
-                    border>
-            <el-table-column prop="nodeName"
-                             label="节点名称"
-                             width="180">
-            </el-table-column>
-            <el-table-column prop="operator"
-                             label="操作人"
-                             width="180">
-            </el-table-column>
-            <el-table-column prop="auditStatus"
-                             label="审核状态"
-                             width="180">
-            </el-table-column>
-            <el-table-column prop="auditmind"
-                             label="处理意见">
-            </el-table-column>
-            <el-table-column prop="operatorTime"
-                             label="操作时间">
-              <template slot-scope="scope">
-                <span style="margin-left: 10px">{{ moment(scope.row.operatorTime).format('YYYY-MM-DD')}}</span>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </el-form>
-    </el-card>
-
   </div>
 </template>
 
@@ -349,6 +420,7 @@
   margin-bottom: 12px;
   color: #333;
   line-height: 32px;
+  font-size: 14px;
   color: rgba(37, 45, 62, 0.85);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
@@ -370,6 +442,10 @@
 
 .contentBox {
   padding-left: 18px;
+
+  .el-row{
+    padding:0
+  }
 }
 .btnBox {
   float: right;

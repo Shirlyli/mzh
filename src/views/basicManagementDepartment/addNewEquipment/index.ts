@@ -42,6 +42,7 @@ export default class extends Vue {
     {
       width: 160,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -88,7 +89,7 @@ export default class extends Vue {
   public handleInsert() {
     this.dialogVisible = true
     const { title, id } = this.nodeClickData
-    // (this.$refs.dataForm as Form).setFiledsValue
+    // (this.$refs.dataForm as any).setFiledsValue
     this.departmentData = {
       parentId: id ?? '001',
       parentName: title ?? '医疗科室',
@@ -115,7 +116,7 @@ export default class extends Vue {
 
   // 新增科室
   public createData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const { parentId, departmentName } = this.departmentData
         const params = {
@@ -156,7 +157,7 @@ export default class extends Vue {
 
   // 修改科室
   public updateData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const { parentId, departmentName, departmentId } = this.departmentData
         const params = {
@@ -207,7 +208,7 @@ export default class extends Vue {
     this.dialogStatus = 'update'
     this.dialogVisible = true
     this.$nextTick(() => {
-      (this.$refs.dataForm as Form).clearValidate()
+      (this.$refs.dataForm as any).clearValidate()
     })
   }
 

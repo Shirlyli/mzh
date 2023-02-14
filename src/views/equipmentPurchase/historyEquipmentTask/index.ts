@@ -66,6 +66,7 @@ export default class extends Vue {
     {
       width: 200,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -198,6 +199,7 @@ export default class extends Vue {
   public handleSearch(row: any) {
     const { id, nextNodeCode } = row
     this.clickProcessData = row
+    // TODO: 换成store存储
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
@@ -205,7 +207,7 @@ export default class extends Vue {
     sessionStorage.setItem('BasicFormList', JSON.stringify(this.basicFormList))
     this.$router
       .push({ path: `/processApproval/index/${'KSSQ'}`, query: { nextNodeCode, id, type: '科室申请' } })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn(err)
       })
   }

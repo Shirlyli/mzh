@@ -17,9 +17,15 @@ import {
 import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
 import { queryByConditionSupplier, savePurchaseCheck, uploadFile } from '@/api/basic'
+import Treeselect from '@riophae/vue-treeselect'
+import { handleDepartData } from '../../../shared/utils'
+import { BusinessViewModule } from '../../../store/modules/business'
 // import { BusinessViewModule } from '@/store/modules/business'
 @Component({
-  name: 'equipmentAcceptOrWarehousing'
+  name: 'equipmentAcceptOrWarehousing',
+  components: {
+    Treeselect
+  }
 })
 export default class extends Vue {
   public dialogStatus = this.$route.query.dialogStatus;
@@ -40,21 +46,14 @@ export default class extends Vue {
   /**********************
    * 保存接口params
    *********************/
-  public requestParams: any = JSON.parse(
-    sessionStorage.getItem('RequestParams') ?? '0'
-  );
+  // TODO:换成从store获取
+  public requestParams: any = BusinessViewModule.processRequestParams.acceptence;
 
-  public watchRequestForm = JSON.parse(
-    sessionStorage.getItem('RequestForm') ?? '0'
-  ); // 流程表单配置数据columns
+  public watchRequestForm = BusinessViewModule.processRequestForm.acceptence; // 流程表单配置数据columns
 
-  public equipmentCategoryData = JSON.parse(
-    sessionStorage.getItem('EquipmentCategoryData') ?? '0'
-  );
+  public equipmentCategoryData = BusinessViewModule.processEquipmentCategoryData.acceptence;
 
-  public processData = JSON.parse(
-    sessionStorage.getItem('ClickProcessData') ?? '0'
-  ); // 流程数据
+  public processData = BusinessViewModule.processClickProcessData.acceptence; // 流程数据
 
   public activeName = 'equipmentVO'; // 当前tab页
   @Watch('activeName') // 监听tab页
@@ -64,10 +63,10 @@ export default class extends Vue {
 
   async created() {
     console.log(
-      'this.processData', this.processData,
-      'this.equipmentCategoryData', this.equipmentCategoryData,
-      'watchRequestForm', this.watchRequestForm,
-      'requestParams', this.requestParams
+      'this.processData====》', this.processData,
+      'this.equipmentCategoryData====》', this.equipmentCategoryData,
+      'watchRequestForm====》', this.watchRequestForm,
+      'requestParams====》', this.requestParams
     )
     this.queryEquipmentCategoryInfo()
     this.queryByConditionSupplier()
@@ -83,6 +82,13 @@ export default class extends Vue {
     }
   }
 
+  public normalizer(node) {
+    return {
+      id: node.id,
+      label: node.label,
+      children: node.children
+    }
+  }
   /**************
    * 监听科室变化
    *************/
@@ -125,13 +131,14 @@ export default class extends Vue {
     if (resData.code === 200) {
       this.allFormList.equipmentVO.forEach((item: any) => {
         if (item.slot === 'equipmentCategory') {
-          item.options = resData.data?.[0]?.children.map((equip: any) => {
+          item.options = handleDepartData(resData.data?.[0]?.children.map((equip: any) => {
             return {
               ...equip,
               label: equip.id,
               value: equip.title
             }
-          })
+          }))
+          console.log('🚀 ~ item.options', item.options)
         }
       })
     }
@@ -166,7 +173,7 @@ export default class extends Vue {
 
   // 保存设备信息  并 保存验收信息
   private saveEquipment() {
-    (this.$refs.equipmentCategoryData as Form).validate(async valid => {
+    (this.$refs.equipmentCategoryData as any).validate(async(valid: any) => {
       if (valid) {
         const {
           equipmentDepreciations,
@@ -180,46 +187,47 @@ export default class extends Vue {
           id,
           state
         } = this.equipmentCategoryData
-        const paramsConfig = {
-          equipmentDepreciations: Object.values(equipmentDepreciations).length
-            ? [equipmentDepreciations]
-            : [],
-          equipmentInspection: Object.values(equipmentInspection).length
-            ? [equipmentInspection]
-            : [],
-          equipmentMaintain: Object.values(equipmentMaintain).length
-            ? [equipmentMaintain]
-            : [],
+        const paramsConfig:any = {
+          // equipmentDepreciations: Object.values(equipmentDepreciations).length
+          //   ? [equipmentDepreciations]
+          //   : [],
+          // equipmentInspection: Object.values(equipmentInspection).length
+          //   ? [equipmentInspection]
+          //   : [],
+          // equipmentMaintain: Object.values(equipmentMaintain).length
+          //   ? [equipmentMaintain]
+          //   : [],
           equipmentPurchases: Object.values(equipmentPurchases).length
             ? [equipmentPurchases]
             : [],
-          equipmentResources: Object.values(equipmentResources).length
-            ? [equipmentResources]
-            : [],
-          equipmentStocks: Object.values(equipmentStocks).length
-            ? [equipmentStocks]
-            : [],
-          equipmentStores: Object.values(equipmentStores).length
-            ? [equipmentStores]
-            : [],
-          equipmentVO,
+          // equipmentResources: Object.values(equipmentResources).length
+          //   ? [equipmentResources]
+          //   : [],
+          // equipmentStocks: Object.values(equipmentStocks).length
+          //   ? [equipmentStocks]
+          //   : [],
+          // equipmentStores: Object.values(equipmentStores).length
+          //   ? [equipmentStores]
+          //   : [],
+          equipmentVO: {
+            ...equipmentVO,
+            operationStatus: 'CHECK',
+            num: equipmentVO.num
+          },
           id,
           state
         }
-        const params = []
+        const params :any = []
         params.push(paramsConfig)
-        console.log('🚀 ~ params', params)
         const purchaseParams = {
           checkState: '已验收',
           bussinessId: this.requestParams.id,
           equId: this.equipmentCategoryData.equipmentVO.name,
           equName: this.equipmentCategoryData.equipmentVO.name
         }
-        console.log('🚀 ~ purchaseParams', purchaseParams)
-        const res: any = await updateEquipmentInfoData(params)
-        const purchaseRes = await savePurchaseCheck(purchaseParams)
-        console.log('🚀 ~ purchaseRes', purchaseRes)
-        if (res.code === 200) {
+        // const res: any = await updateEquipmentInfoData(params)
+        const purchaseRes = await savePurchaseCheck(params)
+        if (purchaseRes.code === 200) {
           this.closeSelectedTag({ path: '/equipmentAcceptOrWarehousing/index' })
         }
         Message.success('验收成功')
@@ -243,7 +251,7 @@ export default class extends Vue {
   private toLastView(visitedViews: ITagView[], view: ITagView) {
     const latestView = visitedViews.slice(-1)[0]
     if (latestView !== undefined && latestView.fullPath !== undefined) {
-      this.$router.push(latestView.fullPath).catch(err => {
+      this.$router.push(latestView.fullPath).catch((err: any) => {
         console.warn(err)
       })
     } else {
@@ -252,11 +260,11 @@ export default class extends Vue {
         // to reload home page
         this.$router
           .replace({ path: '/redirect' + view.fullPath })
-          .catch(err => {
+          .catch((err: any) => {
             console.warn(err)
           })
       } else {
-        this.$router.push((UserModule.menu as any)[0]?.path).catch(err => {
+        this.$router.push((UserModule.menu as any)[0]?.path).catch((err: any) => {
           console.warn(err)
         })
       }

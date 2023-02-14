@@ -8,7 +8,8 @@ import { Message } from 'element-ui'
 import {
   BasicFormList,
   EquipmentDetailFormList,
-  ApprovalFormlist
+  ApprovalFormlist,
+  FileFormList
 } from './formColumns'
 import ProcessApproval from '@/components/processApproval/index.vue'
 import processRequest from '@/components/processRequest/index.vue'
@@ -16,6 +17,8 @@ import { UserModule } from '@/store/modules/user'
 import { BusinessViewModule } from '@/store/modules/business'
 import moment from 'moment'
 import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
+import { ALL_OPTIONS } from '../../../shared/options'
+import { TagsViewModule } from '../../../store/modules/tags-view'
 
 @Component({
   name: 'InlineEditTable',
@@ -27,14 +30,54 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
   }
 })
 export default class extends Vue {
+  public visitedViews = TagsViewModule.visitedViews.find((item:any) => item.path === this.$route.path)
+  private activeTagViews = {}
   public routePath = this.$route.path;
   private isYSQ = this.routePath.indexOf('YSQ') > -1;// 已申请
   private isCGX = this.routePath.indexOf('CGX') > -1;// 草稿箱
   private isDSP = this.routePath.indexOf('DSP') > -1;// 待审批
+  private isPSJD = this.routePath.indexOf('PSJD') > -1;// 评审进度
+  private isPSJG = this.routePath.indexOf('PSJG') > -1;// 评审进度
+  private isZBJL = this.routePath.indexOf('ZBJL') > -1;// 招标记录
 
   async created() {
-    console.log('🚀 ~ routePath', this.routePath)
-    if (this.isDSP || this.isYSQ) {
+    console.log('🚀 ~ routePath', this.routePath, '===', this.visitedViews, TagsViewModule.cachedViews)
+    // this.activeTagViews = this.visitedViews?.matched?.find((item:any)=>item.)
+    if (this.isCGX) {
+      this.columns = [
+        ...this.columns,
+        {
+          width: 160,
+          title: '操作',
+          fixed: 'right',
+          slots: { default: 'operateHasSearch' },
+          showOverflow: true
+        }
+      ]
+      this.formConfig.items = [...this.formConfig.items, {
+        field: 'createTime',
+        title: '创建时间',
+        slots: { default: 'create_time' },
+        span: 10,
+        resetValue: ''
+      },
+      { slots: { default: 'operate_item' }, span: 4 }]
+    } else if (this.isPSJD || this.isPSJG) {
+      this.columns = [
+        ...this.columns,
+        { field: 'status', title: '已评人数' },
+        { field: 'status', title: '未评人数' },
+        { field: 'nextNodeName', title: ' 当前节点' },
+        { field: 'nextNodeState', title: ' 状态 ' },
+        {
+          width: 200,
+          title: '操作',
+          fixed: 'right',
+          slots: { default: 'operateHasSearch' },
+          showOverflow: true
+        }
+      ]
+    } else {
       this.columns = [
         ...this.columns,
         { field: 'nextNodeName', title: ' 当前节点' },
@@ -42,6 +85,7 @@ export default class extends Vue {
         {
           width: 200,
           title: '操作',
+          fixed: 'right',
           slots: { default: 'operateHasSearch' },
           showOverflow: true
         }
@@ -60,43 +104,23 @@ export default class extends Vue {
         title: '创建时间',
         slots: { default: 'create_time' },
         span: 9,
-        folding: true,
+        // folding: true,
         resetValue: []
       },
       { slots: { default: 'operate_item' }, span: 24, collapseNode: true, align: 'center' }]
-    } else if (this.isCGX) {
-      this.columns = [
-        ...this.columns,
-        {
-          width: 160,
-          title: '操作',
-          slots: { default: 'operateHasSearch' },
-          showOverflow: true
-        }
-      ]
-      this.formConfig.items = [...this.formConfig.items, {
-        field: 'createTime',
-        title: '创建时间',
-        slots: { default: 'create_time' },
-        span: 10,
-        resetValue: ''
-      },
-      { slots: { default: 'operate_item' }, span: 4 }]
     }
     await BusinessViewModule.GET_DEPARTMENT_DATA()
   }
 
   public toobarBtns =
-    this.isYSQ || this.isDSP
-      ? []
-      : ['addProcess', 'import', 'delete', 'export'];
+  this.isCGX ? ['addProcess', 'import', 'delete', 'export'] : this.isYSQ || this.isDSP ? [] : []
 
   public editColumns =
     this.isCGX
       ? ['search', 'del']
-      : this.isYSQ
+      : this.isYSQ || this.isPSJD || this.isZBJL
         ? ['search']
-        : ['approval', 'record'];
+        : this.isDSP ? ['approval', 'record'] : [];
 
   /**************************
    * 列表查询项-表单
@@ -105,7 +129,8 @@ export default class extends Vue {
     data: {
       processName: '',
       nodeName: '',
-      createTime: ''
+      createTime: '',
+      purchaseType: ''
     },
     items: [
       {
@@ -116,9 +141,18 @@ export default class extends Vue {
           name: '$input',
           props: { placeholder: '请输入项目名称' }
         },
-        span: this.isCGX ? 5 : 8
+        span: 8
       },
-
+      {
+        field: 'purchaseType',
+        title: '购置类别',
+        itemRender: {
+          name: '$select',
+          props: { placeholder: '请选择' },
+          options: ALL_OPTIONS.purchaseType
+        },
+        span: 8
+      },
       {
         field: 'applyDept',
         title: '申请科室',
@@ -148,7 +182,10 @@ export default class extends Vue {
     },
     { field: 'projectName', title: '项目名称' },
     { field: 'purchaseType', title: '购置类别' },
-    { field: 'purchaseType', title: ' 采购类型 ' }
+    { field: 'applyModle', title: '采购类型 ' },
+    { field: 'status', title: '数量 ' },
+    { field: 'price', title: '总金额 ' }
+
   ];
 
   public basicFormList = BasicFormList;
@@ -208,7 +245,11 @@ export default class extends Vue {
       optType: '', // 保存 -不传，提交 ---add，审批---update
       billId: ''
     },
-    dicAttachmentsList: []
+    dicAttachmentsList: [{
+      id: '',
+      fileName: '',
+      applyPerson: ''
+    }]
   };
 
   public createFormList = BasicFormList;
@@ -224,7 +265,8 @@ export default class extends Vue {
   public requestForm = {
     billMain: BasicFormList,
     billEquipmentList: EquipmentDetailFormList,
-    billApproveList: ApprovalFormlist
+    billApproveList: ApprovalFormlist,
+    dicAttachmentsList: FileFormList
   };
 
   public handleInsert() {
@@ -235,12 +277,13 @@ export default class extends Vue {
    * 新增科室申请
    *************************/
   public addEquipmentRequest() {
+    // TODO: 换成store存储
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
       .push({
         path: `/processRequest/index/${'KSSQ'}`,
-        query: { type: '科室申请', applyUrl: 'KSSQ' }
+        query: { type: '采购申请', applyUrl: 'KSSQ' }
       })
       .catch((err:any) => {
         console.warn(err)
@@ -288,7 +331,7 @@ export default class extends Vue {
         query: {
           nextNodeCode,
           processCode,
-          type: '科室申请',
+          type: '采购申请',
           applyUrl: 'KSSQ',
           code: type
         }

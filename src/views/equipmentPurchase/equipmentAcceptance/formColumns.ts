@@ -1,5 +1,6 @@
 
-import { BusinessViewModule } from '@/store/modules/business'
+import { BusinessViewModule } from '../../..//store/modules/business'
+import { handleDepartData } from '../../../shared/utils'
 // import { UserModule } from '@/store/modules/user'
 export const BasicFormList = [
   {
@@ -16,12 +17,12 @@ export const BasicFormList = [
     type: 'input'
   },
   {
-    field: 'applyDept',
+    field: 'applyDeptName',
     title: '申请科室',
     span: 12,
     type: 'treeSelect',
     slot: 'department',
-    data: BusinessViewModule.departmentData,
+    data: handleDepartData(BusinessViewModule.departmentData),
     required: true
   },
   {

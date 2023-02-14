@@ -575,13 +575,13 @@ export const getBillInfoByApprove = (data: any) =>
 /**
    * 验收
    * 保存
-   * purchaseCheck/savePurchaseCheck
+   * equipmentTemp/saveEquipment
    * 查询
    * /api/purchaseCheck/queryPurchaseCheckList
    */
 export const savePurchaseCheck = (data: any) =>
   request({
-    url: '/purchaseCheck/savePurchaseCheck',
+    url: '/equipmentTemp/saveEquipment',
     method: 'POST',
     data
   })
@@ -589,6 +589,39 @@ export const savePurchaseCheck = (data: any) =>
 export const queryPurchaseCheckList = (data: any) =>
   request({
     url: '/purchaseCheck/queryPurchaseCheckList',
+    method: 'POST',
+    data
+  })
+
+/**
+   * 设备质检
+   */
+// 计量设备
+export const saveHospitalMetering = (data: any) =>
+  request({
+    url: '/hospitalMetering/save',
+    method: 'POST',
+    data
+  })
+
+export const delHospitalMetering = (data: any) =>
+  request({
+    url: '/hospitalMetering/del',
+    method: 'POST',
+    data
+  })
+
+// 不良设备上报
+export const saveadverseEventReport = (data: any) =>
+  request({
+    url: '/adverseEventReport/save',
+    method: 'POST',
+    data
+  })
+
+export const deladverseEventReport = (data: any) =>
+  request({
+    url: '/adverseEventReport/del',
     method: 'POST',
     data
   })

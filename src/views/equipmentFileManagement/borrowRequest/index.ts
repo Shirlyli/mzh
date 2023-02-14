@@ -57,13 +57,20 @@ export default class extends Vue {
       {
         field: 'approveStatus',
         title: '审批状态',
-        itemRender: { name: '$select', props: { placeholder: '请输入审批状态' }, options: ALL_OPTIONS.APPROVAL_STATUS },
+        itemRender: {
+          name: '$select',
+          props: { placeholder: '请输入审批状态' },
+          options: ALL_OPTIONS.APPROVAL_STATUS
+        },
         span: 5
       },
       {
         field: 'rollOutDepartment',
         title: '申请科室',
-        itemRender: { name: '$input', props: { placeholder: '请输入申请科室' } },
+        itemRender: {
+          name: '$input',
+          props: { placeholder: '请输入申请科室' }
+        },
         slots: { default: 'departmentSelect' },
         span: 8
       },
@@ -84,14 +91,22 @@ export default class extends Vue {
     { field: 'billCode', title: '借用单号', width: 150 },
     { field: 'departmentName', title: '申请人科室' },
     { field: 'borrowDepartmentName', title: '借用申请科室' },
-    { field: 'borrowTime', title: '预计借用时间 ', formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD') },
+    {
+      field: 'borrowTime',
+      title: '预计借用时间 ',
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
+    },
     {
       field: 'returnTime',
       title: ' 预计归还时间',
       formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
     },
     { field: 'cause', title: ' 借用原因 ' },
-    { field: 'approveStatus', title: '审批状态', formatter: FormatApproveStatus },
+    {
+      field: 'approveStatus',
+      title: '审批状态',
+      formatter: FormatApproveStatus
+    },
     {
       field: 'createTime',
       title: '申请日期',
@@ -100,6 +115,7 @@ export default class extends Vue {
     {
       width: 250,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -132,6 +148,7 @@ export default class extends Vue {
       returnTime: moment(this.clickProcessData.returnTime).format('YYYY-MM-DD'),
       borrowTime: moment(this.clickProcessData.borrowTime).format('YYYY-MM-DD')
     }
+    // TODO: 换成store存储
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
@@ -144,7 +161,7 @@ export default class extends Vue {
         path: `/processApproval/index/${'JYSQ'}`,
         query: { nextNodeCode, id, type: '借用' }
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn(err)
       })
   }
@@ -233,8 +250,11 @@ export default class extends Vue {
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
-      .push({ path: `/processRequest/index/${'JYSQ'}`, query: { type: '借用', applyUrl: 'JYSQ' } })
-      .catch(err => {
+      .push({
+        path: `/processRequest/index/${'JYSQ'}`,
+        query: { type: '借用', applyUrl: 'JYSQ' }
+      })
+      .catch((err: any) => {
         console.warn(err)
       })
   }

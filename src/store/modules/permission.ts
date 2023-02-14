@@ -64,12 +64,12 @@ export function generaMenu(routes: any, data: any) {
         meta: { ...item.meta, roles: ['admin'] }
       }
       // 遍历子标签，并加入到主目录的children中去
-      item.children.forEach((i: any) => {
+      item.children.length && item.children.forEach((i: any) => {
         const menu2 = {
           path: `/${i.path}`,
           component: (resolve: any) =>
             require([`@/views${i.component}/index.vue`], resolve),
-          name: i.name,
+          // name: i.name,
           meta: { ...i.meta, roles: ['admin'] },
           children: i.children.length
             ? []
@@ -168,6 +168,9 @@ class Permission extends VuexModule implements IPermissionState {
     Object.assign(loadMenuData, data)
     // 把asyncRoutes的数据拷贝到tempAsyncRoutes里面
     const tempAsyncRoutes = Object.assign([], accessedRoutes)
+    console.log('🚀 ~ tempAsyncRoutes', tempAsyncRoutes)
+    console.log('🚀 ~ loadMenuData', loadMenuData)
+
     // 最最重要的，把loadMenuData追加到tempAsyncRoutes后面
     generaMenu(tempAsyncRoutes, loadMenuData)
     // 定义accessedRoutes
@@ -175,6 +178,7 @@ class Permission extends VuexModule implements IPermissionState {
     // 把 tempAsyncRoutes 的值给 accessedRoutes ，并输出
     // eslint-disable-next-line prefer-const
     newaccessedRoutes = tempAsyncRoutes || []
+    console.log('🚀 ~ tempAsyncRoutes', tempAsyncRoutes)
     // 下面这些就是加载目录了
     this.SET_ROUTES(newaccessedRoutes)
     return newaccessedRoutes

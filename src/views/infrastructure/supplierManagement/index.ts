@@ -115,6 +115,7 @@ export default class extends Vue {
     {
       width: 160,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -172,11 +173,11 @@ export default class extends Vue {
   public handleInsert() {
     this.dialogStatus = 'create'
     this.dialogVisible = true;
-    (this.$refs.dataForm as Form).resetFields()
+    (this.$refs.dataForm as any).resetFields()
   }
 
   public handleReset() {
-    (this.$refs.dataForm as Form).resetFields()
+    (this.$refs.dataForm as any).resetFields()
   }
 
   // 模态框关闭事件
@@ -209,7 +210,7 @@ export default class extends Vue {
 
   // 新增供应商
   public createData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const {
           name,
@@ -238,7 +239,7 @@ export default class extends Vue {
 
   // 修改供应商
   public updateData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const {
           id,
@@ -317,7 +318,7 @@ export default class extends Vue {
     this.dialogStatus = 'update'
     this.dialogVisible = true
     this.$nextTick(() => {
-      (this.$refs.dataForm as Form).clearValidate()
+      (this.$refs.dataForm as any).clearValidate()
     })
   }
 

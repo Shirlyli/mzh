@@ -1,5 +1,6 @@
 import { ALL_OPTIONS } from '@/shared/options'
 import { BusinessViewModule } from '@/store/modules/business'
+import { handleDepartData } from '../../../shared/utils'
 /**
  * 设备基础信息
  */
@@ -8,7 +9,7 @@ export const equipmentVO = [
     label: '科室',
     key: 'departmentId',
     type: 'treeSelect',
-    options: BusinessViewModule.departmentData,
+    options: handleDepartData(BusinessViewModule.departmentData),
     required: true
   },
   {
@@ -23,7 +24,7 @@ export const equipmentVO = [
     type: 'treeSelect',
     slot: 'equipmentCategory'
   },
-  { label: '设备来源', key: 'source' },
+  // { label: '设备来源', key: 'source' },
   { label: '设备原值', key: 'region', required: true },
   { label: '设备数量', key: 'num', required: true },
   { label: '设备价格', key: 'price', required: true },
@@ -84,7 +85,7 @@ export const equipmentVO = [
   { label: '折旧月数', key: 'depreciationPeriods' },
   { label: '产地', key: 'origin' },
   { label: '条形码', key: 'barCode' },
-  { label: '条形码编码', key: 'barCodeNo' },
+  // { label: '条形码编码', key: 'barCodeNo' },
   { label: '医院', key: 'hospitalId' },
   {
     label: '是否急救设备',

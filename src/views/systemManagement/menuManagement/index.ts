@@ -75,7 +75,7 @@ export default class extends Vue {
     { field: 'mMtime', title: '创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
     {
       width: 150,
-      title: '操作',
+      title: '操作', fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -190,7 +190,7 @@ export default class extends Vue {
       : '菜单管理'
     /* const { id, title } = this.nodeClickData; */
     this.dialogStatus = 'create'
-    // (this.$refs.dataForm as Form).setFiledsValue
+    // (this.$refs.dataForm as any).setFiledsValue
     this.menuData = {
       ...this.menuData,
       pid: id,
@@ -201,7 +201,7 @@ export default class extends Vue {
 
   // 新增菜单
   private createData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const res: any = await saveMenuInfo(this.menuData)
         if (res.result) {
@@ -220,7 +220,7 @@ export default class extends Vue {
 
   // 修改菜单
   private updateData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const res: any = await saveMenuInfo(this.menuData)
         if (res.result) {
@@ -243,7 +243,7 @@ export default class extends Vue {
     this.dialogStatus = 'update'
     this.dialogVisible = true
     this.$nextTick(() => {
-      (this.$refs.dataForm as Form).clearValidate()
+      (this.$refs.dataForm as any).clearValidate()
     })
   }
 

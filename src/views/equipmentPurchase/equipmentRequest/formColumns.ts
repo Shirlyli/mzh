@@ -15,7 +15,8 @@ export const BasicFormList = [
     field: 'purchaseType',
     title: '购置类别',
     span: 12,
-    type: 'input'
+    type: 'select',
+    data: ALL_OPTIONS.purchaseType
   },
   {
     field: 'applyDeptName',
@@ -38,7 +39,8 @@ export const BasicFormList = [
     field: 'applyModle',
     title: '申请方式',
     span: 12,
-    type: 'input'
+    type: 'select',
+    data: ALL_OPTIONS.applyModle
   },
   {
     field: 'applyReson',
@@ -144,4 +146,24 @@ export const ApprovalFormlist = [
   //     { label: '驳回', value: '0' }
   //   ]
   // }
+]
+
+// 附件信息
+export const FileFormList = [
+  [
+    {
+      field: 'fileName',
+      title: '文件名',
+      span: 8,
+      type: 'input',
+      required: true
+    },
+    {
+      field: 'applyPerson',
+      title: '提交人',
+      span: 8,
+      type: 'select',
+      data: BusinessViewModule.employeeData
+    }
+  ]
 ]

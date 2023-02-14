@@ -12,6 +12,7 @@ import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
 import moment from 'moment'
 import { UserModule } from '@/store/modules/user'
+
 @Component({
   name: 'InlineEditTable',
   components: {
@@ -83,6 +84,7 @@ export default class extends Vue {
     {
       width: 160,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -95,7 +97,7 @@ export default class extends Vue {
     }
   };
 
-  public processData :any= {
+  public processData: any = {
     processName: '',
     processCode: '',
     nodeName: '',
@@ -111,11 +113,11 @@ export default class extends Vue {
    */
   public roleData: any = [];
   public async getRoleTreeData(type: any) {
-    let res :any = []
+    let res: any = []
     if (type === 'role') {
       const resData: any = await getRoleTreeData()
       if (resData.code === 200) {
-        res = resData.data?.[0]?.children.map((item:any) => {
+        res = resData.data?.[0]?.children.map((item: any) => {
           return { ...item, userId: item.id }
         })
       }
@@ -129,7 +131,7 @@ export default class extends Vue {
         }
       })
       if (resUserData.code === 200) {
-        res = resUserData.data.map((item:any) => {
+        res = resUserData.data.map((item: any) => {
           return { ...item, title: item.eName }
         })
       }
@@ -138,7 +140,7 @@ export default class extends Vue {
     this.$forceUpdate()
   }
 
-  public onRoleTypeChange(value:any) {
+  public onRoleTypeChange(value: any) {
     console.log('🚀 ~ value', value)
     this.processData.roleTypeId = ''
   }
@@ -197,7 +199,15 @@ export default class extends Vue {
   public handleUpdate(row: any) {
     console.log('🚀 ~ row', row)
     const { roleType } = row
-    this.processData = roleType === 'user' ? { ...this.processData, ...row, roleTypeId: row.roleTypeId.split(',') } : { ...this.processData, ...row }
+    console.log(row.roleTypeId.split(','))
+    this.processData =
+      roleType === 'user'
+        ? {
+            ...this.processData,
+            ...row,
+            roleTypeId: row.roleTypeId.indexOf(',') > 0 ? JSON.parse(row.roleTypeId) : row.roleTypeId.split(',')
+          }
+        : { ...this.processData, ...row }
     console.log('🚀 ~ this.processData', this.processData)
     this.dialogStatus = 'update'
     this.dialogVisible = true
@@ -205,16 +215,19 @@ export default class extends Vue {
 
   // 新增流程配置
   public createData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const { roleTypeId, roleType } = this.processData
-        this.processData = roleType === 'user' ? { ...this.processData } : { ...this.processData, roleTypeId: roleTypeId.join(',') }
+        this.processData =
+          roleType === 'user'
+            ? { ...this.processData, roleTypeId: roleTypeId.join(',') }
+            : { ...this.processData }
         const res: any = await updateProcessData(this.processData)
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig)
         }
         this.dialogVisible = false;
-        (this.$refs.dataForm as Form).resetFields()
+        (this.$refs.dataForm as any).resetFields()
         this.$message.success('新增流程配置成功')
         this.clearForm()
       } else {
@@ -225,16 +238,20 @@ export default class extends Vue {
 
   // 修改流程配置
   public updateData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const { roleTypeId, roleType } = this.processData
-        this.processData = roleType === 'user' ? { ...this.processData } : { ...this.processData, roleTypeId: roleTypeId.join(',') }
+        console.log('🚀 ~ this.processData', this.processData)
+        this.processData =
+          roleType === 'user'
+            ? { ...this.processData, roleTypeId: roleTypeId.join(',') }
+            : { ...this.processData }
         const res: any = await updateProcessData({ ...this.processData })
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig)
         }
         this.dialogVisible = false;
-        (this.$refs.dataForm as Form).resetFields()
+        (this.$refs.dataForm as any).resetFields()
         this.$message.success('修改流程配置成功')
         this.clearForm()
       }
@@ -258,7 +275,7 @@ export default class extends Vue {
     if (res.result) {
       (this.$refs.vexTable as any).findList(this.paramsConfig)
     }
-    // (this.$refs.dataForm as Form).resetFields()
+    // (this.$refs.dataForm as any).resetFields()
     this.$message.success('删除流程配置成功')
   }
 

@@ -5,6 +5,7 @@ import { UserModule } from '@/store/modules/user'
 import { Component, Vue, Watch, Emit } from 'vue-property-decorator'
 import { APPLY_URL } from '@/shared/options'
 import Treeselect from '@riophae/vue-treeselect'
+import { BusinessViewModule } from '../../store/modules/business'
 
 @Component({
   name: 'processRequest',
@@ -55,6 +56,7 @@ export default class extends Vue {
   /**********************
    * form表单
    *********************/
+  // TODO:换成从store获取
   public watchRequestForm: any = JSON.parse(
     sessionStorage.getItem('RequestForm') ?? '0'
   );
@@ -126,7 +128,7 @@ export default class extends Vue {
         const params = this.requestParams
         const billApproveList: any = []
         billApproveList.push({ ...params.billApproveList, optType: 'add' })
-        const sendParams = []
+        const sendParams:any = []
         sendParams.push({
           ...params,
           status: '1',
@@ -136,7 +138,9 @@ export default class extends Vue {
             departmentId:
               params.billMain.departmentName || params.billMain.applyDept
           },
-          billEquipmentList: params.billEquipmentList,
+          billEquipmentList: params.billEquipmentList.map((item:any) => {
+            return { ...item, price: Number(item.price) }
+          }),
           billApproveList
         })
         console.log('🚀 ~ 提交 sendParams', sendParams)
@@ -169,16 +173,19 @@ export default class extends Vue {
         const params = this.requestParams
         // const billApproveList: any = []
         // billApproveList.push(params.billApproveList)
-        const sendParams = []
+        const sendParams:any = []
         sendParams.push({
           ...params,
           status: '0',
           billMain: {
             ...params.billMain,
+            applyDept: params.billMain.applyDeptName,
             departmentId:
               params.billMain.departmentName || params.billMain.applyDept
           },
-          billEquipmentList: params.billEquipmentList,
+          billEquipmentList: params.billEquipmentList.map((item:any) => {
+            return { ...item, price: Number(item.price) }
+          }),
           billApproveList: []
         })
         console.log('🚀 ~ 保存 sendParams', sendParams)
@@ -375,4 +382,53 @@ export default class extends Vue {
   public fliterMethods(e:string) {
     console.log('🚀 ~ e', e)
   }
+
+   /********************************************
+   * 待新增的设备params
+   *******************************************/
+   public addFileForm = [
+     {
+       field: 'fileName',
+       title: '文件名',
+       span: 8,
+       type: 'input',
+       required: true
+     },
+     {
+       field: 'applyPerson',
+       title: '提交人',
+       span: 8,
+       type: 'select',
+       data: BusinessViewModule.employeeData
+     }
+   ];
+
+   public addNewFile() {
+     const attrLength = this.watchRequestForm.dicAttachmentsList.length
+     if (attrLength !== 0) {
+       if (
+         this.watchRequestForm.dicAttachmentsList[attrLength - 1].attrKey ===
+          '' ||
+        this.watchRequestForm.dicAttachmentsList[attrLength - 1].attrValue === ''
+       ) {
+         this.$message.warning('请填写上一属性完整后再新增')
+       } else {
+         this.pushFileData()
+       }
+     } else {
+       this.pushFileData()
+     }
+   }
+
+   public pushFileData() {
+     this.$nextTick(() => {
+       this.watchRequestForm.dicAttachmentsList.push(this.addFileForm)
+       this.requestParams.dicAttachmentsList.push({
+         id: '',
+         fileName: '',
+         applyPerson: ''
+       })
+     })
+     this.$forceUpdate() // 强制刷新，解决页面不会重新渲染的问题
+   }
 }

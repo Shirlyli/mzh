@@ -230,12 +230,12 @@ export default class extends Vue {
       if ((res.result || res.code === 200) && res.data) {
         if (this.type === 'equipmentSearch') {
           this.tableData = res.data.map((item: any) => {
-            return { ...item, ...item.equipmentVO }
+            return { ...item.equipmentVO, ...item.equipmentStores[0], ...item }
           })
           this.tablePage.total = res.count
         } else if (this.type === 'transferApply') {
           this.tableData = res.data.map((item: any) => {
-            return { ...item, ...item.billApproveList[0], ...item.billMain }
+            return { ...item.billEquipmentList[0], ...item.billApproveList[0], ...item.billMain, ...item }
           })
           this.tablePage.total = res.count
         } else {

@@ -301,7 +301,7 @@ export default class extends Vue {
   }
 
   private submitForm() {
-    (this.$refs.postForm as Form).validate(valid => {
+    (this.$refs.postForm as any).validate(valid => {
       if (valid) {
         this.loading = true
         this.$notify({

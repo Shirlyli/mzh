@@ -23,7 +23,7 @@ export const equipmentVO = [
     type: 'treeSelect',
     slot: 'equipmentCategory'
   },
-  { label: '设备来源', key: 'source', required: true },
+  // { label: '设备来源', key: 'source', required: true },
   { label: '设备原值', key: 'region', required: true },
   { label: '设备数量', key: 'num', required: true },
   { label: '设备价格', key: 'price', required: true },
@@ -55,7 +55,7 @@ export const equipmentVO = [
   { label: '设备负责人', key: 'equipmentPrincipal' },
   { label: '设备唯一识别码', key: 'idCode' },
   { label: '设备图片', key: 'img' },
-  { label: '注册证号', key: 'registrationCertificat' },
+  // { label: '注册证号', key: 'registrationCertificat' },
   { label: '产品批号', key: 'batchNumber' },
   { label: '品牌', key: 'brand', required: true },
   {
@@ -87,7 +87,7 @@ export const equipmentVO = [
   { label: '折旧月数', key: 'depreciationPeriods' },
   { label: '产地', key: 'origin' },
   { label: '条形码', key: 'barCode' },
-  { label: '条形码编码', key: 'barCodeNo' },
+  // { label: '条形码编码', key: 'barCodeNo' },
   { label: '医院', key: 'hospitalId' },
   {
     label: '是否急救设备',
@@ -150,7 +150,7 @@ export const equipmentPurchases = [
   },
   { label: '合同名称', key: 'contractName', required: true },
   { label: '合同编码', key: 'contractNum', required: true },
-  { label: '设备', key: 'equipmentId', required: true },
+  // { label: '设备', key: 'equipmentId', required: true },
   { label: '招标形式', key: 'invitationType', required: true },
   { label: '乙方联系方式', key: 'partyBPhone' },
   { label: '乙方单位', key: 'partyBUnit' },
@@ -173,7 +173,7 @@ export const equipmentPurchases = [
   { label: '付款日期', key: 'paymentTime', type: 'date', required: true },
   { label: '期数', key: 'periods', required: true },
   { label: '预付日期', key: 'prepaymentTime', type: 'date', required: true },
-  { label: '采购id', key: 'purchaseId', required: true },
+  { label: '采购编码', key: 'purchaseId', required: true },
   { label: '付款状态', key: 'status', required: true }
 ]
 
@@ -185,8 +185,8 @@ export const equipmentDepreciations = [
   { label: '折旧年限', key: 'depreciationLimit' },
   { label: '折旧月数', key: 'depreciationPeriods' },
   { label: '折旧日期', key: 'depreciationTime', type: 'date' },
-  { label: '折旧负责人', key: 'depreciationUser' },
-  { label: '设备', key: 'equipmentId', required: true }
+  { label: '折旧负责人', key: 'depreciationUser' }
+  // { label: '设备', key: 'equipmentId', required: true }
 ]
 
 /**
@@ -199,13 +199,13 @@ export const equipmentMaintain = [
   { label: '维保服务商', key: 'facilitator', required: true },
   { label: '维保服务商联系方式', key: 'facilitatorPhone', required: true },
   { label: '附件图片', key: 'img' },
-  {
-    label: '设备',
-    key: 'equipmentId',
-    type: 'select',
-    options: BusinessViewModule.equipmentData,
-    required: true
-  },
+  // {
+  //   label: '设备',
+  //   key: 'equipmentId',
+  //   type: 'select',
+  //   options: BusinessViewModule.equipmentData,
+  //   required: true
+  // },
   {
     label: '上次保养时间',
     key: 'lastMaintainTime',
@@ -228,7 +228,7 @@ export const equipmentResources = [
   { label: '保养说明书', key: 'maintainUrl', required: true }, // maintainUrl
   { label: '计量操作文档名称', key: 'meteringName', type: 'upload' },
   { label: '计量操作文档', key: 'meteringUrl' },
-  { label: '设备', key: 'equipmentId', required: true },
+  // { label: '设备', key: 'equipmentId', required: true },
   { label: '付款计划名称', key: 'paymentName', required: true, type: 'upload' },
   { label: '付款计划', key: 'paymentUrl' },
   { label: '技术参数名称', key: 'technologyName', required: true, type: 'upload' },
@@ -240,8 +240,8 @@ export const equipmentResources = [
  */
 export const equipmentStocks = [
   { label: '库存量', key: 'boundNums' },
-  { label: '仓库', key: 'departmentId' },
-  { label: '设备', key: 'equipmentId', required: true }
+  { label: '仓库', key: 'departmentId' }
+  // { label: '设备', key: 'equipmentId', required: true }
 ]
 
 /**
@@ -255,7 +255,7 @@ export const equipmentStores = [
   { label: '出入库时间', key: 'boundTime', required: true },
   { label: '出入库类型', key: 'boundType', required: true },
   { label: '仓库', key: 'departmentId' },
-  { label: '设备', key: 'equipmentId', required: true },
+  // { label: '设备', key: 'equipmentId', required: true },
   { label: '备注', key: 'note' },
   { label: '领用人', key: 'receivePerson' }
 ]
@@ -266,7 +266,7 @@ export const equipmentStores = [
 export const equipmentInspection = [
   { label: '外观描述', key: 'appearance', required: true },
   { label: '仓库', key: 'departmentId', required: true },
-  { label: '设备', key: 'equipmentId', required: true },
+  // { label: '设备', key: 'equipmentId', required: true },
   { label: '添加日期', key: 'createtime', type: 'date' },
   { label: '巡检描述', key: 'description', required: true },
   { label: '异常描述', key: 'function', required: true },

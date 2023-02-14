@@ -180,7 +180,7 @@ export default class extends Vue {
     this.$nextTick(() => {
       this.$router.replace({
         path: '/redirect' + fullPath
-      }).catch(err => {
+      }).catch((err: any) => {
         console.warn(err)
       })
     })
@@ -196,7 +196,7 @@ export default class extends Vue {
 
   private closeOthersTags() {
     if (this.selectedTag.fullPath !== this.$route.path && this.selectedTag.fullPath !== undefined) {
-      this.$router.push(this.selectedTag.fullPath).catch(err => {
+      this.$router.push(this.selectedTag.fullPath).catch((err: any) => {
         console.warn(err)
       })
     }
@@ -216,18 +216,18 @@ export default class extends Vue {
   private toLastView(visitedViews: ITagView[], view: ITagView) {
     const latestView = visitedViews.slice(-1)[0]
     if (latestView !== undefined && latestView.fullPath !== undefined) {
-      this.$router.push(latestView.fullPath).catch(err => {
+      this.$router.push(latestView.fullPath).catch((err: any) => {
         console.warn(err)
       })
     } else {
       // Default redirect to the home page if there is no tags-view, adjust it if you want
       if (view.name === 'Dashboard') {
         // to reload home page
-        this.$router.replace({ path: '/redirect' + view.fullPath }).catch(err => {
+        this.$router.replace({ path: '/redirect' + view.fullPath }).catch((err: any) => {
           console.warn(err)
         })
       } else {
-        this.$router.push((UserModule.menu as any)[0]?.path).catch(err => {
+        this.$router.push((UserModule.menu as any)[0]?.path).catch((err: any) => {
           console.warn(err)
         })
       }

@@ -58,7 +58,8 @@
                                   :prop="'['+item.key+']'+'['+formItem.key+']'"
                                   :rules="formItem.required ?[{required: true,message: '不能为空',trigger: 'change'}]:[{required: false}]"
                                   :label-width="item.key === 'equipmentMaintain'||item.key==='equipmentResources'?'150px':'120px'">
-                      <el-select v-model="equipmentCategoryData[item.key][formItem.key]"
+                      <!-- 树形下拉框 -->
+                      <!-- <el-select v-model="equipmentCategoryData[item.key][formItem.key]"
                                  placeholder="请选择"
                                  v-if="formItem.type === 'treeSelect'">
                         <el-tree node-key="id"
@@ -78,7 +79,18 @@
                                        :value="data.id"></el-option>
                           </span>
                         </el-tree>
-                      </el-select>
+                      </el-select> -->
+
+                      <treeselect :options="formItem.options"
+                          v-model="equipmentCategoryData[item.key][formItem.key]"
+                          clearable
+                          :disable-branch-nodes="true"
+                          search-nested
+                          placeholder="请选择"
+                          :normalizer="normalizer"
+                          v-if="formItem.type === 'treeSelect'" />
+
+                      <!-- 下拉选择 -->
                       <el-select v-model="equipmentCategoryData[item.key][formItem.key]"
                                  placeholder="请选择"
                                  v-if="formItem.type === 'select'">
@@ -88,16 +100,21 @@
                                    :key="options.value"></el-option>
                       </el-select>
 
+                      <!-- 日期 -->
                       <el-date-picker v-model="equipmentCategoryData[item.key][formItem.key]"
                                       placeholder="请选择时间"
                                       value-format="yyyy-MM-dd"
                                       v-else-if="formItem.type === 'date'"></el-date-picker>
+
+                      <!-- 输入框 -->
                       <el-input v-model="equipmentCategoryData[item.key][formItem.key]"
                                 v-if="!formItem.type"
                                 :placeholder="`请输入${formItem.label}`" />
                       <!-- <el-button v-model="equipmentCategoryData[item.key][formItem.key]"
                                  v-if="formItem.type=== 'button'"
                                  type="primary">生成</el-button> -->
+
+                      <!-- 上传附件 -->
                       <el-upload class="upload-demo"
                                  v-if="formItem.type==='upload'"
                                  action="/fileupload/addFileSubmitAndResult"
@@ -151,5 +168,26 @@
 .contentBox {
   font-size: 14px;
   margin: 10px 0 20px 0;
+
+  .el-col{
+    height: 40px;
+  }
+}
+
+.basicBox{
+  .title {
+    width: 120px;
+    padding: 8px 8px;
+    background-color: rgba(159, 174, 248, 0.08);
+  }
+  .value {
+    color: rgba(37, 45, 62, 0.85);
+    flex: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-left: 20px;
+  }
+
 }
 </style>

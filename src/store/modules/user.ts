@@ -109,7 +109,6 @@ class User extends VuexModule implements IUserState {
   @Action({ rawError: true })
   public async GetUserInfo() {
     // const userInfo = JSON.parse(localStorage.getItem('userInfo') ?? '0')
-    console.log('GetUserInfo  === this.token', this.token, JSON.parse(sessionStorage.getItem('store')))
     if (this.token === '') {
       throw Error('GetUserInfo: token is undefined!')
     }

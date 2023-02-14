@@ -52,8 +52,7 @@ const routes = [
 const router = new VueRouter({
   routes
 })
-
-const wrapper = mount(Breadcrumb, {
+const wrapper :any = mount(Breadcrumb, {
   localVue,
   router,
   mocks: {

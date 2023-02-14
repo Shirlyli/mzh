@@ -4,7 +4,6 @@
     :class="{'collapse': collapse}"
   >
     <transition name="sidebarLogoFade">
-      <!-- TODO: logo -->
       <router-link
         v-if="collapse"
         key="collapse"

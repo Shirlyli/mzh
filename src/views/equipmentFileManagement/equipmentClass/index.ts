@@ -79,9 +79,9 @@ export default class extends Vue {
     {
       width: 160,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
-      showOverflow: true,
-      fixed: 'right'
+      showOverflow: true
     }
   ]; // 列表配置项
 

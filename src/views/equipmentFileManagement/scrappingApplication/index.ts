@@ -104,8 +104,13 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
+    { field: 'billCode', title: '设备编号' },
+    { field: 'billCode', title: '设备名称' },
+    { field: 'billCode', title: '规则型号' },
+    { field: 'billCode', title: '所属科室' },
+    { field: 'billCode', title: '申请人' },
     { field: 'billCode', title: '报废单号', width: 150 },
-    { field: 'departmentName', title: '申请人科室' },
+    { field: 'departmentName', title: '申请科室' },
     { field: 'useDepartmentName', title: '使用科室' },
     { field: 'instructions', title: '使用情况' },
     {
@@ -114,15 +119,16 @@ export default class extends Vue {
       formatter: FormatApproveStatus
     },
     { field: 'cause', title: ' 报废原因 ' },
-    { field: 'approveStatus', title: '审批状态', formatter: FormatApproveStatus },
+    { field: 'approveStatus', title: '报废状态', formatter: FormatApproveStatus },
     {
       field: 'createTime',
       title: '申请日期',
       formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
     },
     {
-      width: 250,
+      width: 100,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -156,6 +162,7 @@ export default class extends Vue {
       returnTime: moment(this.clickProcessData.returnTime).format('YYYY-MM-DD'),
       borrowTime: moment(this.clickProcessData.borrowTime).format('YYYY-MM-DD')
     }
+    // TODO: 换成store存储
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
@@ -168,7 +175,7 @@ export default class extends Vue {
         path: `/processApproval/index/${'BFSQ'}`,
         query: { nextNodeCode, id, type: '报废' }
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn(err)
       })
   }
@@ -257,7 +264,7 @@ export default class extends Vue {
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
       .push({ path: `/processRequest/index/${'BFSQ'}`, query: { type: '报废', applyUrl: 'BFSQ' } })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn(err)
       })
   }

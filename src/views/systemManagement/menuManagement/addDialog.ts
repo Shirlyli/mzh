@@ -22,7 +22,7 @@ export default class extends Vue {
 
   // 新增表单确认
   private createData() {
-    // (this.$refs.dataForm as Form).validate(async valid => {
+    // (this.$refs.dataForm as any).validate(async(valid: any) => {
     //   if (valid) {
     //     const articleData = this.tempArticleData
     //     articleData.id = Math.round(Math.random() * 100) + 1024 // mock a id
@@ -47,13 +47,13 @@ export default class extends Vue {
     // this.dialogStatus = 'update'
     // this.dialogFormVisible = true
     // this.$nextTick(() => {
-    //   (this.$refs.dataForm as Form).clearValidate()
+    //   (this.$refs.dataForm as any).clearValidate()
     // })
   }
 
   // 编辑表单-确认
   private updateData() {
-    // (this.$refs.dataForm as Form).validate(async valid => {
+    // (this.$refs.dataForm as any).validate(async(valid: any) => {
     //   if (valid) {
     //     const tempData = Object.assign({}, this.tempArticleData)
     //     tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464

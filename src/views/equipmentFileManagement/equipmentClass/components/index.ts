@@ -37,6 +37,7 @@ export default class extends Vue {
 
   public allFormList: any = {}; // 表单项
   public rules = {}; // 表单校验
+  // TODO:换成从store获取
 
   public equipmentCategoryData = JSON.parse(
     sessionStorage.getItem('EquipmentCategoryData') ?? '0'
@@ -133,7 +134,7 @@ export default class extends Vue {
 
   // 保存设备验收
   public createData() {
-    (this.$refs.equipmentCategoryData as Form).validate(async valid => {
+    (this.$refs.equipmentCategoryData as any).validate(async(valid: any) => {
       if (valid) {
         const {
           equipmentDepreciations,
@@ -186,7 +187,7 @@ export default class extends Vue {
 
   // 修改科室
   public updateData() {
-    (this.$refs.equipmentCategoryData as Form).validate(async valid => {
+    (this.$refs.equipmentCategoryData as any).validate(async(valid: any) => {
       if (valid) {
         const {
           equipmentDepreciations,
@@ -253,7 +254,7 @@ export default class extends Vue {
   private toLastView(visitedViews: ITagView[], view: ITagView) {
     const latestView = visitedViews.slice(-1)[0]
     if (latestView !== undefined && latestView.fullPath !== undefined) {
-      this.$router.push(latestView.fullPath).catch(err => {
+      this.$router.push(latestView.fullPath).catch((err: any) => {
         console.warn(err)
       })
     } else {
@@ -262,11 +263,11 @@ export default class extends Vue {
         // to reload home page
         this.$router
           .replace({ path: '/redirect' + view.fullPath })
-          .catch(err => {
+          .catch((err: any) => {
             console.warn(err)
           })
       } else {
-        this.$router.push((UserModule.menu as any)[0]?.path).catch(err => {
+        this.$router.push((UserModule.menu as any)[0]?.path).catch((err: any) => {
           console.warn(err)
         })
       }

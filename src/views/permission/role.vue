@@ -267,7 +267,7 @@ export default class extends Vue {
           message: 'Deleted!'
         })
       })
-      .catch((err) => {
+      .catch((err:any) => {
         console.error(err)
       })
   }

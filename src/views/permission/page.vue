@@ -16,7 +16,7 @@ import SwitchRoles from './components/SwitchRoles.vue'
 })
 export default class extends Vue {
   private handleRolesChange() {
-    this.$router.push({ path: '/permission/index?' + +new Date() }).catch(err => {
+    this.$router.push({ path: '/permission/index?' + +new Date() }).catch((err: any) => {
       console.warn(err)
     })
   }

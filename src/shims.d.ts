@@ -3,10 +3,13 @@ declare module '*.vue' {
   export default Vue
 }
 
+declare module '@/'
+declare module 'element-ui/*'
 declare module 'element-ui/lib/locale/lang/*' {
   export const elementLocale: any
 }
-declare module 'element-ui'
+declare module 'element-ui/lib/locale/lang/en'
+declare module 'element-ui/lib/locale/lang/zh-CN'
 declare module 'vue'
 declare module 'moment'
 declare module 'vue-svgicon'

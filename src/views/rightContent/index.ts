@@ -24,7 +24,7 @@ export default class extends Vue {
     // console.log("🚀 ~ dialogStatus", this.dialogStatus);
     // this.dialogFormVisible = true;
     // this.$nextTick(() => {
-    //   (this.$refs.dataForm as Form).clearValidate();
+    //   (this.$refs.dataForm as any).clearValidate();
     // });
     this.$router.push({ path: '/equipmentArchives/addNewEquipment' })
   }

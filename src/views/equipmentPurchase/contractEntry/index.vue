@@ -5,6 +5,18 @@
            class="clearfix">
         <span>合同录入</span>
       </div>
+      <keep-alive>
+        <VexTable ref="vexTable"
+                  :formConfig="formConfig"
+                  :columns="columns"
+                  editColumns="[]"
+                  hasNotSlotButton="add"
+                  :toolbarBtns="[]"
+                  @emit-handle-warehousing="handleWarehousing"
+                  :paramsConfig="paramsConfig" />
+      </keep-alive>
     </el-card>
   </div>
 </template>
+
+<script lang="ts" src="./index.tsx"></script>

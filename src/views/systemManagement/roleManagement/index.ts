@@ -58,6 +58,7 @@ export default class extends Vue {
     {
       width: 160,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -149,7 +150,7 @@ export default class extends Vue {
 
   // 新增菜单
   private createData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const res: any = await saveRoleInfo(this.roleData)
         if (res.result) {
@@ -167,7 +168,7 @@ export default class extends Vue {
 
   // 修改菜单
   private updateData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const res: any = await saveRoleInfo(this.roleData)
         if (res.result) {
@@ -211,5 +212,4 @@ export default class extends Vue {
     }
     this.$message.success('删除菜单成功')
   }
-
 }

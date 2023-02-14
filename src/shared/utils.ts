@@ -12,6 +12,7 @@ export const formatMIsRoleType = (data: any) => {
       : '-'
 }
 
+// 处理科室数据适配vuetreeselect
 export const handleDepartData = (datas: any) => {
   return datas.map((item: any) => {
     if (item.children.length) {
@@ -23,4 +24,20 @@ export const handleDepartData = (datas: any) => {
     }
     return { id: item.id, label: item.title }
   })
+}
+
+export const formatIsOrNotType = (data: any) => {
+  return String(data.cellValue) === '1'
+    ? '是'
+    : String(data.cellValue) === '0'
+      ? '否'
+      : '-'
+}
+
+export const formatSexType = (data: any) => {
+  return String(data.cellValue) === '1'
+    ? '男'
+    : String(data.cellValue) === '0'
+      ? '女'
+      : '-'
 }

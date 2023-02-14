@@ -1,8 +1,8 @@
 import { Component, Vue } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
 import {
-  delHospitalProcessBusiness,
-  queryProcessRecordList
+  queryProcessRecordList,
+  savePurchaseCheck
 } from '@/api/basic'
 import { BusinessViewModule } from '@/store/modules/business'
 import { Message } from 'element-ui'
@@ -13,9 +13,8 @@ import {
   EquipmentDetailFormList,
   ApprovalFormlist
 } from './formColumns'
-import { UserModule } from '@/store/modules/user'
 import moment from 'moment'
-import { ALL_OPTIONS } from '@/shared/options'
+import { ALL_OPTIONS, equipmentCategoryData } from '../../../shared/options'
 import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
 
 @Component({
@@ -29,12 +28,6 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
 })
 export default class extends Vue {
   public routePath = this.$route.path;
-  // private isDYS = this.routePath.indexOf('DYS') > -1;// 待验收
-  // private isYYS = this.routePath.indexOf('YYS') > -1;// 已验收
-
-  async created() {
-    await BusinessViewModule.GET_DEPARTMENT_DATA()
-  }
 
   public basicFormList = BasicFormList;
   /**********************************
@@ -43,9 +36,9 @@ export default class extends Vue {
   // 列表查询项-表单
   public formConfig = {
     data: {
-      approveStatus: '',
-      rollOutDepartment: '',
-      createTime: ''
+      // approveStatus: '',
+      // rollOutDepartment: '',
+      // createTime: ''
     },
     items: [
       {
@@ -75,37 +68,53 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'applyDept', title: '申请科室', width: 150 },
+    { field: 'name', title: '设备名称', width: 150 },
     {
       field: 'applyTime',
       title: '申请日期',
-      formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'),
+      width: 150
     },
-    { field: 'projectName', title: '项目名称' },
-    { field: 'purchaseType', title: '购置类别' },
-    { field: 'purchaseType', title: ' 采购类型 ' },
-    { field: 'nextNodeName', title: ' 当前节点' },
+    { field: 'departmentName', title: '领用科室', width: 150 },
+    { field: 'boundTime', title: '出库日期', width: 150, formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD') },
+    { field: 'billId', title: '出库单号', width: 150 },
+    { field: 'price', title: '出库金额', width: 150 },
+    { field: 'num', title: '出库数量', width: 150 },
+    { field: 'purchaseType', title: '备注', width: 150 },
+    // { field: 'purchaseType', title: '状态', width: 150 },
     {
-      width: 100,
+      width: 120,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
   ];
 
-  /**
+  public equipmentStores = [
+    // { title: '设备唯一编码', key: 'idCode', type: 'input' },
+    { title: '领用人', key: 'receivePerson', type: 'select', options: BusinessViewModule.employeeData, required: true },
+    { title: '出库操作人', key: 'bounder', type: 'select', options: BusinessViewModule.employeeData, required: true },
+    { title: '出库数量', key: 'boundNums', type: 'input' },
+    { title: '出库时间', key: 'boundTime', type: 'date' },
+    { title: '目的地', key: 'destinationId', type: 'select', options: BusinessViewModule.departmentData, required: true },
+    { title: '仓库', key: 'departmentId', type: 'select', options: BusinessViewModule.departmentData, required: true },
+    { title: '备注', key: 'note', type: 'textarea' }
+  ];
+
+  public dialogStatus = false
+
+  /***********************************
    * 列表传参
    * 已验收查看--查询已验收数据
-   */
+   **********************************/
   public paramsConfig: any = {
-    url: '/kssq/getKssqInfoList', // 待验收--查询已归档数据
+    url: '/equipmentTemp/getEquipmentInfo', // 待验收--查询已归档数据
     params: {
       page: '1',
       limit: '10',
       entity: {
-        status: '',
-        projectName: '',
-        applyPerson: ''
+        operationStatus: 'IN_STORE'
       }
     }
   };
@@ -121,103 +130,57 @@ export default class extends Vue {
   };
 
   // 申请接口传惨params
-  public requestParams = {
-    id: '',
-    status: '0',
-    billCode: '',
-    billMain: {
-      id: '',
-      userId: (UserModule.userData as any)?.userId,
-      userName: (UserModule.userData as any)?.userName,
-      createTime: '',
-      rollOutDepartment: '',
-      rollInDepartment: '',
-      equipmentLocation: '',
-      rollOutTime: '',
-      cause: '',
-      status: '',
-      billCode: ''
-    },
-    billEquipmentList: [
-      {
-        id: '',
-        billId: '',
-        equipmentId: ''
-      }
-    ],
-    billApproveList: {
-      id: '',
-      approveUser: (UserModule.userData as any)?.userId,
-      approveUserName: (UserModule.userData as any)?.userName,
-      approveTime: '',
-      approveOpinion: '',
-      approveStatus: '',
-      billId: ''
-    }
-  };
-
-  public processModal = {
-    id: '',
-    status: '0',
-    billCode: '',
-    billMain: {
-      id: '',
-      userId: '',
-      createTime: '',
-      rollOutDepartment: '',
-      rollInDepartment: '',
-      equipmentLocation: '',
-      rollOutTime: '',
-      cause: '',
-      status: '0',
-      billCode: ''
-    },
-    billEquipmentList: [
-      {
-        id: '',
-        billId: '',
-        equipmentId: ''
-      }
-    ],
-    billApproveList: [
-      {
-        id: '',
-        approveUser: '',
-        approveTime: '',
-        approveOpinion: '',
-        approveStatus: '',
-        chrckId: ''
-      }
-    ]
-  };
-
-  public rules = {
-    nextNodeExecutor: [{ require: true, trigger: 'change', message: '请选择' }],
-    approveStatus: [{ require: true, trigger: 'change', message: '请选择' }]
-  };
-
-  /*****************************
-   * 操作记录
-   ***************************/
-  public processRecordListData = []; // 操作记录
-  public processRecordDialogVisible = false; // 操作记录显隐
-
-  public handleRecord(data: any) {
-    this.processRecordDialogVisible = true
-    this.queryProcessRecordListData(data)
-  }
-
-  // 获取流程操作记录 queryProcessRecordList
-  public async queryProcessRecordListData(data: any) {
-    const res: any = await queryProcessRecordList({
-      businessId: data.id
-    })
-    if (res.result) {
-      this.processRecordListData = res.data
-    }
-  }
+  public requestParams = equipmentCategoryData
 
   public handleWarehousing(row:any) {
     console.log('🚀 ~ row', row)
+    this.rowData = row
+    this.dialogStatus = true
+  }
+
+  /**********************************
+  * 提交出库
+  * **********************************/
+  public rowData :any= {}
+  public submitInWarehousing() {
+    (this.$refs.requestParams as any).validate(async(valid: any) => {
+      if (valid) {
+        console.log('this.requestParams', this.requestParams, 'this.rowData', this.rowData)
+        const {
+          equipmentStores,
+          equipmentVO,
+          state
+        } = this.requestParams
+        const paramsConfig = {
+          equipmentStores: Object.values(equipmentStores).length
+            ? [
+                {
+                  ...equipmentStores,
+                  id: this.rowData.equipmentStores[0].id,
+                  boundType: 'OUT_STORE',
+                  equipmentId: this.rowData.name,
+                  equipmentName: this.rowData.name
+                }
+              ]
+            : [],
+          equipmentVO: {
+            ...equipmentVO,
+            ...this.rowData.equipmentVO,
+            operationStatus: 'OUT_STORE',
+            billId: equipmentVO.billCode
+          },
+          id: this.rowData.id,
+          state
+        }
+        const params: any = []
+        params.push(paramsConfig)
+        console.log('🚀 ~ params', params)
+        const res: any = await savePurchaseCheck(params)
+        if (res.code === 200) {
+          Message.success('入库成功')
+          this.dialogStatus = false
+        }
+      }
+    })
   }
 }

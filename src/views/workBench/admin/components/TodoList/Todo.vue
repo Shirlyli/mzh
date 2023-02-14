@@ -1,4 +1,6 @@
+
 <template>
+  <!-- @ts-ignore -->
   <li
     :class="{completed: todo.done, editing: editing}"
     class="todo"
@@ -42,7 +44,7 @@ export interface ITodo {
 @Component({
   name: 'TodoDemo',
   directives: {
-    focus: (el, { value }, { context }) => {
+    focus: (el: { focus: () => void }, { value }: any, { context }: any) => {
       if (value) {
         if (context) {
           context.$nextTick(() => {

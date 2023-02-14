@@ -58,9 +58,9 @@ export default class extends Vue {
     {
       width: 160,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
-      showOverflow: true,
-      fixed: 'right'
+      showOverflow: true
     }
   ]; // 列表配置项
 
@@ -169,7 +169,7 @@ export default class extends Vue {
 
   // 新增字典
   public createData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const res: any = await updateEquipmentCategoryInfoData(this.categoryData)
         console.log('🚀 ~ this.categoryData', this.categoryData)
@@ -189,7 +189,7 @@ export default class extends Vue {
   // 修改字典
   public updateData() {
     debugger;
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const { id, pid, cName, cCode, cHospCode, note, cLevel, cFinancialCode } = this.categoryData
         const params = {

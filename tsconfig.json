@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
+    "noImplicitAny": false,
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
@@ -10,7 +11,8 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "baseUrl": ".",
+    "strictNullChecks": true,
+    "baseUrl": ".", // 解析非相对模块的基础地址，默认是当前目录
     "types": [
       "node",
       "jest",
@@ -28,6 +30,7 @@
       "scripthost"
     ]
   },
+
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
@@ -36,6 +39,6 @@
     "tests/**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules/**", "**/__tests__/*", "src/**"
   ]
 }

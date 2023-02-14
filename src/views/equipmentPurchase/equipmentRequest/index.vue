@@ -4,7 +4,7 @@
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>科室申请</span>
+        <span>{{ visitedViews.name }}</span>
       </div>
       <keep-alive>
         <VexTable ref="vexTable"

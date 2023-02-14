@@ -104,6 +104,7 @@ export default class extends Vue {
     {
       width: 250,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -134,6 +135,7 @@ export default class extends Vue {
       returnTime: moment(this.clickProcessData.returnTime).format('YYYY-MM-DD'),
       borrowTime: moment(this.clickProcessData.borrowTime).format('YYYY-MM-DD')
     }
+    // TODO: 换成store存储
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
@@ -146,7 +148,7 @@ export default class extends Vue {
         path: `/processApproval/index/${'WDSQ'}`,
         query: { nextNodeCode, id, type: '外调' }
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn(err)
       })
   }
@@ -238,7 +240,7 @@ export default class extends Vue {
         path: `/processRequest/index/${'WXSQ'}`,
         query: { type: '维修', applyUrl: 'WXSQ' }
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn(err)
       })
   }

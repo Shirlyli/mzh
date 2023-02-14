@@ -88,7 +88,13 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'billCode', title: '转科单号', width: 150 },
+    // { field: 'billCode', title: '设备编号' },
+    // { field: 'billCode', title: '设备名称' },
+    // { field: 'billCode', title: '规则型号' },
+    // { field: 'billCode', title: '所属科室' },
+    // { field: 'billCode', title: '生产厂家' },
+
+    { field: 'billCode', title: '转科单号' },
     { field: 'rollOutDepartmentName', title: '申请科室' },
     { field: 'userName', title: '申请人' },
     { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
@@ -99,6 +105,7 @@ export default class extends Vue {
     {
       width: 250,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -126,6 +133,7 @@ export default class extends Vue {
         return { ...item, ...item.equipment }
       }
     )
+    // TODO: 换成store存储
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
@@ -138,7 +146,7 @@ export default class extends Vue {
         path: `/processApproval/index/${'ZKSQ'}`,
         query: { nextNodeCode, id, type: '转科' }
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn(err)
       })
   }
@@ -209,7 +217,7 @@ export default class extends Vue {
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
       .push({ path: `/processRequest/index/${'ZKSQ'}`, query: { type: '转科', applyUrl: 'ZKSQ' } })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn(err)
       })
   }

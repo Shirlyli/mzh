@@ -8,7 +8,7 @@ export default class extends Vue {
   created() {
     const { params, query } = this.$route
     const { path } = params
-    this.$router.replace({ path: '/' + path, query }).catch(err => {
+    this.$router.replace({ path: '/' + path, query }).catch((err: any) => {
       console.warn(err)
     })
   }

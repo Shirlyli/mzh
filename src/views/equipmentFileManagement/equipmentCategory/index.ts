@@ -55,9 +55,9 @@ export default class extends Vue {
     {
       width: 160,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
-      showOverflow: true,
-      fixed: 'right'
+      showOverflow: true
     }
   ]; // 列表配置项
 
@@ -274,6 +274,7 @@ export default class extends Vue {
         equipmentCategoryId: id
       }
     }
+    // TODO: 换成store存储
     sessionStorage.setItem('EquipmentCategoryData', JSON.stringify(this.equipmentCategoryData))
     this.$router.push({ path: '/equipmentAddOrUpdate', query: { dialogStatus: this.dialogStatus, type: '新增' } })
   }

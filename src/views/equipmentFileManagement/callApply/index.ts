@@ -28,6 +28,11 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
   }
 })
 export default class extends Vue {
+  public routePath = this.$route.path;
+  private isYSQ = this.routePath.indexOf('YSQ') > -1;// 已申请
+  private isCGX = this.routePath.indexOf('CGX') > -1;// 草稿箱
+  private isDSP = this.routePath.indexOf('DSP') > -1;// 待审批
+
   async created() {
     await BusinessViewModule.GET_DEPARTMENT_DATA()
     // BasicFormList.forEach((item: any) => {
@@ -38,6 +43,20 @@ export default class extends Vue {
     //   }
     // })
   }
+
+public toobarBtns =
+this.isCGX
+  ? ['addProcess', 'import', 'delete', 'export']
+  : this.isYSQ || this.isDSP
+    ? []
+    : [];
+
+  public editColumns =
+    this.isCGX
+      ? ['search', 'del']
+      : this.isYSQ
+        ? ['search']
+        : ['approval', 'record'];
 
   public basicFormList = BasicFormList;
   /**********************************
@@ -114,6 +133,7 @@ export default class extends Vue {
     {
       width: 250,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -146,6 +166,7 @@ export default class extends Vue {
       returnTime: moment(this.clickProcessData.returnTime).format('YYYY-MM-DD'),
       borrowTime: moment(this.clickProcessData.borrowTime).format('YYYY-MM-DD')
     }
+    // TODO: 换成store存储
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
@@ -158,7 +179,7 @@ export default class extends Vue {
         path: `/processApproval/index/${'WDSQ'}`,
         query: { nextNodeCode, id, type: '外调' }
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn(err)
       })
   }
@@ -250,7 +271,7 @@ export default class extends Vue {
         path: `/processRequest/index/${'WDSQ'}`,
         query: { type: '外调', applyUrl: 'WDSQ' }
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn(err)
       })
   }

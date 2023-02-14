@@ -22,6 +22,8 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
 export default class extends Vue {
   public moment = moment;
   public lodash = _;
+  private isPSJD = this.$route.path.indexOf('PSJD') > -1
+  // TODO:换成从store获取
   public processData = JSON.parse(
     sessionStorage.getItem('ClickProcessData') ?? '0'
   ); // 流程数据
@@ -158,7 +160,7 @@ export default class extends Vue {
     const params = this.requestParams
     console.log('🚀 ~ params', params)
     if (this.type === 'submit') {
-      (this.$refs.equipmentProcessData as Form).validate(async valid => {
+      (this.$refs.equipmentProcessData as any).validate(async(valid: any) => {
         if (valid) {
           const sendParams = []
           const billApproveList = [{
@@ -189,14 +191,14 @@ export default class extends Vue {
               path: `/processApproval/index/${applyUrl}`
             })
           }
-          (this.$refs.equipmentProcessData as Form).resetFields()
+          (this.$refs.equipmentProcessData as any).resetFields()
           Message.success('审批成功')
         } else {
           return false
         }
       })
     } else if (this.type === 'end') {
-      (this.$refs.equipmentProcessData as Form).validate(async valid => {
+      (this.$refs.equipmentProcessData as any).validate(async(valid: any) => {
         if (valid) {
           const sendParams = []
           const billApproveList = [{
@@ -227,14 +229,14 @@ export default class extends Vue {
             })
           }
 
-          (this.$refs.equipmentProcessData as Form).resetFields()
+          (this.$refs.equipmentProcessData as any).resetFields()
           Message.success('终止成功')
         } else {
           return false
         }
       })
     } else if (this.type === 'back') {
-      (this.$refs.equipmentProcessData as Form).validate(async valid => {
+      (this.$refs.equipmentProcessData as any).validate(async(valid: any) => {
         console.log('🚀 ~ valid', valid, this.equipmentProcessData)
         if (valid) {
           const billApproveList = [{
@@ -265,7 +267,7 @@ export default class extends Vue {
               path: `/processApproval/index/${applyUrl}`
             })
           }
-          (this.$refs.equipmentProcessData as Form).resetFields()
+          (this.$refs.equipmentProcessData as any).resetFields()
           Message.success('退回成功')
         } else {
           return false
@@ -287,7 +289,7 @@ export default class extends Vue {
   private toLastView(visitedViews: ITagView[], view: ITagView) {
     const latestView = visitedViews.slice(-1)[0]
     if (latestView !== undefined && latestView.fullPath !== undefined) {
-      this.$router.push(latestView.fullPath).catch(err => {
+      this.$router.push(latestView.fullPath).catch((err: any) => {
         console.warn(err)
       })
     } else {
@@ -296,11 +298,11 @@ export default class extends Vue {
         // to reload home page
         this.$router
           .replace({ path: '/redirect' + view.fullPath })
-          .catch(err => {
+          .catch((err: any) => {
             console.warn(err)
           })
       } else {
-        this.$router.push((UserModule.menu as any)[0]?.path).catch(err => {
+        this.$router.push((UserModule.menu as any)[0]?.path).catch((err: any) => {
           console.warn(err)
         })
       }

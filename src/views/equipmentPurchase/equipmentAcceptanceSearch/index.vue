@@ -10,7 +10,7 @@
         <VexTable ref="vexTable"
                   :formConfig="formConfig"
                   :columns="columns"
-                  editColumns="[]"
+                  editColumns="['search']"
                   hasNotSlotButton="add"
                   :toolbarBtns="[]"
                   @emit-handle-search="handleSearch"

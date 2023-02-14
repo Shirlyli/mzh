@@ -1,12 +1,9 @@
 import { Component, Vue } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
-import { BusinessViewModule } from '@/store/modules/business'
-import { Form, Message } from 'element-ui'
-import { UserModule } from '@/store/modules/user'
-import moment from 'moment'
-import { ALL_OPTIONS, equipmentCategoryData } from '@/shared/options'
-import { getBillInfoByApprove } from '@/api/basic'
-import { updateEquipmentInfoData } from '@/api/equipment'
+import { BusinessViewModule } from '../../../store/modules/business'
+import { Message } from 'element-ui'
+import { equipmentCategoryData } from '../../../shared/options'
+import { savePurchaseCheck } from '@/api/basic'
 @Component({
   name: 'InlineEditTable',
   components: {
@@ -16,19 +13,35 @@ import { updateEquipmentInfoData } from '@/api/equipment'
 export default class extends Vue {
   public routePath = this.$route.path;
 
-  async created() {
-    await BusinessViewModule.GET_DEPARTMENT_DATA()
-  }
-
+  /**********************************
+   * 入库弹框form表单渲染
+   *********************************/
   public equipmentStores = [
-    // { title: '出入库操作人', key: 'bounder', required: true, type: 'input' },
-    { title: '出入库数量', key: 'boundNums', type: 'input' },
-    { title: '出入库时间', key: 'boundTime', type: 'date' },
-    // { title: '出入库类型', key: 'boundType', type: 'input' },
-    { title: '仓库', key: 'departmentId', type: 'input' },
-    { title: '设备', key: 'equipmentId', type: 'input' }
-    // { title: '备注', key: 'note', type: 'textarea' },
-    // { title: '领用人', key: 'receivePerson', type: 'input' }
+    { title: '设备唯一编码', key: 'idCode', type: 'input', required: true },
+    {
+      title: '领用人',
+      key: 'receivePerson',
+      type: 'select',
+      options: BusinessViewModule.employeeData,
+      required: true
+    },
+    {
+      title: '入库操作人',
+      key: 'bounder',
+      type: 'select',
+      options: BusinessViewModule.employeeData,
+      required: true
+    },
+    { title: '入库数量', key: 'boundNums', type: 'input' },
+    { title: '入库时间', key: 'boundTime', type: 'date' },
+    {
+      title: '仓库',
+      key: 'departmentId',
+      type: 'select',
+      options: BusinessViewModule.departmentData,
+      required: true
+    },
+    { title: '备注', key: 'note', type: 'textarea' }
   ];
 
   /**********************************
@@ -36,20 +49,24 @@ export default class extends Vue {
    *********************************/
   // 列表查询项-表单
   public formConfig = {
-    data: {
-      approveStatus: '',
-      rollOutDepartment: '',
-      createTime: ''
-    },
+    data: {},
     items: [
       {
         field: 'rollOutDepartment',
-        title: '申请科室',
+        title: '入库单号',
         itemRender: {
           name: '$input',
-          props: { placeholder: '请输入申请科室' }
+          props: { placeholder: '请输入' }
         },
-        slots: { default: 'departmentSelect' },
+        span: 5
+      },
+      {
+        field: 'rollOutDepartment',
+        title: '供应商',
+        itemRender: {
+          name: '$input',
+          props: { placeholder: '请输入' }
+        },
         span: 5
       },
       {
@@ -66,34 +83,32 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'equName', title: '设备名称', width: 150 },
-    { field: 'projectName', title: '厂家名称' },
-    { field: 'purchaseType', title: '型号' },
-    {
-      field: 'checkDate',
-      title: ' 验收时间 ',
-      formatter: (data: any) =>
-        moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss')
-    },
+    { field: 'name', title: '设备名称', width: 150 },
+    { field: 'id', title: '入库单号', width: 150 },
+    { field: 'marking', title: '供应商', width: 150 },
+    { field: 'num', title: '入库数量', width: 150 },
+    { field: 'note', title: '备注', width: 150 },
+    { field: 'purchaseType', title: '状态', width: 150 },
     {
       width: 100,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
   ];
 
-  /**
+  /**********************************
    * 列表传参
    * 已验收查看--查询已验收数据
-   */
+   *********************************/
   public paramsConfig: any = {
-    url: '/purchaseCheck/queryPurchaseCheckList', // 待验收--查询已归档数据
+    url: '/equipmentTemp/getEquipmentInfo', // 待验收--查询已归档数据
     params: {
       page: '1',
       limit: '10',
       entity: {
-        checkState: '已验收'
+        operationStatus: 'CHECK'
       }
     }
   };
@@ -101,73 +116,50 @@ export default class extends Vue {
   // 申请接口传惨params
   public requestParams = equipmentCategoryData;
 
-  /**
+  /**********************************
    * 点击入库
    * @param row
-   */
+   *********************************/
   public dialogStatus = false; // 入库弹框显隐
   public async handleWarehousing(row: any) {
-    console.log('🚀 ~ row', row)
-    // 根据bussinessId获取单据数据
-    const params = {
-      page: '1',
-      limit: '10',
-      entity: {
-        businessId: row.bussinessId,
-        processCode: 'pro_kssq'
-      }
-    }
-    // const equipmentRes = await getBillInfoByApprove(params)
+    this.rowData = row
     this.dialogStatus = true
   }
 
-  // 提交入库
+  /*********************************
+   * 提交入库
+   ********************************/
+  public rowData: any = {};
   public submitInWarehousing() {
-    (this.$refs.requestParams as Form).validate(async valid => {
+    console.log(this.requestParams.equipmentStores);
+    (this.$refs.requestParams as any).validate(async(valid: any) => {
       if (valid) {
-        console.log('this.requestParams', this.requestParams)
-        const {
-          equipmentDepreciations,
-          equipmentInspection,
-          equipmentMaintain,
-          equipmentPurchases,
-          equipmentResources,
-          equipmentStocks,
-          equipmentStores,
-          equipmentVO,
-          id,
-          state
-        } = this.requestParams
+        const { equipmentStores, equipmentVO, state } = this.requestParams
         const paramsConfig = {
-          equipmentDepreciations: Object.values(equipmentDepreciations).length
-            ? [equipmentDepreciations]
-            : [],
-          equipmentInspection: Object.values(equipmentInspection).length
-            ? [equipmentInspection]
-            : [],
-          equipmentMaintain: Object.values(equipmentMaintain).length
-            ? [equipmentMaintain]
-            : [],
-          equipmentPurchases: Object.values(equipmentPurchases).length
-            ? [equipmentPurchases]
-            : [],
-          equipmentResources: Object.values(equipmentResources).length
-            ? [equipmentResources]
-            : [],
-          equipmentStocks: Object.values(equipmentStocks).length
-            ? [equipmentStocks]
-            : [],
           equipmentStores: Object.values(equipmentStores).length
-            ? [{ ...equipmentStores, boundType: '入库' }]
+            ? [
+                {
+                  ...equipmentStores,
+                  boundType: 'IN_STORE',
+                  destinationId: equipmentStores.departmentId,
+                  equipmentId: this.rowData.name,
+                  equipmentName: this.rowData.name
+                }
+              ]
             : [],
-          equipmentVO,
-          id,
+          equipmentVO: {
+            ...equipmentVO,
+            ...this.rowData.equipmentVO,
+            operationStatus: 'IN_STORE',
+            idCode: equipmentStores.idCode,
+            billId: this.rowData.billCode
+          },
+          id: this.rowData.id,
           state
         }
-        const params = []
+        const params: any = []
         params.push(paramsConfig)
-        console.log('🚀 ~ params', params)
-        const res: any = await updateEquipmentInfoData(params)
+        const res: any = await savePurchaseCheck(params)
         if (res.code === 200) {
           Message.success('入库成功')
           this.dialogStatus = false

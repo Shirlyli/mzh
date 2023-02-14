@@ -109,9 +109,12 @@
         <!-- 设备明细 -->
         <div class="dividerBox">
           <el-divider direction="vertical"></el-divider>
-          <span>设备明细 <el-button @click="addNewEquipment"
+          <span>
+            设备明细
+            <el-button @click="addNewEquipment"
                        size="mini"
-                       class="addBtn">+ 新增设备</el-button></span>
+                       class="addBtn">+ 新增设备</el-button>
+          </span>
 
         </div>
         <el-row :gutter="24"
@@ -195,6 +198,60 @@
             </el-form-item>
           </el-col>
         </el-row> -->
+
+        <!--  -->
+        <div class="dividerBox">
+          <el-divider direction="vertical"></el-divider>
+          <span>
+            附件信息
+            <el-button @click="addNewFile"
+                       size="mini"
+                       class="addBtn">+ 新增附件</el-button>
+          </span>
+        </div>
+        <el-row :gutter="24"
+                v-for="(item,index) in watchRequestForm.dicAttachmentsList"
+                :key="index">
+          <el-col :span="24">
+            <el-row :gutter="24"
+                    class="singleRow">
+              <el-col :span="7"
+                      v-for="(equi) in item"
+                      :key="equi.field">
+                <el-form-item :label="equi.title"
+                              label-width="120px"
+                              :prop="'dicAttachmentsList['+index+']['+equi.field+']'"
+                              :rules="equi.required ?[{required: true,message: '不能为空',trigger: 'change'}]:[{required: false}]">
+                  <el-input v-model="requestParams.dicAttachmentsList[index][equi.field]"
+                            :placeholder="`请输入${equi.title}`"
+                            v-if="equi.type === 'input'" />
+                  <el-select v-model="requestParams.dicAttachmentsList[index][equi.field]"
+                             v-if="equi.type === 'select'"
+                             placeholder="请选择">
+                    <el-option :label="optionValue.label"
+                               :value="optionValue.value"
+                               v-for="optionValue in equi.data"
+                               :key="optionValue.value"></el-option>
+                  </el-select>
+                  <el-date-picker v-model="requestParams.dicAttachmentsList[index][equi.field]"
+                                  v-if="equi.type === 'date'"
+                                  type="date"
+                                  placeholder="选择日期"
+                                  value-format="yyyy-MM-dd">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="2">
+                <el-button class="delete-btn"
+                           size="large"
+                           icon="el-icon-delete"
+                           type="danger"
+                           plain
+                           @click="removeKey(item,index)">删除</el-button>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
 
         <!-- 归还信息  -->
         <div v-show="watchRequestForm.borrowReturnList">

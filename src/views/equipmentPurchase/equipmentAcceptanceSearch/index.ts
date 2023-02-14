@@ -14,7 +14,6 @@ import { ALL_OPTIONS } from '@/shared/options'
   name: 'InlineEditTable',
   components: {
     VexTable
-
   }
 })
 export default class extends Vue {
@@ -74,22 +73,31 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'id', title: '验收单号', width: 150 },
+    { field: 'id', title: '设备编号', width: 150 },
     { field: 'equName', title: '设备名称' },
-    { field: 'checkPerson', title: '验收申请人' },
+    { field: 'equName', title: '规则型号' },
+    { field: 'equName', title: '设备状态' },
+    { field: 'equName', title: '所属科室' },
+    { field: 'equName', title: '原值' },
+    { field: 'equName', title: '所属分类' },
+    { field: 'equName', title: '生产厂家' },
+    { field: 'equName', title: '供应商' },
+    { field: 'equName', title: '出厂编号' },
+    { field: 'equName', title: '注册证号' },
     {
       field: 'checkDate',
       title: '验收日期',
       formatter: (data: any) =>
         moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss')
     },
-    { field: 'checkState', title: ' 验收状态 ' }
-    // {
-    //   width: 100,
-    //   title: '操作',
-    //   slots: { default: 'operateHasSearch' },
-    //   showOverflow: true
-    // }
+    { field: 'checkState', title: ' 验收状态 ' },
+    {
+      width: 100,
+      title: '操作',
+      fixed: 'right',
+      slots: { default: 'operateHasSearch' },
+      showOverflow: true
+    }
   ];
 
   /**

@@ -27,6 +27,7 @@ export default class extends Vue {
     {
       width: 160,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -82,7 +83,7 @@ export default class extends Vue {
   public handleInsert() {
     this.dialogVisible = true
     const { title, id } = this.nodeClickData
-    // (this.$refs.dataForm as Form).setFiledsValue
+    // (this.$refs.dataForm as any).setFiledsValue
     this.commonData = {
       id: '',
       pid: id ?? '001',
@@ -115,7 +116,7 @@ export default class extends Vue {
 
   // 新增字典
   public createData() {
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const { pid, dicName, pName, xpath } = this.commonData
         const params = {
@@ -149,7 +150,7 @@ export default class extends Vue {
   // 修改字典
   public updateData() {
     debugger;
-    (this.$refs.dataForm as Form).validate(async valid => {
+    (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const { id, pid, dicName, pName, xpath, dicType, dicCode, flag, dispindex } = this.commonData
         const params = {
@@ -198,7 +199,7 @@ export default class extends Vue {
     this.dialogStatus = 'update'
     this.dialogVisible = true
     this.$nextTick(() => {
-      (this.$refs.dataForm as Form).clearValidate()
+      (this.$refs.dataForm as any).clearValidate()
     })
   }
 

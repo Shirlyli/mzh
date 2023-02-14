@@ -109,6 +109,7 @@ export default class extends Vue {
     {
       width: 250,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -144,6 +145,7 @@ export default class extends Vue {
       }
     )
     this.clickProcessData.billMain.createTime = moment(this.clickProcessData.billMain.createTime).format('YYYY-MM-DD')
+    // TODO: 换成store存储
     sessionStorage.setItem(
       'ClickProcessData',
       JSON.stringify(this.clickProcessData)
@@ -156,7 +158,7 @@ export default class extends Vue {
         path: `/processApproval/index/${'PDSQ'}`,
         query: { nextNodeCode, id, type: '盘点' }
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn(err)
       })
   }
@@ -229,7 +231,7 @@ export default class extends Vue {
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
       .push({ path: `/processRequest/index/${'PDSQ'}`, query: { type: '盘点', applyUrl: 'PDSQ' } })
-      .catch(err => {
+      .catch((err: any) => {
         console.warn(err)
       })
   }

@@ -88,9 +88,9 @@ export default class extends Vue {
     {
       width: 160,
       title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
-      showOverflow: true,
-      fixed: 'right'
+      showOverflow: true
     }
   ];
 
@@ -297,7 +297,7 @@ export default class extends Vue {
 
   // 新增员工
   public createData() {
-    (this.$refs.empolyeeForm as Form).validate(async valid => {
+    (this.$refs.empolyeeForm as any).validate(async(valid: any) => {
       if (valid) {
         const params = this.employeeData
         const res: any = await updatePersonalData(params)
@@ -316,7 +316,7 @@ export default class extends Vue {
 
   // 修改员工信息
   public updateData() {
-    (this.$refs.empolyeeForm as Form).validate(async valid => {
+    (this.$refs.empolyeeForm as any).validate(async(valid: any) => {
       if (valid) {
         const params = this.employeeData
         const res: any = await updatePersonalData(params)

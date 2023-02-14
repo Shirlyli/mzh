@@ -59,6 +59,7 @@ export const BasicFormList = [
 ]
 
 export const EquipmentDetailFormList = [
+  // TODO:
   [
     {
       field: 'equipmentId',

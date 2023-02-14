@@ -195,7 +195,9 @@ export default class extends Vue {
         const { userName, userPwd } = this.loginForm
         await UserModule.Login({ userPwd: encode(userPwd), userName })
         await UserModule.GetMenu()
-        await BusinessViewModule.GET_DEPARTMENT_DATA()
+        await BusinessViewModule.GET_DEPARTMENT_DATA()// 获取科室数据
+        await BusinessViewModule.GET_EMPLOYEE_DATA()// 获取员工信息
+
         this.$router
           .push({
             path: (UserModule.menu as any)[0]?.path,
