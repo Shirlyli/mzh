@@ -149,10 +149,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item :label="'科室'"
-                          prop="deptName"
+                          prop="deptId"
                           :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
-              <el-input v-model="employeeData.deptName"
-                        placeholder="请输入"></el-input>
+              <treeselect :options="departmentData"
+                          v-model="employeeData.deptId"
+                          clearable
+                          :disable-branch-nodes="true"
+                          search-nested
+                          placeholder="请选择" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -360,9 +364,9 @@
             {{ $t('table.cancel') }}
           </el-button>
           <el-button type="primary"
-                   @click="submitCancelRoleData">
-          {{ '确定'}}
-        </el-button>
+                     @click="submitCancelRoleData">
+            {{ '确定'}}
+          </el-button>
         </div>
       </el-dialog>
       <div class="roleBox">

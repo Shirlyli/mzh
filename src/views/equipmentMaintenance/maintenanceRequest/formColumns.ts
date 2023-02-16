@@ -1,49 +1,121 @@
 import { ALL_OPTIONS } from '@/shared/options'
 import { BusinessViewModule } from '@/store/modules/business'
-import { UserModule } from '@/store/modules/user'
-export const BasicFormList = [
-  {
-    field: 'userName',
-    title: '申请人',
-    span: 12,
-    type: 'input',
-    data: UserModule.userData,
-    required: true
-  },
-  {
-    field: 'createTime',
-    title: '申请日期',
-    span: 12,
-    type: 'date',
-    required: true
-  },
+import moment from 'moment'
+import { handleDepartData } from '../../../shared/utils'
+export const requestInfoFormList = [
   {
     field: 'departmentId',
-    title: '申请人科室',
+    title: '报修科室',
     span: 12,
     type: 'treeSelect',
-    slot: 'department',
+    data: handleDepartData(BusinessViewModule.departmentData),
+    required: true
+  },
+  {
+    field: 'equipmentName',
+    title: '设备名称',
+    span: 12,
+    type: 'input',
     required: true,
-    data: BusinessViewModule.departmentData
+    disabled: true
+  },
+  {
+    field: 'equipmentCode',
+    title: '设备编号',
+    span: 12,
+    type: 'input',
+    disabled: true
   },
   {
     field: 'faultProblem',
-    title: '维修原因',
-    span: 12,
-    type: 'input',
-    required: true
-  },
-  {
-    field: 'problemDesc',
-    title: '问题描述',
+    title: '设备型号',
     span: 12,
     type: 'input'
   },
   {
-    field: 'urgency',
-    title: '紧急程度',
+    field: 'problemDesc',
+    title: '资产序列号',
     span: 12,
     type: 'input',
+    disabled: true
+  },
+  {
+    field: 'a',
+    title: '保修截止期',
+    span: 12,
+    type: 'date',
+    disabled: true
+  },
+  {
+    field: 'b',
+    title: '报修人',
+    span: 12,
+    type: 'select',
+    disabled: true,
+    data: BusinessViewModule.employeeData.map((item:any) => {
+      return {
+        label: item.eName,
+        value: item.userId
+      }
+    })
+  },
+  {
+    field: 'c',
+    title: '报修人电话',
+    span: 12,
+    type: 'input'
+  },
+  {
+    field: 'd',
+    title: '报修时间',
+    span: 12,
+    type: 'date',
+    disabled: true
+  },
+  {
+    field: 'e',
+    title: '故障原因',
+    span: 12,
+    type: 'select',
+    data: [
+      { label: '人为', value: 1 }
+    ]
+  },
+  {
+    field: 'f',
+    title: '设备类型',
+    span: 12,
+    type: 'treeSelect',
+    data: handleDepartData(BusinessViewModule.equipmentCategoryData)
+  },
+  {
+    field: 'g',
+    title: '紧急程度',
+    span: 12,
+    type: 'select',
+    data: [
+      { label: '一般', value: 1 },
+      { label: '加急', value: 2 },
+      { label: '特急', value: 2 }
+    ]
+  },
+  {
+    field: 'h',
+    title: '抄送人',
+    span: 12,
+    type: 'select',
+    data: BusinessViewModule.employeeData.map((item:any) => {
+      return {
+        label: item.eName,
+        value: item.userId
+      }
+    })
+  },
+  {
+    field: 'i',
+    title: '故障描述',
+    span: 12,
+    type: 'textarea',
     required: true
   }
 ]
@@ -130,149 +202,3 @@ export const ApprovalFormlist = [
     ]
   }
 ]
-
-export interface approvalList {
-  /**
-   * 审批意见
-   */
-  approveOpinion: string
-  /**
-   * 审批状态
-   */
-  approveStatus: string
-  /**
-   * 审批层级
-   */
-  approveTier: string
-  /**
-   * 审批时间
-   */
-  approveTime: string
-  /**
-   * 审批人
-   */
-  approveUser: string
-  /**
-   * 主表id
-   */
-  chrckId: string
-  id: string
-}
-
-export interface transferEquipment {
-  /**
-   * 单据主表id
-   */
-  billId: string
-  /**
-   * 设备id
-   */
-  equipmentId: string
-  id: string
-}
-
-export interface BillMain {
-  /**
-   * 单据编号
-   */
-  billCode: string
-  /**
-   * 转科原因
-   */
-  cause: string
-  /**
-   * 创建时间
-   */
-  createTime: string
-  /**
-   * 设备所在地
-   */
-  equipmentLocation: string
-  /**
-   * id
-   */
-  id: string
-  /**
-   * 转入科室，科室id
-   */
-  rollInDepartment: string
-  /**
-   * 转出科室，科室id
-   */
-  rollOutDepartment: string
-  /**
-   * 计划转出时间
-   */
-  rollOutTime: string
-  /**
-   * 单据状态，1：未提交；2：审批中；3：审批结束；4：删除
-   */
-  status: string
-  /**
-   * 申请人，人员id
-   */
-  userId: string
-}
-
-export interface ReturnInfo {
-  /**
-   * 借用主表id
-   */
-  billId: string
-  /**
-   * 借用时长
-   */
-  borrowDuration: string
-  /**
-   * 借用单价
-   */
-  borrowUnivalence: string
-  id: string
-  /**
-   * 归还说明
-   */
-  returnExplain: string
-  /**
-   * 设备归还状态，1：完好，2：异常
-   */
-  returnStatus: string
-  /**
-   * 实际归还时间
-   */
-  returnTime: string
-  /**
-   * 合计费用
-   */
-  totalPrice: string
-  /**
-   * 经手人
-   */
-  userId: string
-}
-export interface TransferModal {
-  /**
-   * 审批流程，list
-   */
-  billApproveList?: approvalList[]
-  /**
-   * 单据编号
-   */
-  billCode: string
-  /**
-   * 转科设备，list
-   */
-  billEquipmentList?: transferEquipment[]
-  /**
-     * 归还信息
-     */
-  borrowReturnList: ReturnInfo[]
-  billMain: BillMain
-  /**
-   * id
-   */
-  id: string
-  /**
-   * 单据状态，1：未提交；2：审批中；3：审批结束
-   */
-  status?: string
-}

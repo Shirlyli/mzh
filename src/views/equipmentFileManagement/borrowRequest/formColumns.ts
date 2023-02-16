@@ -1,6 +1,7 @@
 import { ALL_OPTIONS } from '@/shared/options'
 import { BusinessViewModule } from '@/store/modules/business'
 import { UserModule } from '@/store/modules/user'
+import { handleDepartData } from '@/shared/utils'
 export const BasicFormList = [
   {
     field: 'userName',
@@ -24,7 +25,7 @@ export const BasicFormList = [
     type: 'treeSelect',
     slot: 'department',
     required: true,
-    data: BusinessViewModule.departmentData
+    data: handleDepartData(BusinessViewModule.departmentData)
   },
   {
     field: 'borrowDepartmentId',
@@ -32,7 +33,7 @@ export const BasicFormList = [
     span: 12,
     type: 'treeSelect',
     slot: 'department',
-    data: BusinessViewModule.departmentData,
+    data: handleDepartData(BusinessViewModule.departmentData),
     required: true
   },
   {

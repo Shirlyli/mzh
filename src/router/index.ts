@@ -112,6 +112,27 @@ export const constantRoutes: RouteConfig[] = [
       }
     ]
   },
+  {
+    path: '/maintenanceRequest',
+    meta: { hidden: true },
+    component: Layout,
+    redirect: '/maintenanceRequest/index',
+    children: [
+      {
+        path: 'index/:url',
+        component: () =>
+          import(
+            /* webpackChunkName: "401" */ '@/views/equipmentMaintenance/maintenanceRequest/maintenanceRequest/index.vue'
+          ),
+        name: 'maintenanceRequest',
+        meta: {
+          title: '流程申请',
+          icon: 'user',
+          noCache: false
+        }
+      }
+    ]
+  },
   // 流程审批
   {
     path: '/equipmentAddOrUpdate',

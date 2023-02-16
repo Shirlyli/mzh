@@ -110,10 +110,11 @@ export const ALL_OPTIONS = {
   // 主流程状态
   MAIN_STATUS: [
     { label: '申请', value: 1 },
-    { label: '派工', value: 2 },
-    { label: '维修中', value: 3 },
-    { label: '待验收', value: 4 },
-    { label: '已验收', value: 5 }
+    { label: '审核', value: 2 },
+    { label: '派工', value: 3 },
+    { label: '维修中', value: 4 },
+    { label: '待验收', value: 5 },
+    { label: '归档', value: 6 }
   ],
   // 子流程状态
   CHILD_STATUS: [

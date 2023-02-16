@@ -16,6 +16,7 @@ import {
 import moment from 'moment'
 import { ALL_OPTIONS, equipmentCategoryData } from '../../../shared/options'
 import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
+import { handleDepartData } from '../../../shared/utils'
 
 @Component({
   name: 'InlineEditTable',
@@ -97,8 +98,8 @@ export default class extends Vue {
     { title: '出库操作人', key: 'bounder', type: 'select', options: BusinessViewModule.employeeData, required: true },
     { title: '出库数量', key: 'boundNums', type: 'input' },
     { title: '出库时间', key: 'boundTime', type: 'date' },
-    { title: '目的地', key: 'destinationId', type: 'select', options: BusinessViewModule.departmentData, required: true },
-    { title: '仓库', key: 'departmentId', type: 'select', options: BusinessViewModule.departmentData, required: true },
+    { title: '目的地', key: 'destinationId', type: 'treeSelect', options: handleDepartData(BusinessViewModule.departmentData), required: true },
+    { title: '仓库', key: 'departmentId', type: 'treeSelect', options: handleDepartData(BusinessViewModule.departmentData), required: true },
     { title: '备注', key: 'note', type: 'textarea' }
   ];
 

@@ -5,8 +5,9 @@ import {
   Action,
   getModule
 } from 'vuex-module-decorators'
-import store from '@/store'
+import store from '../index'
 import { getEquipmentData, getUserDataByDeptId, queryDepartmentInfoTree } from '@/api/basic'
+import { queryEquipmentCategoryInfo } from '@/api/equipment'
 export interface BusinessState {
   departmentData: any
   equipmentData: any
@@ -16,11 +17,12 @@ export interface BusinessState {
 class BusinessView extends VuexModule implements BusinessState {
   public departmentData: any = []; // 科室数据
   public equipmentData: any = []; // 设备数据
+  public employeeData = [];// 员工数据
+  public equipmentCategoryData = [];// 设备类别
   public processClickProcessData: any = {}; // 各个流程的点击数据
   public processRequestForm: any = {}; // 各个流程的流程form表单渲染数据
   public processRequestParams: any = {}; // 各个流程的params数据
   public processEquipmentCategoryData: any = {};// 新增设备的params数据
-  public employeeData = [];// 员工数据
   @Mutation
   private SET_DEPARTMENT_DATA(view: any) {
     this.departmentData = view
@@ -49,6 +51,11 @@ class BusinessView extends VuexModule implements BusinessState {
   @Mutation
   private SET_PROCESS_EQUIPMENT_CATEGORY_DATA(views:any) {
     this.processEquipmentCategoryData[views.type] = views.data
+  }
+
+  @Mutation
+  private SET_EQUIPMENT_CATEGORY_DATA(views:any) {
+    this.equipmentCategoryData = views
   }
 
   @Mutation
@@ -115,6 +122,20 @@ class BusinessView extends VuexModule implements BusinessState {
       return { ...dept, label: dept.eName, value: dept.id }
     })
     resUserData.code === 200 ? this.SET_EMPLOYEE_DATA(newRes) : this.SET_EMPLOYEE_DATA([])
+  }
+
+  @Action
+  public async GET_EQUIPMENT_CATEGORY_DATA() {
+    const resData: any = await queryEquipmentCategoryInfo({
+      page: '1',
+      limit: '10',
+      entity: { id: '' }
+    })
+    const newRes = resData.data?.[0]?.children.map((item: any) => {
+      return { ...item, label: item.title, value: item.id }
+    })
+    console.log('🚀 ~ newRes', newRes)
+    resData.code === 200 ? this.SET_EQUIPMENT_CATEGORY_DATA(newRes) : this.SET_EQUIPMENT_CATEGORY_DATA([])
   }
 }
 

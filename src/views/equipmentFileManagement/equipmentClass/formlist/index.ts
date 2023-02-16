@@ -1,5 +1,6 @@
 import { ALL_OPTIONS } from '@/shared/options'
 import { BusinessViewModule } from '@/store/modules/business'
+import { handleDepartData } from '../../../../shared/utils'
 /**
  * 设备基础信息
  */
@@ -8,7 +9,7 @@ export const equipmentVO = [
     label: '科室',
     key: 'departmentId',
     type: 'treeSelect',
-    options: BusinessViewModule.departmentData,
+    options: handleDepartData(BusinessViewModule.departmentData),
     required: true
   },
   {

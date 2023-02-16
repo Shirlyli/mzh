@@ -59,28 +59,6 @@
                                   :rules="formItem.required ?[{required: true,message: '不能为空',trigger: 'change'}]:[{required: false}]"
                                   :label-width="item.key === 'equipmentMaintain'||item.key==='equipmentResources'?'150px':'120px'">
                       <!-- 树形下拉框 -->
-                      <!-- <el-select v-model="equipmentCategoryData[item.key][formItem.key]"
-                                 placeholder="请选择"
-                                 v-if="formItem.type === 'treeSelect'">
-                        <el-tree node-key="id"
-                                 :data="formItem.options"
-                                 :props="{
-                                  children: 'children',
-                                  label: 'title'
-                                 }"
-                                 class="add_tree"
-                                 default-expand-all="true"
-                                 :expand-on-click-node="false"
-                                 :check-on-click-node="true">
-                          <span class="custom-tree-node"
-                                slot-scope="{node, data}">
-                            <el-option style="padding: 0"
-                                       :label="data.title"
-                                       :value="data.id"></el-option>
-                          </span>
-                        </el-tree>
-                      </el-select> -->
-
                       <treeselect :options="formItem.options"
                           v-model="equipmentCategoryData[item.key][formItem.key]"
                           clearable

@@ -2,8 +2,12 @@ declare module '*.vue' {
   import Vue from 'vue'
   export default Vue
 }
-
+declare module '@'
 declare module '@/'
+declare module '@/api/*'
+declare module '@/utils/*'
+declare module '@/store/*'
+declare module '@/shared/*'
 declare module 'element-ui/*'
 declare module 'element-ui/lib/locale/lang/*' {
   export const elementLocale: any

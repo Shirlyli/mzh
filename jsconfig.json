@@ -12,21 +12,16 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "strictNullChecks": true,
-    "forceConsistentCasingInFileNames":true,
-    "baseUrl": "./", // 解析非相对模块的基础地址，默认是当前目录
+    "baseUrl": ".", // 解析非相对模块的基础地址，默认是当前目录
     "types": [
       "node",
       "jest",
       "webpack-env"
     ],
     "paths": {
-      "@/*": ["*",
+      "@/*": [
         "src/*"
-      ],
-      "~/*": ["./*"],
-      "@/api": ["src/api"],
-      "@/store/*": ["src/store/*"],
-      "@/components": ["src/components"],
+      ]
     },
     "lib": [
       "esnext",
@@ -45,5 +40,5 @@
   ],
   "exclude": [
     "node_modules/**", "**/__tests__/*", "src/**"
-  ],
+  ]
 }

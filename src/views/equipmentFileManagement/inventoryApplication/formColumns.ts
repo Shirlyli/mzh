@@ -1,6 +1,7 @@
 import { ALL_OPTIONS } from '@/shared/options'
 import { BusinessViewModule } from '@/store/modules/business'
 import { UserModule } from '@/store/modules/user'
+import { handleDepartData } from '../../../shared/utils'
 // eslint-disable-next-line camelcase
 export const BasicFormList = [
   {
@@ -30,7 +31,7 @@ export const BasicFormList = [
     span: 12,
     type: 'treeSelect',
     required: true,
-    data: BusinessViewModule.departmentData,
+    data: handleDepartData(BusinessViewModule.departmentData),
     slot: 'department'
   },
   {

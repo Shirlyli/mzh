@@ -34,7 +34,7 @@ class User extends VuexModule implements IUserState {
   public email = '';
   public loginForm = {};
   public menu = [];
-  public userData = {};
+  public userData :any= {};
   @Mutation
   private SET_TOKEN(token: string) {
     this.token = token

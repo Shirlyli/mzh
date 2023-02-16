@@ -3,6 +3,7 @@ import MainSubLayout from '@/components/CollpaseFlex/index.vue'
 import Tree from '@/components/Tree/index.vue'
 import VexTable from '@/components/VexTable/index.vue'
 import { Form, Message } from 'element-ui'
+import { BusinessViewModule } from '@/store/modules/business'
 import _ from 'lodash'
 import {
   bindPersonalInfo,
@@ -19,17 +20,21 @@ import Content from './content.vue'
 import { VXETable } from 'vxe-table'
 import { ALL_OPTIONS } from '@/shared/options'
 import moment from 'moment'
+import Treeselect from '@riophae/vue-treeselect'
+import { handleDepartData } from '../../../shared/utils'
 @Component({
   name: 'Tab',
   components: {
     MainSubLayout,
     Tree,
     VexTable,
-    Content
+    Content,
+    Treeselect
   }
 })
 export default class extends Vue {
   public innerVisible = false
+  public departmentData = handleDepartData(BusinessViewModule.departmentData)
   public formConfig = {
     data: {
       eName: '',
@@ -319,6 +324,7 @@ export default class extends Vue {
     (this.$refs.empolyeeForm as any).validate(async(valid: any) => {
       if (valid) {
         const params = this.employeeData
+        console.log('🚀 ~ this.employeeData', this.employeeData)
         const res: any = await updatePersonalData(params)
         if (res.result) {
           (this.$refs.vexTable as any).findList(this.paramsConfig);

@@ -4,26 +4,21 @@
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>维修申请</span>
+           <span>{{ visitedViews.name }}</span>
       </div>
       <keep-alive>
         <VexTable ref="vexTable"
                   :formConfig="formConfig"
                   :columns="columns"
-                  editColumns="['search','del','record']"
+                  :editColumns="editColumns"
                   hasNotSlotButton="add"
-                  :toolbarBtns="['add', 'import', 'delete', 'export']"
+                  :toolbarBtns="toolbarBtns"
                   @emit-handle-insert="handleInsert"
                   @emit-handle-search="handleSearch"
                   @emit-handle-remove="handleRemove"
-                  @emit-handle-record="handleRecord"
                   :paramsConfig="paramsConfig" />
       </keep-alive>
     </el-card>
-
-    <!-- 操作记录 -->
-    <ProcessOperationRecord :processRecordDialogVisible="processRecordDialogVisible"
-                            :processRecordListData="processRecordListData" />
   </div>
 
 </template>
