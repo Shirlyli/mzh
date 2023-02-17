@@ -10,7 +10,7 @@ import { Form, Message } from 'element-ui'
 import _ from 'lodash'
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import moment from 'moment'
-import { APPLY_URL } from '@/shared/options'
+import { APPLY_URL } from '../../shared/options'
 import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
 
 @Component({
@@ -162,7 +162,7 @@ export default class extends Vue {
     if (this.type === 'submit') {
       (this.$refs.equipmentProcessData as any).validate(async(valid: any) => {
         if (valid) {
-          const sendParams = []
+          const sendParams:any = []
           const billApproveList = [{
             ...this.equipmentProcessData,
             processCode,
@@ -200,7 +200,7 @@ export default class extends Vue {
     } else if (this.type === 'end') {
       (this.$refs.equipmentProcessData as any).validate(async(valid: any) => {
         if (valid) {
-          const sendParams = []
+          const sendParams:any = []
           const billApproveList = [{
             ...this.equipmentProcessData,
             processCode,
@@ -246,7 +246,7 @@ export default class extends Vue {
             // operator: '操作人',
             auditStatus: '回退' // 审核状态(审核通过,审核不通过，回退,作废)
           }]
-          const sendParams = []
+          const sendParams:any = []
           sendParams.push({
             ...params,
             billMain: {
@@ -281,12 +281,12 @@ export default class extends Vue {
    * 删除当前选中项
    * @param view
    ********************************/
-  private closeSelectedTag(view: ITagView) {
+  private closeSelectedTag(view: any) {
     TagsViewModule.delView(view)
     this.toLastView(TagsViewModule.visitedViews, view)
   }
 
-  private toLastView(visitedViews: ITagView[], view: ITagView) {
+  private toLastView(visitedViews: any[], view: any) {
     const latestView = visitedViews.slice(-1)[0]
     if (latestView !== undefined && latestView.fullPath !== undefined) {
       this.$router.push(latestView.fullPath).catch((err: any) => {

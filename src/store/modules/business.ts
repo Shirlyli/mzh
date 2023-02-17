@@ -63,7 +63,7 @@ class BusinessView extends VuexModule implements BusinessState {
     this.employeeData = views
   }
 
-  @Action
+  @Action({ rawError: true })
   public async GET_DEPARTMENT_DATA() {
     const res: any = await queryDepartmentInfoTree({})
     const newRes = res.data?.[0]?.children?.map((dept: any) => {
@@ -72,7 +72,7 @@ class BusinessView extends VuexModule implements BusinessState {
     res.code === 200 && this.SET_DEPARTMENT_DATA(newRes)
   }
 
-  @Action
+  @Action({ rawError: true })
   public async GET_EQUIPMENT_DATA(
     departmentId: any,
     page: number,
@@ -89,27 +89,27 @@ class BusinessView extends VuexModule implements BusinessState {
     res.code === 200 && this.SET_EQUIPMENT_DATA(newRes)
   }
 
-  @Action
+  @Action({ rawError: true })
   public GET_PROCESS_CLICKDATA(views) {
     this.SET_PROCESS_CLICKDATA(views)
   }
 
-  @Action
+  @Action({ rawError: true })
   public GET_PROCESS_REQUESTFORM(views) {
     this.SET_PROCESS_REQUESTFORM(views)
   }
 
-  @Action
+  @Action({ rawError: true })
   public GET_PROCESS_REQUESTPARAMS(views) {
     this.SET_PROCESS_REQUESTPARAMS(views)
   }
 
-  @Action
+  @Action({ rawError: true })
   public GET_PROCESS_EQUIPMENT_CATEGORY_DATA(views) {
     this.SET_PROCESS_EQUIPMENT_CATEGORY_DATA(views)
   }
 
-  @Action
+  @Action({ rawError: true })
   public async GET_EMPLOYEE_DATA() {
     const resUserData: any = await getUserDataByDeptId({
       page: 1,
@@ -124,7 +124,7 @@ class BusinessView extends VuexModule implements BusinessState {
     resUserData.code === 200 ? this.SET_EMPLOYEE_DATA(newRes) : this.SET_EMPLOYEE_DATA([])
   }
 
-  @Action
+  @Action({ rawError: true })
   public async GET_EQUIPMENT_CATEGORY_DATA() {
     const resData: any = await queryEquipmentCategoryInfo({
       page: '1',

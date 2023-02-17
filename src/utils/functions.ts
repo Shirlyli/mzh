@@ -62,3 +62,9 @@ export function FormatChildStatus(data: any) {
   const cellValue = _.filter(ALL_OPTIONS.CHILD_STATUS, ['value', Number(data.cellValue)])
   return cellValue[0]?.label
 }
+
+// 紧急程度
+export function FormatUrgency(data: any) {
+  const cellValue = _.filter(ALL_OPTIONS.urgency, ['value', Number(data.cellValue)])
+  return cellValue[0]?.label
+}

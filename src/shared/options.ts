@@ -132,6 +132,11 @@ export const ALL_OPTIONS = {
   applyModle: [
     { label: '自行招标额度', value: '自行招标额度' },
     { label: '内部招标额度', value: '内部招标额度' }
+  ],
+  urgency: [
+    { label: '一般', value: 1 },
+    { label: '加急', value: 2 },
+    { label: '特急', value: 2 }
   ]
 }
 

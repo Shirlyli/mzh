@@ -8,12 +8,13 @@ import { Message } from 'element-ui'
 import ProcessApproval from '@/components/processApproval/index.vue'
 import processRequest from '@/components/processRequest/index.vue'
 import moment from 'moment'
-import { FormatChildStatus, FormatMainStatus } from '@/utils/functions'
-import { ALL_OPTIONS } from '@/shared/options'
+import { FormatChildStatus, FormatMainStatus, FormatUrgency } from '../../../utils/functions'
+import { ALL_OPTIONS } from '../../../shared/options'
 import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
 import { TagsViewModule } from '@/store/modules/tags-view'
-import { requestInfoFormList } from './formColumns'
+import { checkInfoFormList, requestInfoFormList } from './formColumns'
 import { UserModule } from '../../../store/modules/user'
+import { handleRepairApply } from '../../../api/equipment'
 // 流程状态
 enum MaintenanceStatusList {
   'SQ'='1', // 申请
@@ -74,6 +75,11 @@ export default class extends Vue {
   public visitedViews :any= TagsViewModule.visitedViews.find((item:any) => item.path === this.$route.path)
   public editColumns = MaintenanceToolbarButtons[this.MaintenancePath]
   public toolbarBtns = this.MaintenancePath === 'SQ' ? ['addProcess', 'import'] : []
+  // 获取维修对应流程状态缩写
+  get MaintenancePath() {
+    return this.routePath.substr(-2, 2)
+  }
+
   /**********************************
    * 列表相关
    *********************************/
@@ -81,7 +87,7 @@ export default class extends Vue {
   public formConfig = {
     data: {
       mainStatus: '',
-      status: ''
+      status: MaintenanceStatusList[this.MaintenancePath]
     },
     items: [
       {
@@ -116,7 +122,7 @@ export default class extends Vue {
     { field: 'mainStatus', title: '主流程状态', formatter: FormatMainStatus, width: 150 },
     { field: 'problemDesc', title: '问题描述', width: 150 },
     { field: 'status', title: '子流程状态', formatter: FormatChildStatus, width: 150 },
-    { field: 'urgency', title: ' 紧急程度 ', width: 150 },
+    { field: 'urgency', title: ' 紧急程度 ', width: 150, formatter: FormatUrgency },
     { field: 'userName', title: '申请人', width: 150 },
     {
       width: 150,
@@ -126,12 +132,6 @@ export default class extends Vue {
       showOverflow: true
     }
   ];
-
-  // 获取维修对应流程状态缩写
-  get MaintenancePath() {
-    console.log(this.routePath.substr(-2, 2))
-    return this.routePath.substr(-2, 2)
-  }
 
   // 列表传参
 
@@ -146,19 +146,15 @@ export default class extends Vue {
     }
   };
 
-  //  点击查看按钮事件
-  public handleSearch(row: any) {
-    const { id, nextNodeCode } = row
-  }
-
   // 删除事件
-  public async handleRemove(data: any) {
-    const res: any = await delHospitalProcessBusiness({
-      ids: data.id
+  public async handleRemove(row: any) {
+    console.log('🚀 ~ row', row)
+    const res: any = await handleRepairApply('delete', {
+      id: row.id
     })
     if (res.result) {
       (this.$refs.vexTable as any).findList(this.paramsConfig)
-      Message.info('删除流程成功')
+      Message.success('删除成功')
     }
   }
 
@@ -166,24 +162,23 @@ export default class extends Vue {
    * 流程申请相关
    *****************/
   // 申请form表单配置文件
-  public requestInfoFormList = requestInfoFormList
+  public requestInfoFormList = MaintenanceProcessType[this.MaintenancePath] === 'maintenanceRequest' ? requestInfoFormList : checkInfoFormList
+
   // 申请接口传惨params
   public requestParams = {
-    requestInfo: {
-      departmentId: UserModule.userData?.department.id,
-      equipmentId: null,
-      equipmentCode: null,
-      faultProblem: null,
-      problemDesc: null,
-      a: null,
-      b: UserModule.userData?.employee.userId,
-      c: UserModule.userData?.employee.phoneNo,
-      d: new Date(),
-      e: null,
-      f: null,
-      g: null,
-      h: null,
-      i: null
+    maintenanceRequest: {
+      applyUserId: UserModule.userData?.employee.userId,
+      applyTime: new Date(),
+      applyDepartmentId: UserModule.userData?.department.id,
+      applyDepartment: UserModule.userData?.department.name,
+      applyTelphone: UserModule.userData?.employee.phoneNo,
+      urgency: '',
+      faultProblem: '',
+      problemDesc: '',
+      applyUserName: UserModule.userData?.employee.eName,
+      equipmentId: '',
+      equipmentName: '',
+      note: null
     }
   };
 
@@ -197,7 +192,27 @@ export default class extends Vue {
     this.$router
       .push({
         path: `/maintenanceRequest/index/${'WXSQ'}`,
-        query: { type: '维修', applyUrl: 'WXSQ', processType: MaintenanceProcessType[this.MaintenancePath] }
+        query: { type: '维修申请', applyUrl: 'WXSQ', processType: MaintenanceProcessType[this.MaintenancePath] }
+      })
+      .catch((err: any) => {
+        console.warn(err)
+      })
+  }
+
+  //  点击查看按钮事件
+  public handleSearch(row: any) {
+    console.log('🚀 ~ row', row)
+    const clickdata = {
+      ...row,
+      urgency: ALL_OPTIONS.urgency.find((item:any) => String(item.value) === String(row.urgency))?.label,
+      applyTime: moment(row.applyTime).format('YYYY-MM-DD')
+    }
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: MaintenanceProcessType[this.MaintenancePath], data: this.requestInfoFormList })
+    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: MaintenanceProcessType[this.MaintenancePath], data: clickdata })
+    this.$router
+      .push({
+        path: `/maintenanceRequest/index/${'WXSH'}`,
+        query: { type: '维修审核', applyUrl: 'WXSH', processType: MaintenanceProcessType[this.MaintenancePath] }
       })
       .catch((err: any) => {
         console.warn(err)

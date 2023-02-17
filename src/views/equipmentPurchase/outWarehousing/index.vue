@@ -59,6 +59,14 @@
                               format="yyyy-MM-dd"
                               value-format="yyyy-MM-dd">
               </el-date-picker>
+               <!-- 树形下拉框 -->
+               <treeselect :options="item.options"
+                          v-model="requestParams.equipmentStores[item.key]"
+                          clearable
+                          :disable-branch-nodes="true"
+                          search-nested
+                          placeholder="请选择"
+                          v-if="item.type === 'treeSelect'" />
               <!-- 多行文本框 -->
               <el-input type="textarea"
                         :rows="2"

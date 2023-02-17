@@ -147,3 +147,11 @@ export const queryEquipmentCategoryInfo = (data: any) =>
     method: 'POST',
     data
   })
+
+// 设备检维修
+export const handleRepairApply = (type: string, data:any) =>
+  request({
+    url: `/repairApply/operate/${type}`,
+    method: 'POST',
+    data
+  })

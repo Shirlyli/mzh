@@ -35,13 +35,6 @@ export default class extends Vue {
 
   async created() {
     await BusinessViewModule.GET_DEPARTMENT_DATA()
-    // BasicFormList.forEach((item: any) => {
-    //   if (item.slot === 'department') {
-    //     item.data = BusinessViewModule.departmentData.map((dept: any) => {
-    //       return { label: dept.title, value: dept.id }
-    //     })
-    //   }
-    // })
   }
 
 public toobarBtns =

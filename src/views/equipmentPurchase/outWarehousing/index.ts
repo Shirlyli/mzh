@@ -1,7 +1,6 @@
 import { Component, Vue } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
 import {
-  queryProcessRecordList,
   savePurchaseCheck
 } from '@/api/basic'
 import { BusinessViewModule } from '@/store/modules/business'
@@ -17,6 +16,7 @@ import moment from 'moment'
 import { ALL_OPTIONS, equipmentCategoryData } from '../../../shared/options'
 import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
 import { handleDepartData } from '../../../shared/utils'
+import Treeselect from '@riophae/vue-treeselect'
 
 @Component({
   name: 'InlineEditTable',
@@ -24,7 +24,8 @@ import { handleDepartData } from '../../../shared/utils'
     VexTable,
     processRequest,
     ProcessApproval,
-    ProcessOperationRecord
+    ProcessOperationRecord,
+    Treeselect
   }
 })
 export default class extends Vue {
@@ -70,6 +71,8 @@ export default class extends Vue {
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'name', title: '设备名称', width: 150 },
+    { field: 'price', title: '设备价格', width: 150 },
+    { field: 'unit', title: '设备单位', width: 100 },
     {
       field: 'applyTime',
       title: '申请日期',
@@ -80,9 +83,7 @@ export default class extends Vue {
     { field: 'boundTime', title: '出库日期', width: 150, formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD') },
     { field: 'billId', title: '出库单号', width: 150 },
     { field: 'price', title: '出库金额', width: 150 },
-    { field: 'num', title: '出库数量', width: 150 },
     { field: 'purchaseType', title: '备注', width: 150 },
-    // { field: 'purchaseType', title: '状态', width: 150 },
     {
       width: 120,
       title: '操作',
@@ -136,6 +137,17 @@ export default class extends Vue {
   public handleWarehousing(row:any) {
     console.log('🚀 ~ row', row)
     this.rowData = row
+    this.requestParams.equipmentStores = {
+      departmentId: null,
+      boundTime: null,
+      boundType: null,
+      bounder: null,
+      receivePerson: null,
+      boundNums: null,
+      note: null,
+      destinationId: null,
+      idCode: null
+    }
     this.dialogStatus = true
   }
 
@@ -157,7 +169,7 @@ export default class extends Vue {
             ? [
                 {
                   ...equipmentStores,
-                  id: this.rowData.equipmentStores[0].id,
+                  id: '',
                   boundType: 'OUT_STORE',
                   equipmentId: this.rowData.name,
                   equipmentName: this.rowData.name
@@ -168,7 +180,7 @@ export default class extends Vue {
             ...equipmentVO,
             ...this.rowData.equipmentVO,
             operationStatus: 'OUT_STORE',
-            billId: equipmentVO.billCode
+            billId: this.rowData.billId
           },
           id: this.rowData.id,
           state

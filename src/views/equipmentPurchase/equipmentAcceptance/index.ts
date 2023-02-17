@@ -187,15 +187,9 @@ export default class extends Vue {
     }
     // TODO: 换成store存储
     console.log('🚀 ~ row.billMain', row.billMain)
-    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'acceptence', data: row.billMain })
-    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
+    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'acceptence', data: row })
     BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'acceptence', data: this.requestForm })
-    // sessionStorage.setItem('RequestParams', JSON.stringify(row))
     BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'acceptence', data: row })
-    // sessionStorage.setItem(
-    //   'EquipmentCategoryData',
-    //   JSON.stringify(this.commonEquipmentCategoryData)
-    // )
     BusinessViewModule.GET_PROCESS_EQUIPMENT_CATEGORY_DATA({ type: 'acceptence', data: this.commonEquipmentCategoryData })
     this.$router.push({
       path: '/equipmentAcceptOrWarehousing/index',

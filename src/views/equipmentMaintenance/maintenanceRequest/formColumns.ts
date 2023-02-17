@@ -2,9 +2,10 @@ import { ALL_OPTIONS } from '@/shared/options'
 import { BusinessViewModule } from '@/store/modules/business'
 import moment from 'moment'
 import { handleDepartData } from '../../../shared/utils'
+
 export const requestInfoFormList = [
   {
-    field: 'departmentId',
+    field: 'applyDepartmentId',
     title: '报修科室',
     span: 12,
     type: 'treeSelect',
@@ -27,27 +28,27 @@ export const requestInfoFormList = [
     disabled: true
   },
   {
-    field: 'faultProblem',
+    field: 'marking',
     title: '设备型号',
     span: 12,
     type: 'input'
   },
+  // {
+  //   field: 'problemDesc',
+  //   title: '资产序列号',
+  //   span: 12,
+  //   type: 'input',
+  //   disabled: true
+  // },
+  // {
+  //   field: 'a',
+  //   title: '保修截止期',
+  //   span: 12,
+  //   type: 'date',
+  //   disabled: true
+  // },
   {
-    field: 'problemDesc',
-    title: '资产序列号',
-    span: 12,
-    type: 'input',
-    disabled: true
-  },
-  {
-    field: 'a',
-    title: '保修截止期',
-    span: 12,
-    type: 'date',
-    disabled: true
-  },
-  {
-    field: 'b',
+    field: 'applyUserId',
     title: '报修人',
     span: 12,
     type: 'select',
@@ -60,20 +61,20 @@ export const requestInfoFormList = [
     })
   },
   {
-    field: 'c',
+    field: 'applyTelphone',
     title: '报修人电话',
     span: 12,
     type: 'input'
   },
   {
-    field: 'd',
+    field: 'applyTime',
     title: '报修时间',
     span: 12,
     type: 'date',
     disabled: true
   },
   {
-    field: 'e',
+    field: 'faultProblem',
     title: '故障原因',
     span: 12,
     type: 'select',
@@ -82,14 +83,14 @@ export const requestInfoFormList = [
     ]
   },
   {
-    field: 'f',
+    field: 'equipmentCategoryId',
     title: '设备类型',
     span: 12,
     type: 'treeSelect',
     data: handleDepartData(BusinessViewModule.equipmentCategoryData)
   },
   {
-    field: 'g',
+    field: 'urgency',
     title: '紧急程度',
     span: 12,
     type: 'select',
@@ -99,11 +100,84 @@ export const requestInfoFormList = [
       { label: '特急', value: 2 }
     ]
   },
+  // {
+  //   field: 'h',
+  //   title: '抄送人',
+  //   span: 12,
+  //   type: 'select',
+  //   data: BusinessViewModule.employeeData.map((item:any) => {
+  //     return {
+  //       label: item.eName,
+  //       value: item.userId
+  //     }
+  //   })
+  // },
   {
-    field: 'h',
-    title: '抄送人',
+    field: 'problemDesc',
+    title: '故障描述',
+    span: 12,
+    type: 'textarea',
+    required: true
+  },
+  {
+    field: 'note',
+    title: '备注',
+    span: 12,
+    type: 'textarea',
+    required: true
+  }
+]
+
+export const checkInfoFormList = [
+  {
+    field: 'applyDepartment',
+    title: '报修科室',
+    span: 12,
+    type: 'treeSelect',
+    data: handleDepartData(BusinessViewModule.departmentData),
+    required: true
+  },
+  {
+    field: 'equipmentName',
+    title: '设备名称',
+    span: 12,
+    type: 'input',
+    required: true,
+    disabled: true
+  },
+  {
+    field: 'equipmentCode',
+    title: '设备编号',
+    span: 12,
+    type: 'input',
+    disabled: true
+  },
+  {
+    field: 'marking',
+    title: '设备型号',
+    span: 12,
+    type: 'input'
+  },
+  // {
+  //   field: 'problemDesc',
+  //   title: '资产序列号',
+  //   span: 12,
+  //   type: 'input',
+  //   disabled: true
+  // },
+  // {
+  //   field: 'a',
+  //   title: '保修截止期',
+  //   span: 12,
+  //   type: 'date',
+  //   disabled: true
+  // },
+  {
+    field: 'applyUserName',
+    title: '报修人',
     span: 12,
     type: 'select',
+    disabled: true,
     data: BusinessViewModule.employeeData.map((item:any) => {
       return {
         label: item.eName,
@@ -112,8 +186,67 @@ export const requestInfoFormList = [
     })
   },
   {
-    field: 'i',
+    field: 'applyTelphone',
+    title: '报修人电话',
+    span: 12,
+    type: 'input'
+  },
+  {
+    field: 'applyTime',
+    title: '报修时间',
+    span: 12,
+    type: 'date',
+    disabled: true
+  },
+  {
+    field: 'faultProblem',
+    title: '故障原因',
+    span: 12,
+    type: 'select',
+    data: [
+      { label: '人为', value: 1 }
+    ]
+  },
+  {
+    field: 'equipmentCategoryId',
+    title: '设备类型',
+    span: 12,
+    type: 'treeSelect',
+    data: handleDepartData(BusinessViewModule.equipmentCategoryData)
+  },
+  {
+    field: 'urgency',
+    title: '紧急程度',
+    span: 12,
+    type: 'select',
+    data: [
+      { label: '一般', value: 1 },
+      { label: '加急', value: 2 },
+      { label: '特急', value: 2 }
+    ]
+  },
+  // {
+  //   field: 'h',
+  //   title: '抄送人',
+  //   span: 12,
+  //   type: 'select',
+  //   data: BusinessViewModule.employeeData.map((item:any) => {
+  //     return {
+  //       label: item.eName,
+  //       value: item.userId
+  //     }
+  //   })
+  // },
+  {
+    field: 'problemDesc',
     title: '故障描述',
+    span: 12,
+    type: 'textarea',
+    required: true
+  },
+  {
+    field: 'note',
+    title: '备注',
     span: 12,
     type: 'textarea',
     required: true

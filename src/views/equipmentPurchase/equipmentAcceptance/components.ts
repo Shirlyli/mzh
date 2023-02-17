@@ -9,17 +9,24 @@ import {
   equipmentInspection,
   equipmentVO
 } from './formlist'
-import { Form, Message } from 'element-ui'
-import {
-  queryEquipmentCategoryInfo,
-  updateEquipmentInfoData
-} from '@/api/equipment'
-import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
+import { Message } from 'element-ui'
+import { queryEquipmentCategoryInfo } from '@/api/equipment'
+import { TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
-import { queryByConditionSupplier, savePurchaseCheck, uploadFile } from '@/api/basic'
+import {
+  queryByConditionSupplier,
+  savePurchaseCheck,
+  uploadFile,
+  saveProcessApply
+  , getProcessNodeInfoByProcessCodeAndBh
+  , getUserListProcessCode
+} from '../../../api/basic'
 import Treeselect from '@riophae/vue-treeselect'
 import { handleDepartData } from '../../../shared/utils'
 import { BusinessViewModule } from '../../../store/modules/business'
+
+import { APPLY_URL } from '../../../shared/options'
+
 // import { BusinessViewModule } from '@/store/modules/business'
 @Component({
   name: 'equipmentAcceptOrWarehousing',
@@ -47,11 +54,12 @@ export default class extends Vue {
    * 保存接口params
    *********************/
   // TODO:换成从store获取
-  public requestParams: any = BusinessViewModule.processRequestParams.acceptence;
+  public requestParams: any =
+    BusinessViewModule.processRequestParams.acceptence;
 
   public watchRequestForm = BusinessViewModule.processRequestForm.acceptence; // 流程表单配置数据columns
-
-  public equipmentCategoryData = BusinessViewModule.processEquipmentCategoryData.acceptence;
+  public equipmentCategoryData =
+    BusinessViewModule.processEquipmentCategoryData.acceptence;
 
   public processData = BusinessViewModule.processClickProcessData.acceptence; // 流程数据
 
@@ -63,10 +71,14 @@ export default class extends Vue {
 
   async created() {
     console.log(
-      'this.processData====》', this.processData,
-      'this.equipmentCategoryData====》', this.equipmentCategoryData,
-      'watchRequestForm====》', this.watchRequestForm,
-      'requestParams====》', this.requestParams
+      'this.processData====》',
+      this.processData,
+      'this.equipmentCategoryData====》',
+      this.equipmentCategoryData,
+      'watchRequestForm====》',
+      this.watchRequestForm,
+      'requestParams====》',
+      this.requestParams
     )
     this.queryEquipmentCategoryInfo()
     this.queryByConditionSupplier()
@@ -122,6 +134,7 @@ export default class extends Vue {
   // }
 
   // 获取设备类别
+
   private async queryEquipmentCategoryInfo() {
     const resData: any = await queryEquipmentCategoryInfo({
       page: '1',
@@ -131,20 +144,24 @@ export default class extends Vue {
     if (resData.code === 200) {
       this.allFormList.equipmentVO.forEach((item: any) => {
         if (item.slot === 'equipmentCategory') {
-          item.options = handleDepartData(resData.data?.[0]?.children.map((equip: any) => {
-            return {
-              ...equip,
-              label: equip.id,
-              value: equip.title
-            }
-          }))
+          item.options = handleDepartData(
+            resData.data?.[0]?.children.map((equip: any) => {
+              return {
+                ...equip,
+                label: equip.id,
+                value: equip.title
+              }
+            })
+          )
           console.log('🚀 ~ item.options', item.options)
         }
       })
     }
   }
 
-  // 获取厂商
+  /****************
+   *  获取厂商
+   **************/
   private async queryByConditionSupplier() {
     const resData: any = await queryByConditionSupplier({
       page: '1',
@@ -166,28 +183,71 @@ export default class extends Vue {
     }
   }
 
-  // 验收设备
+  /***************
+   * 验收设备
+   **************/
   public createData() {
-    this.saveEquipment()
+    // this.saveEquipment()
+    this.handleProcessData()
   }
 
-  // 保存设备信息  并 保存验收信息
+  /****************
+   * 提交流程信息
+   ***************/
+  private async handleProcessData() {
+    console.log(this.processData)
+    const {
+      billMain,
+      billEquipmentList,
+      id,
+      status,
+      billApproveList
+    } = this.processData
+    const currentCoData = await getProcessNodeInfoByProcessCodeAndBh({ processCode: 'pro_kssq', nodeNameCode: billApproveList[0]?.nextNodeCode })
+    const nextCodeData = await getProcessNodeInfoByProcessCodeAndBh({ processCode: 'pro_kssq', nodeSort: currentCoData.data.nodeSort + 1 })
+    console.log('🚀 ~ nextCodeData', nextCodeData)
+    const executorData: any = await getUserListProcessCode({
+      processCode: 'pro_kssq',
+      nodeSort: currentCoData.data.nodeSort + 1
+    })
+    console.log('🚀 ~ executorData', executorData)
+    const sendParams = {
+      id,
+      status: '2',
+      billMain,
+      billEquipmentList,
+      billApproveList: [
+        {
+          ...billApproveList[0],
+          currentNodeCode: currentCoData.data?.nodeNameCode,
+          currentNodeName: currentCoData.data?.nodeName,
+          nextNodeCode: nextCodeData.data?.nodeNameCode,
+          nextNodeExecutor: executorData.data?.[0]?.user_id,
+          nextNodeExecutorName: executorData.data?.[0]?.user_name,
+          nextNodeName: nextCodeData.data?.nodeName,
+          nextNodeState: '已验收'
+        }
+      ]
+    }
+    const res: any = await saveProcessApply(
+      (APPLY_URL as any).KSSQ,
+      sendParams
+    )
+  }
+
+  /****************************
+   * 保存设备信息  并 保存验收信息
+   ***************************/
   private saveEquipment() {
     (this.$refs.equipmentCategoryData as any).validate(async(valid: any) => {
       if (valid) {
         const {
-          equipmentDepreciations,
-          equipmentInspection,
-          equipmentMaintain,
           equipmentPurchases,
-          equipmentResources,
-          equipmentStocks,
-          equipmentStores,
           equipmentVO,
           id,
           state
         } = this.equipmentCategoryData
-        const paramsConfig:any = {
+        const paramsConfig: any = {
           // equipmentDepreciations: Object.values(equipmentDepreciations).length
           //   ? [equipmentDepreciations]
           //   : [],
@@ -217,7 +277,7 @@ export default class extends Vue {
           id,
           state
         }
-        const params :any = []
+        const params: any = []
         params.push(paramsConfig)
         const purchaseParams = {
           checkState: '已验收',
@@ -228,7 +288,9 @@ export default class extends Vue {
         // const res: any = await updateEquipmentInfoData(params)
         const purchaseRes = await savePurchaseCheck(params)
         if (purchaseRes.code === 200) {
-          this.closeSelectedTag({ path: '/equipmentAcceptOrWarehousing/index' })
+          this.closeSelectedTag({
+            path: '/equipmentAcceptOrWarehousing/index'
+          })
         }
         Message.success('验收成功')
       }
@@ -243,30 +305,30 @@ export default class extends Vue {
    * 完成申请后关闭当前tag页
    * @param view
    *****************************/
-  private closeSelectedTag(view: ITagView) {
+  private closeSelectedTag(view: any) {
     TagsViewModule.delView(view)
     this.toLastView(TagsViewModule.visitedViews, view)
   }
 
-  private toLastView(visitedViews: ITagView[], view: ITagView) {
+  private toLastView(visitedViews: any[], view: any) {
     const latestView = visitedViews.slice(-1)[0]
     if (latestView !== undefined && latestView.fullPath !== undefined) {
       this.$router.push(latestView.fullPath).catch((err: any) => {
         console.warn(err)
       })
     } else {
-      // Default redirect to the home page if there is no tags-view, adjust it if you want
       if (view.name === 'Dashboard') {
-        // to reload home page
         this.$router
           .replace({ path: '/redirect' + view.fullPath })
           .catch((err: any) => {
             console.warn(err)
           })
       } else {
-        this.$router.push((UserModule.menu as any)[0]?.path).catch((err: any) => {
-          console.warn(err)
-        })
+        this.$router
+          .push((UserModule.menu as any)[0]?.path)
+          .catch((err: any) => {
+            console.warn(err)
+          })
       }
     }
   }

@@ -32,8 +32,8 @@ export default class extends Vue {
       options: BusinessViewModule.employeeData,
       required: true
     },
-    { title: '入库数量', key: 'boundNums', type: 'input' },
-    { title: '入库时间', key: 'boundTime', type: 'date' },
+    { title: '入库数量', key: 'boundNums', type: 'input', required: true },
+    { title: '入库时间', key: 'boundTime', type: 'date', required: true },
     {
       title: '仓库',
       key: 'departmentId',
@@ -41,7 +41,7 @@ export default class extends Vue {
       options: BusinessViewModule.departmentData,
       required: true
     },
-    { title: '备注', key: 'note', type: 'textarea' }
+    { title: '备注', key: 'note', type: 'textarea', required: true }
   ];
 
   /**********************************
@@ -84,11 +84,12 @@ export default class extends Vue {
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'name', title: '设备名称', width: 150 },
-    { field: 'id', title: '入库单号', width: 150 },
-    { field: 'marking', title: '供应商', width: 150 },
-    { field: 'num', title: '入库数量', width: 150 },
-    { field: 'note', title: '备注', width: 150 },
-    { field: 'purchaseType', title: '状态', width: 150 },
+    { field: 'price', title: '设备价格', width: 150 },
+    { field: 'unit', title: '设备单位', width: 100 },
+    { field: 'departmentName', title: '申请科室', width: 150 },
+    { field: 'id', title: '入库单号' },
+    { field: 'marking', title: '供应商' },
+    { field: 'billId', title: '单号', width: 150 },
     {
       width: 100,
       title: '操作',
@@ -123,6 +124,17 @@ export default class extends Vue {
   public dialogStatus = false; // 入库弹框显隐
   public async handleWarehousing(row: any) {
     this.rowData = row
+    this.requestParams.equipmentStores = {
+      departmentId: null,
+      boundTime: null,
+      boundType: null,
+      bounder: null,
+      receivePerson: null,
+      boundNums: null,
+      note: null,
+      destinationId: null,
+      idCode: null
+    }
     this.dialogStatus = true
   }
 

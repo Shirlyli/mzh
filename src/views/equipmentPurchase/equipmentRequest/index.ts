@@ -119,7 +119,7 @@ export default class extends Vue {
     this.isCGX
       ? ['search', 'del']
       : this.isYSQ || this.isPSJD || this.isZBJL
-        ? ['search']
+        ? ['search', 'record']
         : this.isDSP ? ['approval', 'record'] : [];
 
   /**************************
@@ -183,7 +183,7 @@ export default class extends Vue {
     { field: 'projectName', title: '项目名称' },
     { field: 'purchaseType', title: '购置类别' },
     { field: 'applyModle', title: '采购类型 ' },
-    { field: 'status', title: '数量 ' },
+    { field: 'equipmentNum', title: '数量 ' },
     { field: 'price', title: '总金额 ' }
 
   ];

@@ -126,7 +126,7 @@ export const constantRoutes: RouteConfig[] = [
           ),
         name: 'maintenanceRequest',
         meta: {
-          title: '流程申请',
+          title: '流程',
           icon: 'user',
           noCache: false
         }
