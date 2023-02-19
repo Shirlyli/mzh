@@ -38,9 +38,9 @@ export default class extends Vue {
    *********************************/
   public formConfig = {
     data: {
-      approveStatus: '',
-      rollOutDepartment: '',
-      createTime: ''
+      // approveStatus: '',
+      // rollOutDepartment: '',
+      // createTime: ''
     },
     items: [
       {
@@ -67,23 +67,23 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'applyDeptName', title: '申请科室', width: 150 },
+    { field: 'bill_code', title: '流程单号', width: 150 },
+    { field: 'equipment_id', title: '设备名称', width: 150 },
     {
       field: 'applyTime',
       title: '申请日期',
       formatter: (data: any) => moment(data.cellvalue).format('YYYY-MM-DD'),
       width: 150
     },
-    { field: 'projectName', title: '项目名称', width: 150 },
-    { field: 'purchaseType', title: '购置类别', width: 150 },
-    { field: 'applyModle', title: ' 采购类型 ', width: 150 },
+    // { field: 'projectName', title: '项目名称', width: 150 },
+    // { field: 'purchaseType', title: '购置类别', width: 150 },
     // { title: '供应商名称', field: 'bounder', width: 150 },
-    { title: '设备名称', field: 'equipmentId', width: 150 },
     // { title: '品牌', field: 'boundType', width: 100 },
     // { title: '生产厂家', field: 'departmentId', width: 150 },
-    { title: '数量', field: 'equipmentNum', width: 150 },
+    { title: '数量', field: 'equipment_num', width: 150 },
     { title: '设备单位', field: 'unit', width: 100 },
     { title: '金额', field: 'price', width: 100 },
+    { field: 'applyModle', title: ' 采购类型 ', width: 150 },
     // { title: '保修', field: 'receivePerson', width: 150 },
     // { field: 'nextNodeName', title: ' 当前节点' },
     {
@@ -102,14 +102,13 @@ export default class extends Vue {
    * 已验收查看--查询已验收数据
    ****************************/
   public paramsConfig: any = {
-    url: '/kssq/getKssqInfoList', // 待验收--查询已归档数据
+    url: '/bill/getBillEquipmentInfo', // 待验收--查询已归档数据
     params: {
       page: '1',
       limit: '10',
       entity: {
-        status: '2',
-        projectName: '',
-        applyPerson: ''
+        billType: 'pro_kssq',
+        status: '2'
       }
     }
   };
@@ -182,10 +181,10 @@ export default class extends Vue {
         departmentId: row.billMain.applyDept,
         id: '',
         billId: row.billCode,
-        state: 1
+        state: 1,
+        num: row.billEquipmentList[0].equipmentNum
       }
     }
-    // TODO: 换成store存储
     console.log('🚀 ~ row.billMain', row.billMain)
     BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'acceptence', data: row })
     BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'acceptence', data: this.requestForm })

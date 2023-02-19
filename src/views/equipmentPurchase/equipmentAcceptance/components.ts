@@ -187,7 +187,7 @@ export default class extends Vue {
    * 验收设备
    **************/
   public createData() {
-    // this.saveEquipment()
+    this.saveEquipment()
     this.handleProcessData()
   }
 

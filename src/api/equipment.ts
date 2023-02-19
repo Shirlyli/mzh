@@ -155,3 +155,43 @@ export const handleRepairApply = (type: string, data:any) =>
     method: 'POST',
     data
   })
+
+//  展示维修工程师
+export const queryJxgcsList = (data:any) =>
+  request({
+    url: '/auth/user/queryJxgcsList',
+    method: 'POST',
+    data
+  })
+
+// 指派
+export const handlejobSending = (data:any) =>
+  request({
+    url: '/repairApply/operate/jobSending',
+    method: 'POST',
+    data
+  })
+
+// 节点查询
+export const queryByCondition = (data:any) =>
+  request({
+    url: '/repairApply/query/queryByCondition',
+    method: 'POST',
+    data
+  })
+
+// 根据单据类型和旦角状态获取
+export const getBillEquipmentInfo = (data:any) =>
+  request({
+    url: '/bill/getBillEquipmentInfo',
+    method: 'POST',
+    data
+  })
+
+//  操作日志
+export const queryLogByCondition = (data:any) =>
+  request({
+    url: '/repairApply/log/queryByCondition',
+    method: 'POST',
+    data
+  })

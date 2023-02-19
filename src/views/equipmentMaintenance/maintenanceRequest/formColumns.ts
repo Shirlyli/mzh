@@ -253,6 +253,97 @@ export const checkInfoFormList = [
   }
 ]
 
+export const checkPersonalInfoFormList = [
+  {
+    field: 'checkUserName',
+    title: '姓名',
+    span: 12
+  },
+  {
+    field: 'checkTime',
+    title: '审核时间',
+    span: 12
+  },
+  {
+    field: 'billCode',
+    title: '单号',
+    span: 12
+  }
+]
+
+export const maintenancePersonalInfoFormList = [
+  {
+    field: 'repairUserName',
+    title: '姓名',
+    span: 12
+  },
+  {
+    field: 'repairProcess',
+    title: '接收流程',
+    span: 12
+  },
+  {
+    field: 'repairAcceptTime',
+    title: '接收时间',
+    span: 12
+  }
+]
+
+export const maintenanceAcceptPersonalInfoFormList = [
+  {
+    field: 'acceptUserName',
+    title: '姓名',
+    span: 12
+  },
+  {
+    field: 'acceptTime',
+    title: '验收时间',
+    span: 12
+  }
+]
+
+export const maintenanceRecordsFormList = [
+  [
+    {
+      field: 'name',
+      title: '设备名称',
+      span: 12,
+      type: 'treeSelect',
+      data: BusinessViewModule.equipmentData,
+      required: true
+    },
+    {
+      field: 'unit',
+      title: '设备型号',
+      span: 12,
+      type: 'input',
+      required: true
+    },
+    {
+      field: 'numbers',
+      title: '数量',
+      span: 12,
+      type: 'input',
+      required: true
+
+    },
+    {
+      field: 'hours',
+      title: '时常',
+      span: 12,
+      type: 'input'
+
+    },
+    {
+      field: 'price',
+      title: '金额',
+      span: 12,
+      type: 'input',
+      required: true
+    }
+  ]
+]
+
 export const EquipmentDetailFormList = [
   [
     {

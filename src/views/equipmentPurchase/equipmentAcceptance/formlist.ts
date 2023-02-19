@@ -5,13 +5,13 @@ import { handleDepartData } from '../../../shared/utils'
  * 设备基础信息
  */
 export const equipmentVO = [
-  {
-    label: '科室',
-    key: 'departmentId',
-    type: 'treeSelect',
-    options: handleDepartData(BusinessViewModule.departmentData),
-    required: true
-  },
+  // {
+  //   label: '科室',
+  //   key: 'departmentId',
+  //   type: 'treeSelect',
+  //   options: handleDepartData(BusinessViewModule.departmentData),
+  //   required: true
+  // },
   {
     label: '设备名称',
     key: 'name',
@@ -22,7 +22,8 @@ export const equipmentVO = [
     label: '设备类别',
     key: 'equipmentCategoryId',
     type: 'treeSelect',
-    slot: 'equipmentCategory'
+    options: handleDepartData(BusinessViewModule.equipmentCategoryData),
+    required: true
   },
   // { label: '设备来源', key: 'source' },
   { label: '设备原值', key: 'originalValue', required: true },
@@ -143,8 +144,7 @@ export const equipmentPurchases = [
   {
     label: '合同截至日期',
     key: 'contractDeadlineTime',
-    type: 'date',
-    required: true
+    type: 'date'
   },
   { label: '合同名称', key: 'contractName' },
   { label: '合同编码', key: 'contractNum' },

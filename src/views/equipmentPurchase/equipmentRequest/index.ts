@@ -7,6 +7,7 @@ import {
 import { Message } from 'element-ui'
 import {
   BasicFormList,
+  approvalFormList,
   EquipmentDetailFormList,
   ApprovalFormlist,
   FileFormList
@@ -41,7 +42,7 @@ export default class extends Vue {
   private isZBJL = this.routePath.indexOf('ZBJL') > -1;// 招标记录
 
   async created() {
-    console.log('🚀 ~ routePath', this.routePath, '===', this.visitedViews, TagsViewModule.cachedViews)
+    console.log('🚀 ~ routePath', this.routePath, '===', this.visitedViews, TagsViewModule.cachedViews, UserModule)
     // this.activeTagViews = this.visitedViews?.matched?.find((item:any)=>item.)
     if (this.isCGX) {
       this.columns = [
@@ -65,10 +66,10 @@ export default class extends Vue {
     } else if (this.isPSJD || this.isPSJG) {
       this.columns = [
         ...this.columns,
-        { field: 'status', title: '已评人数' },
-        { field: 'status', title: '未评人数' },
-        { field: 'nextNodeName', title: ' 当前节点' },
-        { field: 'nextNodeState', title: ' 状态 ' },
+        { field: 'status', title: '已评人数', width: 150 },
+        { field: 'status', title: '未评人数', width: 150 },
+        { field: 'nextNodeName', title: ' 当前节点', width: 150 },
+        { field: 'nextNodeState', title: ' 状态 ', width: 150 },
         {
           width: 200,
           title: '操作',
@@ -80,8 +81,8 @@ export default class extends Vue {
     } else {
       this.columns = [
         ...this.columns,
-        { field: 'nextNodeName', title: ' 当前节点' },
-        { field: 'nextNodeState', title: ' 状态 ' },
+        { field: 'nextNodeName', title: ' 当前节点', width: 150 },
+        { field: 'nextNodeState', title: ' 状态 ', width: 150 },
         {
           width: 200,
           title: '操作',
@@ -174,17 +175,20 @@ export default class extends Vue {
   public columns: any = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
+    { field: 'billCode', title: '流程单号', width: 150 },
+    { field: 'applyPersonName', title: '申请人', width: 150 },
     { field: 'applyDeptName', title: '申请科室', width: 150 },
     {
       field: 'applyTime',
       title: '申请日期',
+      width: 150,
       formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
     },
-    { field: 'projectName', title: '项目名称' },
-    { field: 'purchaseType', title: '购置类别' },
-    { field: 'applyModle', title: '采购类型 ' },
-    { field: 'equipmentNum', title: '数量 ' },
-    { field: 'price', title: '总金额 ' }
+    { field: 'projectName', title: '项目名称', width: 150 },
+    { field: 'purchaseType', title: '购置类别', width: 150 },
+    { field: 'applyModle', title: '采购类型 ', width: 150 },
+    { field: 'equipmentNum', title: '数量 ', width: 150 },
+    { field: 'price', title: '总金额 ', width: 150 }
 
   ];
 
@@ -216,11 +220,13 @@ export default class extends Vue {
     billMain: {
       id: '',
       billCode: '',
-      userId: (UserModule.userData as any)?.userId,
-      userName: (UserModule.userData as any)?.userName,
-      applyDept: '',
+      applyPerson: (UserModule.userData as any)?.employee.userId,
+      applyPersonName: (UserModule.userData as any).employee.eName,
+      applyDept: (UserModule.userData as any)?.department.id,
+      applyDeptName: (UserModule.userData as any)?.department.id,
       applyModle: '',
       applyReson: '',
+      applyTime: new Date(),
       projectName: '', //* 项目名称 /
       purchaseType: '' // 购置类别 /
     },
@@ -278,6 +284,10 @@ export default class extends Vue {
    *************************/
   public addEquipmentRequest() {
     // TODO: 换成store存储
+    this.requestForm = {
+      ...this.requestForm,
+      billMain: BasicFormList
+    }
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
@@ -302,7 +312,10 @@ export default class extends Vue {
       billEquipmentList,
       dicAttachmentsList
     } = row
-    this.clickProcessData = row
+    this.clickProcessData = {
+      ...row,
+      applyTime: moment(row.applyTime).format('YYYY-MM-DD')
+    }
     this.clickProcessData.billEquipmentList = this.clickProcessData.billEquipmentList.map(
       (item: any) => {
         return { ...item }
@@ -323,6 +336,10 @@ export default class extends Vue {
       JSON.stringify(this.clickProcessData)
     )
     sessionStorage.setItem('BasicFormList', JSON.stringify(this.basicFormList))
+    this.requestForm = {
+      ...this.requestForm,
+      billMain: approvalFormList
+    }
     sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     sessionStorage.setItem('RequestParams', JSON.stringify(sendRequestParams))
     this.$router

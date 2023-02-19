@@ -25,16 +25,87 @@ export const BasicFormList = [
     type: 'treeSelect',
     slot: 'department',
     data: handleDepartData(BusinessViewModule.departmentData),
+    required: true,
+    disabled: true
+  },
+  {
+    field: 'applyPerson',
+    title: '申请人',
+    span: 12,
+    type: 'select',
+    disabled: true,
+    required: true,
+    data: BusinessViewModule.employeeData.map((item:any) => {
+      return { ...item, label: item.eName, value: item.userId }
+    })
+  },
+  {
+    field: 'applyTime',
+    title: '申请时间',
+    span: 12,
+    type: 'date',
+    disabled: true,
     required: true
   },
-  // {
-  //   field: 'applyPerson',
-  //   title: '申请人',
-  //   span: 12,
-  //   type: 'input',
-  //   required: true,
-  //   data: UserModule.userData
-  // },
+  {
+    field: 'applyModle',
+    title: '申请方式',
+    span: 12,
+    type: 'select',
+    data: ALL_OPTIONS.applyModle
+  },
+  {
+    field: 'applyReson',
+    title: '申请理由',
+    span: 12,
+    type: 'textarea',
+    required: true
+  }
+]
+
+export const approvalFormList = [
+  {
+    field: 'projectName',
+    title: '项目名称',
+    span: 12,
+    type: 'input',
+    required: true
+  },
+  {
+    field: 'purchaseType',
+    title: '购置类别',
+    span: 12,
+    type: 'select',
+    data: ALL_OPTIONS.purchaseType
+  },
+  {
+    field: 'applyDeptName',
+    title: '申请科室',
+    span: 12,
+    type: 'treeSelect',
+    slot: 'department',
+    data: handleDepartData(BusinessViewModule.departmentData),
+    required: true
+  },
+  {
+    field: 'applyPersonName',
+    title: '申请人',
+    span: 12,
+    type: 'select',
+    disabled: true,
+    required: true,
+    data: BusinessViewModule.employeeData.map((item:any) => {
+      return { ...item, label: item.eName, value: item.userId }
+    })
+  },
+  {
+    field: 'applyTime',
+    title: '申请时间',
+    span: 12,
+    type: 'date',
+    disabled: true,
+    required: true
+  },
   {
     field: 'applyModle',
     title: '申请方式',

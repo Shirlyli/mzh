@@ -23,15 +23,29 @@ enum MaintenanceStatusList {
   'JX'='6,7', // 检修
   'YS'='8,9', // 验收
   'GD'='10', // 归档
-  'ZF'='20', // 作废
+  // 'LJ'='20', // 作废
   'HY'='21', // 还原
   'SC'='22'// 删除
+}
+
+// 节点名称
+enum MaintenanceStatusNameList {
+  'SQ'='申请', // 申请
+  'SH'='审核', // 审核
+  'PG'='派工', // 派工
+  'JX'='检修', // 检修
+  'YS'='验收', // 验收
+  'GD'='归档', // 归档
+  'LJ'='作废', // 作废
+  'HY'='还原', // 还原
+  'SC'='删除', // 删除
+  'CX'='综合', // 综合
 }
 
 // 票据类型
 enum MaintenanceTypeList{
   'ZC'='1', // 正常
-  'ZF'='2' // 作废
+  'LJ'='2' // 作废
 }
 
 // 流程对应跳转表单type值 == 自定义
@@ -42,7 +56,7 @@ enum MaintenanceProcessType {
   'JX'='maintenanceIng', // 检修
   'YS'='maintenanceAcceptance', // 验收
   'GD'='maintenanceFile', // 归档
-  'ZF'='maintenanceDustbin', // 作废
+  'LJ'='maintenanceDustbin', // 作废
   'HY'='maintenanceReturn', // 还原
   'SC'='maintenanceDel'// 删除
 }
@@ -54,7 +68,7 @@ const MaintenanceToolbarButtons = {
   JX: ['search'], // 检修
   YS: ['search'], // 验收
   GD: ['search'], // 归档
-  ZF: ['search'], // 作废
+  LJ: ['search'], // 作废
   HY: ['search'], // 还原
   SC: ['search'], // 删除
   CX: ['search']// 综合查询
@@ -86,8 +100,8 @@ export default class extends Vue {
   // 列表查询项-表单
   public formConfig = {
     data: {
-      mainStatus: '',
-      status: MaintenanceStatusList[this.MaintenancePath]
+      status: MaintenanceStatusList[this.MaintenancePath],
+      billType: MaintenanceTypeList[this.MaintenancePath]
     },
     items: [
       {
@@ -96,12 +110,12 @@ export default class extends Vue {
         span: 8,
         itemRender: { name: '$select', props: { placeholder: '请输入单据状态' }, options: ALL_OPTIONS.MAIN_STATUS }
       },
-      {
-        field: 'status',
-        title: '子流程状态',
-        span: 8,
-        itemRender: { name: '$select', props: { placeholder: '请输入单据状态' }, options: ALL_OPTIONS.CHILD_STATUS }
-      },
+      // {
+      //   field: 'status',
+      //   title: '子流程状态',
+      //   span: 8,
+      //   itemRender: { name: '$select', props: { placeholder: '请输入单据状态' }, options: ALL_OPTIONS.CHILD_STATUS }
+      // },
       {
         slots: { default: 'operate_item' },
         span: 8
@@ -115,15 +129,15 @@ export default class extends Vue {
     { type: 'checkbox', width: 60 },
     { field: 'applyDepartment', title: '申请科室', width: 150 },
     { field: 'applyTelphone', title: '申请号码', width: 150 },
-    { field: 'applyTime', title: '申请时间', width: 150 },
+    { field: 'applyTime', title: '申请时间', formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'), width: 150 },
     { field: 'billCode', title: '流程编码', width: 150 },
     { field: 'faultProblem', title: '维修原因', width: 150 },
     { field: 'transferTime', title: '外调时间', formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'), width: 150 },
-    { field: 'mainStatus', title: '主流程状态', formatter: FormatMainStatus, width: 150 },
+    { field: 'status', title: '主流程状态', formatter: FormatMainStatus, width: 150 },
     { field: 'problemDesc', title: '问题描述', width: 150 },
-    { field: 'status', title: '子流程状态', formatter: FormatChildStatus, width: 150 },
+    // { field: 'status', title: '子流程状态', formatter: FormatChildStatus, width: 150 },
     { field: 'urgency', title: ' 紧急程度 ', width: 150, formatter: FormatUrgency },
-    { field: 'userName', title: '申请人', width: 150 },
+    { field: 'applyUserName', title: '申请人', width: 150 },
     {
       width: 150,
       title: '操作',
@@ -141,7 +155,8 @@ export default class extends Vue {
       page: '1',
       limit: '10',
       entity: {
-        status: MaintenanceStatusList[this.MaintenancePath]
+        status: MaintenanceStatusList[this.MaintenancePath],
+        billType: MaintenanceTypeList[this.MaintenancePath]
       }
     }
   };
@@ -207,12 +222,13 @@ export default class extends Vue {
       urgency: ALL_OPTIONS.urgency.find((item:any) => String(item.value) === String(row.urgency))?.label,
       applyTime: moment(row.applyTime).format('YYYY-MM-DD')
     }
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: MaintenanceProcessType[this.MaintenancePath], data: this.requestParams })
     BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: MaintenanceProcessType[this.MaintenancePath], data: this.requestInfoFormList })
     BusinessViewModule.GET_PROCESS_CLICKDATA({ type: MaintenanceProcessType[this.MaintenancePath], data: clickdata })
     this.$router
       .push({
-        path: `/maintenanceRequest/index/${'WXSH'}`,
-        query: { type: '维修审核', applyUrl: 'WXSH', processType: MaintenanceProcessType[this.MaintenancePath] }
+        path: `/maintenanceRequest/index/WX${this.MaintenancePath}`,
+        query: { type: `维修${MaintenanceStatusNameList[this.MaintenancePath]}查看`, applyUrl: 'CK', processType: MaintenanceProcessType[this.MaintenancePath] }
       })
       .catch((err: any) => {
         console.warn(err)

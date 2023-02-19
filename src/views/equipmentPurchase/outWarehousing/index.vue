@@ -41,10 +41,12 @@
               <!-- 普通输入框 -->
               <el-input v-model="requestParams.equipmentStores[item.key]"
                         :placeholder="`请输入${item.title}`"
+                        :disabled="item.disabled"
                         v-if="item.type === 'input'" />
               <!-- 下拉框 -->
               <el-select v-model="requestParams.equipmentStores[item.key]"
                          placeholder="请选择"
+                         :disabled="item.disabled"
                          v-if="item.type === 'select'">
                 <el-option :label="options.label"
                            :value="options.value"
@@ -54,6 +56,7 @@
               <!-- 时间 -->
               <el-date-picker v-model="requestParams.equipmentStores[item.key]"
                               v-if="item.type === 'date'"
+                              :disabled="item.disabled"
                               type="date"
                               placeholder="选择日期"
                               format="yyyy-MM-dd"
@@ -63,6 +66,7 @@
                <treeselect :options="item.options"
                           v-model="requestParams.equipmentStores[item.key]"
                           clearable
+                          :disabled="item.disabled"
                           :disable-branch-nodes="true"
                           search-nested
                           placeholder="请选择"
@@ -70,6 +74,7 @@
               <!-- 多行文本框 -->
               <el-input type="textarea"
                         :rows="2"
+                        :disabled="item.disabled"
                         v-if="item.type === 'textarea'"
                         placeholder="请输入内容"
                         v-model="requestParams.equipmentStores[item.key]">

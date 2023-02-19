@@ -37,15 +37,27 @@
                   :key="index">
             <el-form-item :label="item.title"
                           label-width="120px"
+                          :disabled="item.disabled"
                           :prop="'equipmentStores['+item.key+']'"
                           :rules="item.required ? [{required: true, message: '不能为空', trigger: 'change'}]:[{required: false}]">
+              <!-- 树形下拉框 -->
+              <treeselect :options="item.options"
+                          v-model="requestParams.equipmentStores[item.key]"
+                          clearable
+                          :disabled="item.disabled"
+                          :disable-branch-nodes="true"
+                          search-nested
+                          placeholder="请选择"
+                          v-if="item.type === 'treeSelect'" />
               <!-- 普通输入框 -->
               <el-input v-model="requestParams.equipmentStores[item.key]"
                         :placeholder="`请输入${item.title}`"
+                        :disabled="item.disabled"
                         v-if="item.type === 'input'" />
               <!-- 下拉框 -->
               <el-select v-model="requestParams.equipmentStores[item.key]"
                          placeholder="请选择"
+                         :disabled="item.disabled"
                          v-if="item.type === 'select'">
                 <el-option :label="options.label"
                            :value="options.value"
@@ -56,6 +68,7 @@
               <el-date-picker v-model="requestParams.equipmentStores[item.key]"
                               v-if="item.type === 'date'"
                               type="date"
+                              :disabled="item.disabled"
                               placeholder="选择日期"
                               format="yyyy-MM-dd"
                               value-format="yyyy-MM-dd">
@@ -63,6 +76,7 @@
               <!-- 多行文本框 -->
               <el-input type="textarea"
                         :rows="2"
+                        :disabled="item.disabled"
                         v-if="item.type === 'textarea'"
                         placeholder="请输入内容"
                         v-model="requestParams.equipmentStores[item.key]">

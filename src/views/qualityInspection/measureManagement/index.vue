@@ -211,7 +211,7 @@ export default class extends Vue {
     if (res.code || res.result) {
       (this.$refs.vexTable as any).findList(this.paramsConfig)
     }
-    this.$message.success('删除菜单成功')
+    this.$message.success('删除成功')
   }
 
   public clearForm() {

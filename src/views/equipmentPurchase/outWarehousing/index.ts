@@ -70,8 +70,9 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'name', title: '设备名称', width: 150 },
-    { field: 'price', title: '设备价格', width: 150 },
+    { field: 'billId', title: '流程单号', width: 150 },
+    { field: 'name', title: '设备名称', width: 100 },
+    { field: 'price', title: '设备价格', width: 100 },
     { field: 'unit', title: '设备单位', width: 100 },
     {
       field: 'applyTime',
@@ -80,7 +81,7 @@ export default class extends Vue {
       width: 150
     },
     { field: 'departmentName', title: '领用科室', width: 150 },
-    { field: 'boundTime', title: '出库日期', width: 150, formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD') },
+    // { field: 'boundTime', title: '出库日期', width: 150, formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD') },
     { field: 'billId', title: '出库单号', width: 150 },
     { field: 'price', title: '出库金额', width: 150 },
     { field: 'purchaseType', title: '备注', width: 150 },
@@ -97,7 +98,7 @@ export default class extends Vue {
     // { title: '设备唯一编码', key: 'idCode', type: 'input' },
     { title: '领用人', key: 'receivePerson', type: 'select', options: BusinessViewModule.employeeData, required: true },
     { title: '出库操作人', key: 'bounder', type: 'select', options: BusinessViewModule.employeeData, required: true },
-    { title: '出库数量', key: 'boundNums', type: 'input' },
+    { title: '出库数量', key: 'boundNums', type: 'input', disabled: true },
     { title: '出库时间', key: 'boundTime', type: 'date' },
     { title: '目的地', key: 'destinationId', type: 'treeSelect', options: handleDepartData(BusinessViewModule.departmentData), required: true },
     { title: '仓库', key: 'departmentId', type: 'treeSelect', options: handleDepartData(BusinessViewModule.departmentData), required: true },
@@ -143,7 +144,7 @@ export default class extends Vue {
       boundType: null,
       bounder: null,
       receivePerson: null,
-      boundNums: null,
+      boundNums: 1,
       note: null,
       destinationId: null,
       idCode: null
@@ -190,7 +191,7 @@ export default class extends Vue {
         console.log('🚀 ~ params', params)
         const res: any = await savePurchaseCheck(params)
         if (res.code === 200) {
-          Message.success('入库成功')
+          Message.success('出库成功')
           this.dialogStatus = false
         }
       }

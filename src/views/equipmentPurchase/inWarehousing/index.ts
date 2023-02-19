@@ -4,10 +4,13 @@ import { BusinessViewModule } from '../../../store/modules/business'
 import { Message } from 'element-ui'
 import { equipmentCategoryData } from '../../../shared/options'
 import { savePurchaseCheck } from '@/api/basic'
+import { handleDepartData } from '../../../shared/utils'
+import Treeselect from '@riophae/vue-treeselect'
 @Component({
   name: 'InlineEditTable',
   components: {
-    VexTable
+    VexTable,
+    Treeselect
   }
 })
 export default class extends Vue {
@@ -32,13 +35,13 @@ export default class extends Vue {
       options: BusinessViewModule.employeeData,
       required: true
     },
-    { title: '入库数量', key: 'boundNums', type: 'input', required: true },
+    { title: '入库数量', key: 'boundNums', type: 'input', required: true, disabled: true },
     { title: '入库时间', key: 'boundTime', type: 'date', required: true },
     {
       title: '仓库',
       key: 'departmentId',
-      type: 'select',
-      options: BusinessViewModule.departmentData,
+      type: 'treeSelect',
+      options: handleDepartData(BusinessViewModule.departmentData),
       required: true
     },
     { title: '备注', key: 'note', type: 'textarea', required: true }
@@ -83,13 +86,13 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
+    { field: 'billId', title: '流程单号', width: 150 },
     { field: 'name', title: '设备名称', width: 150 },
     { field: 'price', title: '设备价格', width: 150 },
     { field: 'unit', title: '设备单位', width: 100 },
     { field: 'departmentName', title: '申请科室', width: 150 },
-    { field: 'id', title: '入库单号' },
-    { field: 'marking', title: '供应商' },
-    { field: 'billId', title: '单号', width: 150 },
+    { field: 'id', title: '入库单号', width: 150 },
+    { field: 'marking', title: '供应商', width: 150 },
     {
       width: 100,
       title: '操作',
@@ -130,7 +133,7 @@ export default class extends Vue {
       boundType: null,
       bounder: null,
       receivePerson: null,
-      boundNums: null,
+      boundNums: 1,
       note: null,
       destinationId: null,
       idCode: null

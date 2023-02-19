@@ -47,11 +47,13 @@
               <!-- 普通输入框 -->
               <el-input v-model="requestParams.billMain[item.field]"
                         :placeholder="`请输入${item.title}`"
+                        :disabled="item.disabled"
                         v-if="item.type === 'input'" />
               <!-- 树形下拉框 -->
               <treeselect :options="item.data"
                           v-model="requestParams.billMain[item.field]"
                           clearable
+                          :disabled="item.disabled"
                           :disable-branch-nodes="true"
                           search-nested
                           placeholder="请选择"
@@ -80,7 +82,7 @@
               </el-select> -->
               <!-- 下拉框 -->
               <el-select v-model="requestParams.billMain[item.field]"
-                         v-if="item.type === 'select'"
+                         v-if="item.type === 'select'" :disabled="item.disabled"
                          placeholder="请选择">
                 <el-option :label="optionValue.label"
                            :value="optionValue.value"
@@ -91,6 +93,7 @@
               <el-date-picker v-model="requestParams.billMain[item.field]"
                               v-if="item.type === 'date'"
                               type="date"
+                              :disabled="item.disabled"
                               placeholder="选择日期"
                               format="yyyy-MM-dd"
                               value-format="yyyy-MM-dd">
@@ -98,6 +101,7 @@
               <!-- 多行文本框 -->
               <el-input type="textarea"
                         :rows="2"
+                        :disabled="item.disabled"
                         v-if="item.type === 'textarea'"
                         placeholder="请输入内容"
                         v-model="requestParams.billMain[item.field]">

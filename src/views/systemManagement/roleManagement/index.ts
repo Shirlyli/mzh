@@ -210,6 +210,6 @@ export default class extends Vue {
       (this.$refs.vexTable as any).findList(this.paramsConfig);
       (this.$refs.vxeTree as any).getTreeListData(this.url, this.treeParams)
     }
-    this.$message.success('删除菜单成功')
+    this.$message.success('删除成功')
   }
 }

@@ -84,7 +84,7 @@ class BusinessView extends VuexModule implements BusinessState {
       entity: { departmentId }
     })
     const newRes = res.data.map((dept: any) => {
-      return { ...dept, label: dept.name, value: dept.id, ...dept.equipmentVO }
+      return { ...dept, label: dept.equipmentVO.name, value: dept.equipmentVO.id, ...dept.equipmentVO }
     })
     res.code === 200 && this.SET_EQUIPMENT_DATA(newRes)
   }

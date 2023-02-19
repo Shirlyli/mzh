@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <!-- <component :is="currentRole" /> -->
-    <iframe id="01" src="/static/index.html"  width="100%" height="100%" scrolling="no" frameborder="'0'"/>
+    <iframe id="01" src="./static/index.html"  width="100%" height="100%" scrolling="no" frameborder="'0'"/>
   </div>
 </template>
 

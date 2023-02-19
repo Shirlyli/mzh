@@ -13,7 +13,6 @@
                   editColumns="['acceptance']"
                   hasNotSlotButton="add"
                   :toolbarBtns="[]"
-                  type="transferApply"
                   @emit-handle-acceptance-row="handleAcceptance"
                   :paramsConfig="paramsConfig" />
       </keep-alive>

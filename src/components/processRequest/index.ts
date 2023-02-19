@@ -1,4 +1,4 @@
-import { getProcessNodeInfoByProcessCodeAndBh, getUserListProcessCode, queryDepartmentInfoTree, saveProcessApply } from '@/api/basic'
+import { getProcessNodeInfoByProcessCodeAndBh, getUserListProcessCode, queryDepartmentInfoTree, saveProcessApply } from '../../api/basic'
 import { getEquipmentInfoByDepartmentId } from '@/api/equipment'
 import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
@@ -15,6 +15,9 @@ import { BusinessViewModule } from '../../store/modules/business'
 })
 export default class extends Vue {
   public rules = {};
+  mounted() {
+    console.log(BusinessViewModule.employeeData)
+  }
 
   /********************************************
    * 待新增的设备params
@@ -49,7 +52,11 @@ export default class extends Vue {
       field: 'isImport',
       title: '是否进口',
       span: 12,
-      type: 'input'
+      type: 'select',
+      data: [
+        { label: '是', value: 1 },
+        { label: '否', value: 0 }
+      ]
     }
   ];
 
@@ -208,12 +215,12 @@ export default class extends Vue {
    * 完成申请后关闭当前tag页
    * @param view
    *****************************/
-  public closeSelectedTag(view: ITagView) {
+  public closeSelectedTag(view: any) {
     TagsViewModule.delView(view)
     this.toLastView(TagsViewModule.visitedViews, view)
   }
 
-  public toLastView(visitedViews: ITagView[], view: ITagView) {
+  public toLastView(visitedViews: any[], view: any) {
     const latestView = visitedViews.slice(-1)[0]
     if (latestView !== undefined && latestView.fullPath !== undefined) {
       this.$router.push(latestView.fullPath).catch((err:any) => {

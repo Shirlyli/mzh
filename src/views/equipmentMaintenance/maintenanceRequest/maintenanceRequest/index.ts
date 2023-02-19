@@ -3,10 +3,23 @@ import { BusinessViewModule } from '@/store/modules/business'
 import Treeselect from '@riophae/vue-treeselect'
 import { UserModule } from '@/store/modules/user'
 import { getEquipmentData } from '../../../../api/basic'
-import { handleRepairApply } from '../../../../api/equipment'
+import {
+  handlejobSending,
+  handleRepairApply,
+  queryJxgcsList,
+  queryByCondition,
+  queryLogByCondition
+} from '../../../../api/equipment'
 import VXETable from 'vxe-table'
 import moment from 'moment'
 import { TagsViewModule } from '../../../../store/modules/tags-view'
+import {
+  checkPersonalInfoFormList,
+  maintenanceAcceptPersonalInfoFormList,
+  maintenancePersonalInfoFormList,
+  maintenanceRecordsFormList
+} from '../formColumns'
+import { handleDepartData } from '../../../../shared/utils'
 
 enum MethodsAndTitle {
   'save' = '保存', // 保存
@@ -20,6 +33,8 @@ enum MethodsAndTitle {
   'revent' = '还原', // 还原
   'delete' = '删除', // 删除
   'back' = '回退', // 回退
+  'accepted' = '验收', // 验收
+  'finished' = '归档', // 归档
   'queryByCondition' = '操作日志' // 操作日志
 }
 @Component({
@@ -30,7 +45,7 @@ enum MethodsAndTitle {
   }
 })
 export default class extends Vue {
-  mounted() {
+  async mounted() {
     console.log(
       'UserModule.userData====>',
       UserModule.userData,
@@ -44,18 +59,36 @@ export default class extends Vue {
       UserModule.userData,
       'BusinessViewModule.processClickProcessData====>',
       BusinessViewModule.processClickProcessData,
-      'BusinessViewModule',
-      BusinessViewModule,
+      'BusinessViewModule.equipmentData',
+      BusinessViewModule.equipmentData,
       'this.processClickProcessData',
       this.processClickProcessData
     )
 
-    console.log(this.processType, this.processFormItemData, 'this.applyUrl', this.applyUrl)
+    console.log(
+      this.processType,
+      this.processFormItemData,
+      'this.applyUrl',
+      this.applyUrl
+    )
+
+    if (this.processType === 'maintenanceDispatch' || this.processType === 'maintenanceIng' || this.processType === 'maintenanceAcceptance' || this.processType === 'maintenanceFile') {
+      const conditionres = await this.queryDataByCondition({
+        page: '1',
+        limit: '10',
+        entity: {
+          id: this.processClickProcessData.id
+        }
+      })
+      console.log('🚀 ~ conditionres', conditionres)
+      this.maintenanceRecordData = conditionres[0]
+    }
   }
 
+  public moment = moment
   public pathQuery = this.$route.query; // 路由信息
   public processType: string = this.$route.query.processType; // 获取路由信息中的流程type值
-  public applyUrl: any = this.$route.query.applyUrl
+  public applyUrl: any = this.$route.query.applyUrl;
 
   /******************
    * 维修流程按钮
@@ -78,7 +111,13 @@ export default class extends Vue {
         disabled: true
       },
       { title: '导出', key: 'export', type: 'primary', method: 'save' }, // ??
-      { title: '删除', key: 'delete', type: 'danger', method: 'delete', disabled: true },
+      {
+        title: '删除',
+        key: 'delete',
+        type: 'danger',
+        method: 'delete',
+        disabled: true
+      },
       {
         title: '操作日志',
         key: 'queryByCondition',
@@ -89,7 +128,13 @@ export default class extends Vue {
     // 审核
     maintenanceCheck: [
       { title: '审核', key: 'checking', type: 'primary', method: 'checking' },
-      { title: '转派工', key: 'jobSend', type: 'primary', method: 'jobSend', disabled: true },
+      {
+        title: '转派工',
+        key: 'jobSend',
+        type: 'primary',
+        method: 'jobSend',
+        disabled: true
+      },
       { title: '导出', key: 'save', type: 'primary', method: 'save' }, // ??
       { title: '作废', key: 'cancel', type: 'danger', method: 'cancel' },
       { title: '退回', key: 'back', type: 'primary', method: 'back' },
@@ -102,12 +147,13 @@ export default class extends Vue {
     ],
     // 派工
     maintenanceDispatch: [
-      { title: '指派', key: 'save', type: 'primary', method: 'save' }, // ??
+      { title: '派工', key: 'send', type: 'primary', method: 'send' }, // ??
       {
         title: '转检修',
         key: 'repairSend',
         type: 'primary',
-        method: 'repairSend'
+        method: 'repairSend',
+        disabled: true
       },
       { title: '作废', key: 'cancel', type: 'danger', method: 'cancel' },
       {
@@ -130,7 +176,8 @@ export default class extends Vue {
         title: '转验收',
         key: 'repairFinish',
         type: 'primary',
-        method: 'repairFinish'
+        method: 'repairFinish',
+        disabled: true
       },
       { title: '作废', key: 'cancel', type: 'danger', method: 'cancel' },
       {
@@ -142,8 +189,8 @@ export default class extends Vue {
     ],
     // 验收
     maintenanceAcceptance: [
-      { title: '验收', key: 'save', type: 'primary', method: 'save' }, // ??
-      { title: '归档', key: 'save', type: 'primary', method: 'save' }, // ??
+      { title: '验收', key: 'accepted', type: 'primary', method: 'accepted' },
+      { title: '归档', key: 'finished', type: 'primary', method: 'finished', disabled: true },
       {
         title: '操作日志',
         key: 'queryByCondition',
@@ -164,8 +211,10 @@ export default class extends Vue {
    *******************/
   public processFormItemData = {
     maintenanceRequest:
-      BusinessViewModule.processRequestForm[this.$route.query.processType]
-
+      BusinessViewModule.processRequestForm[this.$route.query.processType],
+    checkPersonalInfoFormList: checkPersonalInfoFormList,
+    maintenancePersonalInfoFormList: maintenancePersonalInfoFormList,
+    maintenanceAcceptPersonalInfoFormList: maintenanceAcceptPersonalInfoFormList
   };
 
   /*********************
@@ -178,14 +227,41 @@ export default class extends Vue {
    * 单个流程信息数据
    *********************/
   public processClickProcessData =
-  BusinessViewModule.processClickProcessData[this.$route.query.processType];
+    BusinessViewModule.processClickProcessData[this.$route.query.processType];
+
+  /************************
+   *维修清单
+   **********************/
+  public maintenanceRecordsFormList:any = maintenanceRecordsFormList;
+  public maintenanceParamsData = [
+    {
+      name: null,
+      unit: '',
+      numbers: '',
+      hours: '',
+      price: ''
+    }
+  ]
+
+  public maintenanceRecordData = {
+    records: []
+  }
+
+  /*************************
+   * 获取节点信息
+   ************************/
+  private async queryDataByCondition(params) {
+    const maintenanceData = await queryByCondition(params)
+    console.log('🚀 ~ maintenanceData', maintenanceData)
+    return maintenanceData.data
+  }
 
   /**********************
    * 选择设备按钮点击
    * return  展示模态框
    *
    *********************/
-  public chooseEquipmentDialogVisible = false;
+  public chooseEquipmentDialogVisible = false; // 选择设备弹框
   public chooseEquipmentData = [];
   public selectRow: any = {};
   public handleChooseEquipment() {
@@ -194,7 +270,8 @@ export default class extends Vue {
   }
 
   public async getEquipmentInfoByDepartmentId() {
-    const nowDepartmentId = this.processParamsData[this.processType].departmentId
+    const nowDepartmentId = this.processParamsData[this.processType]
+      .departmentId
     const res = await getEquipmentData({
       page: '1',
       limit: '10',
@@ -234,7 +311,7 @@ export default class extends Vue {
    *
    * 按钮提交事件
    ***********************/
-  public saveProcessData ={ id: '' } // 维修流程保存数据
+  public saveProcessData = { id: '' }; // 维修流程保存数据
 
   public handleSubmit(type: string) {
     switch (type) {
@@ -250,13 +327,43 @@ export default class extends Vue {
       case 'jobSend':
         this.handleJobSend(type)
         break
+      case 'send':
+        this.handleSend(type)
+        break
+      case 'repairSend':
+        this.handleRepairSend(type)
+        break
+      case 'recieveSending':
+        this.handlerRecieveSending(type)
+        break
+      case 'repairFinish':
+        this.handlerRepairFinish(type)
+        break
+      case 'accepted':
+        this.handlerAccepted(type)
+        break
+      case 'finished':
+        this.handlerFinished(type)
+        break
+      case 'revent':
+        this.handleRevent(type)
+        break
+      case 'cancel':
+        this.handlerCancel(type)
+        break
+      case 'back':
+        this.handleBack(type)
+        break
+      case 'queryByCondition':
+        this.handleQueryByCondition(type)
+        break
       default:
         console.log('请传入正确的type值')
     }
   }
 
   // 保存
-  public async handleSave(type:string) {
+  public async handleSave(type: string) {
     console.log('🚀 ~ type', type)
     const { applyTime } = this.processParamsData[this.processType]
     const params = {
@@ -268,44 +375,48 @@ export default class extends Vue {
       this.$message.success(`${MethodsAndTitle[type]}成功`)
       this.saveProcessData = res.data
       this.$nextTick(() => {
-        this.ProcessBtnLists[this.processType].forEach((item) => {
+        this.ProcessBtnLists[this.processType].forEach(item => {
           if (item.key === 'checkSend' || item.key === 'delete') {
             item.disabled = false
           } else if (item.key === 'save') {
             item.disabled = true
           }
         })
-
-        // this.processFormItemData.maintenanceRequest.forEach((item:any)=>{
-        //   item.disabled = true
-        // })
       })
     }
   }
 
   // 送审
-  public async handleCheckSend(type:string) {
+  public async handleCheckSend(type: string) {
     const params = {
       id: this.saveProcessData.id
     }
     const res = await handleRepairApply(type, params)
     if (res.code === 200) {
-      this.$message.success(`${MethodsAndTitle[type]}成功`)
       this.closeSelectedTag({ path: '/maintenanceRequest/index/WXSQ' })
+      this.$message.success(`${MethodsAndTitle[type]}成功`)
     }
   }
 
   // 审核
-  public async handleChecking(type:string) {
+  public checkUserData = null;
+  public async handleChecking(type: string) {
     const params = {
       id: this.processClickProcessData.id
     }
     const res = await handleRepairApply(type, params)
     if (res.code === 200) {
       this.$message.success(`${MethodsAndTitle[type]}成功`)
-      this.saveProcessData = res.data
+      const conditionres = await this.queryDataByCondition({
+        page: '1',
+        limit: '10',
+        entity: {
+          id: res.data.id
+        }
+      })
+      this.maintenanceRecordData = conditionres[0]
       this.$nextTick(() => {
-        this.ProcessBtnLists[this.processType].forEach((item) => {
+        this.ProcessBtnLists[this.processType].forEach(item => {
           if (item.key === 'jobSend') {
             item.disabled = false
           } else if (item.key === 'checking') {
@@ -317,26 +428,328 @@ export default class extends Vue {
   }
 
   // 转派工
-  public async handleJobSend(type:string) {
+  public async handleJobSend(type: string) {
     const params = {
       id: this.saveProcessData.id
     }
     const res = await handleRepairApply(type, params)
     if (res.code === 200) {
+      this.closeSelectedTag({
+        path: '/maintenanceRequest/index/WXSH'
+      })
       this.$message.success(`${MethodsAndTitle[type]}成功`)
-      this.closeSelectedTag({ path: `/maintenanceRequest/index/${this.applyUrl}` })
     }
   }
 
-  // public async handleSubmitType(type: string, params: any) {
-  //   const res = await handleRepairApply(type, params)
-  //   if (res.code === 200) {
-  //     this.$message.success(`${MethodsAndTitle[type]}成功`)
-  //     return res.data
-  //   } else {
-  //     console.log('操作失败')
-  //   }
-  // }
+  // 派工
+  public maintenanceCheckData = { id: '' };
+  public chooseMaintenanceDialogVisible = false;
+  public chooseMaintenanceData = [];
+  public async handleSend(type: string) {
+    this.chooseMaintenanceDialogVisible = true
+    const res = await queryJxgcsList({
+      page: '1',
+      limit: '10',
+      entity: {}
+    })
+    if (res.code === 200) {
+      this.chooseMaintenanceData = res.data
+    }
+  }
+
+  // 指派
+  public async submitJobSending(record) {
+    console.log('🚀 ~ record', record)
+    const res = await handlejobSending({
+      id: record.id
+    })
+    if (res.code === 200) {
+      this.$message.success('指派成功')
+      this.maintenanceCheckData = record
+      this.chooseMaintenanceDialogVisible = false
+      this.$nextTick(() => {
+        this.ProcessBtnLists[this.processType].forEach(item => {
+          if (item.key === 'repairSend') {
+            item.disabled = false
+          } else if (item.key === 'send') {
+            item.disabled = true
+          }
+        })
+      })
+    }
+  }
+
+  // 转检修
+  public async handleRepairSend(type: string) {
+    console.log(' this.maintenanceCheckData ', this.maintenanceCheckData)
+    const params = {
+      id: this.processClickProcessData.id,
+      repairUserName: '',
+      repairUserId: ''
+    }
+    const res = await handleRepairApply(type, params)
+    if (res.code === 200) {
+      this.closeSelectedTag({
+        path: '/maintenanceRequest/index/WXPG'
+      })
+      this.$message.success(`${MethodsAndTitle[type]}成功`)
+    }
+  }
+
+  // 接收
+  private async handlerRecieveSending(type: string) {
+    const params = {
+      id: this.processClickProcessData.id
+    }
+    const res = await handleRepairApply(type, params)
+    if (res.code === 200) {
+      this.$message.success(`${MethodsAndTitle[type]}成功`)
+      const conditionres = await this.queryDataByCondition({
+        page: '1',
+        limit: '10',
+        entity: {
+          id: res.data.id
+        }
+      })
+      this.maintenanceRecordData = conditionres[0]
+      this.$nextTick(() => {
+        this.ProcessBtnLists[this.processType].forEach(item => {
+          if (item.key === 'repairFinish') {
+            item.disabled = false
+          } else if (item.key === 'recieveSending') {
+            item.disabled = true
+          }
+        })
+      })
+    }
+  }
+
+  // 转验收
+  private async handlerRepairFinish(type: string) {
+    console.log(this.maintenanceParamsData);
+    (this.$refs as any).recordRef.validate(async(valid: any) => {
+      if (valid) {
+        console.log(this.maintenanceParamsData)
+        const params = {
+          id: this.processClickProcessData.id,
+          records: this.maintenanceParamsData
+        }
+        const res = await handleRepairApply(type, params)
+        if (res.code === 200) {
+          this.closeSelectedTag({
+            path: '/maintenanceRequest/index/WHSH'
+          })
+          this.$message.success(`${MethodsAndTitle[type]}成功`)
+        }
+      }
+    })
+  }
+
+  // 验收
+  private async handlerAccepted(type:string) {
+    const params = {
+      id: this.processClickProcessData.id
+    }
+    const res = await handleRepairApply(type, params)
+    if (res.code === 200) {
+      this.$message.success(`${MethodsAndTitle[type]}成功`)
+      const conditionres = await this.queryDataByCondition({
+        page: '1',
+        limit: '10',
+        entity: {
+          id: res.data.id
+        }
+      })
+      this.maintenanceRecordData = conditionres[0]
+      this.$nextTick(() => {
+        this.ProcessBtnLists[this.processType].forEach(item => {
+          if (item.key === 'finished') {
+            item.disabled = false
+          } else if (item.key === 'accepted') {
+            item.disabled = true
+          }
+        })
+      })
+    }
+  }
+
+  // 归档
+  private async handlerFinished(type:string) {
+    const params = {
+      id: this.processClickProcessData.id
+    }
+    const res = await handleRepairApply(type, params)
+    if (res.code === 200) {
+      this.closeSelectedTag({
+        path: '/maintenanceRequest/index/WHSH'
+      })
+      this.$message.success(`${MethodsAndTitle[type]}成功`)
+    }
+  }
+
+  // 还原
+  private async handleRevent(type:string) {
+    const params = {
+      id: this.processClickProcessData.id
+    }
+    const res = await handleRepairApply(type, params)
+    if (res.code === 200) {
+      this.closeSelectedTag({
+        path: '/maintenanceRequest/index/WHSH'
+      })
+      this.$message.success(`${MethodsAndTitle[type]}成功`)
+    }
+  }
+
+  // 回退
+  private async handleBack(type:string) {
+    const params = {
+      id: this.processClickProcessData.id
+    }
+    const res = await handleRepairApply(type, params)
+    if (res.code === 200) {
+      this.$message.success(`${MethodsAndTitle[type]}成功`)
+    }
+  }
+
+  // 作废
+  private async handlerCancel(type:string) {
+    const params = {
+      id: this.processClickProcessData.id
+    }
+    const res = await handleRepairApply(type, params)
+    if (res.code === 200) {
+      this.closeSelectedTag({
+        path: '/maintenanceRequest/index/WHSH'
+      })
+      this.$message.success(`${MethodsAndTitle[type]}成功`)
+    }
+  }
+
+  // 操作日志
+  public showRecordVisible = false
+  public logData = []
+  private async handleQueryByCondition(type:string) {
+    this.showRecordVisible = true
+    const params = {
+      page: '1',
+      limit: '10',
+      entity: {
+        repairId: this.processClickProcessData.id
+      }
+    }
+    const res = await queryLogByCondition(params)
+    console.log('🚀 ~ 操作日志', res)
+    this.logData = res.data
+  }
+
+  /*******************************
+   * 新增明细
+   *****************************/
+  private addFormList = [
+    {
+      field: 'name',
+      title: '设备名称',
+      span: 12,
+      type: 'treeSelect',
+      data: handleDepartData(BusinessViewModule.departmentData),
+      required: true
+    },
+    {
+      field: 'unit',
+      title: '设备型号',
+      span: 12,
+      type: 'input',
+      required: true
+    },
+    {
+      field: 'numbers',
+      title: '数量',
+      span: 12,
+      type: 'input',
+      required: true
+
+    },
+    {
+      field: 'hours',
+      title: '时常',
+      span: 12,
+      type: 'input'
+
+    },
+    {
+      field: 'price',
+      title: '金额',
+      span: 12,
+      type: 'input',
+      required: true
+    }
+  ]
+
+  public addNewRecord() {
+    const attrLength = this.maintenanceRecordsFormList.length
+    if (attrLength !== 0) {
+      if (
+        this.maintenanceRecordsFormList[attrLength - 1].attrKey ===
+          '' ||
+        this.maintenanceRecordsFormList[attrLength - 1].attrValue === ''
+      ) {
+        this.$message.warning('请填写上一属性完整后再新增')
+      } else {
+        this.pushData()
+      }
+    } else {
+      this.pushData()
+    }
+  }
+
+  public pushData() {
+    this.$nextTick(() => {
+      this.maintenanceRecordsFormList.push(this.addFormList)
+      this.maintenanceParamsData.push({
+        name: null,
+        unit: '',
+        numbers: '',
+        hours: '',
+        price: ''
+      })
+    })
+    this.$forceUpdate() // 强制刷新，解决页面不会重新渲染的问题
+  }
+
+  /***************************************
+   * 移除当前设备行
+   * @param label
+   * @param index
+   **************************************/
+  public removeKey(label: any, index: number) {
+    this.$confirm('此操作将永该, 是否继续?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    })
+      .then(() => {
+        this.maintenanceRecordsFormList.splice(index, 1)
+        const loading = this.$loading({
+          lock: true,
+          text: '正在删除,请稍等',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.6)'
+        })
+        // 下面写向后台发送删除属性请求，请求后重新向后台查询form数据
+        // 此处不写请求，用setTimeout模拟效果
+        setTimeout(() => {
+          loading.close()
+          this.$message.success('删除成功')
+        }, 2000)
+      })
+      .catch(() => {
+        // this.$message({
+        //   type: "info",
+        //   message: "已取消删除"
+        // });
+      })
+  }
 
   /******************************
    * 完成申请后关闭当前tag页
@@ -345,5 +758,28 @@ export default class extends Vue {
   private closeSelectedTag(view: any) {
     TagsViewModule.delView(view)
     this.toLastView(TagsViewModule.visitedViews, view)
+  }
+
+  public toLastView(visitedViews: any[], view: any) {
+    const latestView = visitedViews.slice(-1)[0]
+    if (latestView !== undefined && latestView.fullPath !== undefined) {
+      this.$router.push(latestView.fullPath).catch((err:any) => {
+        console.warn(err)
+      })
+    } else {
+      // Default redirect to the home page if there is no tags-view, adjust it if you want
+      if (view.name === 'Dashboard') {
+        // to reload home page
+        this.$router
+          .replace({ path: '/redirect' + view.fullPath })
+          .catch((err:any) => {
+            console.warn(err)
+          })
+      } else {
+        this.$router.push((UserModule.menu as any)[0]?.path).catch((err:any) => {
+          console.warn(err)
+        })
+      }
+    }
   }
 }

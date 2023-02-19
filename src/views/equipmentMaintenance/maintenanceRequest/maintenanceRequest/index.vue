@@ -4,11 +4,11 @@
       <div slot="header"
            class="clearfix">
         <span>流程申请</span>
-        <div class="demo-drawer__footer">
+        <div class="demo-drawer__footer" v-show="pathQuery.type !== '维修申请查看'" >
           <el-row>
             <el-button size="mini"
                        :disabled="item.disabled"
-                       type="primary"
+                       :type="item.type"
                        v-for="(item) in ProcessBtnLists[processType]"
                        :key="item.key"
                        @click="handleSubmit(item.method)">
@@ -31,11 +31,11 @@
                 type="flex"
                 justify="start"
                 style="flex-wrap:wrap; flex-direction: row">
-          <el-col :span="processType === 'maintenanceRequest'?8:6"
+          <el-col :span="8"
                   v-for="(item,index) in processFormItemData.maintenanceRequest"
                   :key="index">
             <!-- 申请 表单填写 -->
-            <div v-if="processType === 'maintenanceRequest'">
+            <div v-if="processType === 'maintenanceRequest' && applyUrl !== 'CK'">
               <el-form-item :label="item.title"
                             label-width="120px"
                             :prop="'maintenanceRequest['+item.field+']'"
@@ -102,21 +102,183 @@
           </el-col>
         </el-row>
 
-        <div v-if="processType !== 'maintenanceRequest'">
-          <!-- 审核人信息 aaa-->
+        <div v-if=" processType !== 'maintenanceRequest'">
+          <!-- 审核人信息 -->
           <div class="dividerBox">
             <el-divider direction="vertical"></el-divider>
             <span>审核人信息</span>
           </div>
+          <el-row :gutter="22"
+                  type="flex"
+                  justify="start"
+                  style="flex-wrap:wrap; flex-direction: row">
+            <el-col :span="8"
+                    v-for="(item,index) in processFormItemData.checkPersonalInfoFormList"
+                    :key="index">
+              <div class="basicBox">
+                <span class="label">
+                  {{ item.title }}
+                </span>
+                <span class="value">
+                  {{ maintenanceRecordData && maintenanceRecordData[item.field] ? maintenanceRecordData[item.field] :'-'}}
+                </span>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
 
+        <div v-if="processType !== 'maintenanceRequest'">
           <!-- 维修人信息 -->
           <div class="dividerBox">
             <el-divider direction="vertical"></el-divider>
             <span>维修人信息</span>
           </div>
+          <el-row :gutter="22"
+                  type="flex"
+                  justify="start"
+                  style="flex-wrap:wrap; flex-direction: row">
+            <el-col :span="8"
+                    v-for="(item,index) in processFormItemData.maintenancePersonalInfoFormList"
+                    :key="index">
+              <div class="basicBox">
+                <span class="label">
+                  {{ item.title }}
+                </span>
+                <span class="value">
+                  {{ maintenanceRecordData && maintenanceRecordData[item.field] ? maintenanceRecordData[item.field] :'-'}}
+                </span>
+              </div>
+            </el-col>
+          </el-row>
+
         </div>
       </el-form>
 
+      <div v-if="processType === 'maintenanceIng'">
+        <el-form ref="recordRef"
+                 :model="maintenanceParamsData"
+                 label-position="left"
+                 style="margin-left:0;">
+          <!-- 维修清单 -->
+          <div class="dividerBox">
+            <el-divider direction="vertical"></el-divider>
+            <span>维修清单
+              <el-button @click="addNewRecord"
+                         size="mini"
+                         class="addBtn">+ 新增明细</el-button>
+            </span>
+          </div>
+          <el-row :gutter="24"
+                  v-for="(item,index) in maintenanceRecordsFormList"
+                  :key="index">
+            <el-col :span="24">
+              <el-row :gutter="24"
+                      class="singleRow"
+                      style="flex-wrap:wrap; flex-direction: row">
+                <el-col :span="7"
+                        v-for="(equi) in item"
+                        :key="equi.field">
+                  <el-form-item :label="equi.title"
+                                label-width="120px"
+                                :prop="'['+index+']['+equi.field+']'"
+                                :rules="equi.required ?[{required: true,message: '不能为空',trigger: 'change'}]:[{required: false}]">
+
+                    <el-input v-model="maintenanceParamsData[index][equi.field]"
+                              :placeholder="`请输入${equi.title}`"
+                              v-if="equi.type === 'input'" />
+                    <treeselect :options="equi.data"
+                                v-model="maintenanceParamsData[index][equi.field]"
+                                clearable
+                                :disable-branch-nodes="true"
+                                search-nested
+                                placeholder="请选择"
+                                v-if="equi.type === 'treeSelect'" />
+                    <!-- <el-select v-model="maintenanceParamsData[index][equi.field]"
+                             v-if="equi.type === 'select'"
+                             placeholder="请选择">
+                    <el-option :label="optionValue.label"
+                               :value="optionValue.value"
+                               v-for="optionValue in equi.data"
+                               :key="optionValue.value"></el-option>
+                  </el-select> -->
+                    <el-date-picker v-model="maintenanceParamsData[index][equi.field]"
+                                    v-if="equi.type === 'date'"
+                                    type="date"
+                                    placeholder="选择日期"
+                                    value-format="yyyy-MM-dd">
+                    </el-date-picker>
+
+                  </el-form-item>
+                </el-col>
+                <el-col :span="2">
+                  <el-button class="delete-btn"
+                             size="large"
+                             icon="el-icon-delete"
+                             type="danger"
+                             plain
+                             @click="removeKey(item,index)">删除</el-button>
+                </el-col>
+
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+
+      <!-- 维修清单 -->
+      <div v-if="processType !== 'maintenanceIng' && processType !== 'maintenanceRequest'">
+        <div class="dividerBox">
+          <el-divider direction="vertical"></el-divider>
+          <span>维修清单
+          </span>
+        </div>
+        <vxe-table border
+                   ref="xTable1"
+                   :data="maintenanceRecordData.records">
+          <vxe-column field="name"
+                      width="400"
+                      title="设备名称"></vxe-column>
+          <vxe-column field="unit"
+                      width="150"
+                      title="设备型号"></vxe-column>
+          <vxe-column field="numbers"
+                      width="150"
+                      title="数量"
+                      show-overflow></vxe-column>
+          <vxe-column field="hours"
+                      width="150"
+                      title="时常"
+                      show-overflow></vxe-column>
+          <vxe-column field="price"
+                      title="金额"
+                      show-overflow></vxe-column>
+        </vxe-table>
+      </div>
+
+      <div v-if="processType !== 'maintenanceIng' && processType !== 'maintenanceRequest'">
+        <!-- 验收人信息 -->
+        <div class="dividerBox">
+          <el-divider direction="vertical"></el-divider>
+          <span>验收人信息</span>
+        </div>
+        <el-row :gutter="22"
+                type="flex"
+                justify="start"
+                style="flex-wrap:wrap; flex-direction: row">
+          <el-col :span="8"
+                  v-for="(item,index) in processFormItemData.maintenanceAcceptPersonalInfoFormList"
+                  :key="index">
+            <div class="basicBox">
+              <span class="label">
+                {{ item.title }}
+              </span>
+              <span class="value">
+                {{ maintenanceRecordData && maintenanceRecordData[item.field] ? maintenanceRecordData[item.field] :'-'}}
+              </span>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
     </el-card>
 
     <!-- 选择设备模态框 -->
@@ -159,6 +321,68 @@
           确定
         </el-button>
       </div>
+    </el-dialog>
+
+    <!-- 维修工程师指派模态框 -->
+    <el-dialog title="选择维修工程师"
+               :visible.sync="chooseMaintenanceDialogVisible">
+      <vxe-table border
+                 ref="xTable1"
+                 height="300"
+                 :data="chooseMaintenanceData">
+        <vxe-column field="eName"
+                    title="名称"></vxe-column>
+        <vxe-column field="phoneNo"
+                    title="电话"></vxe-column>
+        <vxe-column field="sex"
+                    title="性别"
+                    show-overflow></vxe-column>
+        <vxe-column field="citizenNo"
+                    title="身份证号"
+                    show-overflow></vxe-column>
+        <vxe-column field="nation"
+                    title="国别"
+                    show-overflow></vxe-column>
+        <vxe-column width="80"
+                    title="操作">
+          <template #default="{row}">
+            <vxe-button status="primary"
+                        @click="submitJobSending(row)">指派</vxe-button>
+          </template>
+        </vxe-column>
+      </vxe-table>
+      <!-- <div slot="footer"
+           class="dialog-footer">
+        <el-button @click="chooseEquipmentDialogVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary"
+                   @click="submitChooseEquipment">
+          确定
+        </el-button>
+      </div> -->
+    </el-dialog>
+
+    <!--  操作日志-->
+    <el-dialog title="操作日志"
+               :visible.sync="showRecordVisible">
+      <vxe-table border
+                 ref="xTable1"
+                 :data="logData">
+        <vxe-column field="optUserName"
+                    width="150"
+                    title="操作人"></vxe-column>
+        <vxe-column field="optName"
+                    width="150"
+                    title="节点名称"></vxe-column>
+        <vxe-column field="optTime"
+                    title="操作时间"
+                    show-overflow>
+          <template #default="{row}">
+            <span>{{ moment(row.optTime).format('YYYY-MM-DD') }}</span>
+          </template>
+        </vxe-column>
+      </vxe-table>
     </el-dialog>
   </div>
 </template>
