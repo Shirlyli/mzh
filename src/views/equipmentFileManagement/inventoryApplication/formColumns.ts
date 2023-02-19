@@ -5,13 +5,6 @@ import { handleDepartData } from '../../../shared/utils'
 // eslint-disable-next-line camelcase
 export const BasicFormList = [
   {
-    field: 'projectName',
-    title: '任务名称',
-    span: 12,
-    type: 'input',
-    required: true
-  },
-  {
     field: 'userId',
     title: '申请人',
     span: 12,
@@ -39,10 +32,19 @@ export const BasicFormList = [
     slot: 'department'
   },
   {
-    field: 'equipmentCategory',
-    title: '盘点范围',
+    field: 'checkDepartment',
+    title: '盘点科室',
     span: 12,
-    type: 'input'
+    type: 'treeSelect',
+    required: true,
+    data: handleDepartData(BusinessViewModule.departmentData)
+  },
+  {
+    field: 'equipmentCategory',
+    title: '设备类别',
+    span: 12,
+    type: 'treeSelect',
+    data: handleDepartData(BusinessViewModule.equipmentCategoryData)
   }
 ]
 
@@ -53,37 +55,25 @@ export const EquipmentDetailFormList = [
       field: 'equipmentId',
       title: '设备名称',
       span: 12,
-      type: 'input',
+      type: 'treeSelect',
       required: true,
-      slot: 'equipment'
+      data: BusinessViewModule.equipmentData
     },
     {
-      field: 'unit',
-      title: '设备单位',
-      span: 12,
-      type: 'input'
-    },
-    {
-      field: 'equipmentNum',
-      title: '设备数量',
-      span: 12,
-      type: 'input'
-    },
-    {
-      field: 'price',
-      title: '设备价格',
-      span: 12,
-      type: 'input'
-    },
-    {
-      field: 'isImport',
-      title: '是否进口',
+      field: 'currentStatus',
+      title: '当前状态',
       span: 12,
       type: 'select',
-      data: [
-        { label: '是', value: 1 },
-        { label: '否', value: 0 }
-      ]
+      required: true,
+      data: ALL_OPTIONS.equipmentStates
+    },
+    {
+      field: 'checkStatus',
+      title: '盘点状态',
+      span: 12,
+      type: 'select',
+      required: true,
+      data: ALL_OPTIONS.equipmentStates
     }
   ]
 ]

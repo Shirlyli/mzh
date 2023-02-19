@@ -2,6 +2,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import VexTable from '@/components/VexTable/index.vue'
 import {
   delHospitalProcessBusiness,
+  delCheckApply,
   queryProcessRecordList
 } from '@/api/basic'
 import { BusinessViewModule } from '@/store/modules/business'
@@ -18,6 +19,7 @@ import { ALL_OPTIONS } from '@/shared/options'
 import { FormatApproveStatusColumns } from '@/utils/functions'
 import moment from 'moment'
 import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
+import _ from 'lodash'
 
 @Component({
   name: 'InlineEditTable',
@@ -30,9 +32,13 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
 })
 export default class extends Vue {
   async created() {
+    console.log(this.path)
     await BusinessViewModule.GET_DEPARTMENT_DATA()
   }
 
+  public path = this.$route.path
+  public editColumns = this.path.indexOf('SQ') > -1 ? ['search', 'del', 'record'] : ['search']
+  public toolbarBtns = this.path.indexOf('SQ') > -1 ? ['addProcess', 'import', 'delete', 'export'] : []
   public basicFormList = BasicFormList;
   /**********************************
    * 列表相关
@@ -40,38 +46,32 @@ export default class extends Vue {
   // 列表查询项-表单
   public formConfig = {
     data: {
-      approveStatus: '',
-      rollOutDepartment: '',
-      createTime: '',
-      status: ''
+      // approveStatus: '',
+      // rollOutDepartment: '',
+      // createTime: '',
+      // status: ''
     },
     items: [
-      {
-        field: 'approveStatus',
-        title: '任务名称',
-        span: 8,
-        itemRender: { name: '$input', props: { placeholder: '请输入任务名称' } }
-      },
-      {
-        field: 'rollOutDepartment',
-        title: '制单科室',
-        span: 8,
-        itemRender: {
-          name: '$select',
-          props: { placeholder: '请选择' },
-          options: BusinessViewModule.departmentData
-        }
-      },
-      {
-        field: 'status',
-        title: '盘点状态',
-        span: 8,
-        itemRender: {
-          name: '$select',
-          props: { placeholder: '请选择' },
-          options: ALL_OPTIONS.APPROVE_STATUS
-        }
-      },
+      // {
+      //   field: 'rollOutDepartment',
+      //   title: '制单科室',
+      //   span: 8,
+      //   itemRender: {
+      //     name: '$select',
+      //     props: { placeholder: '请选择' },
+      //     options: BusinessViewModule.departmentData
+      //   }
+      // },
+      // {
+      //   field: 'status',
+      //   title: '盘点状态',
+      //   span: 8,
+      //   itemRender: {
+      //     name: '$select',
+      //     props: { placeholder: '请选择' },
+      //     options: ALL_OPTIONS.APPROVE_STATUS
+      //   }
+      // },
       {
         field: 'createTime',
         title: '创建时间',
@@ -89,16 +89,10 @@ export default class extends Vue {
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'billCode', title: '盘点单号', width: 150 },
-    { field: 'checkDepartment', title: '任务名称' },
     { field: 'userName', title: '申请人' },
     { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
-    { field: 'departmentName', title: '制单科室 ' },
-    { field: 'equipmentCategory', title: '盘点范围' },
-    {
-      field: 'approveStatus',
-      title: '盘点状态 ',
-      formatter: (data: any) => FormatApproveStatusColumns(data)
-    },
+    { field: 'checkDepartmentName', title: '盘点科室 ' },
+    { field: 'equipmentCategoryName', title: '设备类别' },
     {
       width: 250,
       title: '操作',
@@ -117,7 +111,7 @@ export default class extends Vue {
       page: '1',
       limit: '10',
       entity: {
-        status: '0'
+        status: ''
       }
     }
   };
@@ -142,13 +136,6 @@ export default class extends Vue {
     BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'purchase', data: this.clickProcessData })
     BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
     BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: this.requestParams })
-    // sessionStorage.setItem(
-    //   'ClickProcessData',
-    //   JSON.stringify(this.clickProcessData)
-    // )
-    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    // sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
-
     this.$router
       .push({
         path: `/processApproval/index/${'PDSQ'}`,
@@ -163,13 +150,22 @@ export default class extends Vue {
    * 删除事件
    * @param data
    ************************************/
-  public async handleRemove(data: any) {
-    const res: any = await delHospitalProcessBusiness({
-      ids: data.id
-    })
-    if (res.result) {
+  public async handleRemove(row: any) {
+    let params = {}
+    if (Array.isArray(row)) {
+      params = row.map((item) => {
+        return { id: item.id }
+      })
+    } else {
+      params = [{
+        id: row.id
+      }]
+    }
+    console.log('🚀 ~ params', params)
+    const res: any = await delCheckApply(params)
+    if (res) {
       (this.$refs.vexTable as any).findList(this.paramsConfig)
-      Message.info('删除流程成功')
+      Message.info('删除成功')
     }
   }
 
@@ -190,17 +186,11 @@ export default class extends Vue {
     billCode: '',
     billMain: {
       id: '',
-      // applyPerson: (UserModule.userData as any)?.employee.userId,
-      // applyPersonName: (UserModule.userData as any).employee.eName,
-      // applyDept: (UserModule.userData as any)?.department.id,
-      // applyDeptName: (UserModule.userData as any)?.department.id,
-
       userId: (UserModule.userData as any)?.employee.userId,
-      // userName: (UserModule.userData as any).employee.eName,
       createTime: new Date(),
-      projectName: '',
       checkDepartment: (UserModule.userData as any)?.department.id,
       departmentId: (UserModule.userData as any)?.department.id,
+      equipmentCategory: null,
       status: '',
       billCode: ''
     },
@@ -208,7 +198,10 @@ export default class extends Vue {
       {
         id: '',
         billId: '',
-        equipmentId: ''
+        name: '',
+        equipmentId: null,
+        currentStatus: '',
+        checkStatus: ''
       }
     ],
     billApproveList: {
@@ -231,7 +224,7 @@ export default class extends Vue {
     // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
     // sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
-      .push({ path: `/processRequest/index/${'PDSQ'}`, query: { type: '盘点', applyUrl: 'PDSQ' } })
+      .push({ path: `/inventoryProcessRequest/index/${'PDSQ'}`, query: { type: '盘点', applyUrl: 'PDSQ' } })
       .catch((err: any) => {
         console.warn(err)
       })

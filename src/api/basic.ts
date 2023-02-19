@@ -625,3 +625,12 @@ export const deladverseEventReport = (data: any) =>
     method: 'POST',
     data
   })
+
+// 删除盘点流程
+
+export const delCheckApply = (data: any) =>
+  request({
+    url: '/checkApply/delCheckApply',
+    method: 'POST',
+    data
+  })

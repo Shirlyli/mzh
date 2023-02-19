@@ -99,7 +99,6 @@
                        size="mini"
                        class="addBtn">+ 新增设备</el-button>
           </span>
-
         </div>
         <el-row :gutter="24"
                 v-for="(item,index) in watchRequestForm.billEquipmentList"
@@ -155,44 +154,6 @@
           </el-col>
         </el-row>
 
-        <!-- 审批清单 -->
-        <!-- <div class="dividerBox">
-          <el-divider direction="vertical"></el-divider>
-          <span>审批清单</span>
-        </div>
-        <el-row :gutter="22"
-                type="flex"
-                justify="start"
-                style="flex-wrap:wrap; flex-direction: row">
-          <el-col :span="8"
-                  v-for="(item,index) in watchRequestForm.billApproveList"
-                  :key="index">
-            <el-form-item :label="item.title"
-                          label-width="120px"
-                          :prop="'billApproveList['+item.field+']'"
-                          :rules="item.required ? [{required: true, message: '不能为空', trigger: 'change'}]:[{required: false}]">
-              <el-input v-model="requestParams.billApproveList[item.field]"
-                        :placeholder="`请输入${item.title}`"
-                        v-if="item.type === 'input'" />
-              <el-select v-model="requestParams.billApproveList[item.field]"
-                         v-if="item.type === 'select'"
-                         placeholder="请选择">
-                <el-option :label="optionValue.label"
-                           :value="optionValue.value"
-                           v-for="optionValue in item.data"
-                           :key="optionValue.label"></el-option>
-              </el-select>
-              <el-date-picker v-model="requestParams.billApproveList[item.field]"
-                              v-if="item.type === 'date'"
-                              type="date"
-                              placeholder="选择日期"
-                              value-format="yyyy-MM-dd">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row> -->
-
-        <!--  -->
         <div class="dividerBox">
           <el-divider direction="vertical"></el-divider>
           <span>
@@ -246,43 +207,6 @@
           </el-col>
         </el-row>
 
-        <!-- 归还信息  -->
-        <div v-show="watchRequestForm.borrowReturnList">
-          <div class="dividerBox">
-            <el-divider direction="vertical"></el-divider>
-            <span>归还信息</span>
-          </div>
-          <el-row type="flex"
-                  justify="start"
-                  style="flex-wrap:wrap; flex-direction: row">
-            <el-col :span="8"
-                    v-for="(item,index) in watchRequestForm.borrowReturnList"
-                    :key="index">
-              <el-form-item :label="item.title"
-                            label-width="120px"
-                            :prop="'borrowReturnList['+item.field+']'"
-                            :rules="item.required ? [{required: true, message: '不能为空', trigger: 'change'}]:[{required: false}]">
-                <el-input v-model="requestParams.borrowReturnList[item.field]"
-                          :placeholder="`请输入${item.title}`"
-                          v-if="item.type === 'input'" />
-                <el-select v-model="requestParams.borrowReturnList[item.field]"
-                           v-if="item.type === 'select'"
-                           placeholder="请选择">
-                  <el-option :label="optionValue.label"
-                             :value="optionValue.value"
-                             v-for="optionValue in item.data"
-                             :key="optionValue.label"></el-option>
-                </el-select>
-                <el-date-picker v-model="requestParams.borrowReturnList[item.field]"
-                                v-if="item.type === 'date'"
-                                type="date"
-                                placeholder="选择日期"
-                                value-format="yyyy-MM-DD">
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </div>
       </el-form>
 
     </el-card>

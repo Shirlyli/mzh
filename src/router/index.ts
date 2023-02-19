@@ -90,7 +90,7 @@ export const constantRoutes: RouteConfig[] = [
       }
     ]
   },
-  // 流程申请
+  // 采购流程申请
   {
     path: '/processRequest',
     meta: { hidden: true },
@@ -104,6 +104,28 @@ export const constantRoutes: RouteConfig[] = [
             /* webpackChunkName: "401" */ '@/components/processRequest/index.vue'
           ),
         name: 'processRequest',
+        meta: {
+          title: '流程申请',
+          icon: 'user',
+          noCache: false
+        }
+      }
+    ]
+  },
+  // 盘点流程申请
+  {
+    path: '/inventoryProcessRequest',
+    meta: { hidden: true },
+    component: Layout,
+    redirect: '/inventoryProcessRequest/index',
+    children: [
+      {
+        path: 'index/:url',
+        component: () =>
+          import(
+            /* webpackChunkName: "401" */ '@/views/equipmentFileManagement/inventoryApplication/processRequest/index.vue'
+          ),
+        name: 'inventoryProcessRequest',
         meta: {
           title: '流程申请',
           icon: 'user',
