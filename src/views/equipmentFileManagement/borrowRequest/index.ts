@@ -140,13 +140,16 @@ export default class extends Vue {
       returnTime: moment(this.clickProcessData.returnTime).format('YYYY-MM-DD'),
       borrowTime: moment(this.clickProcessData.borrowTime).format('YYYY-MM-DD')
     }
+    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'purchase', data: this.clickProcessData })
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: this.requestParams })
     // TODO: 换成store存储
-    sessionStorage.setItem(
-      'ClickProcessData',
-      JSON.stringify(this.clickProcessData)
-    )
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    // sessionStorage.setItem(
+    //   'ClickProcessData',
+    //   JSON.stringify(this.clickProcessData)
+    // )
+    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
+    // sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
 
     this.$router
       .push({
@@ -187,8 +190,10 @@ export default class extends Vue {
     billCode: '',
     billMain: {
       id: '',
-      userId: (UserModule.userData as any)?.userId,
-      userName: (UserModule.userData as any)?.userName,
+      applyPerson: (UserModule.userData as any)?.employee.userId,
+      applyPersonName: (UserModule.userData as any).employee.eName,
+      applyDept: (UserModule.userData as any)?.department.id,
+      applyDeptName: (UserModule.userData as any)?.department.id,
       createTime: '',
       departmentId: '',
       borrowDepartmentId: '',
@@ -239,8 +244,10 @@ export default class extends Vue {
    ******************************/
   public handleInsert(row: any) {
     console.log('🚀 ~ row', row)
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: this.requestParams })
+    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
+    // sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
       .push({
         path: `/processRequest/index/${'JYSQ'}`,

@@ -3,11 +3,14 @@ import { BusinessViewModule } from '@/store/modules/business'
 import { UserModule } from '@/store/modules/user'
 export const BasicFormList = [
   {
-    field: 'userName',
+    field: 'applyPersonName',
     title: '申请人',
     span: 12,
-    type: 'input',
-    data: UserModule.userData,
+    disabled: true,
+    type: 'select',
+    data: BusinessViewModule.employeeData.map((item:any) => {
+      return { ...item, label: item.eName, value: item.userId }
+    }),
     required: true
   },
   {
@@ -18,9 +21,10 @@ export const BasicFormList = [
     required: true
   },
   {
-    field: 'departmentId',
-    title: '申请人科室',
+    field: 'applyDeptName',
+    title: '申请科室',
     span: 12,
+    disabled: true,
     type: 'treeSelect',
     slot: 'department',
     required: true,

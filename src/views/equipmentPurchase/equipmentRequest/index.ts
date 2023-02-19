@@ -288,8 +288,10 @@ export default class extends Vue {
       ...this.requestForm,
       billMain: BasicFormList
     }
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: this.requestParams })
+    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
+    // sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
       .push({
         path: `/processRequest/index/${'KSSQ'}`,
@@ -321,7 +323,6 @@ export default class extends Vue {
         return { ...item }
       }
     )
-    console.log('🚀 ~ this.clickProcessData', this.clickProcessData)
     const sendRequestParams = {
       id,
       status,
@@ -331,17 +332,20 @@ export default class extends Vue {
       billEquipmentList,
       dicAttachmentsList
     }
-    sessionStorage.setItem(
-      'ClickProcessData',
-      JSON.stringify(this.clickProcessData)
-    )
-    sessionStorage.setItem('BasicFormList', JSON.stringify(this.basicFormList))
     this.requestForm = {
       ...this.requestForm,
       billMain: approvalFormList
     }
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(sendRequestParams))
+    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'purchase', data: this.clickProcessData })
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: sendRequestParams })
+    // sessionStorage.setItem(
+    //   'ClickProcessData',
+    //   JSON.stringify(this.clickProcessData)
+    // )
+    // sessionStorage.setItem('BasicFormList', JSON.stringify(this.basicFormList))
+    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
+    // sessionStorage.setItem('RequestParams', JSON.stringify(sendRequestParams))
     this.$router
       .push({
         path: `/processApproval/index/${'KSSQ'}`,

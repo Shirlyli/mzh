@@ -291,7 +291,7 @@ export const maintenancePersonalInfoFormList = [
 
 export const maintenanceAcceptPersonalInfoFormList = [
   {
-    field: 'acceptUserName',
+    field: 'acceptUserId',
     title: '姓名',
     span: 12
   },
@@ -313,7 +313,7 @@ export const maintenanceRecordsFormList = [
       required: true
     },
     {
-      field: 'unit',
+      field: 'marking',
       title: '设备型号',
       span: 12,
       type: 'input',

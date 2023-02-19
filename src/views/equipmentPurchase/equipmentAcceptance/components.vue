@@ -28,7 +28,7 @@
                   :key="index">
             <div class="basicBox">
               <span class="title">{{item.title}}:</span>
-              <span class="value">{{processData.billMain[item.field]?processData.billMain[item.field]:'-'}}</span>
+              <span class="value">{{processData[item.field]?processData[item.field]:'-'}}</span>
             </div>
           </el-col>
         </el-row>

@@ -1,10 +1,13 @@
+import { BusinessViewModule } from '../../../store/modules/business'
+
 export const FormListData = [
   {
     field: 'uploader',
     title: '上传人',
     span: 12,
-    type: 'input',
-    required: true
+    type: 'select',
+    required: true,
+    data: BusinessViewModule.employeeData
   },
   {
     field: 'eventTime',
@@ -14,12 +17,7 @@ export const FormListData = [
     required: true
 
   },
-  {
-    field: 'adverseDesc',
-    title: '不良情况描述',
-    span: 12,
-    type: 'textarea'
-  },
+
   {
     field: 'patientName',
     title: '患者姓名',
@@ -71,6 +69,12 @@ export const FormListData = [
     title: '事件原因分析',
     span: 12,
     type: 'input'
+  },
+  {
+    field: 'adverseDesc',
+    title: '不良情况描述',
+    span: 12,
+    type: 'textarea'
   }
 
 ]

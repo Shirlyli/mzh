@@ -63,17 +63,12 @@ export default class extends Vue {
   /**********************
    * form表单
    *********************/
-  // TODO:换成从store获取
-  public watchRequestForm: any = JSON.parse(
-    sessionStorage.getItem('RequestForm') ?? '0'
-  );
+  public watchRequestForm: any = BusinessViewModule.processRequestForm.purchase;
 
   /**********************
    * 保存接口params
    *********************/
-  public requestParams: any = JSON.parse(
-    sessionStorage.getItem('RequestParams') ?? '0'
-  );
+  public requestParams: any = BusinessViewModule.processRequestParams.purchase;
 
   /**************
    * 监听科室变化

@@ -5,19 +5,22 @@ import { handleDepartData } from '../../../shared/utils'
 // eslint-disable-next-line camelcase
 export const BasicFormList = [
   {
-    field: 'checkDepartment',
+    field: 'projectName',
     title: '任务名称',
     span: 12,
     type: 'input',
     required: true
   },
   {
-    field: 'userName',
+    field: 'userId',
     title: '申请人',
     span: 12,
-    type: 'input',
+    disabled: true,
+    type: 'select',
     required: true,
-    data: UserModule.userData
+    data: BusinessViewModule.employeeData.map((item:any) => {
+      return { ...item, label: item.eName, value: item.userId }
+    })
   },
   {
     field: 'createTime',
@@ -26,9 +29,10 @@ export const BasicFormList = [
     type: 'date'
   },
   {
-    field: 'departmentName',
+    field: 'departmentId',
     title: '申请科室',
     span: 12,
+    disabled: true,
     type: 'treeSelect',
     required: true,
     data: handleDepartData(BusinessViewModule.departmentData),

@@ -69,7 +69,11 @@ export default class extends Vue {
       this.processType,
       this.processFormItemData,
       'this.applyUrl',
-      this.applyUrl
+      this.applyUrl,
+      'this.pathQuery',
+      this.pathUrl,
+      'this.$route',
+      this.$route
     )
 
     if (this.processType === 'maintenanceDispatch' || this.processType === 'maintenanceIng' || this.processType === 'maintenanceAcceptance' || this.processType === 'maintenanceFile') {
@@ -81,7 +85,12 @@ export default class extends Vue {
         }
       })
       console.log('🚀 ~ conditionres', conditionres)
-      this.maintenanceRecordData = conditionres[0]
+      this.maintenanceRecordData = {
+        ...conditionres[0],
+        acceptTime: conditionres[0].acceptTime ? moment(conditionres[0].acceptTime).format('YYYY-MM-DD') : '-',
+        checkTime: conditionres[0].checkTime ? moment(conditionres[0].checkTime).format('YYYY-MM-DD') : '-',
+        repairAcceptTime: conditionres[0].repairAcceptTime ? moment(conditionres[0].repairAcceptTime).format('YYYY-MM-DD') : '-'
+      }
     }
   }
 
@@ -89,6 +98,7 @@ export default class extends Vue {
   public pathQuery = this.$route.query; // 路由信息
   public processType: string = this.$route.query.processType; // 获取路由信息中的流程type值
   public applyUrl: any = this.$route.query.applyUrl;
+  private pathUrl = this.$route.path.substr(-4, 4)
 
   /******************
    * 维修流程按钮
@@ -243,7 +253,8 @@ export default class extends Vue {
     }
   ]
 
-  public maintenanceRecordData = {
+  public maintenanceRecordData :any= {
+    id: '',
     records: []
   }
 
@@ -321,6 +332,9 @@ export default class extends Vue {
       case 'checkSend':
         this.handleCheckSend(type)
         break
+      case 'delete' :
+        this.handleDelete(type)
+        break
       case 'checking':
         this.handleChecking(type)
         break
@@ -393,7 +407,19 @@ export default class extends Vue {
     }
     const res = await handleRepairApply(type, params)
     if (res.code === 200) {
-      this.closeSelectedTag({ path: '/maintenanceRequest/index/WXSQ' })
+      this.closeSelectedTag({ path: `/maintenanceRequest/index/${this.pathUrl}` })
+      this.$message.success(`${MethodsAndTitle[type]}成功`)
+    }
+  }
+
+  // 删除
+  public async handleDelete(type:string) {
+    const params = {
+      id: this.saveProcessData.id
+    }
+    const res = await handleRepairApply(type, params)
+    if (res.code === 200) {
+      this.closeSelectedTag({ path: `/maintenanceRequest/index/${this.pathUrl}` })
       this.$message.success(`${MethodsAndTitle[type]}成功`)
     }
   }
@@ -414,7 +440,12 @@ export default class extends Vue {
           id: res.data.id
         }
       })
-      this.maintenanceRecordData = conditionres[0]
+      this.maintenanceRecordData = {
+        ...conditionres[0],
+        acceptTime: conditionres[0].acceptTime ? moment(conditionres[0].acceptTime).format('YYYY-MM-DD') : '-',
+        checkTime: conditionres[0].checkTime ? moment(conditionres[0].checkTime).format('YYYY-MM-DD') : '-',
+        repairAcceptTime: conditionres[0].repairAcceptTime ? moment(conditionres[0].repairAcceptTime).format('YYYY-MM-DD') : '-'
+      }
       this.$nextTick(() => {
         this.ProcessBtnLists[this.processType].forEach(item => {
           if (item.key === 'jobSend') {
@@ -430,19 +461,19 @@ export default class extends Vue {
   // 转派工
   public async handleJobSend(type: string) {
     const params = {
-      id: this.saveProcessData.id
+      id: this.maintenanceRecordData?.id
     }
     const res = await handleRepairApply(type, params)
     if (res.code === 200) {
       this.closeSelectedTag({
-        path: '/maintenanceRequest/index/WXSH'
+        path: `/maintenanceRequest/index/${this.pathUrl}`
       })
       this.$message.success(`${MethodsAndTitle[type]}成功`)
     }
   }
 
   // 派工
-  public maintenanceCheckData = { id: '' };
+  public maintenanceCheckData = { userId: '', eName: '' };
   public chooseMaintenanceDialogVisible = false;
   public chooseMaintenanceData = [];
   public async handleSend(type: string) {
@@ -484,13 +515,13 @@ export default class extends Vue {
     console.log(' this.maintenanceCheckData ', this.maintenanceCheckData)
     const params = {
       id: this.processClickProcessData.id,
-      repairUserName: '',
-      repairUserId: ''
+      repairUserName: this.maintenanceCheckData.eName,
+      repairUserId: this.maintenanceCheckData.userId
     }
     const res = await handleRepairApply(type, params)
     if (res.code === 200) {
       this.closeSelectedTag({
-        path: '/maintenanceRequest/index/WXPG'
+        path: `/maintenanceRequest/index/${this.pathUrl}`
       })
       this.$message.success(`${MethodsAndTitle[type]}成功`)
     }
@@ -511,7 +542,12 @@ export default class extends Vue {
           id: res.data.id
         }
       })
-      this.maintenanceRecordData = conditionres[0]
+      this.maintenanceRecordData = {
+        ...conditionres[0],
+        acceptTime: conditionres[0].acceptTime ? moment(conditionres[0].acceptTime).format('YYYY-MM-DD') : '-',
+        checkTime: conditionres[0].checkTime ? moment(conditionres[0].checkTime).format('YYYY-MM-DD') : '-',
+        repairAcceptTime: conditionres[0].repairAcceptTime ? moment(conditionres[0].repairAcceptTime).format('YYYY-MM-DD') : '-'
+      }
       this.$nextTick(() => {
         this.ProcessBtnLists[this.processType].forEach(item => {
           if (item.key === 'repairFinish') {
@@ -537,7 +573,7 @@ export default class extends Vue {
         const res = await handleRepairApply(type, params)
         if (res.code === 200) {
           this.closeSelectedTag({
-            path: '/maintenanceRequest/index/WHSH'
+            path: `/maintenanceRequest/index/${this.pathUrl}`
           })
           this.$message.success(`${MethodsAndTitle[type]}成功`)
         }
@@ -560,7 +596,12 @@ export default class extends Vue {
           id: res.data.id
         }
       })
-      this.maintenanceRecordData = conditionres[0]
+      this.maintenanceRecordData = {
+        ...conditionres[0],
+        acceptTime: conditionres[0].acceptTime ? moment(conditionres[0].acceptTime).format('YYYY-MM-DD') : '-',
+        checkTime: conditionres[0].checkTime ? moment(conditionres[0].checkTime).format('YYYY-MM-DD') : '-',
+        repairAcceptTime: conditionres[0].repairAcceptTime ? moment(conditionres[0].repairAcceptTime).format('YYYY-MM-DD') : '-'
+      }
       this.$nextTick(() => {
         this.ProcessBtnLists[this.processType].forEach(item => {
           if (item.key === 'finished') {
@@ -581,7 +622,7 @@ export default class extends Vue {
     const res = await handleRepairApply(type, params)
     if (res.code === 200) {
       this.closeSelectedTag({
-        path: '/maintenanceRequest/index/WHSH'
+        path: `/maintenanceRequest/index/${this.pathUrl}`
       })
       this.$message.success(`${MethodsAndTitle[type]}成功`)
     }
@@ -595,7 +636,7 @@ export default class extends Vue {
     const res = await handleRepairApply(type, params)
     if (res.code === 200) {
       this.closeSelectedTag({
-        path: '/maintenanceRequest/index/WHSH'
+        path: `/maintenanceRequest/index/${this.pathUrl}`
       })
       this.$message.success(`${MethodsAndTitle[type]}成功`)
     }
@@ -620,8 +661,9 @@ export default class extends Vue {
     const res = await handleRepairApply(type, params)
     if (res.code === 200) {
       this.closeSelectedTag({
-        path: '/maintenanceRequest/index/WHSH'
+        path: `/maintenanceRequest/index/${this.pathUrl}`
       })
+      console.log('🚀 ~ this.pathQuery', this.pathQuery)
       this.$message.success(`${MethodsAndTitle[type]}成功`)
     }
   }

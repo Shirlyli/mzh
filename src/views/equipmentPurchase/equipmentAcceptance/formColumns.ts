@@ -20,6 +20,7 @@ export const BasicFormList = [
     field: 'applyDeptName',
     title: '申请科室',
     span: 12,
+    disabled: true,
     type: 'treeSelect',
     slot: 'department',
     data: handleDepartData(BusinessViewModule.departmentData),
@@ -34,6 +35,28 @@ export const BasicFormList = [
   {
     field: 'applyReson',
     title: '申请理由',
+    span: 12,
+    type: 'textarea',
+    required: true
+  },
+  {
+    field: 'billCode',
+    title: '流程单号',
+    span: 12,
+    type: 'textarea',
+    required: true
+  },
+  {
+    field: 'applyPersonName',
+    title: '申请人',
+    span: 12,
+    disabled: true,
+    type: 'textarea',
+    required: true
+  },
+  {
+    field: 'applyTime',
+    title: '申请时间',
     span: 12,
     type: 'textarea',
     required: true

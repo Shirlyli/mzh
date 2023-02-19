@@ -29,16 +29,16 @@
                :rules="{}"
                :model="formObj"
                label-position="left"
-               label-width="120px">
+               label-width="140px">
         <el-row type="flex"
                 :gutter="20"
                 justify="start"
                 style="flex-wrap:wrap; flex-direction: row">
           <el-col v-for="item in FormListData"
                   :key="item.field"
-                  :span="12">
+                  :span="8">
             <el-form-item :label="item.title"
-                          label-width="120px"
+                          label-width="140px"
                           :prop="item.field"
                           :rules="item.required ?[{required: true,message: '不能为空',trigger: 'change'}]:[{required: false}]">
               <el-input v-model="formObj[item.field]"
@@ -279,3 +279,9 @@ export default class extends Vue {
   }
 }
 </script>
+
+<style scoped lang="scss">
+  .el-select{
+    width: 100%;
+  }
+</style>

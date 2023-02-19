@@ -127,6 +127,7 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
+    { field: 'equipmentName', title: '设备名称', width: 150 },
     { field: 'applyDepartment', title: '申请科室', width: 150 },
     { field: 'applyTelphone', title: '申请号码', width: 150 },
     { field: 'applyTime', title: '申请时间', formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'), width: 150 },
@@ -216,7 +217,7 @@ export default class extends Vue {
 
   //  点击查看按钮事件
   public handleSearch(row: any) {
-    console.log('🚀 ~ row', row)
+    console.log('🚀 ~ row====', row)
     const clickdata = {
       ...row,
       urgency: ALL_OPTIONS.urgency.find((item:any) => String(item.value) === String(row.urgency))?.label,
@@ -228,7 +229,7 @@ export default class extends Vue {
     this.$router
       .push({
         path: `/maintenanceRequest/index/WX${this.MaintenancePath}`,
-        query: { type: `维修${MaintenanceStatusNameList[this.MaintenancePath]}查看`, applyUrl: 'CK', processType: MaintenanceProcessType[this.MaintenancePath] }
+        query: { type: `维修${MaintenanceStatusNameList[this.MaintenancePath]}查看`, applyUrl: 'CK', processType: MaintenanceProcessType[this.MaintenancePath], url: `WX${this.MaintenancePath}` }
       })
       .catch((err: any) => {
         console.warn(err)

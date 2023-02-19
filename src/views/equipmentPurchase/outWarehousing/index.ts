@@ -101,7 +101,7 @@ export default class extends Vue {
     { title: '出库数量', key: 'boundNums', type: 'input', disabled: true },
     { title: '出库时间', key: 'boundTime', type: 'date' },
     { title: '目的地', key: 'destinationId', type: 'treeSelect', options: handleDepartData(BusinessViewModule.departmentData), required: true },
-    { title: '仓库', key: 'departmentId', type: 'treeSelect', options: handleDepartData(BusinessViewModule.departmentData), required: true },
+    { title: '仓库', key: 'departmentId', type: 'treeSelect', options: handleDepartData(BusinessViewModule.departmentData), required: true, disabled: true },
     { title: '备注', key: 'note', type: 'textarea' }
   ];
 
@@ -139,7 +139,7 @@ export default class extends Vue {
     console.log('🚀 ~ row', row)
     this.rowData = row
     this.requestParams.equipmentStores = {
-      departmentId: null,
+      departmentId: row.departmentId,
       boundTime: null,
       boundType: null,
       bounder: null,

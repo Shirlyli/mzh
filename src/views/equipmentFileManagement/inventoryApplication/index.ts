@@ -139,12 +139,15 @@ export default class extends Vue {
     )
     this.clickProcessData.billMain.createTime = moment(this.clickProcessData.billMain.createTime).format('YYYY-MM-DD')
     // TODO: 换成store存储
-    sessionStorage.setItem(
-      'ClickProcessData',
-      JSON.stringify(this.clickProcessData)
-    )
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'purchase', data: this.clickProcessData })
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: this.requestParams })
+    // sessionStorage.setItem(
+    //   'ClickProcessData',
+    //   JSON.stringify(this.clickProcessData)
+    // )
+    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
+    // sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
 
     this.$router
       .push({
@@ -183,18 +186,21 @@ export default class extends Vue {
   // 申请接口传惨params
   public requestParams = {
     id: '',
-    status: '0',
+    status: '1',
     billCode: '',
     billMain: {
       id: '',
-      userId: (UserModule.userData as any)?.userId,
-      userName: (UserModule.userData as any)?.userName,
-      createTime: '',
-      rollOutDepartment: '',
-      rollInDepartment: '',
-      equipmentLocation: '',
-      rollOutTime: '',
-      cause: '',
+      // applyPerson: (UserModule.userData as any)?.employee.userId,
+      // applyPersonName: (UserModule.userData as any).employee.eName,
+      // applyDept: (UserModule.userData as any)?.department.id,
+      // applyDeptName: (UserModule.userData as any)?.department.id,
+
+      userId: (UserModule.userData as any)?.employee.userId,
+      // userName: (UserModule.userData as any).employee.eName,
+      createTime: new Date(),
+      projectName: '',
+      checkDepartment: (UserModule.userData as any)?.department.id,
+      departmentId: (UserModule.userData as any)?.department.id,
       status: '',
       billCode: ''
     },
@@ -220,8 +226,10 @@ export default class extends Vue {
    * 新增流程配置
    ******************************/
   public handleInsert() {
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: this.requestParams })
+    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
+    // sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
       .push({ path: `/processRequest/index/${'PDSQ'}`, query: { type: '盘点', applyUrl: 'PDSQ' } })
       .catch((err: any) => {

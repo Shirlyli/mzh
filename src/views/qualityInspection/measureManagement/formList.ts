@@ -1,3 +1,5 @@
+import { BusinessViewModule } from '../../../store/modules/business'
+
 export const FormListData = [
   // {
   //   field: 'id',
@@ -11,7 +13,8 @@ export const FormListData = [
     title: '设备名称',
     span: 12,
     type: 'input',
-    required: true
+    required: true,
+    disabled: true
   },
   {
     field: 'isQualified',
@@ -36,8 +39,9 @@ export const FormListData = [
     field: 'checkPerson',
     title: '检查人',
     span: 12,
-    type: 'input',
-    required: true
+    type: 'select',
+    required: true,
+    data: BusinessViewModule.employeeData
   },
   {
     field: 'checkTime',

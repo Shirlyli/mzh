@@ -67,8 +67,8 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'bill_code', title: '流程单号', width: 150 },
-    { field: 'equipment_id', title: '设备名称', width: 150 },
+    { field: 'billCode', title: '流程单号', width: 150 },
+    { field: 'equipmentId', title: '设备名称', width: 150 },
     {
       field: 'applyTime',
       title: '申请日期',
@@ -80,7 +80,7 @@ export default class extends Vue {
     // { title: '供应商名称', field: 'bounder', width: 150 },
     // { title: '品牌', field: 'boundType', width: 100 },
     // { title: '生产厂家', field: 'departmentId', width: 150 },
-    { title: '数量', field: 'equipment_num', width: 150 },
+    { title: '数量', field: 'equipmentNum', width: 150 },
     { title: '设备单位', field: 'unit', width: 100 },
     { title: '金额', field: 'price', width: 100 },
     { field: 'applyModle', title: ' 采购类型 ', width: 150 },
@@ -130,14 +130,17 @@ export default class extends Vue {
     billCode: '',
     billMain: {
       id: '',
-      userId: (UserModule.userData as any)?.userId,
-      userName: (UserModule.userData as any)?.userName,
+      applyPerson: (UserModule.userData as any)?.employee.userId,
+      applyPersonName: (UserModule.userData as any).employee.eName,
+      applyDept: (UserModule.userData as any)?.department.id,
+      applyDeptName: (UserModule.userData as any)?.department.id,
       createTime: '',
       rollOutDepartment: '',
       rollInDepartment: '',
       equipmentLocation: '',
       rollOutTime: '',
       cause: '',
+      projectName: '',
       status: '',
       billCode: ''
     },
@@ -169,26 +172,25 @@ export default class extends Vue {
    *验收点击跳转
    ****************************/
   public async handleAcceptance(row: any) {
-    const { equipmentId, unit, price } = row.billEquipmentList[0]
+    console.log('🚀 ~ row', row)
+    const { equipmentNum, equipmentId, billCode, unit, price, id } = row
     this.commonEquipmentCategoryData = {
       ...this.commonEquipmentCategoryData,
       equipmentVO: {
         ...this.commonEquipmentCategoryData.equipmentVO,
         name: equipmentId,
-        equipmentId,
+        equipmentId: equipmentId,
         unit,
         price,
-        departmentId: row.billMain.applyDept,
-        id: '',
-        billId: row.billCode,
+        id,
+        billId: billCode,
         state: 1,
-        num: row.billEquipmentList[0].equipmentNum
+        num: equipmentNum
       }
     }
-    console.log('🚀 ~ row.billMain', row.billMain)
-    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'acceptence', data: row })
+    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'acceptence', data: { ...row, applyTime: moment(row.applyTime).format('YYYY-MM-DD') } })
     BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'acceptence', data: this.requestForm })
-    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'acceptence', data: row })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'acceptence', data: this.requestParams })
     BusinessViewModule.GET_PROCESS_EQUIPMENT_CATEGORY_DATA({ type: 'acceptence', data: this.commonEquipmentCategoryData })
     this.$router.push({
       path: '/equipmentAcceptOrWarehousing/index',

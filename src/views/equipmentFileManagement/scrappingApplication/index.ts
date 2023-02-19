@@ -208,8 +208,10 @@ export default class extends Vue {
     billCode: '',
     billMain: {
       id: '',
-      userId: (UserModule.userData as any)?.userId,
-      userName: (UserModule.userData as any)?.userName,
+      applyPerson: (UserModule.userData as any)?.employee.userId,
+      applyPersonName: (UserModule.userData as any).employee.eName,
+      applyDept: (UserModule.userData as any)?.department.id,
+      applyDeptName: (UserModule.userData as any)?.department.id,
       createTime: '',
       departmentId: '',
       borrowDepartmentId: '',

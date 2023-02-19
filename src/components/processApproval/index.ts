@@ -12,6 +12,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator'
 import moment from 'moment'
 import { APPLY_URL } from '../../shared/options'
 import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
+import { BusinessViewModule } from '../../store/modules/business'
 
 @Component({
   name: 'processApproval',
@@ -22,19 +23,11 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
 export default class extends Vue {
   public moment = moment;
   public lodash = _;
-  private isPSJD = this.$route.path.indexOf('PSJD') > -1
+  private isPSJD = this.$route.path.indexOf('PSJD') > -1;
   // TODO:换成从store获取
-  public processData = JSON.parse(
-    sessionStorage.getItem('ClickProcessData') ?? '0'
-  ); // 流程数据
+  public processData = BusinessViewModule.processClickProcessData.purchase; // 流程数据
 
-  created() {
-    console.log('🚀 ~ processData', this.processData)
-  }
-
-  public watchRequestForm = JSON.parse(
-    sessionStorage.getItem('RequestForm') ?? '0'
-  ); // 流程表单配置数据columns
+  public watchRequestForm = BusinessViewModule.processRequestForm.purchase; // 流程表单配置数据columns
 
   public submitVisible = false; // 同意
   @Watch('submitVisible')
@@ -66,9 +59,7 @@ export default class extends Vue {
   /**********************
    * 保存接口params
    *********************/
-  public requestParams: any = JSON.parse(
-    sessionStorage.getItem('RequestParams') ?? '0'
-  );
+  public requestParams: any = BusinessViewModule.processRequestParams.purchase;
 
   public rules = {};
   public nextNodeNameData: any = {}; // 下一节点名称
@@ -82,7 +73,7 @@ export default class extends Vue {
     currentNodeName: '',
     nextNodeExecutor: '',
     auditReason: ''
-  }
+  };
 
   /**************************************************
    * 获取当前节点信息，并根据当前节点信息获取下一节点信息数据
@@ -162,25 +153,41 @@ export default class extends Vue {
     if (this.type === 'submit') {
       (this.$refs.equipmentProcessData as any).validate(async(valid: any) => {
         if (valid) {
-          const sendParams:any = []
-          const billApproveList = [{
-            ...this.equipmentProcessData,
-            processCode,
-            optType: 'update',
-            id: params.billApproveList[0]?.id,
-            // operator: '操作人',
-            auditStatus: '审核通过' // 审核状态(审核通过,审核不通过，回退,作废)
-          }]
-          sendParams.push({
-            ...params,
-            billMain: {
-              ...params.billMain,
-              departmentId:
-              params.billMain.departmentName || params.billMain.applyDept
-            },
-            billEquipmentList: params.billEquipmentList,
-            billApproveList
-          })
+          const sendParams: any = []
+          const billApproveList = [
+            {
+              ...this.equipmentProcessData,
+              processCode,
+              optType: 'update',
+              id: params.billApproveList[0]?.id,
+              auditStatus: '审核通过' // 审核状态(审核通过,审核不通过，回退,作废)
+            }
+          ]
+          if (this.equipmentProcessData.nextNodeCode === 'end') {
+            sendParams.push({
+              ...params,
+              status: '2',
+              billMain: {
+                ...params.billMain,
+                status: '2',
+                departmentId:
+                  params.billMain.departmentName || params.billMain.applyDept
+              },
+              billEquipmentList: params.billEquipmentList,
+              billApproveList
+            })
+          } else {
+            sendParams.push({
+              ...params,
+              billMain: {
+                ...params.billMain,
+                departmentId:
+                  params.billMain.departmentName || params.billMain.applyDept
+              },
+              billEquipmentList: params.billEquipmentList,
+              billApproveList
+            })
+          }
           console.log('🚀 ~ 保存 sendParams', sendParams)
           const res: any = await saveProcessApply(
             (APPLY_URL as any)[applyUrl],
@@ -200,20 +207,22 @@ export default class extends Vue {
     } else if (this.type === 'end') {
       (this.$refs.equipmentProcessData as any).validate(async(valid: any) => {
         if (valid) {
-          const sendParams:any = []
-          const billApproveList = [{
-            ...this.equipmentProcessData,
-            processCode,
-            optType: 'update',
-            // operator: '操作人',
-            auditStatus: '作废' // 审核状态(审核通过,审核不通过，回退,作废)
-          }]
+          const sendParams: any = []
+          const billApproveList = [
+            {
+              ...this.equipmentProcessData,
+              processCode,
+              optType: 'update',
+              // operator: '操作人',
+              auditStatus: '作废' // 审核状态(审核通过,审核不通过，回退,作废)
+            }
+          ]
           sendParams.push({
             ...params,
             billMain: {
               ...params.billMain,
               departmentId:
-              params.billMain.departmentName || params.billMain.applyDept
+                params.billMain.departmentName || params.billMain.applyDept
             },
             billEquipmentList: params.billEquipmentList,
             billApproveList
@@ -239,20 +248,22 @@ export default class extends Vue {
       (this.$refs.equipmentProcessData as any).validate(async(valid: any) => {
         console.log('🚀 ~ valid', valid, this.equipmentProcessData)
         if (valid) {
-          const billApproveList = [{
-            ...this.equipmentProcessData,
-            processCode,
-            optType: 'update',
-            // operator: '操作人',
-            auditStatus: '回退' // 审核状态(审核通过,审核不通过，回退,作废)
-          }]
-          const sendParams:any = []
+          const billApproveList = [
+            {
+              ...this.equipmentProcessData,
+              processCode,
+              optType: 'update',
+              // operator: '操作人',
+              auditStatus: '回退' // 审核状态(审核通过,审核不通过，回退,作废)
+            }
+          ]
+          const sendParams: any = []
           sendParams.push({
             ...params,
             billMain: {
               ...params.billMain,
               departmentId:
-              params.billMain.departmentName || params.billMain.applyDept
+                params.billMain.departmentName || params.billMain.applyDept
             },
             billEquipmentList: params.billEquipmentList,
             billApproveList
@@ -302,9 +313,11 @@ export default class extends Vue {
             console.warn(err)
           })
       } else {
-        this.$router.push((UserModule.menu as any)[0]?.path).catch((err: any) => {
-          console.warn(err)
-        })
+        this.$router
+          .push((UserModule.menu as any)[0]?.path)
+          .catch((err: any) => {
+            console.warn(err)
+          })
       }
     }
   }

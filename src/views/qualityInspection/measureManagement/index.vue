@@ -23,7 +23,8 @@
 
     <!-- 新增编辑 -->
     <el-dialog :title="dialogStatus==='create'?'新增':'修改'"
-               :visible.sync="dialogVisible" width="80%">
+               :visible.sync="dialogVisible"
+               width="80%">
       <el-form ref="dataForm"
                :rules="{}"
                :model="formObj"
@@ -40,9 +41,13 @@
                           label-width="120px"
                           :prop="item.field"
                           :rules="item.required ?[{required: true,message: '不能为空',trigger: 'change'}]:[{required: false}]">
-              <el-input v-model="formObj[item.field]"
-                        :placeholder="`请输入${item.title}`"
-                        v-if="item.type === 'input'" />
+              <div v-if="item.type === 'input'" style="display: flex;">
+                <el-input v-model="formObj[item.field]"
+                          :placeholder="`请输入${item.title}`"  :disabled="item.disabled"/>
+                <el-button type="primary"
+                           v-if="item.field==='equName'"
+                           @click="handleChooseEquipment">选择设备</el-button>
+              </div>
               <el-date-picker v-model="formObj[item.field]"
                               v-if="item.type === 'date'"
                               type="date"
@@ -79,6 +84,47 @@
         </el-button>
       </div>
     </el-dialog>
+
+     <!-- 选择设备模态框 -->
+     <el-dialog title="选择设备"
+               :visible.sync="chooseEquipmentDialogVisible">
+      <vxe-table border
+                 ref="xTable1"
+                 :data="chooseEquipmentData"
+                 :radio-config="{highlight: true}"
+                 @radio-change="radioChangeEvent">
+        <vxe-column type="radio"
+                    width="60">
+          <template #header>
+            <vxe-button type="text"
+                        :disabled="!selectRow"></vxe-button>
+          </template>
+        </vxe-column>
+        <vxe-column field="barCode"
+                    title="设备编号"></vxe-column>
+        <vxe-column field="name"
+                    title="设备名称"></vxe-column>
+        <vxe-column field="brand"
+                    title="规则型号"
+                    show-overflow></vxe-column>
+        <vxe-column field="barCode"
+                    title="序列号"
+                    show-overflow></vxe-column>
+        <vxe-column field="address"
+                    title="原设备编号"
+                    show-overflow></vxe-column>
+      </vxe-table>
+      <div slot="footer"
+           class="dialog-footer">
+        <el-button @click="chooseEquipmentDialogVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary"
+                   @click="submitChooseEquipment">
+          确定
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -88,9 +134,11 @@ import VexTable from '@/components/VexTable/index.vue'
 import { FormListData } from './formList'
 import moment from 'moment'
 import { updateEquipmentCategoryInfoData } from '@/api/equipment'
-import { saveHospitalMetering, delHospitalMetering } from '@/api/basic'
+import { saveHospitalMetering, delHospitalMetering, getEquipmentData } from '@/api/basic'
 import { formatIsOrNotType } from '@/shared/utils'
 import _ from 'lodash'
+import { BusinessViewModule } from '@/store/modules/business'
+
 @Component({
   name: 'InlineEditTable',
   components: {
@@ -139,16 +187,23 @@ export default class extends Vue {
     {
       field: 'checkTime',
       title: '检查日期',
-      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'),
+      width: 150
     },
-    { field: 'isQualified', title: '是否合格', formatter: this.formatIsOrNotType },
-    { field: 'qualifiedReason', title: '是否合格原因' },
+    {
+      field: 'isQualified',
+      title: '是否合格',
+      formatter: this.formatIsOrNotType,
+      width: 150
+    },
+    { field: 'qualifiedReason', title: '是否合格原因', width: 150 },
     { field: 'checkPerson', title: '检测人', width: 150 },
     { field: 'checkUnit', title: '检查单位', width: 150 },
     {
       field: 'planTime',
       title: '计划检查时间',
-      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'),
+      width: 150
     },
     {
       width: 160,
@@ -177,6 +232,7 @@ export default class extends Vue {
     isQualified: '',
     qualifiedReason: '',
     checkPerson: '',
+    checkPersonName: '',
     checkTime: null,
     checkUnit: '',
     planTime: null
@@ -222,6 +278,7 @@ export default class extends Vue {
       isQualified: '',
       qualifiedReason: '',
       checkPerson: '',
+      checkPersonName: '',
       checkTime: null,
       checkUnit: '',
       planTime: null
@@ -229,13 +286,13 @@ export default class extends Vue {
   }
 
   public async createData() {
-    console.log('保存');
-    (this.$refs.dataForm as any).validate(async(valid: any) => {
+    console.log('保存')
+    ;(this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const res: any = await saveHospitalMetering(this.formObj)
         if (res.code || res.result) {
-          this.dialogVisible = false;
-          (this.$refs.vexTable as any).findList(this.paramsConfig)
+          this.dialogVisible = false
+          ;(this.$refs.vexTable as any).findList(this.paramsConfig)
         }
         this.$message.success('创建成功')
       }
@@ -247,13 +304,63 @@ export default class extends Vue {
       if (valid) {
         const res: any = await saveHospitalMetering(this.formObj)
         if (res.code || res.result) {
-          this.dialogVisible = false;
-          (this.$refs.vexTable as any).findList(this.paramsConfig)
+          this.dialogVisible = false
+          ;(this.$refs.vexTable as any).findList(this.paramsConfig)
         }
         this.$message.success('修改成功')
         this.clearForm()
       }
     })
   }
+
+  // 新增设备
+  public chooseEquipmentDialogVisible = false
+  public selectRow :any= null
+  public chooseEquipmentData = []
+  public handleChooseEquipment() {
+    this.chooseEquipmentDialogVisible = true
+    this.getEquipmentInfoByDepartmentId()
+  }
+
+  public async getEquipmentInfoByDepartmentId() {
+    const res:any = await getEquipmentData({
+      page: '1',
+      limit: '10',
+      entity: {
+        isMetering: '1'
+      }
+    })
+    if (res.code === 200) {
+      this.chooseEquipmentData = res.data.map((item: any) => {
+        return { ...item, ...item.equipmentVO }
+      })
+      console.log('🚀 ~ this.chooseEquipmentData', this.chooseEquipmentData)
+    }
+  }
+
+  public radioChangeEvent({ row }) {
+    this.selectRow = row
+    console.log('🚀 ~  this.selectRow ', this.selectRow)
+    console.log('单选事件')
+  }
+
+  // 提交设备选择
+  public submitChooseEquipment() {
+    console.log('🚀 ~  this.selectRow ', this.selectRow)
+    const { name } = this.selectRow.equipmentVO
+    this.formObj = {
+      ...this.formObj,
+      equName: name,
+      checkPersonName: ''
+    }
+    console.log(BusinessViewModule.employeeData)
+    this.chooseEquipmentDialogVisible = false
+  }
 }
 </script>
+
+<style scoped lang="scss">
+  .el-select{
+    width: 100%;
+  }
+</style>

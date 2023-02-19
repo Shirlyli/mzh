@@ -4,11 +4,13 @@ import { BusinessViewModule } from '@/store/modules/business'
 import { UserModule } from '@/store/modules/user'
 export const BasicFormList = [
   {
-    field: 'userName',
+    field: 'applyPersonName',
     title: '申请人',
     span: 12,
-    type: 'input',
-    data: UserModule.userData,
+    type: 'select',
+    data: BusinessViewModule.employeeData.map((item:any) => {
+      return { ...item, label: item.eName, value: item.userId }
+    }),
     required: true
   },
   {
