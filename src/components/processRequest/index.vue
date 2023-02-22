@@ -62,6 +62,7 @@
               <!-- 下拉框 -->
               <el-select v-model="requestParams.billMain[item.field]"
                          v-if="item.type === 'select'"
+                         clearable
                          :disabled="item.disabled"
                          placeholder="请选择">
                 <el-option :label="optionValue.label"
@@ -99,61 +100,100 @@
                        size="mini"
                        class="addBtn">+ 新增设备</el-button>
           </span>
-
         </div>
-        <el-row :gutter="24"
-                v-for="(item,index) in watchRequestForm.billEquipmentList"
-                :key="index">
-          <el-col :span="24">
-            <el-row :gutter="24"
-                    class="singleRow">
-              <el-col :span="7"
-                      v-for="(equi) in item"
-                      :key="equi.field">
-                <el-form-item :label="equi.title"
-                              label-width="120px"
-                              :prop="'billEquipmentList['+index+']['+equi.field+']'"
-                              :rules="equi.required ?[{required: true,message: '不能为空',trigger: 'change'}]:[{required: false}]">
-                  <!-- 树形下拉框 -->
-                  <treeselect :options="equi.data"
-                              v-model="requestParams.billEquipmentList[index][equi.field]"
-                              clearable
-                              :disabled="equi.disabled"
-                              :disable-branch-nodes="true"
-                              search-nested
-                              placeholder="请选择"
-                              v-if="equi.type === 'treeSelect'" />
-                  <el-input v-model="requestParams.billEquipmentList[index][equi.field]"
-                            :placeholder="`请输入${equi.title}`"
-                            v-if="equi.type === 'input'" />
-                  <el-select v-model="requestParams.billEquipmentList[index][equi.field]"
-                             v-if="equi.type === 'select'"
-                             placeholder="请选择">
-                    <el-option :label="optionValue.label"
-                               :value="optionValue.value"
-                               v-for="optionValue in equi.data"
-                               :key="optionValue.value"></el-option>
-                  </el-select>
-                  <el-date-picker v-model="requestParams.billEquipmentList[index][equi.field]"
-                                  v-if="equi.type === 'date'"
-                                  type="date"
-                                  placeholder="选择日期"
-                                  value-format="yyyy-MM-dd">
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="2">
-                <el-button class="delete-btn"
-                           size="large"
-                           icon="el-icon-delete"
-                           type="danger"
-                           plain
-                           @click="removeKey(item,index)">删除</el-button>
-              </el-col>
+        <div>
+          <el-row :gutter="24"
+                  v-for="(item,index) in watchRequestForm.billEquipmentList"
+                  :key="index">
+            <el-col :span="24">
+              <el-row :gutter="24"
+                      class="singleRow">
+                <el-col :span="7"
+                        v-for="(equi) in item"
+                        :key="equi.field">
+                  <el-form-item :label="equi.title"
+                                label-width="120px"
+                                :prop="'billEquipmentList['+index+']['+equi.field+']'"
+                                :rules="equi.required ?[{required: true,message: '不能为空',trigger: 'change'}]:[{required: false}]">
+                    <!-- 树形下拉框 -->
+                    <treeselect :options="equi.data"
+                                v-model="requestParams.billEquipmentList[index][equi.field]"
+                                clearable
+                                :disabled="equi.disabled"
+                                :disable-branch-nodes="true"
+                                search-nested
+                                placeholder="请选择"
+                                v-if="equi.type === 'treeSelect'" />
+                    <el-input v-model="requestParams.billEquipmentList[index][equi.field]"
+                              :placeholder="`请输入${equi.title}`"
+                              v-if="equi.type === 'input'" />
+                    <el-select v-model="requestParams.billEquipmentList[index][equi.field]"
+                               v-if="equi.type === 'select'"
+                               clearable
+                               placeholder="请选择">
+                      <el-option :label="optionValue.label"
+                                 :value="optionValue.value"
+                                 v-for="optionValue in equi.data"
+                                 :key="optionValue.value"></el-option>
+                    </el-select>
+                    <el-date-picker v-model="requestParams.billEquipmentList[index][equi.field]"
+                                    v-if="equi.type === 'date'"
+                                    type="date"
+                                    placeholder="选择日期"
+                                    value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="2">
+                  <el-button class="delete-btn"
+                             size="large"
+                             icon="el-icon-delete"
+                             type="danger"
+                             plain
+                             @click="removeKey(item,index)">删除</el-button>
+                </el-col>
 
-            </el-row>
-          </el-col>
-        </el-row>
+              </el-row>
+            </el-col>
+          </el-row>
+        </div>
+
+        <!-- 新增设备盘点 -->
+        <el-dialog title="新增设备盘点"
+                   :visible.sync="inventoryDialogVisible">
+          <vxe-table border
+                     ref="xTable1"
+                     :data="chooseEquipmentData"
+                     @checkbox-all="selectAllEvent"
+                     @checkbox-change="selectChangeEvent">
+            <vxe-column type="checkbox"
+                        width="60">
+            </vxe-column>
+            <vxe-column field="barCode"
+                        title="设备编号"></vxe-column>
+            <vxe-column field="name"
+                        title="设备名称"></vxe-column>
+            <vxe-column field="brand"
+                        title="规则型号"
+                        show-overflow></vxe-column>
+            <vxe-column field="barCode"
+                        title="序列号"
+                        show-overflow></vxe-column>
+            <vxe-column field="address"
+                        title="原设备编号"
+                        show-overflow></vxe-column>
+          </vxe-table>
+          <div slot="footer"
+               class="dialog-footer">
+            <el-button @click="inventoryDialogVisible = false">
+              取消
+            </el-button>
+            <el-button type="primary"
+                       @click="submitChooseEquipment">
+              确定
+            </el-button>
+          </div>
+        </el-dialog>
 
         <!-- 审批清单 -->
         <!-- <div class="dividerBox">
@@ -192,7 +232,7 @@
           </el-col>
         </el-row> -->
 
-        <!--  -->
+        <!-- 附件信息 -->
         <div class="dividerBox">
           <el-divider direction="vertical"></el-divider>
           <span>
@@ -220,6 +260,7 @@
                             v-if="equi.type === 'input'" />
                   <el-select v-model="requestParams.dicAttachmentsList[index][equi.field]"
                              v-if="equi.type === 'select'"
+                             clearable
                              placeholder="请选择">
                     <el-option :label="optionValue.label"
                                :value="optionValue.value"
@@ -254,6 +295,7 @@
           </div>
           <el-row type="flex"
                   justify="start"
+                  :gutter="20"
                   style="flex-wrap:wrap; flex-direction: row">
             <el-col :span="8"
                     v-for="(item,index) in watchRequestForm.borrowReturnList"
@@ -267,6 +309,7 @@
                           v-if="item.type === 'input'" />
                 <el-select v-model="requestParams.borrowReturnList[item.field]"
                            v-if="item.type === 'select'"
+                           clearable
                            placeholder="请选择">
                   <el-option :label="optionValue.label"
                              :value="optionValue.value"
@@ -279,6 +322,14 @@
                                 placeholder="选择日期"
                                 value-format="yyyy-MM-DD">
                 </el-date-picker>
+                <!-- 多行文本框 -->
+                <el-input type="textarea"
+                          :rows="2"
+                          :disabled="item.disabled"
+                          v-if="item.type === 'textarea'"
+                          placeholder="请输入内容"
+                          v-model="requestParams.billMain[item.field]">
+                </el-input>
               </el-form-item>
             </el-col>
           </el-row>

@@ -29,7 +29,7 @@
                             label-width="120px"
                             prop="nextNodeExecutor"
                             :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
-                <el-select v-model="equipmentProcessData.nextNodeExecutor"
+                <el-select v-model="equipmentProcessData.nextNodeExecutor" clearable
                            placeholder="请选择">
                   <el-option :label="item.user_name"
                              :value="item.user_id"
@@ -66,7 +66,7 @@
                             label-width="80px"
                             prop="nextNodeCode"
                             :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
-                <el-select v-model="equipmentProcessData.nextNodeCode"
+                <el-select v-model="equipmentProcessData.nextNodeCode" clearable
                            placeholder="请选择"
                            @change="handleNodeChange">
                   <el-option :label="item.nodeName"
@@ -79,7 +79,7 @@
                             label-width="80px"
                             prop="nextNodeExecutor"
                             :rules="[{required: true, message: '不能为空', trigger: 'change'}]">
-                <el-select v-model="equipmentProcessData.nextNodeExecutor"
+                <el-select v-model="equipmentProcessData.nextNodeExecutor" clearable
                            placeholder="请选择">
                   <el-option :label="item.user_name"
                              :value="item.user_id"

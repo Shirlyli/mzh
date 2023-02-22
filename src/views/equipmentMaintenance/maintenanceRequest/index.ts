@@ -58,7 +58,8 @@ enum MaintenanceProcessType {
   'GD'='maintenanceFile', // 归档
   'LJ'='maintenanceDustbin', // 作废
   'HY'='maintenanceReturn', // 还原
-  'SC'='maintenanceDel'// 删除
+  'SC'='maintenanceDel', // 删除
+  'CX'='maintenanceSearch', // 综合查询
 }
 
 const MaintenanceToolbarButtons = {

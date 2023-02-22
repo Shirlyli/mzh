@@ -23,6 +23,7 @@ class BusinessView extends VuexModule implements BusinessState {
   public processRequestForm: any = {}; // 各个流程的流程form表单渲染数据
   public processRequestParams: any = {}; // 各个流程的params数据
   public processEquipmentCategoryData: any = {};// 新增设备的params数据
+  public addEquipmentParamsData = {};
   @Mutation
   private SET_DEPARTMENT_DATA(view: any) {
     this.departmentData = view
@@ -61,6 +62,11 @@ class BusinessView extends VuexModule implements BusinessState {
   @Mutation
   private SET_EMPLOYEE_DATA(views:any) {
     this.employeeData = views
+  }
+
+  @Mutation
+  private SET_ADD_EQUIPMENT_DATA(view:any) {
+    this.addEquipmentParamsData = view
   }
 
   @Action({ rawError: true })
@@ -136,6 +142,11 @@ class BusinessView extends VuexModule implements BusinessState {
     })
     console.log('🚀 ~ newRes', newRes)
     resData.code === 200 ? this.SET_EQUIPMENT_CATEGORY_DATA(newRes) : this.SET_EQUIPMENT_CATEGORY_DATA([])
+  }
+
+  @Action({ rawError: true })
+  public GET_ADD_EQUIPMENT_DATA(view) {
+    this.SET_ADD_EQUIPMENT_DATA(view)
   }
 }
 

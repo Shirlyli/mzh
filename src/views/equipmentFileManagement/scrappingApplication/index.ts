@@ -104,26 +104,28 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'billCode', title: '设备编号' },
-    { field: 'billCode', title: '设备名称' },
-    { field: 'billCode', title: '规则型号' },
-    { field: 'billCode', title: '所属科室' },
-    { field: 'billCode', title: '申请人' },
+    { field: 'billCode', title: '设备编号', width: 150 },
+    { field: 'billCode', title: '设备名称', width: 150 },
+    { field: 'billCode', title: '规则型号', width: 150 },
+    { field: 'billCode', title: '所属科室', width: 150 },
+    { field: 'billCode', title: '申请人', width: 150 },
     { field: 'billCode', title: '报废单号', width: 150 },
-    { field: 'departmentName', title: '申请科室' },
-    { field: 'useDepartmentName', title: '使用科室' },
-    { field: 'instructions', title: '使用情况' },
+    { field: 'departmentName', title: '申请科室', width: 150 },
+    { field: 'useDepartmentName', title: '使用科室', width: 150 },
+    { field: 'instructions', title: '使用情况', width: 150 },
     {
       field: 'status',
       title: '单据状态',
-      formatter: FormatApproveStatus
+      formatter: FormatApproveStatus,
+      width: 150
     },
-    { field: 'cause', title: ' 报废原因 ' },
-    { field: 'approveStatus', title: '报废状态', formatter: FormatApproveStatus },
+    { field: 'cause', title: ' 报废原因 ', width: 150 },
+    { field: 'approveStatus', title: '报废状态', formatter: FormatApproveStatus, width: 150 },
     {
       field: 'createTime',
       title: '申请日期',
-      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'),
+      width: 150
     },
     {
       width: 100,
@@ -162,18 +164,14 @@ export default class extends Vue {
       returnTime: moment(this.clickProcessData.returnTime).format('YYYY-MM-DD'),
       borrowTime: moment(this.clickProcessData.borrowTime).format('YYYY-MM-DD')
     }
-    // TODO: 换成store存储
-    sessionStorage.setItem(
-      'ClickProcessData',
-      JSON.stringify(this.clickProcessData)
-    )
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'scrapApply', data: this.clickProcessData })
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'scrapApply', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'scrapApply', data: this.requestParams })
 
     this.$router
       .push({
         path: `/processApproval/index/${'BFSQ'}`,
-        query: { nextNodeCode, id, type: '报废' }
+        query: { nextNodeCode, id, type: '报废', moduleType: 'scrapApply' }
       })
       .catch((err: any) => {
         console.warn(err)
@@ -210,10 +208,10 @@ export default class extends Vue {
       id: '',
       applyPerson: (UserModule.userData as any)?.employee.userId,
       applyPersonName: (UserModule.userData as any).employee.eName,
-      applyDept: (UserModule.userData as any)?.department.id,
-      applyDeptName: (UserModule.userData as any)?.department.id,
-      createTime: '',
-      departmentId: '',
+      // applyDept: (UserModule.userData as any)?.department.id,
+      // applyDeptName: (UserModule.userData as any)?.department.id,
+      createTime: new Date(),
+      departmentId: (UserModule.userData as any)?.department.id,
       borrowDepartmentId: '',
       borrowTime: '',
       cause: '',
@@ -262,10 +260,10 @@ export default class extends Vue {
    ******************************/
   public handleInsert(row: any) {
     console.log('🚀 ~ row', row)
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'scrapApply', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'scrapApply', data: this.requestParams })
     this.$router
-      .push({ path: `/processRequest/index/${'BFSQ'}`, query: { type: '报废', applyUrl: 'BFSQ' } })
+      .push({ path: `/processRequest/index/${'BFSQ'}`, query: { type: '报废', applyUrl: 'BFSQ', moduleType: 'scrapApply' } })
       .catch((err: any) => {
         console.warn(err)
       })

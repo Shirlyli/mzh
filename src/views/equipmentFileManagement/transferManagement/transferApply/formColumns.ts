@@ -4,22 +4,23 @@ import { BusinessViewModule } from '@/store/modules/business'
 import { UserModule } from '@/store/modules/user'
 export const BasicFormList = [
   {
-    field: 'applyPersonName',
+    field: 'userId',
     title: '申请人',
     span: 12,
     type: 'select',
     data: BusinessViewModule.employeeData.map((item:any) => {
       return { ...item, label: item.eName, value: item.userId }
     }),
-    required: true
+    required: true,
+    disabled: true
   },
   {
     field: 'createTime',
     title: '申请日期',
     span: 12,
     type: 'date',
-    required: true
-
+    required: true,
+    disabled: true
   },
   {
     field: 'rollOutDepartment',
@@ -43,7 +44,8 @@ export const BasicFormList = [
     field: 'equipmentLocation',
     title: '新存放地点',
     span: 12,
-    type: 'input'
+    type: 'treeSelect',
+    data: handleDepartData(BusinessViewModule.departmentData)
   },
   {
     field: 'rollOutTime',
@@ -67,9 +69,9 @@ export const EquipmentDetailFormList = [
       field: 'equipmentId',
       title: '设备名称',
       span: 12,
-      type: 'input',
+      type: 'select',
       required: true,
-      slot: 'equipment'
+      data: []
     },
     {
       field: 'unit',

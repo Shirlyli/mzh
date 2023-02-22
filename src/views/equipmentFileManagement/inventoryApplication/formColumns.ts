@@ -55,9 +55,9 @@ export const EquipmentDetailFormList = [
       field: 'equipmentId',
       title: '设备名称',
       span: 12,
-      type: 'treeSelect',
+      type: 'select',
       required: true,
-      data: BusinessViewModule.equipmentData
+      data: []
     },
     {
       field: 'currentStatus',

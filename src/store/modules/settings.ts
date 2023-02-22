@@ -29,7 +29,7 @@ class Settings extends VuexModule implements ISettingsState {
     }
   }
 
-  @Action
+  @Action({ rawError: true })
   public ChangeSetting(payload: { key: string, value: any}) {
     this.CHANGE_SETTING(payload)
   }

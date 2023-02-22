@@ -157,21 +157,7 @@ export default class extends Vue {
    * @returns
    */
   public handleInsert() {
-    // if (!this.nodeClickData.id) {
-    //   Message.error('请选中科室后新增')
-    //   return
-    // }
-    // this.dialogStatus = 'create'
-    // const { id } = this.nodeClickData
-    // this.equipmentCategoryData = {
-    //   ...this.equipmentCategoryData,
-    //   equipmentVO: {
-    //     ...this.equipmentCategoryData.equipmentVO,
-    //     departmentId: id
-    //   }
-    // }
-    // sessionStorage.setItem('EquipmentCategoryData', JSON.stringify(this.equipmentCategoryData))
-    // this.$router.push({ path: '/equipmentAddOrUpdate', query: { dialogStatus: this.dialogStatus, type: '新增' } })
+    console.log('aaaa')
   }
 
   /**
@@ -205,7 +191,8 @@ export default class extends Vue {
     }
     this.dialogStatus = 'update'
     // TODO: 换成store存储
-    sessionStorage.setItem('EquipmentCategoryData', JSON.stringify(this.equipmentCategoryData))
+    BusinessViewModule.GET_ADD_EQUIPMENT_DATA(this.equipmentCategoryData)
+
     this.$router.push({ path: '/equipmentAddOrUpdate', query: { dialogStatus: this.dialogStatus, type: '修改' } })
     await BusinessViewModule.GET_EQUIPMENT_DATA(row.equipmentVO?.departmentId, 1, 10)
   }

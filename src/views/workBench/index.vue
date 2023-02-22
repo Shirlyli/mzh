@@ -31,6 +31,29 @@ export default class extends Vue {
       this.currentRole = 'editor-dashboard'
     }
   }
+
+  mounted() {
+    this.getData()
+    this.getAdata()
+    this.getBDAta()
+    this.GET_EQUIPMENT_CATEGORY_DATA()
+  }
+
+  public async getData() {
+    await BusinessViewModule.GET_EQUIPMENT_DATA('001', 1, 10)
+  }
+
+  public async getAdata() {
+    await BusinessViewModule.GET_DEPARTMENT_DATA()// 获取科室数据
+  }
+
+  public async getBDAta() {
+    await BusinessViewModule.GET_EMPLOYEE_DATA()// 获取员工信息
+  }
+
+  public async GET_EQUIPMENT_CATEGORY_DATA() {
+    await BusinessViewModule.GET_EQUIPMENT_CATEGORY_DATA()// 获取设备类别信息
+  }
 }
 </script>
 

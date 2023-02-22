@@ -11,14 +11,16 @@ export const BasicFormList = [
     data: BusinessViewModule.employeeData.map((item:any) => {
       return { ...item, label: item.eName, value: item.userId }
     }),
-    required: true
+    required: true,
+    disabled: true
   },
   {
     field: 'createTime',
     title: '申请日期',
     span: 12,
     type: 'date',
-    required: true
+    required: true,
+    disabled: true
   },
   {
     field: 'departmentId',
@@ -27,6 +29,7 @@ export const BasicFormList = [
     type: 'treeSelect',
     slot: 'department',
     required: true,
+    disabled: true,
     data: handleDepartData(BusinessViewModule.departmentData)
   },
   {
@@ -59,9 +62,9 @@ export const EquipmentDetailFormList = [
       field: 'equipmentId',
       title: '设备名称',
       span: 12,
-      type: 'input',
+      type: 'select',
       required: true,
-      slot: 'equipment'
+      data: []
     },
     {
       field: 'unit',

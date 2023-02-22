@@ -112,17 +112,17 @@ this.isCGX
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'billCode', title: '外调单号', width: 150 },
-    { field: 'departmentName', title: '申请人科室' },
-    { field: 'transferDepartmentId', title: '外调科室' },
-    { field: 'departmentPrincipal', title: '科室负责人' },
-    { field: 'transferType', title: '外调类型' },
-    { field: 'transferTime', title: '外调时间', formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD') },
-    { field: 'contacts', title: '乙方联系人' },
-    { field: 'contactWay', title: '联系方式' },
-    { field: 'destination', title: '外调目的地' },
-    { field: 'cause', title: ' 外调原因 ' },
-    { field: 'approveStatus', title: '审批状态', formatter: FormatApproveStatus },
-    { field: 'createTime', title: '申请日期', formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD') },
+    { field: 'departmentName', title: '申请人科室', width: 150 },
+    { field: 'transferDepartmentId', title: '外调科室', width: 150 },
+    { field: 'departmentPrincipal', title: '科室负责人', width: 150 },
+    { field: 'transferType', title: '外调类型', width: 150 },
+    { field: 'transferTime', title: '外调时间', formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'), width: 150 },
+    { field: 'contacts', title: '乙方联系人', width: 150 },
+    { field: 'contactWay', title: '联系方式', width: 150 },
+    { field: 'destination', title: '外调目的地', width: 150 },
+    { field: 'cause', title: ' 外调原因 ', width: 150 },
+    { field: 'approveStatus', title: '审批状态', formatter: FormatApproveStatus, width: 150 },
+    { field: 'createTime', title: '申请日期', formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'), width: 150 },
     {
       width: 250,
       title: '操作',
@@ -159,18 +159,14 @@ this.isCGX
       returnTime: moment(this.clickProcessData.returnTime).format('YYYY-MM-DD'),
       borrowTime: moment(this.clickProcessData.borrowTime).format('YYYY-MM-DD')
     }
-    // TODO: 换成store存储
-    sessionStorage.setItem(
-      'ClickProcessData',
-      JSON.stringify(this.clickProcessData)
-    )
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'outCall', data: this.clickProcessData })
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'outCall', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'outCall', data: this.requestParams })
 
     this.$router
       .push({
         path: `/processApproval/index/${'WDSQ'}`,
-        query: { nextNodeCode, id, type: '外调' }
+        query: { nextNodeCode, id, type: '外调', moduleType: 'outCall' }
       })
       .catch((err: any) => {
         console.warn(err)
@@ -209,8 +205,8 @@ this.isCGX
       applyPersonName: (UserModule.userData as any).employee.eName,
       applyDept: (UserModule.userData as any)?.department.id,
       applyDeptName: (UserModule.userData as any)?.department.id,
-      createTime: '',
-      departmentId: '',
+      createTime: new Date(),
+      departmentId: (UserModule.userData as any)?.department.id,
       borrowDepartmentId: '',
       borrowTime: '',
       cause: '',
@@ -259,12 +255,12 @@ this.isCGX
    ******************************/
   public handleInsert(row: any) {
     console.log('🚀 ~ row', row)
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'outCall', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'outCall', data: this.requestParams })
     this.$router
       .push({
         path: `/processRequest/index/${'WDSQ'}`,
-        query: { type: '外调', applyUrl: 'WDSQ' }
+        query: { type: '外调', applyUrl: 'WDSQ', moduleType: 'outCall' }
       })
       .catch((err: any) => {
         console.warn(err)

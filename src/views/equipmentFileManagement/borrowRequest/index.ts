@@ -30,10 +30,9 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
   }
 })
 export default class extends Vue {
-  async created() {
-    await BusinessViewModule.GET_DEPARTMENT_DATA()
-  }
-
+  public path = this.$route.path
+  public editColumns = this.path.indexOf('SQ') > -1 ? ['search', 'del', 'record'] : ['search']
+  public toolbarBtns = this.path.indexOf('SQ') > -1 ? ['addProcess', 'import', 'delete', 'export'] : []
   public basicFormList = BasicFormList;
   /**********************************
    * 列表相关
@@ -72,7 +71,7 @@ export default class extends Vue {
         slots: { default: 'create_time' },
         span: 10
       },
-      { slots: { default: 'operate_item' }, span: 4 }
+      { slots: { default: 'operate_item' }, span: 6 }
     ] // 表单项
   };
 
@@ -81,28 +80,32 @@ export default class extends Vue {
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
     { field: 'billCode', title: '借用单号', width: 150 },
-    { field: 'departmentName', title: '申请人科室' },
-    { field: 'borrowDepartmentName', title: '借用申请科室' },
+    { field: 'departmentName', title: '申请人科室', width: 150 },
+    { field: 'borrowDepartmentName', title: '借用申请科室', width: 150 },
     {
       field: 'borrowTime',
       title: '预计借用时间 ',
-      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'),
+      width: 150
     },
     {
       field: 'returnTime',
       title: ' 预计归还时间',
-      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'),
+      width: 150
     },
-    { field: 'cause', title: ' 借用原因 ' },
+    { field: 'cause', title: ' 借用原因 ', width: 150 },
     {
       field: 'approveStatus',
       title: '审批状态',
-      formatter: FormatApproveStatus
+      formatter: FormatApproveStatus,
+      width: 150
     },
     {
       field: 'createTime',
       title: '申请日期',
-      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'),
+      width: 150
     },
     {
       width: 250,
@@ -140,21 +143,14 @@ export default class extends Vue {
       returnTime: moment(this.clickProcessData.returnTime).format('YYYY-MM-DD'),
       borrowTime: moment(this.clickProcessData.borrowTime).format('YYYY-MM-DD')
     }
-    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'purchase', data: this.clickProcessData })
-    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
-    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: this.requestParams })
-    // TODO: 换成store存储
-    // sessionStorage.setItem(
-    //   'ClickProcessData',
-    //   JSON.stringify(this.clickProcessData)
-    // )
-    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    // sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'borrow', data: this.clickProcessData })
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'borrow', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'borrow', data: this.requestParams })
 
     this.$router
       .push({
         path: `/processApproval/index/${'JYSQ'}`,
-        query: { nextNodeCode, id, type: '借用' }
+        query: { nextNodeCode, id, type: '借用', moduleType: 'borrow' }
       })
       .catch((err: any) => {
         console.warn(err)
@@ -194,9 +190,9 @@ export default class extends Vue {
       applyPersonName: (UserModule.userData as any).employee.eName,
       applyDept: (UserModule.userData as any)?.department.id,
       applyDeptName: (UserModule.userData as any)?.department.id,
-      createTime: '',
+      createTime: new Date(),
       departmentId: '',
-      borrowDepartmentId: '',
+      borrowDepartmentId: null,
       borrowTime: '',
       cause: '',
       returnTime: '',
@@ -244,14 +240,12 @@ export default class extends Vue {
    ******************************/
   public handleInsert(row: any) {
     console.log('🚀 ~ row', row)
-    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
-    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: this.requestParams })
-    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    // sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'borrow', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'borrow', data: this.requestParams })
     this.$router
       .push({
         path: `/processRequest/index/${'JYSQ'}`,
-        query: { type: '借用', applyUrl: 'JYSQ' }
+        query: { type: '借用', applyUrl: 'JYSQ', moduleType: 'borrow' }
       })
       .catch((err: any) => {
         console.warn(err)

@@ -23,11 +23,11 @@ import { BusinessViewModule } from '../../store/modules/business'
 export default class extends Vue {
   public moment = moment;
   public lodash = _;
-  private isPSJD = this.$route.path.indexOf('PSJD') > -1;
+  public query = this.$route.query
   // TODO:换成从store获取
-  public processData = BusinessViewModule.processClickProcessData.purchase; // 流程数据
+  public processData = BusinessViewModule.processClickProcessData[this.query.moduleType]; // 流程数据
 
-  public watchRequestForm = BusinessViewModule.processRequestForm.purchase; // 流程表单配置数据columns
+  public watchRequestForm = BusinessViewModule.processRequestForm[this.query.moduleType]; // 流程表单配置数据columns
 
   public submitVisible = false; // 同意
   @Watch('submitVisible')
@@ -59,7 +59,7 @@ export default class extends Vue {
   /**********************
    * 保存接口params
    *********************/
-  public requestParams: any = BusinessViewModule.processRequestParams.purchase;
+  public requestParams: any = BusinessViewModule.processRequestParams[this.query.moduleType];
 
   public rules = {};
   public nextNodeNameData: any = {}; // 下一节点名称

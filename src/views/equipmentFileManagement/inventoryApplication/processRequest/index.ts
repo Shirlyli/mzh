@@ -19,6 +19,7 @@ export default class extends Vue {
     console.log(BusinessViewModule.employeeData)
   }
 
+  public path = this.$route.path
   /********************************************
    * 待新增的设备params
    *******************************************/
@@ -143,6 +144,7 @@ export default class extends Vue {
           status: '1',
           billMain: {
             ...params.billMain,
+            status: '1',
             applyDept: params.billMain.applyDeptName,
             departmentId:
               params.billMain.departmentName || params.billMain.applyDept

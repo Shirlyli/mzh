@@ -94,7 +94,7 @@ export default class extends Vue {
     { field: 'checkDepartmentName', title: '盘点科室 ' },
     { field: 'equipmentCategoryName', title: '设备类别' },
     {
-      width: 250,
+      width: this.$route.path.indexOf('PDSQ') > -1 ? 250 : 100,
       title: '操作',
       fixed: 'right',
       slots: { default: 'operateHasSearch' },
@@ -133,13 +133,13 @@ export default class extends Vue {
     )
     this.clickProcessData.billMain.createTime = moment(this.clickProcessData.billMain.createTime).format('YYYY-MM-DD')
     // TODO: 换成store存储
-    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'purchase', data: this.clickProcessData })
-    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
-    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: this.requestParams })
+    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'inventory', data: this.clickProcessData })
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'inventory', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'inventory', data: this.requestParams })
     this.$router
       .push({
         path: `/processApproval/index/${'PDSQ'}`,
-        query: { nextNodeCode, id, type: '盘点' }
+        query: { nextNodeCode, id, type: '盘点', moduleType: 'inventory' }
       })
       .catch((err: any) => {
         console.warn(err)
@@ -219,12 +219,10 @@ export default class extends Vue {
    * 新增流程配置
    ******************************/
   public handleInsert() {
-    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
-    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: this.requestParams })
-    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    // sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'inventory', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'inventory', data: this.requestParams })
     this.$router
-      .push({ path: `/inventoryProcessRequest/index/${'PDSQ'}`, query: { type: '盘点', applyUrl: 'PDSQ' } })
+      .push({ path: `/processRequest/index/${'PDSQ'}`, query: { type: '盘点', applyUrl: 'PDSQ', moduleType: 'inventory' } })
       .catch((err: any) => {
         console.warn(err)
       })

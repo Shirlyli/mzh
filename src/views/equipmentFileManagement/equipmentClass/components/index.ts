@@ -17,6 +17,7 @@ import {
 import { ITagView, TagsViewModule } from '@/store/modules/tags-view'
 import { UserModule } from '@/store/modules/user'
 import { queryByConditionSupplier, uploadFile } from '@/api/basic'
+import { BusinessViewModule } from '../../../../store/modules/business'
 // import { BusinessViewModule } from '@/store/modules/business'
 @Component({
   name: 'equipmentAddOrUpdate'
@@ -39,9 +40,7 @@ export default class extends Vue {
   public rules = {}; // 表单校验
   // TODO:换成从store获取
 
-  public equipmentCategoryData = JSON.parse(
-    sessionStorage.getItem('EquipmentCategoryData') ?? '0'
-  );
+  public equipmentCategoryData = BusinessViewModule.addEquipmentParamsData
 
   public activeName = 'equipmentVO'; // 当前tab页
   @Watch('activeName') // 监听tab页

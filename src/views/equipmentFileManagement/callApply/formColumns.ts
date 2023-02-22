@@ -1,6 +1,7 @@
 import { ALL_OPTIONS } from '@/shared/options'
 import { BusinessViewModule } from '@/store/modules/business'
 import { UserModule } from '@/store/modules/user'
+import { handleDepartData } from '../../../shared/utils'
 export const BasicFormList = [
   {
     field: 'applyPersonName',
@@ -12,13 +13,15 @@ export const BasicFormList = [
       return { ...item, label: item.eName, value: item.userId }
     }),
     required: true
+
   },
   {
     field: 'createTime',
     title: '申请日期',
     span: 12,
     type: 'date',
-    required: true
+    required: true,
+    disabled: true
   },
   {
     field: 'applyDeptName',
@@ -28,7 +31,7 @@ export const BasicFormList = [
     type: 'treeSelect',
     slot: 'department',
     required: true,
-    data: BusinessViewModule.departmentData
+    data: handleDepartData(BusinessViewModule.departmentData)
   },
   {
     field: 'transferDepartmentId',
@@ -37,20 +40,24 @@ export const BasicFormList = [
     type: 'treeSelect',
     slot: 'department',
     required: true,
-    data: BusinessViewModule.departmentData
+    data: handleDepartData(BusinessViewModule.departmentData)
   },
   {
     field: 'departmentPrincipal',
     title: '科室负责人',
     span: 12,
-    type: 'input',
-    required: true
+    type: 'select',
+    required: true,
+    data: BusinessViewModule.employeeData.map((item:any) => {
+      return { ...item, label: item.eName, value: item.userId }
+    })
   },
   {
     field: 'transferType',
     title: '外调类型',
     span: 12,
-    type: 'input'
+    type: 'select',
+    data: []
   },
   {
     field: 'transferTime',
@@ -90,9 +97,9 @@ export const EquipmentDetailFormList = [
       field: 'equipmentId',
       title: '设备名称',
       span: 12,
-      type: 'input',
+      type: 'select',
       required: true,
-      slot: 'equipment'
+      data: []
     },
     {
       field: 'unit',

@@ -300,7 +300,7 @@ export default class extends Vue {
         departmentId: id
       }
     }
-    sessionStorage.setItem('EquipmentCategoryData', JSON.stringify(this.equipmentCategoryData))
+    BusinessViewModule.GET_ADD_EQUIPMENT_DATA(this.equipmentCategoryData)
     this.$router.push({ path: '/equipmentAddOrUpdate', query: { dialogStatus: this.dialogStatus, type: '新增' } })
   }
 
@@ -334,7 +334,7 @@ export default class extends Vue {
       equipmentVO
     }
     this.dialogStatus = 'update'
-    sessionStorage.setItem('EquipmentCategoryData', JSON.stringify(this.equipmentCategoryData))
+    BusinessViewModule.GET_ADD_EQUIPMENT_DATA(this.equipmentCategoryData)
     this.$router.push({ path: '/equipmentAddOrUpdate', query: { dialogStatus: this.dialogStatus, type: '修改' } })
     await BusinessViewModule.GET_EQUIPMENT_DATA(row.equipmentVO?.departmentId, 1, 10)
   }

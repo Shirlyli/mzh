@@ -11,6 +11,7 @@ import { getEquipmentInfoByDepartmentId } from '@/api/equipment'
 import moment from 'moment'
 import ProcessApproval from '@/components/processApproval/index.vue'
 import ProcessOperationRecord from '@/components/processOperationRecord/index.vue'
+import { BusinessViewModule } from '../../../store/modules/business'
 @Component({
   name: 'InlineEditTable',
   components: {
@@ -199,17 +200,13 @@ export default class extends Vue {
   public handleSearch(row: any) {
     const { id, nextNodeCode } = row
     this.clickProcessData = row
-    // TODO: 换成store存储
-    sessionStorage.setItem(
-      'ClickProcessData',
-      JSON.stringify(this.clickProcessData)
-    )
-    sessionStorage.setItem('BasicFormList', JSON.stringify(this.basicFormList))
-    this.$router
-      .push({ path: `/processApproval/index/${'KSSQ'}`, query: { nextNodeCode, id, type: '科室申请' } })
-      .catch((err: any) => {
-        console.warn(err)
-      })
+    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'purchase', data: this.clickProcessData })
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
+    // this.$router
+    //   .push({ path: `/processApproval/index/${'KSSQ'}`, query: { nextNodeCode, id, type: '科室申请' } })
+    //   .catch((err: any) => {
+    //     console.warn(err)
+    //   })
   }
 
   public emitHandleSubmit(value: boolean) {

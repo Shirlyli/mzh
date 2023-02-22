@@ -93,46 +93,46 @@ class TagsView extends VuexModule implements ITagsViewState {
     }
   }
 
-  @Action
+  @Action({ rawError: true })
   public addView(view: ITagView) {
     this.ADD_VISITED_VIEW(view)
     this.ADD_CACHED_VIEW(view)
   }
 
-  @Action
+  @Action({ rawError: true })
   public addVisitedView(view: ITagView) {
     this.ADD_VISITED_VIEW(view)
   }
 
-  @Action
+  @Action({ rawError: true })
   public delView(view: ITagView) {
     this.DEL_VISITED_VIEW(view)
     this.DEL_CACHED_VIEW(view)
   }
 
-  @Action
+  @Action({ rawError: true })
   public delCachedView(view: ITagView) {
     this.DEL_CACHED_VIEW(view)
   }
 
-  @Action
+  @Action({ rawError: true })
   public delOthersViews(view: ITagView) {
     this.DEL_OTHERS_VISITED_VIEWS(view)
     this.DEL_OTHERS_CACHED_VIEWS(view)
   }
 
-  @Action
+  @Action({ rawError: true })
   public delAllViews() {
     this.DEL_ALL_VISITED_VIEWS()
     this.DEL_ALL_CACHED_VIEWS()
   }
 
-  @Action
+  @Action({ rawError: true })
   public delAllCachedViews() {
     this.DEL_ALL_CACHED_VIEWS()
   }
 
-  @Action
+  @Action({ rawError: true })
   public updateVisitedView(view: ITagView) {
     this.UPDATE_VISITED_VIEW(view)
   }

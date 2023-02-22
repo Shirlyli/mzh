@@ -19,7 +19,8 @@ export const BasicFormList = [
     title: '申请日期',
     span: 12,
     type: 'date',
-    required: true
+    required: true,
+    disabled: true
   },
   {
     field: 'applyDeptName',
@@ -76,9 +77,9 @@ export const EquipmentDetailFormList = [
       field: 'equipmentId',
       title: '设备名称',
       span: 12,
-      type: 'input',
+      type: 'select',
       required: true,
-      slot: 'equipment'
+      data: []
     },
     {
       field: 'unit',
@@ -158,8 +159,11 @@ export const ReturnInfo = [
     field: 'userName',
     title: '经手人',
     span: 12,
-    type: 'input',
-    required: true
+    type: 'select',
+    required: true,
+    data: BusinessViewModule.employeeData.map((item:any) => {
+      return { ...item, label: item.eName, value: item.userId }
+    })
   },
   {
     field: 'borrowUnivalence',
@@ -196,7 +200,7 @@ export const ReturnInfo = [
     field: 'returnExplain',
     title: '归还说明',
     span: 12,
-    type: 'input'
+    type: 'textarea'
   }
 
 ]

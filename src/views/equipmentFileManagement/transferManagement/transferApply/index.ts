@@ -28,10 +28,6 @@ import ProcessOperationRecord from '@/components/processOperationRecord/index.vu
   }
 })
 export default class extends Vue {
-  async created() {
-    await BusinessViewModule.GET_DEPARTMENT_DATA()
-  }
-
   public routePath = this.$route.path;
   private isYSQ = this.routePath.indexOf('YSQ') > -1;// 已申请
   private isCGX = this.routePath.indexOf('CGX') > -1;// 草稿箱
@@ -88,20 +84,14 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    // { field: 'billCode', title: '设备编号' },
-    // { field: 'billCode', title: '设备名称' },
-    // { field: 'billCode', title: '规则型号' },
-    // { field: 'billCode', title: '所属科室' },
-    // { field: 'billCode', title: '生产厂家' },
-
-    { field: 'billCode', title: '转科单号' },
-    { field: 'rollOutDepartmentName', title: '申请科室' },
-    { field: 'userName', title: '申请人' },
-    { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
-    { field: 'rollInDepartmentName', title: ' 转入科室 ' },
-    { field: 'rollOutTime', title: ' 转科日期', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
-    { field: 'cause', title: ' 转科原因 ' },
-    { field: 'approveStatus', title: ' 审批状态 ' },
+    { field: 'billCode', title: '转科单号', width: 150 },
+    { field: 'rollOutDepartmentName', title: '申请科室', width: 150 },
+    { field: 'userName', title: '申请人', width: 150 },
+    { field: 'createTime', title: '申请日期', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss'), width: 150 },
+    { field: 'rollInDepartmentName', title: ' 转入科室 ', width: 150 },
+    { field: 'rollOutTime', title: ' 转科日期', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss'), width: 150 },
+    { field: 'cause', title: ' 转科原因 ', width: 150 },
+    { field: 'approveStatus', title: ' 审批状态 ', width: 150 },
     {
       width: 250,
       title: '操作',
@@ -133,18 +123,13 @@ export default class extends Vue {
         return { ...item, ...item.equipment }
       }
     )
-    // TODO: 换成store存储
-    sessionStorage.setItem(
-      'ClickProcessData',
-      JSON.stringify(this.clickProcessData)
-    )
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
-
+    BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'transferDepartment', data: this.clickProcessData })
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'transferDepartment', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'transferDepartment', data: this.requestParams })
     this.$router
       .push({
         path: `/processApproval/index/${'ZKSQ'}`,
-        query: { nextNodeCode, id, type: '转科' }
+        query: { nextNodeCode, id, type: '转科', moduleType: 'transferDepartment' }
       })
       .catch((err: any) => {
         console.warn(err)
@@ -181,10 +166,10 @@ export default class extends Vue {
       id: '',
       userId: (UserModule.userData as any)?.userId,
       userName: (UserModule.userData as any)?.employee?.eName,
-      createTime: '',
-      rollOutDepartment: null,
+      createTime: new Date(),
+      rollOutDepartment: (UserModule.userData as any)?.department.id,
       rollInDepartment: null,
-      equipmentLocation: '',
+      equipmentLocation: null,
       rollOutTime: '',
       cause: '',
       status: '',
@@ -194,7 +179,7 @@ export default class extends Vue {
       {
         id: '',
         billId: '',
-        equipmentId: ''
+        equipmentId: null
       }
     ],
     billApproveList: {
@@ -212,11 +197,10 @@ export default class extends Vue {
    * 新增流程配置
    ******************************/
   public handleInsert(row: any) {
-    console.log('🚀 ~ row', row)
-    sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
+    BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'transferDepartment', data: this.requestForm })
+    BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'transferDepartment', data: this.requestParams })
     this.$router
-      .push({ path: `/processRequest/index/${'ZKSQ'}`, query: { type: '转科', applyUrl: 'ZKSQ' } })
+      .push({ path: `/processRequest/index/${'ZKSQ'}`, query: { type: '转科', applyUrl: 'ZKSQ', moduleType: 'transferDepartment' } })
       .catch((err: any) => {
         console.warn(err)
       })

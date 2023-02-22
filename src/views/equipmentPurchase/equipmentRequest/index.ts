@@ -290,12 +290,10 @@ export default class extends Vue {
     }
     BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
     BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: this.requestParams })
-    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    // sessionStorage.setItem('RequestParams', JSON.stringify(this.requestParams))
     this.$router
       .push({
         path: `/processRequest/index/${'KSSQ'}`,
-        query: { type: '采购申请', applyUrl: 'KSSQ' }
+        query: { type: '采购申请', applyUrl: 'KSSQ', moduleType: 'purchase' }
       })
       .catch((err:any) => {
         console.warn(err)
@@ -339,13 +337,6 @@ export default class extends Vue {
     BusinessViewModule.GET_PROCESS_CLICKDATA({ type: 'purchase', data: this.clickProcessData })
     BusinessViewModule.GET_PROCESS_REQUESTFORM({ type: 'purchase', data: this.requestForm })
     BusinessViewModule.GET_PROCESS_REQUESTPARAMS({ type: 'purchase', data: sendRequestParams })
-    // sessionStorage.setItem(
-    //   'ClickProcessData',
-    //   JSON.stringify(this.clickProcessData)
-    // )
-    // sessionStorage.setItem('BasicFormList', JSON.stringify(this.basicFormList))
-    // sessionStorage.setItem('RequestForm', JSON.stringify(this.requestForm))
-    // sessionStorage.setItem('RequestParams', JSON.stringify(sendRequestParams))
     this.$router
       .push({
         path: `/processApproval/index/${'KSSQ'}`,
@@ -354,7 +345,8 @@ export default class extends Vue {
           processCode,
           type: '采购申请',
           applyUrl: 'KSSQ',
-          code: type
+          code: type,
+          moduleType: 'purchase'
         }
       })
       .catch((err:any) => {

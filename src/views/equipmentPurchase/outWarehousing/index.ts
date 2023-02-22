@@ -74,16 +74,16 @@ export default class extends Vue {
     { field: 'name', title: '设备名称', width: 100 },
     { field: 'price', title: '设备价格', width: 100 },
     { field: 'unit', title: '设备单位', width: 100 },
-    {
-      field: 'applyTime',
-      title: '申请日期',
-      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'),
-      width: 150
-    },
+    // {
+    //   field: 'applyTime',
+    //   title: '申请日期',
+    //   formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'),
+    //   width: 150
+    // },
     { field: 'departmentName', title: '领用科室', width: 150 },
     // { field: 'boundTime', title: '出库日期', width: 150, formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD') },
-    { field: 'billId', title: '出库单号', width: 150 },
-    { field: 'price', title: '出库金额', width: 150 },
+    // { field: 'billId', title: '出库单号', width: 150 },
+    // { field: 'price', title: '出库金额', width: 150 },
     { field: 'purchaseType', title: '备注', width: 150 },
     {
       width: 120,

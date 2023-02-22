@@ -213,6 +213,15 @@ export default class extends Vue {
     // 垃圾箱
     maintenanceDustbin: [
       { title: '还原', key: 'revent', type: 'primary', method: 'revent' }
+    ],
+    // 综合查询
+    maintenanceSearch: [
+      {
+        title: '操作日志',
+        key: 'queryByCondition',
+        type: 'primary',
+        method: 'queryByCondition'
+      }
     ]
   };
 

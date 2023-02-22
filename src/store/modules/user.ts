@@ -80,7 +80,7 @@ class User extends VuexModule implements IUserState {
     this.userData = userData
   }
 
-  @Action
+  @Action({ rawError: true })
   public async Login(userInfo: any) {
     this.SET_LOGIN_FORM(userInfo)
     let { userName, userPwd } = userInfo
@@ -93,13 +93,13 @@ class User extends VuexModule implements IUserState {
     }
   }
 
-  @Action
+  @Action({ rawError: true })
   public async GetMenu() {
     const { data } = await queryLeftMenuData({})
     this.SET_MENU(data)
   }
 
-  @Action
+  @Action({ rawError: true })
   public ResetToken() {
     removeToken()
     this.SET_TOKEN('')
@@ -124,10 +124,9 @@ class User extends VuexModule implements IUserState {
     this.SET_INTRODUCTION('')
     this.SET_EMAIL('')
     this.SET_TOKEN(res.data.token)
-    sessionStorage.setItem('store', JSON.stringify(res.data))
   }
 
-  @Action
+  @Action({ rawError: true })
   public async ChangeRoles(role: string) {
     console.log('🚀 ~ ChangeRoles')
     // Dynamically modify permissions
@@ -146,7 +145,7 @@ class User extends VuexModule implements IUserState {
     TagsViewModule.delAllViews()
   }
 
-  @Action
+  @Action({ rawError: true })
   public async LogOut() {
     console.log('this.token', this.token)
     if (this.token === '') {

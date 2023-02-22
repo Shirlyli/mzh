@@ -44,14 +44,14 @@ export default {
   padding: 10px;
   // height: calc(100vh - 88px);
   &-left {
-    width: 260px;
+    width: 200px;
     background: #fff;
     // border: 1px solid #d9d9d9;
     border-radius: 4px;
     position: relative;
     transition: all 0.3s;
     opacity: 1;
-    max-width: 260px;
+    max-width: 200px;
 
     .slot-left {
       width: 100%;
@@ -83,8 +83,8 @@ export default {
       height: 44px;
       color: #fff;
       background: #0b68e6;
-      top: 260px;
-      left: 260px;
+      top: 200px;
+      left: 200px;
       cursor: pointer;
       border-radius: 0 10px 10px 0;
       font-size: 10px;
@@ -92,7 +92,7 @@ export default {
   }
 
   &-right {
-    width: calc(100% - 276px);
+    width: calc(100% - 220px);
     background: #fff;
     border-radius: 4px;
     // border: 1px solid #d9d9d9;

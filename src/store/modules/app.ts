@@ -65,27 +65,27 @@ class App extends VuexModule implements IAppState {
     setSize(this.size)
   }
 
-  @Action
+  @Action({ rawError: true })
   public ToggleSideBar(withoutAnimation: boolean) {
     this.TOGGLE_SIDEBAR(withoutAnimation)
   }
 
-  @Action
+  @Action({ rawError: true })
   public CloseSideBar(withoutAnimation: boolean) {
     this.CLOSE_SIDEBAR(withoutAnimation)
   }
 
-  @Action
+  @Action({ rawError: true })
   public ToggleDevice(device: DeviceType) {
     this.TOGGLE_DEVICE(device)
   }
 
-  @Action
+  @Action({ rawError: true })
   public SetLanguage(language: string) {
     this.SET_LANGUAGE(language)
   }
 
-  @Action
+  @Action({ rawError: true })
   public SetSize(size: string) {
     this.SET_SIZE(size)
   }
