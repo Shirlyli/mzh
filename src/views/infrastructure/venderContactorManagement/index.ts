@@ -98,18 +98,19 @@ export default class extends Vue {
   private columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'linkId', title: '关联厂商' },
-    { field: 'lImportant', title: '重要程度' },
-    { field: 'lChart', title: '微信' },
-    { field: 'lEmail', title: '邮箱' },
+    { field: 'linkId', title: '关联厂商', width: 120 },
+    { field: 'lImportant', title: '重要程度', width: 120 },
+    { field: 'lChart', title: '微信', width: 120 },
+    { field: 'lEmail', title: '邮箱', width: 120 },
     {
       field: 'lName',
-      title: '姓名'
+      title: '姓名',
+      width: 120
     },
-    { field: 'lPosition', title: ' 职务' },
-    { field: 'lQq', title: 'qq' },
-    { field: 'lTelphone', title: '电话' },
-    { field: 'note', title: '备注' },
+    { field: 'lPosition', title: ' 职务', width: 120 },
+    { field: 'lQq', title: 'qq', width: 120 },
+    { field: 'lTelphone', title: '电话', width: 120 },
+    { field: 'note', title: '备注', width: 120 },
     {
       width: 160,
       title: '操作',

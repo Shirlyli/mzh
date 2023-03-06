@@ -19,11 +19,11 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'dicName', title: '字典值', treeNode: true },
-    { field: 'dicCode', title: '字典编码' },
-    { field: 'dispindex', title: '字典排序' },
-    { field: 'dicType', title: '字典类型' },
-    { field: 'flag', title: '状态', formatter: FormatMIsavailable },
+    { field: 'dicName', title: '字典值', treeNode: true, width: 160 },
+    { field: 'dicCode', title: '字典编码', width: 160 },
+    { field: 'dispindex', title: '字典排序', width: 160 },
+    { field: 'dicType', title: '字典类型', width: 160 },
+    { field: 'flag', title: '状态', formatter: FormatMIsavailable, width: 160 },
     {
       width: 160,
       title: '操作',

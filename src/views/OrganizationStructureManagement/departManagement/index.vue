@@ -23,7 +23,7 @@
                     :formConfig="formConfig"
                     :columns="columns"
                     editColumns="['edit','del']"
-                     :toolbarBtns="['add', 'import', 'delete', 'export']"
+                    :toolbarBtns="['add', 'import', 'delete', 'export']"
                     @emit-handle-insert="handleInsert"
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"
@@ -45,30 +45,29 @@
                label-position="left"
                label-width="100px"
                style="">
-        <el-row type="flex"
+        <el-row :gutter="22"
+                type="flex"
                 justify="start"
                 style="flex-wrap:wrap; flex-direction: row">
-          <!-- <el-col :span="12">
-            <el-form-item :label="'上级科室Id'"
-                          prop="parentId">
-              <el-input v-model="departmentData.parentId"
-                        placeholder=""
-                        readonly="readonly"></el-input>
-            </el-form-item>
-          </el-col> -->
           <el-col :span="12">
             <el-form-item :label="'上级科室'"
                           prop="parentId">
-              <el-input v-model="departmentData.parentName"
-                        placeholder="请选择"
-                        readonly="readonly"></el-input>
+              <treeselect :options="departmentDataList"
+                          v-model="departmentData.parentId"
+                          clearable
+                          disabled
+                          :disable-branch-nodes="true"
+                          search-nested
+                          placeholder="请选择" />
+
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="'科室名称'"
                           prop="departmentName">
               <el-input v-model="departmentData.departmentName"
-                        placeholder="请输入科室名称" />
+                        placeholder="请选择"
+                        readonly="readonly"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -86,17 +85,7 @@
                         placeholder="请输入科室座机" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item :label="'是否启用'"
-                          prop="departmentStatus">
-              <el-radio-group v-model="departmentData.departmentStatus">
-                <el-radio label="0">不启用
-                </el-radio>
-                <el-radio label="1">启用
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
+
           <el-col :span="12">
             <el-form-item :label="'所在医院'"
                           prop="companyInfoId"
@@ -125,6 +114,17 @@
               <el-input v-model="departmentData.xpath"
                         placeholder="自动生成"
                         readonly="readonly" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="'是否启用'"
+                          prop="departmentStatus">
+              <el-radio-group v-model="departmentData.departmentStatus">
+                <el-radio label="0">不启用
+                </el-radio>
+                <el-radio label="1">启用
+                </el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="24">

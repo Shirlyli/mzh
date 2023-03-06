@@ -12,7 +12,6 @@
                   editColumns="[]"
                   hasNotSlotButton="add"
                   :toolbarBtns="[]"
-                  @emit-handle-warehousing="handleWarehousing"
                   :paramsConfig="paramsConfig" />
       </keep-alive>
     </el-card>

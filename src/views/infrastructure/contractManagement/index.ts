@@ -66,19 +66,20 @@ export default class extends Vue {
   private columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'cName', title: '合同名称' },
-    { field: 'cCode', title: '合同编码' },
-    { field: 'cSignDate', title: '签订日期', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
-    { field: 'cEffective', title: '有效期限' },
+    { field: 'cName', title: '合同名称', width: 120 },
+    { field: 'cCode', title: '合同编码', width: 120 },
+    { field: 'cSignDate', title: '签订日期', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss'), width: 120 },
+    { field: 'cEffective', title: '有效期限', width: 120 },
     {
       field: 'cDefend',
-      title: '经办人'
+      title: '经办人',
+      width: 120
     },
-    { field: 'cTotal', title: ' 合同总金额' },
-    { field: 'ctime', title: ' 创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
-    { field: 'supplierId', title: '厂商ID' },
-    { field: 'cAttahUrl', title: '附件' },
-    { field: 'note', title: ' 排序' },
+    { field: 'cTotal', title: ' 合同总金额', width: 120 },
+    { field: 'ctime', title: ' 创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss'), width: 120 },
+    { field: 'supplierId', title: '厂商ID', width: 120 },
+    { field: 'cAttahUrl', title: '附件', width: 120 },
+    { field: 'note', title: ' 排序', width: 120 },
     {
       width: 160,
       title: '操作',

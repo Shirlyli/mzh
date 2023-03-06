@@ -36,9 +36,6 @@
         <!-- <vxe-button @click="$refs.xGrid.exportData()"
                     v-if="toolbarBtns.includes('export')">导出</vxe-button> -->
       </template>
-      <template #add_button>
-
-      </template>
       <template #department="{row}">
         <span>{{row.department?row.department.name :'-'}}</span>
       </template>
@@ -61,33 +58,6 @@
                       search-nested
                       :disable-branch-nodes="true"
                       placeholder="请选择" />
-          <!-- <el-select v-model="deparmentId"
-                     placeholder="请选择"
-                     multiple
-                     @remove-tag="removeTag"
-                     collapse-tags>
-            <el-tree node-key="id"
-                     ref="departmentTree"
-                     :data="BussniessDepartmentData"
-                     show-checkbox
-                     @check-change="checkChange"
-                     accordion
-                     :props="{
-                                  children: 'children',
-                                  label: 'title'
-                                 }"
-                     class="add_tree"
-                     :expand-on-click-node="false"
-                     :check-on-click-node="true">
-              <span class="custom-tree-node"
-                    slot-scope="{data}">
-                <el-option style="padding: 0"
-                           :label="data.title"
-                           :value="data.id"></el-option>
-              </span>
-            </el-tree>
-          </el-select> -->
-
         </div>
       </template>
       <template #operate_item>

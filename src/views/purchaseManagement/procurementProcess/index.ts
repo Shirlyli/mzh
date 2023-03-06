@@ -59,27 +59,30 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'processName', title: '流程名称', width: 150 },
-    { field: 'processCode', title: '流程代码' },
-    { field: 'nodeName', title: '节点名称' },
-    { field: 'nodeNameCode', title: '节点名称编码' },
-    { field: 'nodeSort', title: ' 节点顺序 ' },
+    { field: 'processName', title: '流程名称', width: 120 },
+    { field: 'processCode', title: '流程代码', width: 120 },
+    { field: 'nodeName', title: '节点名称', width: 120 },
+    { field: 'nodeNameCode', title: '节点名称编码', width: 200 },
+    { field: 'nodeSort', title: ' 节点顺序 ', width: 120 },
     {
       field: 'isDisable',
       title: ' 是否禁用 ',
-      formatter: this.getformatMIsAvailable
+      formatter: this.getformatMIsAvailable,
+      width: 120
     },
     {
       field: 'roleType',
       title: ' 角色类型 ',
-      formatter: this.formatMIsRoleType
+      formatter: this.formatMIsRoleType,
+      width: 120
     },
     // { field: "roleTypeId", title: " 角色类型id " },
-    { field: 'cteator', title: '创建人' },
+    { field: 'cteator', title: '创建人', width: 120 },
     {
       field: 'createTime',
       title: '创建时间',
-      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD')
+      formatter: (data: any) => moment(data.cellValue).format('YYYY-MM-DD'),
+      width: 120
     },
     {
       width: 160,

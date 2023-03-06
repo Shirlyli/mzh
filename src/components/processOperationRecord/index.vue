@@ -26,9 +26,9 @@
         </el-table-column>
         <el-table-column prop="operatorTime"
                          label="操作时间">
-          <template slot-scope="scope">
+          <!-- <template slot-scope="scope">
             <span style="margin-left: 10px">{{ moment(scope.row.operatorTime).format('YYYY-MM-DD')}}</span>
-          </template>
+          </template> -->
         </el-table-column>
       </el-table>
     </div>

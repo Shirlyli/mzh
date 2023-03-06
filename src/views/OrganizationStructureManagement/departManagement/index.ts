@@ -6,18 +6,22 @@ import { Form } from 'element-ui'
 import { dealEquipmentData, updateEquipmentData } from '@/api/equipment'
 import _ from 'lodash'
 import { ALL_OPTIONS } from '@/shared/options'
+import { handleDepartData } from '@/shared/utils'
 import moment from 'moment'
-// import { TreeData } from "@/mock/tree";
+import { BusinessViewModule } from '../../../store/modules/business'
+import Treeselect from '@riophae/vue-treeselect'
 @Component({
   name: 'Tab',
   components: {
     MainSubLayout,
     Tree,
-    VexTable
+    VexTable,
+    Treeselect
   }
 })
 export default class extends Vue {
-  private formConfig = {
+  public departmentDataList = handleDepartData(BusinessViewModule.departmentData)
+  public formConfig = {
     data: {
       name: '',
       time: ''
@@ -33,7 +37,7 @@ export default class extends Vue {
     ] // 表单项
   };
 
-  private columns = [
+  public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 80 },
     { field: 'name', title: ' 科室名称', treeNode: true },
@@ -49,7 +53,7 @@ export default class extends Vue {
     }
   ];
 
-  private treeParams = {
+  public treeParams = {
     page: '1',
     limit: '10',
     entity: {
@@ -57,10 +61,10 @@ export default class extends Vue {
     }
   };
 
-  private departmentData = {
+  public departmentData = {
     parentId: '',
     parentName: '',
-    departmentName: '',
+    departmentName: null,
     departmentId: '',
     departmentCode: '',
     departmentMobile: '',
@@ -72,16 +76,16 @@ export default class extends Vue {
     companyInfoName: ''
   }; // 新增或编辑表单
 
-  private rules = {
+  public rules = {
     departmentName: [
       { required: true, message: '请输入部门名称', trigger: 'change' }
     ]
   }; // 表单校验
 
-  private dialogVisible = false; // 新增过模态框
-  private dialogStatus = 'create';
-  private url = 'THospitalDepartmentInfo/queryTree'; // 左侧科室分类树形数据
-  private paramsConfig = {
+  public dialogVisible = false; // 新增过模态框
+  public dialogStatus = 'create';
+  public url = 'THospitalDepartmentInfo/queryTree'; // 左侧科室分类树形数据
+  public paramsConfig = {
     url: 'THospitalDepartmentInfo/querySelfAndPar',
     params: {
       page: 1,
@@ -92,17 +96,17 @@ export default class extends Vue {
     }
   };
 
-  private nodeClickData: any = {}; // 点击科室数据
+  public nodeClickData: any = {}; // 点击科室数据
 
   // 新增科室
-  private handleInsert() {
+  public handleInsert() {
     this.dialogVisible = true
     const { title, id } = this.nodeClickData
     // (this.$refs.dataForm as any).setFiledsValue
     this.departmentData = {
       parentId: id ?? '001',
       parentName: title ?? '医疗科室',
-      departmentName: '',
+      departmentName: null,
       departmentId: '',
       departmentCode: '',
       departmentMobile: '',
@@ -116,7 +120,7 @@ export default class extends Vue {
   }
 
   // 接收树形组件点击节点数据
-  private handleNodeClick(data: any) {
+  public handleNodeClick(data: any) {
     this.nodeClickData = data
     // 查询科室及下级科室
     this.paramsConfig = {
@@ -132,7 +136,7 @@ export default class extends Vue {
   }
 
   // 新增科室
-  private createData() {
+  public createData() {
     (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const { parentId, departmentName, departmentCode, departmentMobile, departmentStatus, companyInfoId, departmentDicid, note, xpath } = this.departmentData
@@ -170,7 +174,7 @@ export default class extends Vue {
   }
 
   // 修改科室
-  private updateData() {
+  public updateData() {
     (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
         const { parentId, parentName, departmentName, departmentId, departmentCode, departmentMobile, departmentStatus, companyInfoId, departmentDicid, note, xpath } = this.departmentData
@@ -209,7 +213,7 @@ export default class extends Vue {
   }
 
   // 触发编辑事件
-  private handleUpdate(row: any) {
+  public handleUpdate(row: any) {
     const { name, id, pid, pname, dCode, mobile, status, companyInfoId, dicId, note, xpath } = row
     this.departmentData = {
       parentId: pid,
@@ -233,7 +237,7 @@ export default class extends Vue {
   }
 
   // 删除科室
-  private async handleRemove(row: any) {
+  public async handleRemove(row: any) {
     let params = {}
     if (Array.isArray(row)) {
       const res = _.map(row, 'id')

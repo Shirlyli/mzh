@@ -31,7 +31,7 @@
                     @emit-handle-update="handleUpdate"
                     @emit-handle-remove="handleRemove"
                     :paramsConfig="paramsConfig"
-                    type="equipmentSearch" />
+                    />
         </el-card>
       </template>
     </main-sub-layout>

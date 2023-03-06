@@ -164,9 +164,13 @@ export default class extends Vue {
   }
 
   public removeRowEvent = async(row: any) => {
-    const type = await VXETable.modal.confirm('您确定要删除该数据?')
-    if (type === 'confirm') {
-      this.emitHandleRemove(row)
+    try {
+      const type = await VXETable.modal.confirm('您确定要删除该数据?')
+      if (type === 'confirm') {
+        this.emitHandleRemove(row)
+      }
+    } catch (err) {
+      console.log('🚀 ~ err', err)
     }
   }
 
@@ -202,9 +206,13 @@ export default class extends Vue {
       Message.error('请选择后进行操作！')
       return
     }
-    const type = await VXETable.modal.confirm('您确定要删除该数据?')
-    if (type === 'confirm') {
-      this.emitHandleRemove(this.checkedList)
+    try {
+      const type = await VXETable.modal.confirm('您确定要删除该数据?')
+      if (type === 'confirm') {
+        this.emitHandleRemove(this.checkedList)
+      }
+    } catch (err) {
+      console.log('🚀 ~ err', err)
     }
   }
 

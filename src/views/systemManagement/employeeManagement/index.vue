@@ -46,6 +46,7 @@
                style="width: 100%">
         <el-row type="flex"
                 justify="start"
+                :gutter="22"
                 style="flex-wrap:wrap; flex-direction: row">
           <el-col :span="8">
             <el-form-item :label="'用户名称'"
@@ -79,9 +80,9 @@
           </el-col>
         </el-row>
         <el-row type="flex"
+                :gutter="22"
                 justify="start"
                 style="flex-wrap:wrap; flex-direction: row">
-
           <el-col :span="8">
             <el-form-item :label="'出生日期'"
                           prop="birth"
@@ -111,6 +112,7 @@
           </el-col>
         </el-row>
         <el-row type="flex"
+                :gutter="22"
                 justify="start"
                 style="flex-wrap:wrap; flex-direction: row">
 
@@ -137,6 +139,7 @@
           </el-col>
         </el-row>
         <el-row type="flex"
+                :gutter="22"
                 justify="start"
                 style="flex-wrap:wrap; flex-direction: row">
 
@@ -168,6 +171,7 @@
           </el-col>
         </el-row>
         <el-row type="flex"
+                :gutter="22"
                 justify="start"
                 style="flex-wrap:wrap; flex-direction: row">
 
@@ -194,6 +198,7 @@
           </el-col>
         </el-row>
         <el-row type="flex"
+                :gutter="22"
                 justify="start"
                 style="flex-wrap:wrap; flex-direction: row">
           <el-col :span="8">
@@ -249,6 +254,7 @@
                label-width="100px"
                style="width: 100%">
         <el-row type="flex"
+                :gutter="22"
                 justify="start"
                 style="flex-wrap:wrap; flex-direction: row">
           <el-col :span="8">

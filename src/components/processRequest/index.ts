@@ -21,10 +21,10 @@ import { BusinessViewModule } from '../../store/modules/business'
 export default class extends Vue {
   public rules = {};
   mounted() {
-    console.log(
-      BusinessViewModule.departmentData,
-      BusinessViewModule.employeeData
-    )
+    // console.log(
+    //   BusinessViewModule.departmentData,
+    //   BusinessViewModule.employeeData
+    // )
   }
 
   public path = this.$route.path;
@@ -115,7 +115,7 @@ export default class extends Vue {
    *************/
   @Watch('requestParams.billMain.checkDepartment', { immediate: true })
   public async onChangeRequestParams(formValue: any) {
-    console.log('🚀 ~ formValue', formValue)
+    // console.log('🚀 ~ 监听科室变化formValue', formValue)
     if (formValue) {
       try {
         const res: any = await getEquipmentInfoByDepartmentId({
@@ -144,34 +144,35 @@ export default class extends Vue {
   @Watch('requestParams.billMain.borrowDepartmentId', { immediate: true })
 
   public async onChangeDepartment(formValue: any) {
-    console.log('🚀 ~ 监听科室变化', formValue, this.watchRequestForm)
-    const res: any = await getEquipmentInfoByDepartmentId({
-      page: '1',
-      limit: '10',
-      entity: {
-        departmentId: formValue
-      }
-    })
-    if (res.code === 200) {
-      console.log('🚀 ~ res', res)
-      this.filterByDepartEquipmentData = res.data.map((equip: any) => {
-        return {
-          equipmentVO: equip.equipmentVO,
-          label: equip.equipmentVO.name,
-          value: equip.equipmentVO.id
+    // console.log('🚀 ~ 监听科室变化', formValue, this.watchRequestForm)
+    if (formValue) {
+      const res: any = await getEquipmentInfoByDepartmentId({
+        page: '1',
+        limit: '10',
+        entity: {
+          departmentId: formValue
         }
       })
-      this.watchRequestForm.billEquipmentList.forEach((item) => {
-        if (item.length) {
-          item.forEach(i => {
-            if (i) {
-              i.data = this.filterByDepartEquipmentData
-            }
-          })
-        }
-      })
+      if (res.code === 200) {
+        this.filterByDepartEquipmentData = res.data.map((equip: any) => {
+          return {
+            equipmentVO: equip.equipmentVO,
+            label: equip.equipmentVO.name,
+            value: equip.equipmentVO.id
+          }
+        })
+        this.watchRequestForm.billEquipmentList.forEach((item) => {
+          if (item.length) {
+            item.forEach(i => {
+              if (i) {
+                i.data = this.filterByDepartEquipmentData
+              }
+            })
+          }
+        })
 
-      this.$forceUpdate()
+        this.$forceUpdate()
+      }
     }
   }
 
@@ -429,6 +430,7 @@ export default class extends Vue {
     this.selectRow = records
   }
 
+  // 确认新增设备盘点
   public submitChooseEquipment() {
     this.inventoryDialogVisible = false
     const selectParamsData = this.selectRow.map(item => {
@@ -446,10 +448,8 @@ export default class extends Vue {
     for (let i = 0; i < selectParamsData.length; i++) {
       selectedRequestForm.push(this.addInventoryEquipment)
     }
-    // console.log('🚀 ~ selectedRequestForm', selectedRequestForm)
     this.watchRequestForm.billEquipmentList = selectedRequestForm
     this.requestParams.billEquipmentList = [...selectParamsData]
-    // console.log('🚀 ~ selectParamsData', this.requestParams)
   }
 
   /**********************************************
@@ -463,10 +463,8 @@ export default class extends Vue {
 
   created() {
     const applyUrl: any = this.$route.query.applyUrl
-    // console.log('🚀 ~ applyUrl', applyUrl)
     const processCode: string = this.requestParams.billApproveList.processCode
-    // console.log('🚀 ~ processCode', processCode)
-    this.queryCodeDataFirst(processCode)
+    if (processCode) { this.queryCodeDataFirst(processCode) }
   }
 
   /**************************
@@ -525,7 +523,6 @@ export default class extends Vue {
       processCode: code,
       nodeSort: nodeSort + 1
     })
-    // console.log('🚀 ~ nextNodeExecutorData', nextNodeExecutorData)
     if (nextNodeExecutorData.code === 200) {
       this.requestParams.billApproveList = {
         ...this.requestParams.billApproveList,
@@ -537,9 +534,6 @@ export default class extends Vue {
   /***************************
    * 科室查询筛选逻辑
    **************************/
-  public fliterMethods(e: string) {
-    console.log('🚀 ~ e', e)
-  }
 
   /********************************************
    * 待新增的设备params

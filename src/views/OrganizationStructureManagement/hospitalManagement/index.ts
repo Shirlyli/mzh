@@ -102,22 +102,6 @@ export default class extends Vue {
 
   private hLevelList = []; // 字典表
 
-  // 获取医院等级
-  /* private async getCommonTreeData() {
-    const params = {
-      page: 1,
-      limit: 10,
-      entity: { id: "58CC52594FA7C8-1A54-4DC6-9854-FD8BB128B194" }
-    };
-    const res: any = await getTableDataList(
-      "common/dicInfo/querySelfAndPar",
-      params
-    );
-    if (res.result) {
-      this.hLevelList = res.data;
-    }
-  } */
-
   /**
    *dicType:字典表类型id
    */
@@ -135,7 +119,7 @@ export default class extends Vue {
     }
   }
 
-  // 新增科室
+  // 新增
   private handleInsert() {
     this.dialogStatus = 'create'
     this.dialogVisible = true;
@@ -159,23 +143,8 @@ export default class extends Vue {
       id: ''
     }
   }
-  // 接收树形组件点击节点数据
-  // private handleNodeClick(data: any) {
-  //   this.nodeClickData = data
-  //   // 查询科室及下级科室
-  //   this.paramsConfig = {
-  //     url: 'THospitalDepartmentInfo/querySelfAndPar',
-  //     params: {
-  //       page: 1,
-  //       limit: 10,
-  //       entity: {
-  //         id: data.id
-  //       }
-  //     }
-  //   }
-  // }
 
-  // 新增科室
+  // 新增
   private createData() {
     (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
@@ -208,7 +177,7 @@ export default class extends Vue {
     })
   }
 
-  // 修改科室
+  // 修改
   private updateData() {
     (this.$refs.dataForm as any).validate(async(valid: any) => {
       if (valid) {
@@ -261,7 +230,7 @@ export default class extends Vue {
     })
   }
 
-  // 删除科室
+  // 删除
   private async handleRemove(row: any) {
     let params = {}
     if (Array.isArray(row)) {

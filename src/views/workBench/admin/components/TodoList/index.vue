@@ -132,7 +132,7 @@ export default class extends Vue {
   }
 
   private setLocalStorage() {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(this.todos))
+    // window.localStorage.setItem(STORAGE_KEY, JSON.stringify(this.todos))
   }
 
   private addTodo(e: KeyboardEvent) {

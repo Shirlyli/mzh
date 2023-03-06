@@ -44,8 +44,8 @@
       </el-row>
     </div>
     <!-- 员工主体区域 -->
-    <el-row :gutter="20">
-      <el-col :span="5"
+    <el-row :gutter="22">
+      <el-col :span="8"
               v-for="(item,index) in employeeData"
               :key="index">
         <div :class="[item.isClick?'clickContentItem':'notClickContentItem',item.userId?'hasLoginUser':'hasNotLoginUser','contentItem']"

@@ -98,20 +98,21 @@ export default class extends Vue {
   public columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'name', title: '厂商名称' },
-    { field: 'taxId', title: '纳税识别号' },
+    { field: 'name', title: '厂商名称', width: 120 },
+    { field: 'taxId', title: '纳税识别号', width: 120 },
     {
       field: 'runningState',
-      title: '运营状态'
+      title: '运营状态',
+      width: 120
       // formatter: FormatRunningState
     },
-    { field: 'registeredCapital', title: '注册资金' },
-    { field: 'phoneNo', title: '电话' },
-    { field: 'email', title: '邮箱' },
-    { field: 'regeditAddress', title: ' 注册地' },
-    { field: 'legalPerson', title: '法人' },
-    { field: 'ctime', title: '创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
-    { field: 'note', title: '备注' },
+    { field: 'registeredCapital', title: '注册资金', width: 120 },
+    { field: 'phoneNo', title: '电话', width: 120 },
+    { field: 'email', title: '邮箱', width: 120 },
+    { field: 'regeditAddress', title: ' 注册地', width: 120 },
+    { field: 'legalPerson', title: '法人', width: 120 },
+    { field: 'ctime', title: '创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss'), width: 120 },
+    { field: 'note', title: '备注', width: 120 },
     {
       width: 160,
       title: '操作',

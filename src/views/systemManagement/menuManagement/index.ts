@@ -61,21 +61,23 @@ export default class extends Vue {
   private columns = [
     { type: 'seq', width: 60 },
     { type: 'checkbox', width: 60 },
-    { field: 'mName', title: '名称', treeNode: true },
-    { field: 'mCode', title: '编码' },
-    { field: 'mType', title: '菜单类型', formatter: FormatMType },
-    { field: 'mUrl', title: '菜单路由' },
+    { field: 'mName', title: '名称', treeNode: true, width: 140 },
+    { field: 'mCode', title: '编码', width: 100 },
+    { field: 'mType', title: '菜单类型', formatter: FormatMType, width: 150 },
+    { field: 'mUrl', title: '菜单路由', width: 150 },
     {
       field: 'mIsavailable',
       title: '是否启用',
-      formatter: FormatMIsavailable
+      formatter: FormatMIsavailable,
+      width: 150
     },
-    { field: 'note', title: '备注' },
-    { field: 'dispindex', title: '排序' },
-    { field: 'mMtime', title: '创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss') },
+    { field: 'note', title: '备注', width: 150 },
+    { field: 'dispindex', title: '排序', width: 150 },
+    { field: 'mMtime', title: '创建时间', formatter: (data:any) => moment(data.cellValue).format('YYYY-MM-DD HH:mm:ss'), width: 150 },
     {
       width: 150,
-      title: '操作', fixed: 'right',
+      title: '操作',
+      fixed: 'right',
       slots: { default: 'operateHasSearch' },
       showOverflow: true
     }
@@ -129,7 +131,7 @@ export default class extends Vue {
     mDesc: '',
     note: '',
     mIsavailable: '',
-    dispindex:''
+    dispindex: ''
   };
 
   // 菜单类型
@@ -174,7 +176,7 @@ export default class extends Vue {
       mDesc: '',
       note: '',
       mIsavailable: '',
-      dispindex:''
+      dispindex: ''
     }
   }
 

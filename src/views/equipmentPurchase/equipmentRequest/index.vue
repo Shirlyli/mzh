@@ -4,7 +4,7 @@
     <el-card>
       <div slot="header"
            class="clearfix">
-        <span>{{ visitedViews.name }}</span>
+        <span>{{visitedViews? visitedViews.name :'-' }}</span>
       </div>
       <keep-alive>
         <VexTable ref="vexTable"
